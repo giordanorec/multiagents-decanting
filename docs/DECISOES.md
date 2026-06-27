@@ -131,3 +131,29 @@ sem projeto/`_utils`.
 projeto nativamente.
 
 **Feature relacionada:** hooks / guardrails / observabilidade.
+
+---
+
+## 2026-06-27 — Decisão #7: Rebrand das superfícies de usuário para "multiagents"
+
+**Decisão:** As superfícies voltadas ao usuário usam a marca **"multiagents"**
+(inglês): skill `multiagents-workflow`, comandos `/multiagents-*`, CLI
+`multiagents`/`scripts/multiagents.py`. "decanting" fica só como conceito interno
+(o protocolo) e na ação `/multiagents-decant`. Plugin/repo/marketplace e
+`subagent_type` seguem `multiagents-decanting`.
+
+**Alternativas consideradas:** Manter `/decanting-*` (rejeitado pelo Giordano);
+usar "multiagentes" em português (rejeitado — ele quer inglês).
+
+**Por quê:** No dogfood ao vivo, a marca "decanting" dominava tudo e o modelo, em
+sessão nova, passou a achar que o próprio projeto se chamava "decanting"
+(vazamento de identidade). Corrigido também com nota explícita na skill e no
+arquiteto separando método × nome-do-projeto.
+
+**Restrição decorrente:** Em código/docs voltados ao usuário, usar "multiagents".
+"decanting" só ao descrever o protocolo. Ver memória do projeto
+`naming-multiagents-not-decanting`.
+
+**Como reabrir:** Se o Giordano mudar de ideia sobre a marca.
+
+**Feature relacionada:** rebrand / UX / naming.
