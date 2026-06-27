@@ -4,11 +4,11 @@
 
 Plugin expõe **1 skill principal** que carrega a filosofia quando triggered, alinhado com `anthropic/skills` pattern.
 
-### `skills/decanting-workflow/SKILL.md`
+### `skills/multiagents-workflow/SKILL.md`
 
 ```yaml
 ---
-name: decanting-workflow
+name: multiagents-workflow
 description: |
   Filosofia e protocolo do plugin multiagents-decanting. Carrega papel
   de Arquiteto coordenador, protocolo de boot/decanting, workflow patterns
@@ -16,7 +16,7 @@ description: |
   + memória em arquivo + SendMessage opcional pra continuação.
   Use quando: usuário pede "fluxo multi-agente", "decanting",
   "arquitetura multi-agente", "vamos montar um time de agentes",
-  ou invoca /decanting-init.
+  ou invoca /multiagents-init.
 ---
 
 # Skill — multiagents-decanting
@@ -28,9 +28,9 @@ de memória do projeto.]
 
 ## 7.2 Slash commands
 
-Cada comando vive em `commands/<nome>.md`. Conteúdo é prompt template que o Claude Code executa quando o usuário digita o comando. Prefixo padrão: `/decanting-`.
+Cada comando vive em `commands/<nome>.md`. Conteúdo é prompt template que o Claude Code executa quando o usuário digita o comando. Prefixo padrão: `/multiagents-`.
 
-### `commands/decanting-init.md`
+### `commands/multiagents-init.md`
 
 ```markdown
 ---
@@ -43,7 +43,7 @@ Você vai iniciar um projeto multiagente em modo decanting nativo (sessão viva 
 
 1. Verifique se já existe `multiagents-decanting.toml` na raiz. Se sim,
    projeto já inicializado — aborte com mensagem "projeto já tem
-   multiagentes ativo; use /decanting-dashboard ou /decanting-doctor".
+   multiagentes ativo; use /multiagents-dashboard ou /multiagents-doctor".
 2. Verifique se Python 3.9+ está disponível: `python --version` ou
    `python3 --version`. Se não, aborte com instrução de instalação.
 3. Verifique versão do Claude Code: `claude --version`. Se ≥ 2.1.77,
@@ -85,8 +85,8 @@ NÃO despeje todas de uma vez.
     handoff, trust.json com score 50).
 14. **Não há spawn.** Os agentes ficam "prontos" — primeira Agent call
     será a primeira execução.
-15. Inicie dashboard em background: `python scripts/decanting.py dashboard --background`.
-16. Verifique saúde: `python scripts/decanting.py doctor`.
+15. Inicie dashboard em background: `python scripts/multiagents.py dashboard --background`.
+16. Verifique saúde: `python scripts/multiagents.py doctor`.
 
 ## Mensagem final
 
@@ -98,12 +98,12 @@ NÃO despeje todas de uma vez.
 Cada especialista é invocado sob demanda via Agent tool (sem processos
 em background, sem session_id manual). Memória vive em memory/<agente>/.
 
-Use /decanting-dashboard para reabrir o dashboard, /decanting-doctor
-para verificar saúde, /decanting-decant <agente> para forçar decanting
+Use /multiagents-dashboard para reabrir o dashboard, /multiagents-doctor
+para verificar saúde, /multiagents-decant <agente> para forçar decanting
 manual."
 ```
 
-### `commands/decanting-enable.md`
+### `commands/multiagents-enable.md`
 
 ```markdown
 ---
@@ -124,7 +124,7 @@ Habilite o especialista `{{arg1}}` no projeto atual.
 8. Confirme: "{{arg1}} habilitado. Pronto para ser invocado via Agent tool."
 ```
 
-### `commands/decanting-inspect.md`
+### `commands/multiagents-inspect.md`
 
 ```markdown
 ---
@@ -146,23 +146,23 @@ Mostre estado completo de {{arg1}}:
 Apresente formatado, em PT-BR, com seções claras.
 ```
 
-### `commands/decanting-dashboard.md`
+### `commands/multiagents-dashboard.md`
 
 ```markdown
 ---
 description: Abre ou reabre o dashboard web local.
 ---
 
-1. Verifique se há processo dashboard rodando: `python scripts/decanting.py
+1. Verifique se há processo dashboard rodando: `python scripts/multiagents.py
    dashboard-status`.
-2. Se não, inicie em background: `python scripts/decanting.py dashboard
+2. Se não, inicie em background: `python scripts/multiagents.py dashboard
    --background`.
 3. Abra URL no browser cross-platform.
 4. Confirme: "Dashboard em http://localhost:8765. Use
-   `/decanting-dashboard --stop` para encerrar."
+   `/multiagents-dashboard --stop` para encerrar."
 ```
 
-### `commands/decanting-decant.md`
+### `commands/multiagents-decant.md`
 
 ```markdown
 ---
@@ -192,14 +192,14 @@ trabalho recente) e produz decanting retroativo.
 4. Confirme ao usuário: "Decanting retroativo de {{arg1}} completo."
 ```
 
-### `commands/decanting-doctor.md`
+### `commands/multiagents-doctor.md`
 
 ```markdown
 ---
 description: Verifica saúde do projeto multiagente.
 ---
 
-Rode `python scripts/decanting.py doctor`. Reporta:
+Rode `python scripts/multiagents.py doctor`. Reporta:
 
 1. **Versões:**
    - Python: ≥ 3.9 OK / KO
@@ -233,7 +233,7 @@ Rode `python scripts/decanting.py doctor`. Reporta:
 7. **Verde / Amarelo / Vermelho** veredito final.
 ```
 
-### `commands/decanting-trust.md`
+### `commands/multiagents-trust.md`
 
 ```markdown
 ---
@@ -257,7 +257,7 @@ Mostre `memory/{{arg1}}/trust.json` formatado:
   - 70-100: "alta autonomia; só catastróficas precisam confirmação"
 ```
 
-### `commands/decanting-upgrade.md`
+### `commands/multiagents-upgrade.md`
 
 ```markdown
 ---
@@ -275,7 +275,7 @@ description: Atualiza o plugin para nova versão (preserva memória do projeto).
 8. Reporte mudanças relevantes pro usuário.
 ```
 
-### `commands/decanting-explain.md`
+### `commands/multiagents-explain.md`
 
 ```markdown
 ---
@@ -304,7 +304,7 @@ Conceitos cobertos:
 Use analogias do mundo real, evite jargão técnico, dê 1 exemplo concreto.
 ```
 
-### `commands/decanting-tutorial.md`
+### `commands/multiagents-tutorial.md`
 
 ```markdown
 ---
@@ -314,7 +314,7 @@ description: Tutorial interativo embutido (para primeiros usos).
 Execute um walkthrough guiado de 5-7 minutos:
 
 1. Explique brevemente o que é multiagents-decanting (1 parágrafo).
-2. Crie um projeto fictício temporário em `/tmp/decanting-tutorial-<timestamp>/`.
+2. Crie um projeto fictício temporário em `/tmp/multiagents-tutorial-<timestamp>/`.
 3. Habilite 2 agentes (arquiteto + pipeline-dev).
 4. Mostre o dashboard.
 5. Escreva uma spec simples ("crie um script Python que soma 2 e 2").

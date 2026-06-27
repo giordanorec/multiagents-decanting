@@ -1,6 +1,6 @@
 # 05 — Templates (de memória, spec, report, status)
 
-Todos os templates abaixo são copiados pelo `/decanting-init` para o projeto-cliente. Cada arquivo é Markdown ou JSON puro, sem dependências exóticas. Variáveis no formato `{{var}}` são substituídas no momento da criação.
+Todos os templates abaixo são copiados pelo `/multiagents-init` para o projeto-cliente. Cada arquivo é Markdown ou JSON puro, sem dependências exóticas. Variáveis no formato `{{var}}` são substituídas no momento da criação.
 
 ## 5.1 `templates/memory/identity.md`
 
@@ -371,11 +371,11 @@ Este projeto usa o plugin `multiagents-decanting`. Estrutura em:
 - `logs/otel/` — telemetria runtime (gitignored)
 
 ## Comandos úteis
-- `/decanting-dashboard` — abrir dashboard local
-- `/decanting-doctor` — verificar saúde do projeto
-- `/decanting-decant <agente>` — forçar decanting manual de um agente
-- `/decanting-inspect <agente>` — ver estado de um agente
-- `/decanting-trust <agente>` — ver trust score
+- `/multiagents-dashboard` — abrir dashboard local
+- `/multiagents-doctor` — verificar saúde do projeto
+- `/multiagents-decant <agente>` — forçar decanting manual de um agente
+- `/multiagents-inspect <agente>` — ver estado de um agente
+- `/multiagents-trust <agente>` — ver trust score
 
 ## Regras não-negociáveis
 - Nunca push em main sem revisão humana.

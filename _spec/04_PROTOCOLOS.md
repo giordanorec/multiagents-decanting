@@ -96,7 +96,7 @@ Não é hard guard (sessão já terminou), mas é instrumentação que pune omis
 2. Ler ./CLAUDE.md (projeto).
 3. Ler ./docs/STATE.md, ./docs/DECISOES.md (últimas 10 entradas).
 4. Ler ./memory/arquiteto/handoff.md.
-5. Verificar saúde: scripts/decanting.py doctor.
+5. Verificar saúde: scripts/multiagents.py doctor.
 6. Apresentar resumo ao usuário e perguntar "Onde paramos?" /
    "Em que parte quer trabalhar?".
 7. Não executar até confirmação.

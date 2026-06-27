@@ -1,7 +1,7 @@
 """
 init.py — scaffold determinístico de um projeto multiagents-decanting.
 
-A conversa de Discovery é conduzida pelo slash command /decanting-init (LLM).
+A conversa de Discovery é conduzida pelo slash command /multiagents-init (LLM).
 Aqui fica só o que é puro filesystem: criar estrutura, copiar templates,
 substituir {{variáveis}}, registrar agentes. Idempotente onde seguro; nunca
 sobrescreve memória/docs existentes sem aviso.
@@ -34,7 +34,7 @@ MEMORY_FILES = ["identity.md", "dossier.md", "decisions.md", "handoff.md",
 # diretórios estáticos copiados do plugin para o projeto
 # (hooks vão só para .claude/hooks, tratado à parte — não duplicar)
 COPY_TREES = ["dashboard", "bin", "locale"]
-COPY_SCRIPTS = ["decanting.py", "init.py", "doctor.py", "inspect_agent.py",
+COPY_SCRIPTS = ["multiagents.py", "init.py", "doctor.py", "inspect_agent.py",
                 "dashboard_server.py", "resilience.py", "_utils.py"]
 
 
@@ -131,7 +131,7 @@ def run(name=None, project_type="outro", agents=None, budget_usd=50.0,
 
     if (target / u.CONFIG_FILENAME).is_file():
         print(u.c("▲ Projeto já inicializado (multiagents-decanting.toml existe).", "yellow"))
-        print("  Use /decanting-dashboard ou /decanting-doctor.")
+        print("  Use /multiagents-dashboard ou /multiagents-doctor.")
         return 1
 
     agents = agents or TYPE_AGENTS.get(project_type, TYPE_AGENTS["outro"])
@@ -200,8 +200,8 @@ def run(name=None, project_type="outro", agents=None, budget_usd=50.0,
     print(f"  Agentes habilitados: {', '.join(agents)}")
     print(f"  {len(all_created)} arquivos criados em memory/ e .claude/agents/")
     print(u.c("\n  Próximo passo:", "bold"))
-    print("    /decanting-dashboard   → abre o dashboard local")
-    print("    /decanting-doctor      → verifica saúde")
+    print("    /multiagents-dashboard   → abre o dashboard local")
+    print("    /multiagents-doctor      → verifica saúde")
     print("    Descreva sua primeira feature e o Arquiteto coordena.")
     return 0
 

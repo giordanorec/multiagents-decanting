@@ -7,14 +7,14 @@ Mostre o trust score e o histórico do agente `$ARGUMENTS`. Tudo em português b
 
 ## Convenção de invocação da CLI
 
-Use `python3 scripts/decanting.py <subcomando>`. Se `python3` não existir, caia para `python scripts/decanting.py <subcomando>`.
+Use `python3 scripts/multiagents.py <subcomando>`. Se `python3` não existir, caia para `python scripts/multiagents.py <subcomando>`.
 
 ## Passos
 
 1. Rode:
 
    ```
-   python3 scripts/decanting.py trust $ARGUMENTS
+   python3 scripts/multiagents.py trust $ARGUMENTS
    ```
 
    (Se a CLI não cobrir tudo, complemente lendo `memory/$ARGUMENTS/trust.json` diretamente.)

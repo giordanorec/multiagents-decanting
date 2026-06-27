@@ -1,8 +1,8 @@
 # Exemplos por tipo de projeto
 
-Como o `/decanting-init` configura o time conforme o tipo, e que primeira
+Como o `/multiagents-init` configura o time conforme o tipo, e que primeira
 feature faz sentido em cada caso. Todos começam igual: `claude` →
-`/decanting-init` → responda o Discovery → `/decanting-dashboard`.
+`/multiagents-init` → responda o Discovery → `/multiagents-dashboard`.
 
 ## ML / pipeline de dados
 
@@ -54,7 +54,7 @@ convenções de estilo em `memory/docs-writer/lessons.md`.
 ## Outro
 
 O Discovery pergunta quais especialistas você quer. Habilite mais a qualquer
-momento com `/decanting-enable <agente>`.
+momento com `/multiagents-enable <agente>`.
 
 ---
 

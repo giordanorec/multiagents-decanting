@@ -137,9 +137,9 @@ Quando essas coisas acontecerem, plugin precisa repensar:
 
 | Falha | Recuperação |
 |---|---|
-| Call do Agent tool falha mid-feature | `/decanting-doctor` detecta via spans OTel sem `agent.end`; oferece reexecução com `/decanting-decant` retroativo + nova Agent call |
-| `memory/<agente>/handoff.md` corrompido | Reconstruir a partir de `logs/otel/<date>.jsonl` recente; manualmente ou via `/decanting-decant` |
-| `memory/*/handoff.md` perdido | Reconstruir a partir de `logs/otel/<date>.jsonl` (spans recentes) ou via `/decanting-decant` retroativo |
+| Call do Agent tool falha mid-feature | `/multiagents-doctor` detecta via spans OTel sem `agent.end`; oferece reexecução com `/multiagents-decant` retroativo + nova Agent call |
+| `memory/<agente>/handoff.md` corrompido | Reconstruir a partir de `logs/otel/<date>.jsonl` recente; manualmente ou via `/multiagents-decant` |
+| `memory/*/handoff.md` perdido | Reconstruir a partir de `logs/otel/<date>.jsonl` (spans recentes) ou via `/multiagents-decant` retroativo |
 | Dashboard não inicia (porta ocupada) | Auto-tenta 8765-8775; se falhar, instrução pra usuário |
 | Claude Code SDK quebra com plugin | Doctor reporta incompatibilidade; sugere downgrade ou aguardar patch |
 | Billing surpresa | Budget enforcement já encerrou; histórico em logs/otel/ |

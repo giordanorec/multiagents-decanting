@@ -26,27 +26,27 @@ Rodar com **igual qualidade** em:
 
 ## 9.3 Wrappers shell
 
-Para conveniência (usuário não precisa lembrar `python scripts/decanting.py ...`):
+Para conveniência (usuário não precisa lembrar `python scripts/multiagents.py ...`):
 
-**Windows (PowerShell):** `bin/decanting.ps1`
+**Windows (PowerShell):** `bin/multiagents.ps1`
 ```powershell
 #!/usr/bin/env pwsh
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $Project = Split-Path -Parent $ScriptDir
-python "$Project\scripts\decanting.py" @args
+python "$Project\scripts\multiagents.py" @args
 ```
 
-**Windows (cmd):** `bin/decanting.bat`
+**Windows (cmd):** `bin/multiagents.bat`
 ```bat
 @echo off
-python "%~dp0\..\scripts\decanting.py" %*
+python "%~dp0\..\scripts\multiagents.py" %*
 ```
 
-**Bash (Linux/macOS/Git Bash):** `bin/decanting`
+**Bash (Linux/macOS/Git Bash):** `bin/multiagents`
 ```bash
 #!/usr/bin/env bash
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-exec python3 "$SCRIPT_DIR/../scripts/decanting.py" "$@"
+exec python3 "$SCRIPT_DIR/../scripts/multiagents.py" "$@"
 ```
 
 Usuário pode adicionar `bin/` ao PATH para chamar só `decanting doctor` etc.
@@ -159,7 +159,7 @@ COPY scripts/ scripts/
 COPY templates/ templates/
 COPY agents/ agents/
 COPY dashboard/ dashboard/
-ENTRYPOINT ["python", "scripts/decanting.py"]
+ENTRYPOINT ["python", "scripts/multiagents.py"]
 ```
 
 Uso:
@@ -234,7 +234,7 @@ Testes principais:
 - `test_init.py`: estrutura criada corretamente.
 - `test_paths.py`: paths funcionam em Win/Mac/Linux.
 - `test_agent_call.py`: simula call do Agent tool (mock) e verifica boot + decanting.
-- `test_decanting.py`: protocolo executado.
+- `test_multiagents.py`: protocolo executado.
 - `test_dashboard.py`: WebSocket conecta, messages chegam.
 - `test_doctor.py`: detecta projeto saudável vs problemas.
 

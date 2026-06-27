@@ -104,11 +104,11 @@ O plugin é construído para um espectro amplo:
 - Times de desenvolvimento profissional em geral.
 - **Usuários leigos** (advogados, médicos, professores) que querem multiagente sem entender stack — esse é critério qualitativo importante (ver CQ-001 a CQ-005).
 
-Pense em UX desde o início. Onboarding conversacional uma-pergunta-por-vez (já validado em prática), templates por tipo de projeto, comando `/decanting-explain` em PT-BR, dashboard com personagens visuais.
+Pense em UX desde o início. Onboarding conversacional uma-pergunta-por-vez (já validado em prática), templates por tipo de projeto, comando `/multiagents-explain` em PT-BR, dashboard com personagens visuais.
 
 ## Boas práticas pra você (Arquiteto do plugin)
 
-1. **Comece pelo doctor.** Implementar `/decanting-doctor` primeiro força você a definir todas as invariantes do sistema. Ele vira o teste vivo de integridade.
+1. **Comece pelo doctor.** Implementar `/multiagents-doctor` primeiro força você a definir todas as invariantes do sistema. Ele vira o teste vivo de integridade.
 2. **TDD nos componentes críticos.** Especialmente decanting protocol e circuit breaker.
 3. **Mock generoso do `Agent` tool** nos testes para não pagar API durante CI (subprocesses Python que simulam call + retorno).
 4. **Documente cada decisão importante em `docs/DECISOES.md`** do plugin. Mostra a outros (incluindo futuras instâncias suas) por que escolhas foram feitas.
@@ -162,5 +162,5 @@ A outra Claude está implementando. Pode levar dias úteis. Você acompanha via:
 
 Volta aqui (sessão ML) e me avisa. A gente:
 - Instala o plugin no seu ambiente.
-- Roda `/decanting-migrate-from-v02` pra portar este projeto ML.
+- Roda `/multiagents-migrate-from-v02` pra portar este projeto ML.
 - Continua a Discovery do ML usando o plugin novo.

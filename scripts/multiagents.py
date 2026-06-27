@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-decanting.py — entry point único da CLI do multiagents-decanting.
+multiagents.py — entry point único da CLI do multiagents-decanting.
 
 Subcomandos determinísticos (rodados pelo Claude via slash commands ou pelo
 usuário direto). Os subcomandos conversacionais (decant retroativo, explain,
@@ -8,13 +8,13 @@ tutorial) são conduzidos pelos próprios slash commands em Markdown — aqui s�
 ficam as partes que são puro filesystem/diagnóstico.
 
 Uso:
-    python scripts/decanting.py doctor [--json]
-    python scripts/decanting.py init [--name N] [--type T] [--agents a,b,c]
-    python scripts/decanting.py enable <agente>
-    python scripts/decanting.py inspect <agente>
-    python scripts/decanting.py trust <agente>
-    python scripts/decanting.py dashboard [--background|--stop|--status] [--port P] [--no-open] [--bind ADDR]
-    python scripts/decanting.py version
+    python scripts/multiagents.py doctor [--json]
+    python scripts/multiagents.py init [--name N] [--type T] [--agents a,b,c]
+    python scripts/multiagents.py enable <agente>
+    python scripts/multiagents.py inspect <agente>
+    python scripts/multiagents.py trust <agente>
+    python scripts/multiagents.py dashboard [--background|--stop|--status] [--port P] [--no-open] [--bind ADDR]
+    python scripts/multiagents.py version
 """
 from __future__ import annotations
 
@@ -74,7 +74,7 @@ def _cmd_version(args) -> int:
 
 
 def build_parser() -> argparse.ArgumentParser:
-    p = argparse.ArgumentParser(prog="decanting", description="multiagents-decanting CLI")
+    p = argparse.ArgumentParser(prog="multiagents", description="multiagents-decanting CLI")
     sub = p.add_subparsers(dest="cmd", required=True)
 
     d = sub.add_parser("doctor", help="diagnóstico de saúde do projeto")

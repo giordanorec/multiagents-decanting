@@ -7,17 +7,17 @@ Habilite o especialista `$ARGUMENTS` no projeto atual. Tudo em português brasil
 
 ## Convenção de invocação da CLI
 
-Use `python3 scripts/decanting.py <subcomando>`. Se `python3` não existir, caia para `python scripts/decanting.py <subcomando>`.
+Use `python3 scripts/multiagents.py <subcomando>`. Se `python3` não existir, caia para `python scripts/multiagents.py <subcomando>`.
 
 ## Passos
 
-1. Verifique que `multiagents-decanting.toml` existe na raiz. Se não existir, avise que o projeto ainda não foi inicializado e sugira `/decanting-init`.
+1. Verifique que `multiagents-decanting.toml` existe na raiz. Se não existir, avise que o projeto ainda não foi inicializado e sugira `/multiagents-init`.
 2. Verifique que existe um template de agente para `$ARGUMENTS` no plugin (`agents/$ARGUMENTS.md` ou template equivalente). Se o papel não existir, liste os papéis disponíveis e peça que o usuário escolha um válido.
-3. Verifique que o agente ainda não foi habilitado (não existe `memory/$ARGUMENTS/`). Se já existir, **não sobrescreva** — informe que ele já está habilitado e sugira `/decanting-inspect $ARGUMENTS`.
+3. Verifique que o agente ainda não foi habilitado (não existe `memory/$ARGUMENTS/`). Se já existir, **não sobrescreva** — informe que ele já está habilitado e sugira `/multiagents-inspect $ARGUMENTS`.
 4. Rode o habilitador da CLI:
 
    ```
-   python3 scripts/decanting.py enable $ARGUMENTS
+   python3 scripts/multiagents.py enable $ARGUMENTS
    ```
 
    Isso copia o template para `.claude/agents/$ARGUMENTS.md` (registrando o `subagent_type`) e cria `memory/$ARGUMENTS/` com os templates iniciais (identity, dossier, decisions, handoff, trust.json com score 50).

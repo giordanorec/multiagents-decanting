@@ -12,17 +12,17 @@ Toda interação com o usuário é em **português brasileiro**, tom didático.
 
 ```bash
 PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT}"
-if [ -z "$PLUGIN_ROOT" ] || [ ! -f "$PLUGIN_ROOT/scripts/decanting.py" ]; then
-  PLUGIN_ROOT=$(find "$HOME/.claude/plugins" -maxdepth 6 -type f -name decanting.py -path "*multiagents-decanting*/scripts/*" 2>/dev/null | head -1 | xargs -r dirname | xargs -r dirname)
+if [ -z "$PLUGIN_ROOT" ] || [ ! -f "$PLUGIN_ROOT/scripts/multiagents.py" ]; then
+  PLUGIN_ROOT=$(find "$HOME/.claude/plugins" -maxdepth 6 -type f -name multiagents.py -path "*multiagents-decanting*/scripts/*" 2>/dev/null | head -1 | xargs -r dirname | xargs -r dirname)
 fi
 PY=python3; command -v python3 >/dev/null 2>&1 || PY=python
 ```
 
-Use `"$PY" "$PLUGIN_ROOT/scripts/decanting.py" <subcomando>` para o **init**. Depois que o init rodar, o projeto passa a ter seu próprio `scripts/`, e os demais comandos podem usar `"$PY" scripts/decanting.py <subcomando>` (ou continuar usando `$PLUGIN_ROOT` — ambos funcionam).
+Use `"$PY" "$PLUGIN_ROOT/scripts/multiagents.py" <subcomando>` para o **init**. Depois que o init rodar, o projeto passa a ter seu próprio `scripts/`, e os demais comandos podem usar `"$PY" scripts/multiagents.py <subcomando>` (ou continuar usando `$PLUGIN_ROOT` — ambos funcionam).
 
 ## Pré-check
 
-1. Verifique se já existe `multiagents-decanting.toml` na raiz. Se sim, o projeto já foi inicializado — **aborte** com a mensagem: "Projeto já tem multiagentes ativo; use /decanting-dashboard ou /decanting-doctor."
+1. Verifique se já existe `multiagents-decanting.toml` na raiz. Se sim, o projeto já foi inicializado — **aborte** com a mensagem: "Projeto já tem multiagentes ativo; use /multiagents-dashboard ou /multiagents-doctor."
 2. Verifique Python 3.9+: rode `python3 --version` (ou `python --version`). Se não houver Python ou for < 3.9, aborte com instrução curta de instalação.
 3. Verifique a versão do Claude Code: `claude --version`. Se >= 2.1.77, informe que SendMessage está disponível (continuação multi-turn via `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`). Se for mais antigo, informe que a continuidade entre calls será via boot reconstruindo de `handoff.md` (fallback universal, funcionalmente equivalente).
 
@@ -42,7 +42,7 @@ Faça as perguntas abaixo **em sequência**, esperando a resposta do usuário en
 Depois de coletar as respostas, rode o inicializador da CLI passando os parâmetros do Discovery como flags:
 
 ```
-"$PY" "$PLUGIN_ROOT/scripts/decanting.py" init \
+"$PY" "$PLUGIN_ROOT/scripts/multiagents.py" init \
   --name "<nome-do-projeto>" \
   --type "<ml|web|cli|jogo|documento|outro>" \
   --agents "<lista,separada,por,virgula>" \
@@ -66,8 +66,8 @@ Depois que o `init` rodar, complemente `CLAUDE.md` e `docs/00_OBJETIVO.md` com a
 
 Por fim:
 
-- Inicie o dashboard em background: `"$PY" scripts/decanting.py dashboard --background`
-- Verifique a saúde: `"$PY" scripts/decanting.py doctor`
+- Inicie o dashboard em background: `"$PY" scripts/multiagents.py dashboard --background`
+- Verifique a saúde: `"$PY" scripts/multiagents.py doctor`
 
 ## Despacho de especialistas (como o Arquiteto trabalha depois)
 
@@ -93,6 +93,6 @@ Pronto. Projeto multiagente iniciado (decanting nativo).
 Cada especialista é invocado sob demanda via Agent tool (sem processos em
 background, sem session_id manual). Memória vive em memory/<agente>/.
 
-Use /decanting-dashboard para reabrir o dashboard, /decanting-doctor para
-verificar saúde, /decanting-decant <agente> para forçar decanting manual.
+Use /multiagents-dashboard para reabrir o dashboard, /multiagents-doctor para
+verificar saúde, /multiagents-decant <agente> para forçar decanting manual.
 ```

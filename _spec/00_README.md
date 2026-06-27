@@ -12,7 +12,7 @@
 Este conjunto de 14 arquivos descreve, em densidade suficiente para implementação direta, um **novo plugin** para Claude Code chamado `multiagents-decanting`. É um sucessor filosófico (não um upgrade) do plugin `multiagentes-giordano` v0.2.0, com diferenças arquiteturais fundamentais que justificam repo separado.
 
 Nome no marketplace: `multiagents-decanting`.
-Prefixo de comandos: `/decanting-` (ex: `/decanting-init`, `/decanting-spawn`, `/decanting-dashboard`).
+Prefixo de comandos: `/multiagents-` (ex: `/multiagents-init`, `/multiagents-spawn`, `/multiagents-dashboard`).
 
 ## Por que repo separado, não upgrade
 

@@ -17,28 +17,28 @@ Usuário pode ter os dois plugins instalados simultaneamente em Claude Code. Pro
 
 | v0.2.0 (`multiagentes-giordano`) | v1.0 (`multiagents-decanting`) |
 |---|---|
-| `/multiagente-init` (giordano) | `/decanting-init` — sem colisão |
-| `/multiagente-spawn` | `/decanting-enable` — sem colisão |
-| `/multiagente-dashboard` | `/decanting-dashboard` — sem colisão |
+| `/multiagente-init` (giordano) | `/multiagents-init` — sem colisão |
+| `/multiagente-spawn` | `/multiagents-enable` — sem colisão |
+| `/multiagente-dashboard` | `/multiagents-dashboard` — sem colisão |
 
-**Sem colisão de namespaces** porque o plugin novo usa prefixo `/decanting-` em vez de `/multiagente-`. Plugins coexistem nativamente.
+**Sem colisão de namespaces** porque o plugin novo usa prefixo `/multiagents-` em vez de `/multiagente-`. Plugins coexistem nativamente.
 
 Lista completa dos comandos novos:
 
-- `/decanting-init`
-- `/decanting-enable <agente>`
-- `/decanting-inspect <agente>`
-- `/decanting-dashboard`
-- `/decanting-decant <agente>`
-- `/decanting-doctor`
-- `/decanting-trust <agente>`
-- `/decanting-upgrade`
-- `/decanting-explain <conceito>`
-- `/decanting-tutorial`
+- `/multiagents-init`
+- `/multiagents-enable <agente>`
+- `/multiagents-inspect <agente>`
+- `/multiagents-dashboard`
+- `/multiagents-decant <agente>`
+- `/multiagents-doctor`
+- `/multiagents-trust <agente>`
+- `/multiagents-upgrade`
+- `/multiagents-explain <conceito>`
+- `/multiagents-tutorial`
 
 ## 10.3 Migração projeto v0.2.0 → v1.0
 
-Comando dedicado: `/decanting-migrate-from-v02`.
+Comando dedicado: `/multiagents-migrate-from-v02`.
 
 Faz:
 
@@ -70,7 +70,7 @@ Faz:
    - `dashboard/` (HTML+WS)
    - `.claude/hooks/` com guardrails
    - `bin/` com wrappers
-8. **Inicia** dashboard novo: `python scripts/decanting.py dashboard --background`.
+8. **Inicia** dashboard novo: `python scripts/multiagents.py dashboard --background`.
 9. **Roda doctor** para confirmar.
 10. **Apresenta** ao usuário o diff: o que mudou, o que ficou, o que precisa revisão manual.
 
@@ -81,7 +81,7 @@ Risco: split de `MEMORY.md` em arquivos novos é heurístico e pode misturar coi
 Caso usuário não queira migrar tudo de uma vez:
 
 ```bash
-/decanting-migrate-agent <agente>
+/multiagents-migrate-agent <agente>
 ```
 
 Migra só um agente, deixando os outros em formato v0.2.0. Útil quando há time grande de agentes e migração precisa ser gradual.

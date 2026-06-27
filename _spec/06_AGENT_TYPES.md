@@ -246,14 +246,14 @@ Template completo em `templates/agents/_template.md`.
 
 O usuário pode:
 - Editar `.claude/agents/<nome>.md` no projeto (não altera o template global do plugin).
-- Adicionar agentes novos via `/decanting-enable <nome>` que cria pasta `memory/<nome>/` e arquivo template `.claude/agents/<nome>.md` (registrando subagent_type) para o usuário preencher.
+- Adicionar agentes novos via `/multiagents-enable <nome>` que cria pasta `memory/<nome>/` e arquivo template `.claude/agents/<nome>.md` (registrando subagent_type) para o usuário preencher.
 - Versionar suas customizações no git do projeto (não vai pro plugin upstream).
 
 Plugin não impede customização. Paved road, não golden cage.
 
 ## 6.9 Listing dinâmico
 
-`/decanting-list-agents` mostra:
+`/multiagents-list-agents` mostra:
 - Agentes disponíveis no plugin (templates).
 - Agentes habilitados no projeto atual (com trust score e último decanting).
 - Agentes customizados pelo usuário.

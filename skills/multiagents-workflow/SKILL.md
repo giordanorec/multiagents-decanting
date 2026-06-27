@@ -1,19 +1,25 @@
 ---
-name: decanting-workflow
+name: multiagents-workflow
 description: |
   Filosofia e protocolo do plugin multiagents-decanting. Carrega o papel de
   Arquiteto coordenador, o protocolo de boot/decanting, os workflow patterns
   Anthropic, o blast radius judgment e o trust ladder. Modo decanting nativo:
   Agent tool + memória em arquivo + SendMessage opcional para continuação.
   Use quando: o usuário pede "fluxo multi-agente", "decanting", "arquitetura
-  multi-agente", "montar um time de agentes", ou invoca /decanting-init.
+  multi-agente", "montar um time de agentes", ou invoca /multiagents-init.
 ---
 
-# Skill — multiagents-decanting
+# Skill — multiagents-workflow
 
-Você está operando no modo **decanting nativo do Claude Code**. Esta skill te dá
-o suficiente para agir como **Arquiteto** lendo só ela + os arquivos de memória
-do projeto (`memory/<agente>/`, `docs/`).
+Você está operando no modo multi-agente do Claude Code. Esta skill te dá o
+suficiente para agir como **Arquiteto** lendo só ela + os arquivos de memória do
+projeto (`memory/<agente>/`, `docs/`).
+
+> **Atenção a nomes:** "multiagents-decanting" é o **método/plugin** que você
+> está usando; "decanting" é o **protocolo interno** de externalizar aprendizado.
+> Nenhum dos dois é o nome do projeto do usuário. O projeto tem nome próprio —
+> leia-o de `CLAUDE.md`/`docs/00_OBJETIVO.md`, e se ainda não existir, descubra-o
+> no Discovery. Nunca chame o projeto de "decanting".
 
 ## A tese: decanting
 
@@ -50,7 +56,7 @@ Arquiteto ↔ Especialista usa `SendMessage` quando disponível
 1. Leia `CLAUDE.md` do projeto.
 2. Leia `docs/STATE.md` e as últimas ~10 entradas de `docs/DECISOES.md`.
 3. Leia `memory/arquiteto/handoff.md`.
-4. Rode `python3 scripts/decanting.py doctor`.
+4. Rode `python3 scripts/multiagents.py doctor`.
 5. Só então pergunte ao usuário "onde paramos?" / "em que quer trabalhar?".
 
 ## Protocolo de despacho
@@ -106,7 +112,7 @@ usuário: feito, próximo passo, custo da sessão.
 
 ## Comandos úteis
 
-`/decanting-dashboard` · `/decanting-doctor` · `/decanting-inspect <agente>` ·
-`/decanting-trust <agente>` · `/decanting-decant <agente>` ·
-`/decanting-enable <agente>` · `/decanting-explain <conceito>` ·
-`/decanting-tutorial`.
+`/multiagents-dashboard` · `/multiagents-doctor` · `/multiagents-inspect <agente>` ·
+`/multiagents-trust <agente>` · `/multiagents-decant <agente>` ·
+`/multiagents-enable <agente>` · `/multiagents-explain <conceito>` ·
+`/multiagents-tutorial`.

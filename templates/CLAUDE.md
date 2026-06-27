@@ -25,11 +25,11 @@ Este projeto usa o plugin `multiagents-decanting`. Estrutura em:
 - `logs/otel/` — telemetria runtime (gitignored)
 
 ## Comandos úteis
-- `/decanting-dashboard` — abrir dashboard local
-- `/decanting-doctor` — verificar saúde do projeto
-- `/decanting-decant <agente>` — forçar decanting manual de um agente
-- `/decanting-inspect <agente>` — ver estado de um agente
-- `/decanting-trust <agente>` — ver trust score
+- `/multiagents-dashboard` — abrir dashboard local
+- `/multiagents-doctor` — verificar saúde do projeto
+- `/multiagents-decant <agente>` — forçar decanting manual de um agente
+- `/multiagents-inspect <agente>` — ver estado de um agente
+- `/multiagents-trust <agente>` — ver trust score
 
 ## Regras não-negociáveis
 - Nunca push em main sem revisão humana.

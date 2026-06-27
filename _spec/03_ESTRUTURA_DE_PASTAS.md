@@ -1,6 +1,6 @@
 # 03 — Estrutura de Pastas
 
-## 3.1 Layout do projeto-cliente após `/decanting-init`
+## 3.1 Layout do projeto-cliente após `/multiagents-init`
 
 ```
 meu-projeto/
@@ -66,7 +66,7 @@ meu-projeto/
 │       └── avatars/                     # SVG por agente
 │
 └── scripts/                             # CLI do plugin (Python)
-    ├── decanting.py                     # entry point único
+    ├── multiagents.py                     # entry point único
     ├── init.py
     ├── inspect.py
     ├── dashboard_server.py
@@ -101,7 +101,7 @@ multiagents-decanting/
 │   ├── docs-writer.md                   # (v1.1+)
 │   └── asset-designer.md                # (v1.2+)
 │
-├── commands/                            # slash commands (prefixo /decanting-)
+├── commands/                            # slash commands (prefixo /multiagents-)
 │   ├── decanting-init.md
 │   ├── decanting-enable.md              # habilita especialista novo (não spawna; só cria memory/)
 │   ├── decanting-inspect.md
@@ -114,7 +114,7 @@ multiagents-decanting/
 │   └── decanting-tutorial.md
 │
 ├── skills/
-│   └── decanting-workflow/
+│   └── multiagents-workflow/
 │       └── SKILL.md                     # filosofia, carregada quando triggered
 │
 ├── templates/                           # copiados pro projeto no init
@@ -140,7 +140,7 @@ multiagents-decanting/
 │       └── _template.md
 │
 ├── scripts/                             # copiados pro projeto no init
-│   ├── decanting.py                     # entry point único
+│   ├── multiagents.py                     # entry point único
 │   ├── init.py
 │   ├── inspect.py
 │   ├── doctor.py
@@ -171,7 +171,7 @@ multiagents-decanting/
 └── tests/                               # testes do próprio plugin
     ├── test_init.py
     ├── test_boot_protocol.py
-    ├── test_decanting.py
+    ├── test_multiagents.py
     ├── test_dashboard.py
     ├── test_doctor.py
     └── fixtures/

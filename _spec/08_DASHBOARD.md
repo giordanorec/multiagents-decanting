@@ -210,7 +210,7 @@ Cliente → servidor (raro; principalmente leitura):
 Quando o usuário está em SSH sem browser, alternativa via Textual ([textualize.io](https://textual.textualize.io/)).
 
 ```
-$ decanting.py dashboard --tui
+$ multiagents.py dashboard --tui
 
 ┌─ multiagente-vivos ──────────────────── projeto: ML_AtivosJudiciais ──┐
 │ arquiteto    ● idle      trust 75  ▓▓▓▓▓▓▓░░░                          │

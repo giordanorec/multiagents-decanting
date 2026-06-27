@@ -48,10 +48,10 @@
 ```
 $ cd ~/meu-projeto
 $ claude  # sessão Claude Code interativa abre
-> /decanting-init
+> /multiagents-init
 ```
 
-O comando dispara o skill `decanting-workflow`:
+O comando dispara o skill `multiagents-workflow`:
 
 1. Verifica que está em projeto novo (sem estrutura).
 2. Cria estrutura de pastas (definida em 03).
@@ -109,14 +109,14 @@ Arquiteto:
 1. Atualiza `docs/STATE.md` com snapshot global.
 2. Atualiza `docs/DECISOES.md` com decisões da sessão.
 3. Sobrescreve `memory/arquiteto/handoff.md`.
-4. Dashboard permanece ativo (processo Python único); pode ser encerrado com `/decanting-dashboard --stop`.
+4. Dashboard permanece ativo (processo Python único); pode ser encerrado com `/multiagents-dashboard --stop`.
 5. Usuário fecha sessão Claude Code. **Não há processo de agente em background a encerrar** (nunca houve).
 
 ### Retomada
 
 ```
 $ claude  # nova sessão
-> /decanting-dashboard  # confirma/reabre dashboard
+> /multiagents-dashboard  # confirma/reabre dashboard
 > Onde paramos?
 ```
 
@@ -211,7 +211,7 @@ A escala não é gating bureaucrático: é instrumentação de competência.
 | Agentes (registros de subagent_type) | Markdown em `.claude/agents/` | Carregados pelo Claude Code nativamente |
 | Templates de memória | Markdown em `templates/` | Copiados no `init` |
 | Skills do plugin | Markdown em `skills/` | Loaded pelo Claude Code |
-| Commands do plugin | Markdown em `commands/` | Slash commands `/decanting-*` |
+| Commands do plugin | Markdown em `commands/` | Slash commands `/multiagents-*` |
 | Hooks (guardrails + OTel emit) | Markdown / scripts | Hooks Claude Code nativos |
 
 **Note o que NÃO aparece:** `spawn.py`, `drive.py`, `sessions.json`, stream parser próprio, `claude -p` wrapper. Tudo isso desapareceu junto com a complexidade de modo vivo.

@@ -6,14 +6,14 @@ Verifique a saúde do projeto multiagente e apresente um diagnóstico claro, em 
 
 ## Convenção de invocação da CLI
 
-Use `python3 scripts/decanting.py <subcomando>`. Se `python3` não existir, caia para `python scripts/decanting.py <subcomando>`.
+Use `python3 scripts/multiagents.py <subcomando>`. Se `python3` não existir, caia para `python scripts/multiagents.py <subcomando>`.
 
 ## Passos
 
 1. Rode o diagnóstico:
 
    ```
-   python3 scripts/decanting.py doctor
+   python3 scripts/multiagents.py doctor
    ```
 
    (Se precisar parsear o resultado, use `doctor --json`.)

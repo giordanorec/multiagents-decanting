@@ -31,7 +31,7 @@ de tokens limitado por feature, e tudo auditável.
 | Custo | sem teto | budget enforcement + circuit breaker |
 | Confiança | — | trust ladder por agente |
 
-Os dois coexistem (prefixos `/multiagente-` vs `/decanting-`). Veja
+Os dois coexistem (prefixos `/multiagente-` vs `/multiagents-`). Veja
 `_spec/10_MIGRACAO_E_COEXISTENCIA.md`.
 
 ## Requisitos
@@ -44,8 +44,8 @@ Os dois coexistem (prefixos `/multiagente-` vs `/decanting-`). Veja
 ```
 cd meu-projeto
 claude
-> /decanting-init        # Discovery + estrutura + agentes + dashboard
-> /decanting-dashboard   # abre o painel local
+> /multiagents-init        # Discovery + estrutura + agentes + dashboard
+> /multiagents-dashboard   # abre o painel local
 > Descreva sua primeira feature — o Arquiteto coordena.
 ```
 
@@ -53,16 +53,16 @@ claude
 
 | Comando | O que faz |
 |---|---|
-| `/decanting-init` | Discovery e scaffold do projeto |
-| `/decanting-enable <agente>` | Habilita um especialista adicional |
-| `/decanting-inspect <agente>` | Estado completo de um agente |
-| `/decanting-dashboard` | Abre/encerra o dashboard local |
-| `/decanting-decant <agente>` | Força decanting retroativo |
-| `/decanting-doctor` | Diagnóstico verde/amarelo/vermelho |
-| `/decanting-trust <agente>` | Trust score e histórico |
-| `/decanting-upgrade` | Atualiza o plugin (preserva memória) |
-| `/decanting-explain <conceito>` | Explica um conceito em PT-BR acessível |
-| `/decanting-tutorial` | Walkthrough guiado de 5-7 min |
+| `/multiagents-init` | Discovery e scaffold do projeto |
+| `/multiagents-enable <agente>` | Habilita um especialista adicional |
+| `/multiagents-inspect <agente>` | Estado completo de um agente |
+| `/multiagents-dashboard` | Abre/encerra o dashboard local |
+| `/multiagents-decant <agente>` | Força decanting retroativo |
+| `/multiagents-doctor` | Diagnóstico verde/amarelo/vermelho |
+| `/multiagents-trust <agente>` | Trust score e histórico |
+| `/multiagents-upgrade` | Atualiza o plugin (preserva memória) |
+| `/multiagents-explain <conceito>` | Explica um conceito em PT-BR acessível |
+| `/multiagents-tutorial` | Walkthrough guiado de 5-7 min |
 
 ## Conceitos
 
@@ -75,7 +75,7 @@ claude
 - **guardrails** — poucos e catastróficos (force-push, rm -rf, secret commit,
   identity change). Proteção contra acidente, não contra agente malicioso.
 
-Rode `/decanting-explain <conceito>` para qualquer um deles em linguagem
+Rode `/multiagents-explain <conceito>` para qualquer um deles em linguagem
 acessível.
 
 ## Filosofia
