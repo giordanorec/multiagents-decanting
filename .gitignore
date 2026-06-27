@@ -1,0 +1,43 @@
+# --- runtime / telemetria (gitignored: runtime, não versionado) ---
+logs/
+status/
+*.log
+
+# --- memória dos projetos-cliente é versionada NELES, não aqui ---
+# (no repo do plugin não há memory/ de cliente; o do Arquiteto-do-plugin é versionado de propósito)
+
+# --- python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+.coverage.*
+
+# --- node / dashboard (não usamos, mas por garantia) ---
+node_modules/
+
+# --- editores / OS ---
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# --- segredos ---
+.env
+*.key
+credentials.json
+.credentials/
+
+# --- backups de migração ---
+.backup-pre-migrate-*/

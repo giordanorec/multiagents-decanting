@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# Wrapper de conveniência (Linux/macOS/Git Bash).
+# Uso: decanting <subcomando> [args]   (ex: decanting doctor)
+set -euo pipefail
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PY="python3"
+command -v python3 >/dev/null 2>&1 || PY="python"
+exec "$PY" "$SCRIPT_DIR/../scripts/decanting.py" "$@"

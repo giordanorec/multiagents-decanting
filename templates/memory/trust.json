@@ -1,0 +1,7 @@
+{
+  "agente": "{{agente}}",
+  "score": 50,
+  "history": [],
+  "last_updated": "{{iso_timestamp}}",
+  "version": 1
+}

@@ -1,0 +1,50 @@
+[plugin]
+version = "1.0.0"
+
+[budget]
+max_tokens_per_feature = 100000   # alerta no Arquiteto se ultrapassar numa única feature
+max_cost_per_day_usd = 50.0       # encerra calls subsequentes; força decanting do que está em curso
+warning_threshold = 0.8            # avisa em 80% do limite
+
+[resilience]
+retry_attempts = 3
+retry_backoff_initial_ms = 1000
+retry_backoff_max_ms = 30000
+retry_jitter = true
+circuit_breaker_failures = 3
+circuit_breaker_reset_seconds = 300
+
+[fallback]
+opus_to_sonnet = true
+sonnet_to_haiku = true
+
+[observability]
+otel_enabled = true
+otel_local_path = "logs/otel"
+otel_exporter_endpoint = ""  # ou variável de ambiente OTEL_EXPORTER_OTLP_ENDPOINT
+
+[dashboard]
+port = 8765
+auto_open_browser = true
+theme = "dark"  # dark | light | auto
+
+[i18n]
+default_locale = "pt-BR"
+fallback_locale = "en"
+
+[guardrails]
+block_force_push_to_main = true
+block_rm_rf_outside_project = true
+block_secret_commit = true
+block_identity_change_without_flag = true
+
+[trust]
+default_score = 50
+weights = { accepted = 5, accepted_with_minor_note = 3, rework_minor = 1, rework_major = -3, rejected = -7, decanting_skipped = -10 }
+
+[multiturn]
+# Quando especialista precisa continuar conversa durante a feature:
+# - "sendmessage": usa SendMessage se Claude Code v2.1.77+ e env var set
+# - "agent_call": sempre nova call do Agent tool lendo handoff
+# - "auto": detecta capacidade e escolhe (default)
+strategy = "auto"

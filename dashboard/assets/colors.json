@@ -1,0 +1,13 @@
+{
+  "arquiteto": "#1e7a3a",
+  "pipeline-dev": "#1e5a7a",
+  "qa-tester": "#6a3a8a",
+  "dba": "#8a5a1e",
+  "frontend-dev": "#7a1e6a",
+  "devops-installer": "#5a5a5a",
+  "docs-writer": "#1e7a7a",
+  "llm-prompt": "#a55050",
+  "mobile-dev": "#3a8a8a",
+  "asset-designer": "#8a3a5a",
+  "security-auditor": "#7a1e1e"
+}

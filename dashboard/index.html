@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="auto">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>multiagente</title>
+  <meta name="theme-color" content="#1e1e2e" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="icon" href="/assets/icon-192.png" type="image/png" />
+  <link rel="apple-touch-icon" href="/assets/icon-192.png" />
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-dot" aria-hidden="true">●</span>
+      <h1 id="title">multiagente</h1>
+    </div>
+    <div class="topbar-actions">
+      <span id="conn" class="conn conn--connecting" title="conexão">
+        <span class="conn-dot" aria-hidden="true"></span>
+        <span class="conn-label">conectando…</span>
+      </span>
+      <button id="theme-toggle" class="icon-btn" type="button" aria-label="alternar tema" title="tema">
+        <span class="theme-glyph">☀</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="content">
+    <section id="team" class="team" aria-label="sala de equipe">
+      <div class="team-empty" id="team-empty">aguardando agentes…</div>
+    </section>
+
+    <section class="metrics" aria-label="métricas de hoje">
+      <h2 class="section-title">Métricas hoje</h2>
+      <div class="metrics-grid">
+        <div class="metric">
+          <div class="metric-head">
+            <span class="metric-label">Tokens</span>
+            <span class="metric-value" id="m-tokens">—</span>
+          </div>
+          <div class="bar"><div class="bar-fill" id="m-tokens-bar"></div></div>
+          <div class="metric-sub" id="m-tokens-sub"></div>
+        </div>
+        <div class="metric">
+          <div class="metric-head">
+            <span class="metric-label">Custo</span>
+            <span class="metric-value" id="m-cost">—</span>
+          </div>
+          <div class="bar"><div class="bar-fill bar-fill--cost" id="m-cost-bar"></div></div>
+          <div class="metric-sub" id="m-cost-sub"></div>
+        </div>
+        <div class="metric metric--mini">
+          <div class="metric-head">
+            <span class="metric-label">Features completadas</span>
+            <span class="metric-value metric-value--big" id="m-features">0</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="activity" aria-label="atividade em tempo real">
+      <h2 class="section-title">Atividade em tempo real</h2>
+      <ul class="activity-list" id="activity-list">
+        <li class="activity-empty">sem atividade recente</li>
+      </ul>
+    </section>
+  </main>
+
+  <div id="offline-banner" class="offline-banner" hidden>
+    dashboard sem conexão — tentando reconectar…
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
