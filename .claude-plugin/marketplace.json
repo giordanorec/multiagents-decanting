@@ -1,0 +1,31 @@
+{
+  "name": "multiagents-decanting-dev",
+  "owner": {
+    "name": "giordanorec",
+    "email": "grec@cin.ufpe.br"
+  },
+  "metadata": {
+    "description": "Marketplace local de desenvolvimento do multiagents-decanting",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "multiagents-decanting",
+      "source": "./",
+      "description": "Orquestração multi-agente em modo decanting nativo do Claude Code: Arquiteto coordena especialistas via Agent tool (sem claude -p), decanting obrigatório ao fim de cada feature, memória institucional em arquivo, trust ladder, guardrails proporcionais ao blast radius, dashboard HTML local cross-platform e OpenTelemetry GenAI.",
+      "version": "1.0.0",
+      "category": "workflow",
+      "tags": [
+        "multiagent",
+        "subagents",
+        "decanting",
+        "memory",
+        "trust-ladder",
+        "opentelemetry",
+        "dashboard",
+        "orchestration",
+        "cross-platform"
+      ]
+    }
+  ]
+}
