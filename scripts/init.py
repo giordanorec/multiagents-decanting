@@ -1,7 +1,7 @@
 """
 init.py — scaffold determinístico de um projeto multiagents-decanting.
 
-A conversa de Discovery é conduzida pelo slash command /multiagents-init (LLM).
+A conversa de Discovery é conduzida pelo slash command /mad-init (LLM).
 Aqui fica só o que é puro filesystem: criar estrutura, copiar templates,
 substituir {{variáveis}}, registrar agentes. Idempotente onde seguro; nunca
 sobrescreve memória/docs existentes sem aviso.
@@ -34,7 +34,7 @@ MEMORY_FILES = ["identity.md", "dossier.md", "decisions.md", "handoff.md",
 # diretórios estáticos copiados do plugin para o projeto
 # (hooks vão só para .claude/hooks, tratado à parte — não duplicar)
 COPY_TREES = ["dashboard", "bin", "locale"]
-COPY_SCRIPTS = ["multiagents.py", "init.py", "doctor.py", "inspect_agent.py",
+COPY_SCRIPTS = ["mad.py", "init.py", "doctor.py", "inspect_agent.py",
                 "dashboard_server.py", "resilience.py", "_utils.py"]
 
 
@@ -119,7 +119,7 @@ def enable_agent(agent: str, target: Path | None = None, project: str | None = N
     for c in created:
         print(f"    + {c}")
     print(f"  Pronto pra ser invocado via Agent tool: "
-          f"subagent_type=\"multiagents-decanting:{agent}\"")
+          f"subagent_type=\"mad:{agent}\"")
     u.emit_span("agent.enabled", {"agent.name": agent}, root=target)
     return 0
 
@@ -131,7 +131,7 @@ def run(name=None, project_type="outro", agents=None, budget_usd=50.0,
 
     if (target / u.CONFIG_FILENAME).is_file():
         print(u.c("▲ Projeto já inicializado (multiagents-decanting.toml existe).", "yellow"))
-        print("  Use /multiagents-dashboard ou /multiagents-doctor.")
+        print("  Use /mad-dashboard ou /mad-doctor.")
         return 1
 
     agents = agents or TYPE_AGENTS.get(project_type, TYPE_AGENTS["outro"])
@@ -200,8 +200,8 @@ def run(name=None, project_type="outro", agents=None, budget_usd=50.0,
     print(f"  Agentes habilitados: {', '.join(agents)}")
     print(f"  {len(all_created)} arquivos criados em memory/ e .claude/agents/")
     print(u.c("\n  Próximo passo:", "bold"))
-    print("    /multiagents-dashboard   → abre o dashboard local")
-    print("    /multiagents-doctor      → verifica saúde")
+    print("    /mad-dashboard   → abre o dashboard local")
+    print("    /mad-doctor      → verifica saúde")
     print("    Descreva sua primeira feature e o Arquiteto coordena.")
     return 0
 

@@ -7,17 +7,17 @@ Mostre o estado completo do agente `$ARGUMENTS`. Tudo em português brasileiro, 
 
 ## Convenção de invocação da CLI
 
-Use `python3 scripts/multiagents.py <subcomando>`. Se `python3` não existir, caia para `python scripts/multiagents.py <subcomando>`.
+Use `python3 scripts/mad.py <subcomando>`. Se `python3` não existir, caia para `python scripts/mad.py <subcomando>`.
 
 ## Passos
 
 1. Rode o inspetor da CLI, que reúne memória + telemetria do agente:
 
    ```
-   python3 scripts/multiagents.py inspect $ARGUMENTS
+   python3 scripts/mad.py inspect $ARGUMENTS
    ```
 
-2. Se o agente não estiver habilitado (sem `memory/$ARGUMENTS/`), avise e sugira `/multiagents-enable $ARGUMENTS`.
+2. Se o agente não estiver habilitado (sem `memory/$ARGUMENTS/`), avise e sugira `/mad-enable $ARGUMENTS`.
 3. Apresente o resultado formatado, cobrindo:
    - **Handoff** — conteúdo de `memory/$ARGUMENTS/handoff.md` (a cabeça de tudo: onde parou, o que ficou pendente).
    - **Decisões recentes** — últimas 5 entradas de `memory/$ARGUMENTS/decisions.md`.

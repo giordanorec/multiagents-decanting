@@ -13,8 +13,8 @@ dashboard, resiliência e i18n funcionais e validados end-to-end no Linux.
 |---|---|
 | CLI Python (`_utils`, `decanting`, `doctor`, `init`, `inspect_agent`, `dashboard_server`, `resilience`) | ✅ funcional |
 | 3 agentes (arquiteto, pipeline-dev, qa-tester) | ✅ self-contained |
-| 10 slash commands `/multiagents-*` | ✅ |
-| Skill `multiagents-workflow` | ✅ |
+| 10 slash commands `/mad-*` | ✅ |
+| Skill `mad-workflow` | ✅ |
 | 8 hooks (4 guardrails + budget/circuit + OTel + trust + decant-check) | ✅ wireados via settings.json |
 | Dashboard HTML+WS+PWA vanilla + 11 avatares | ✅ servindo HTTP + WS ao vivo |
 | Templates (memory/docs/spec/report/agent) | ✅ validados |
@@ -38,6 +38,6 @@ dashboard, resiliência e i18n funcionais e validados end-to-end no Linux.
 
 1. CI GitHub Actions (matrix Win/Mac/Linux × Python 3.9-3.13).
 2. Validação real nas máquinas-alvo.
-3. Instalar como plugin no Claude Code do Giordano e dogfoodar `/multiagents-init`
+3. Instalar como plugin no Claude Code do Giordano e dogfoodar `/mad-init`
    num projeto real (E2E da invocação via Agent tool — fora do escopo dos testes).
 4. Tier 2 (dba/frontend-dev/devops-installer/docs-writer + migração v0.2).

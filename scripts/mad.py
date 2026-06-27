@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-multiagents.py — entry point único da CLI do multiagents-decanting.
+mad.py — entry point único da CLI do multiagents-decanting.
 
 Subcomandos determinísticos (rodados pelo Claude via slash commands ou pelo
 usuário direto). Os subcomandos conversacionais (decant retroativo, explain,
@@ -8,13 +8,13 @@ tutorial) são conduzidos pelos próprios slash commands em Markdown — aqui s�
 ficam as partes que são puro filesystem/diagnóstico.
 
 Uso:
-    python scripts/multiagents.py doctor [--json]
-    python scripts/multiagents.py init [--name N] [--type T] [--agents a,b,c]
-    python scripts/multiagents.py enable <agente>
-    python scripts/multiagents.py inspect <agente>
-    python scripts/multiagents.py trust <agente>
-    python scripts/multiagents.py dashboard [--background|--stop|--status] [--port P] [--no-open] [--bind ADDR]
-    python scripts/multiagents.py version
+    python scripts/mad.py doctor [--json]
+    python scripts/mad.py init [--name N] [--type T] [--agents a,b,c]
+    python scripts/mad.py enable <agente>
+    python scripts/mad.py inspect <agente>
+    python scripts/mad.py trust <agente>
+    python scripts/mad.py dashboard [--background|--stop|--status] [--port P] [--no-open] [--bind ADDR]
+    python scripts/mad.py version
 """
 from __future__ import annotations
 
@@ -64,7 +64,7 @@ def _cmd_dashboard(args) -> int:
 
 
 def _cmd_version(args) -> int:
-    print(f"multiagents-decanting {PLUGIN_VERSION}")
+    print(f"mad (MultiAgent Decanting) {PLUGIN_VERSION}")
     ccv = u.get_claude_code_version()
     print(f"claude code: {'.'.join(map(str, ccv)) if ccv else 'não detectado'}")
     print(f"python: {sys.version.split()[0]}  ·  plataforma: {u.get_platform()}"
@@ -74,7 +74,7 @@ def _cmd_version(args) -> int:
 
 
 def build_parser() -> argparse.ArgumentParser:
-    p = argparse.ArgumentParser(prog="multiagents", description="multiagents-decanting CLI")
+    p = argparse.ArgumentParser(prog="mad", description="mad — MultiAgent Decanting CLI")
     sub = p.add_subparsers(dest="cmd", required=True)
 
     d = sub.add_parser("doctor", help="diagnóstico de saúde do projeto")

@@ -86,7 +86,7 @@ com fallback). Python alvo: 3.9+, ambiente de dev é 3.14.
 
 **Decisão:** Os agentes existem em duas camadas, ambas válidas:
 (a) **plugin-shipped** em `agents/<role>.md` → invocados pelo Arquiteto como
-`subagent_type="multiagents-decanting:<role>"` (funcionam por o plugin estar
+`subagent_type="mad:<role>"` (funcionam por o plugin estar
 instalado); (b) **project-local** copiados pelo `init` para
 `.claude/agents/<role>.md` → invocáveis como `<role>` (sem namespace), para
 customização do usuário sem mexer no template do plugin (spec §6.8).
@@ -94,7 +94,7 @@ customização do usuário sem mexer no template do plugin (spec §6.8).
 **Alternativas consideradas:** Só (a) — não copiar pro projeto. Rejeitado: a
 spec (CA-001, layout §3.1) quer `.claude/agents/` populado e §6.8 quer
 customização local. Só (b) — não usar namespace. Rejeitado: todos os prompts de
-despacho usam `multiagents-decanting:<role>`.
+despacho usam `mad:<role>`.
 
 **Por quê:** Não há colisão (subagent_types distintos). A cópia local dá o ponto
 de customização; o namespaced é o canônico do despacho.
@@ -137,9 +137,9 @@ projeto nativamente.
 ## 2026-06-27 — Decisão #7: Rebrand das superfícies de usuário para "multiagents"
 
 **Decisão:** As superfícies voltadas ao usuário usam a marca **"multiagents"**
-(inglês): skill `multiagents-workflow`, comandos `/multiagents-*`, CLI
-`multiagents`/`scripts/multiagents.py`. "decanting" fica só como conceito interno
-(o protocolo) e na ação `/multiagents-decant`. Plugin/repo/marketplace e
+(inglês): skill `mad-workflow`, comandos `/mad-*`, CLI
+`multiagents`/`scripts/mad.py`. "decanting" fica só como conceito interno
+(o protocolo) e na ação `/mad-decant`. Plugin/repo/marketplace e
 `subagent_type` seguem `multiagents-decanting`.
 
 **Alternativas consideradas:** Manter `/decanting-*` (rejeitado pelo Giordano);
@@ -157,3 +157,34 @@ arquiteto separando método × nome-do-projeto.
 **Como reabrir:** Se o Giordano mudar de ideia sobre a marca.
 
 **Feature relacionada:** rebrand / UX / naming.
+
+---
+
+## 2026-06-27 — Decisão #8: Rebrand final para `mad` + política de versionamento
+
+**Decisão:** O plugin passa a se chamar **`mad`** (MultiAgent Decanting). Skill
+`mad-workflow`, comandos `/mad-*`, subagent_type `mad:<role>`, CLI `mad`/`scripts/mad.py`.
+O repo/pasta e o arquivo de config (`multiagents-decanting.toml`) seguem inalterados.
+
+**Política de versionamento estabelecida (vale daqui pra frente):**
+- Mudança **incremental** (sem quebrar projetos existentes) → mesmo nome, bump de
+  versão (semver no plugin.json), usuário roda `claude plugin update`.
+- Mudança **arquitetural que quebra** → nome NOVO e **distinto** (não homônimo).
+  Controle de versão = semver + marketplace + `claude plugin update`; `/mad-doctor`
+  reporta instalado vs disponível on-demand (NÃO phone-home a cada chamada);
+  release via git tag + `gh release`.
+
+**Alternativas consideradas:** Manter `multiagents-workflow` (rejeitado: diferia
+do v0.2 `multiagente-workflow` por UMA letra — confusão real no dogfood). Upgrade
+in-place do `multiagentes-giordano` (rejeitado: filosofias incompatíveis).
+
+**Por quê:** Nome distinto elimina a ambiguidade "mesmo comando, versão diferente
+pra cada um": `/multiagente-*` = sempre v0.2; `/mad-*` = sempre o novo.
+
+**Restrição decorrente:** Em todas as superfícies de usuário, marca = `mad`.
+Side-effect do sed corrigido: URLs do GitHub voltaram a `multiagents-decanting`
+(o repo não mudou); `_spec/` restaurado (referência congelada).
+
+**Como reabrir:** Se "mad" provar ambíguo na prática.
+
+**Feature relacionada:** rebrand final / versionamento.

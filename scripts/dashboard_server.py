@@ -320,7 +320,7 @@ def cli(args) -> int:
 
     if getattr(args, "background", False):
         # reexecuta destacado
-        cmd = [sys.executable, str(Path(__file__).resolve().parent / "multiagents.py"),
+        cmd = [sys.executable, str(Path(__file__).resolve().parent / "mad.py"),
                "dashboard", "--port", str(port), "--bind", bind, "--no-open"]
         kwargs = {}
         if u.get_platform() == "windows":
@@ -337,7 +337,7 @@ def cli(args) -> int:
         print(u.c(f"✓ dashboard em background · pid {proc.pid} · {url}", "green", "bold"))
         if not args.no_open:
             u.open_url(url)
-        print("  parar: /multiagents-dashboard --stop")
+        print("  parar: /mad-dashboard --stop")
         return 0
 
     # foreground

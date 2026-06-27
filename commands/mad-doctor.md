@@ -6,14 +6,14 @@ Verifique a saúde do projeto multiagente e apresente um diagnóstico claro, em 
 
 ## Convenção de invocação da CLI
 
-Use `python3 scripts/multiagents.py <subcomando>`. Se `python3` não existir, caia para `python scripts/multiagents.py <subcomando>`.
+Use `python3 scripts/mad.py <subcomando>`. Se `python3` não existir, caia para `python scripts/mad.py <subcomando>`.
 
 ## Passos
 
 1. Rode o diagnóstico:
 
    ```
-   python3 scripts/multiagents.py doctor
+   python3 scripts/mad.py doctor
    ```
 
    (Se precisar parsear o resultado, use `doctor --json`.)
@@ -23,7 +23,7 @@ Use `python3 scripts/multiagents.py <subcomando>`. Se `python3` não existir, ca
    **Versões**
    - Python: >= 3.9?
    - Claude Code: versão + suporte a SendMessage (`CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS`).
-   - Plugin multiagents-decanting: versão instalada vs última no marketplace.
+   - Plugin mad: versão instalada vs última no marketplace.
 
    **Estrutura**
    - `multiagents-decanting.toml` presente.

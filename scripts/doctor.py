@@ -5,7 +5,7 @@ Verifica versões, estrutura, telemetria, budget, trust e emite veredito
 verde/amarelo/vermelho. É o teste vivo de integridade do sistema: tudo que o
 plugin promete tem uma invariante checada aqui.
 
-Uso:  python scripts/multiagents.py doctor [--json]
+Uso:  python scripts/mad.py doctor [--json]
 """
 from __future__ import annotations
 
@@ -91,7 +91,7 @@ def run(root: Path | None = None, as_json: bool = False) -> int:
                               "error": "projeto não inicializado (sem multiagents-decanting.toml)"}))
         else:
             print(u.c("✗ Projeto não inicializado.", "red", "bold"))
-            print("  Rode /multiagents-init neste diretório primeiro.")
+            print("  Rode /mad-init neste diretório primeiro.")
         return 2
 
     cfg = u.load_config(root)

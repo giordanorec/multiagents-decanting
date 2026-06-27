@@ -6,7 +6,7 @@ Atualize o plugin multiagents-decanting para uma versão mais recente, **preserv
 
 ## Convenção de invocação da CLI
 
-Use `python3 scripts/multiagents.py <subcomando>`. Se `python3` não existir, caia para `python scripts/multiagents.py <subcomando>`.
+Use `python3 scripts/mad.py <subcomando>`. Se `python3` não existir, caia para `python scripts/mad.py <subcomando>`.
 
 ## Passos
 
@@ -22,5 +22,5 @@ Use `python3 scripts/multiagents.py <subcomando>`. Se `python3` não existir, ca
 6. **NUNCA** sobrescreva o estado do projeto:
    - `memory/`, `docs/`, `specs/`, `reports/`, `CLAUDE.md`, `multiagents-decanting.toml`
 7. Após copiar os arquivos novos, atualize o campo `version` em `multiagents-decanting.toml` para a nova versão (esta é a única edição permitida nesse arquivo).
-8. Rode `python3 scripts/multiagents.py doctor` para verificar compatibilidade pós-upgrade.
+8. Rode `python3 scripts/mad.py doctor` para verificar compatibilidade pós-upgrade.
 9. Reporte ao usuário um resumo das mudanças relevantes e o veredito do doctor.

@@ -36,7 +36,7 @@ def _find_root(start: str):
 
 def _agent_name(d: dict) -> str:
     ti = d.get("tool_input") or {}
-    # subagent_type vem como "multiagents-decanting:<role>" — pega o role.
+    # subagent_type vem como "mad:<role>" — pega o role.
     sub = ti.get("subagent_type") or ti.get("subagentType") or ""
     if sub:
         return sub.split(":")[-1]

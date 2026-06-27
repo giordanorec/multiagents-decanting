@@ -15,7 +15,7 @@ Em modo decanting nativo o agente não é um processo vivo. "Forçar decanting" 
 2. Faça a Agent call de decanting retroativo:
 
    ```
-   Agent(subagent_type="multiagents-decanting:$ARGUMENTS",
+   Agent(subagent_type="mad:$ARGUMENTS",
          description="Decanting retroativo de $ARGUMENTS",
          prompt="Você está sendo chamado para executar decanting retroativo.
                  Leia memory/$ARGUMENTS/handoff.md (estado atual),

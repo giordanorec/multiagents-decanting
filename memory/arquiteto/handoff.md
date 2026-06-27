@@ -7,14 +7,14 @@
 - PLUGIN INSTALADO no Claude Code (marketplace local `multiagents-decanting-dev`).
   Empacotamento validado: `claude plugin details` mostra 3 agentes + 11 skills.
   Init E2E da cópia instalada funciona (32 arquivos, doctor verde-amarelo).
-- Corrigido bug chicken-and-egg: /multiagents-init usa ${CLAUDE_PLUGIN_ROOT}.
+- Corrigido bug chicken-and-egg: /mad-init usa ${CLAUDE_PLUGIN_ROOT}.
 - PENDENTE (precisa sessão nova do Claude): dogfood ao vivo da invocação via
-  Agent tool. Dir pronto em /home/grec/Projetos/multiagents-dogfood/.
+  Agent tool. Dir pronto em /home/grec/Projetos/mad-dogfood/.
 - Faltam ainda: CI rodar de verdade (repo no GitHub), validação Win/Mac.
 
 ## Próximos passos imediatos
 1. Escrever `.github/workflows/ci.yml` (matrix os × python).
-2. Instalar o plugin no Claude Code do Giordano e rodar `/multiagents-init` num
+2. Instalar o plugin no Claude Code do Giordano e rodar `/mad-init` num
    projeto-teste real para validar o despacho via Agent tool.
 3. Decidir com o Giordano: publicar no marketplace `giordanorec/...`?
 
@@ -33,4 +33,4 @@
 ## Como retomar em um minuto
 Leia `docs/STATE.md` (estado dos componentes + gaps) e `docs/DECISOES.md` (6
 decisões registradas). Rode `.venv/bin/python -m pytest tests/ -q` para confirmar
-verde. O código é todo Python stdlib + pathlib; entry point `scripts/multiagents.py`.
+verde. O código é todo Python stdlib + pathlib; entry point `scripts/mad.py`.

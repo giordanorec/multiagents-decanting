@@ -1,6 +1,7 @@
-# multiagents-decanting
+# mad — MultiAgent Decanting
 
-> Orquestração multi-agente para Claude Code em **modo decanting nativo**.
+> Plugin **`mad`** (MultiAgent Decanting). Orquestração multi-agente para Claude
+> Code em **modo decanting nativo**.
 > O Arquiteto coordena especialistas via `Agent` tool — sem `claude -p`, sem
 > processos em background, sem `tmux`. Cada feature é uma sessão viva que
 > **externaliza o aprendizado obrigatoriamente** ao terminar. Windows nativo,
@@ -31,7 +32,7 @@ de tokens limitado por feature, e tudo auditável.
 | Custo | sem teto | budget enforcement + circuit breaker |
 | Confiança | — | trust ladder por agente |
 
-Os dois coexistem (prefixos `/multiagente-` vs `/multiagents-`). Veja
+Os dois coexistem (prefixos `/multiagente-` vs `/mad-`). Veja
 `_spec/10_MIGRACAO_E_COEXISTENCIA.md`.
 
 ## Requisitos
@@ -44,8 +45,8 @@ Os dois coexistem (prefixos `/multiagente-` vs `/multiagents-`). Veja
 ```
 cd meu-projeto
 claude
-> /multiagents-init        # Discovery + estrutura + agentes + dashboard
-> /multiagents-dashboard   # abre o painel local
+> /mad-init        # Discovery + estrutura + agentes + dashboard
+> /mad-dashboard   # abre o painel local
 > Descreva sua primeira feature — o Arquiteto coordena.
 ```
 
@@ -53,16 +54,16 @@ claude
 
 | Comando | O que faz |
 |---|---|
-| `/multiagents-init` | Discovery e scaffold do projeto |
-| `/multiagents-enable <agente>` | Habilita um especialista adicional |
-| `/multiagents-inspect <agente>` | Estado completo de um agente |
-| `/multiagents-dashboard` | Abre/encerra o dashboard local |
-| `/multiagents-decant <agente>` | Força decanting retroativo |
-| `/multiagents-doctor` | Diagnóstico verde/amarelo/vermelho |
-| `/multiagents-trust <agente>` | Trust score e histórico |
-| `/multiagents-upgrade` | Atualiza o plugin (preserva memória) |
-| `/multiagents-explain <conceito>` | Explica um conceito em PT-BR acessível |
-| `/multiagents-tutorial` | Walkthrough guiado de 5-7 min |
+| `/mad-init` | Discovery e scaffold do projeto |
+| `/mad-enable <agente>` | Habilita um especialista adicional |
+| `/mad-inspect <agente>` | Estado completo de um agente |
+| `/mad-dashboard` | Abre/encerra o dashboard local |
+| `/mad-decant <agente>` | Força decanting retroativo |
+| `/mad-doctor` | Diagnóstico verde/amarelo/vermelho |
+| `/mad-trust <agente>` | Trust score e histórico |
+| `/mad-upgrade` | Atualiza o plugin (preserva memória) |
+| `/mad-explain <conceito>` | Explica um conceito em PT-BR acessível |
+| `/mad-tutorial` | Walkthrough guiado de 5-7 min |
 
 ## Conceitos
 
@@ -75,7 +76,7 @@ claude
 - **guardrails** — poucos e catastróficos (force-push, rm -rf, secret commit,
   identity change). Proteção contra acidente, não contra agente malicioso.
 
-Rode `/multiagents-explain <conceito>` para qualquer um deles em linguagem
+Rode `/mad-explain <conceito>` para qualquer um deles em linguagem
 acessível.
 
 ## Filosofia

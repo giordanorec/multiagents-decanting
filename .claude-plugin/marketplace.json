@@ -10,7 +10,7 @@
   },
   "plugins": [
     {
-      "name": "multiagents-decanting",
+      "name": "mad",
       "source": "./",
       "description": "Orquestração multi-agente em modo decanting nativo do Claude Code: Arquiteto coordena especialistas via Agent tool (sem claude -p), decanting obrigatório ao fim de cada feature, memória institucional em arquivo, trust ladder, guardrails proporcionais ao blast radius, dashboard HTML local cross-platform e OpenTelemetry GenAI.",
       "version": "1.0.0",

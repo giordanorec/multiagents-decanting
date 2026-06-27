@@ -72,7 +72,7 @@ def test_budget_hook_blocks_over_budget(tmp_project):
                 {"agent.name": "x", "gen_ai.cost.estimate": 999.0}, root=tmp_project)
     hook = tmp_project / ".claude" / "hooks" / "pre-budget-circuit.py"
     payload = {"tool_name": "Agent", "cwd": str(tmp_project),
-               "tool_input": {"subagent_type": "multiagents-decanting:pipeline-dev"}}
+               "tool_input": {"subagent_type": "mad:pipeline-dev"}}
     res = subprocess.run([sys.executable, str(hook)], input=json.dumps(payload),
                          text=True, cwd=str(tmp_project), capture_output=True)
     assert res.returncode == 2
