@@ -26,20 +26,34 @@ Use `"$PY" "$PLUGIN_ROOT/scripts/mad.py" <subcomando>` para o **init**. Depois q
 2. Verifique Python 3.9+: rode `python3 --version` (ou `python --version`). Se não houver Python ou for < 3.9, aborte com instrução curta de instalação.
 3. Verifique a versão do Claude Code: `claude --version`. Se >= 2.1.77, informe que SendMessage está disponível (continuação multi-turn via `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`). Se for mais antigo, informe que a continuidade entre calls será via boot reconstruindo de `handoff.md` (fallback universal, funcionalmente equivalente).
 
-## Discovery (UMA pergunta por vez)
+## Discovery (conduza pela skill `mad-discovery`)
 
-Faça as perguntas abaixo **em sequência**, esperando a resposta do usuário entre cada uma. NUNCA despeje todas de uma vez.
+**Não faça um formulário.** Conduza um Discovery de verdade seguindo a skill
+`mad-discovery` (carregue-a). Em resumo:
 
-1. "Qual é o objetivo principal do projeto, em uma frase?"
-2. "Quem usa o resultado disso, e como?"
-3. "Que tecnologia/stack já está definida? (linguagem, frameworks, infra) Ou ainda em aberto?"
-4. "Que tipo de projeto é? [ ] ML/pipeline de dados  [ ] App web  [ ] CLI/automação  [ ] Jogo  [ ] Documento/conteúdo  [ ] Outro"
-5. "Há restrições não-óbvias? (compliance, dados sensíveis, prazo apertado, time pequeno, etc)"
-6. "Quanto orçamento de tokens é razoável por dia? (default $50)"
+1. **Calibre a profundidade no começo** — pergunte se o usuário quer modo **expresso**
+   ou **profundo**, recomendando com base no que farejou.
+2. **Postura, não checklist** — antecipe, desconfie, exponha hipóteses como suspeitas,
+   alterne entre afunilar e abrir portas, recomende em vez de dar menu. Um fio por vez.
+3. **Disciplina Mom-Test** — quando o usuário especular sobre o futuro, puxe pro
+   comportamento passado e concreto ("como resolvem isso hoje? o que já tentaram?").
+   Nunca pergunta capciosa.
+4. **Ilumine o mapa de cobertura** (rubrica privada, não recitada): problema & dor;
+   quem usa/opera/decide; comportamento atual & alternativas; critério de sucesso;
+   escopo **e não-objetivos**; restrições (stack, custo/budget, compliance, prazo,
+   time, infra); blast-radius; premissas; unknowns; quem opera no fim; tipo de projeto.
+5. **No modo profundo**, antes de cravar: rode um **premortem** ("imagine que fracassou
+   em 6 meses — o que matou?") e **nomeie as premissas** (desejável/viável/factível).
+6. **Read-back periódico** e pare só na **saturação** (mapa iluminado + read-back limpo
+   + nenhuma premissa nova). Veja `mad-discovery` §8.
+
+O `--type` sai da dimensão "tipo de projeto"; o `--budget` da dimensão "restrições"
+(default $50/dia); o `--name` do nome próprio do projeto (NÃO use "mad" nem "decanting");
+o `--agents` da sugestão por tipo (abaixo), confirmada com o usuário.
 
 ## Setup
 
-Depois de coletar as respostas, rode o inicializador da CLI passando os parâmetros do Discovery como flags:
+Fechada a saturação do Discovery, rode o inicializador da CLI com os parâmetros colhidos:
 
 ```
 "$PY" "$PLUGIN_ROOT/scripts/mad.py" init \
