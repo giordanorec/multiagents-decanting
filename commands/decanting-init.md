@@ -8,7 +8,17 @@ Toda interação com o usuário é em **português brasileiro**, tom didático.
 
 ## Convenção de invocação da CLI
 
-Use `python3 scripts/decanting.py <subcomando>`. Se `python3` não existir no sistema (comum no Windows), caia para `python scripts/decanting.py <subcomando>`. Detecte uma vez no começo e reutilize a forma que funcionou.
+**Importante:** no `init` o projeto ainda NÃO tem `scripts/` (é o init que os cria). Portanto, para o passo de `init`, use a CLI **empacotada no plugin**. Descubra a raiz do plugin:
+
+```bash
+PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT}"
+if [ -z "$PLUGIN_ROOT" ] || [ ! -f "$PLUGIN_ROOT/scripts/decanting.py" ]; then
+  PLUGIN_ROOT=$(find "$HOME/.claude/plugins" -maxdepth 6 -type f -name decanting.py -path "*multiagents-decanting*/scripts/*" 2>/dev/null | head -1 | xargs -r dirname | xargs -r dirname)
+fi
+PY=python3; command -v python3 >/dev/null 2>&1 || PY=python
+```
+
+Use `"$PY" "$PLUGIN_ROOT/scripts/decanting.py" <subcomando>` para o **init**. Depois que o init rodar, o projeto passa a ter seu próprio `scripts/`, e os demais comandos podem usar `"$PY" scripts/decanting.py <subcomando>` (ou continuar usando `$PLUGIN_ROOT` — ambos funcionam).
 
 ## Pré-check
 
@@ -32,14 +42,14 @@ Faça as perguntas abaixo **em sequência**, esperando a resposta do usuário en
 Depois de coletar as respostas, rode o inicializador da CLI passando os parâmetros do Discovery como flags:
 
 ```
-python3 scripts/decanting.py init \
+"$PY" "$PLUGIN_ROOT/scripts/decanting.py" init \
   --name "<nome-do-projeto>" \
   --type "<ml|web|cli|jogo|documento|outro>" \
   --agents "<lista,separada,por,virgula>" \
   --budget "<valor-em-USD-por-dia>"
 ```
 
-O `init` cria a estrutura de pastas (ver `_spec/03_ESTRUTURA_DE_PASTAS.md`), copia os templates de memória (`_spec/05_TEMPLATES.md`), gera `multiagents-decanting.toml` com defaults + ajustes do Discovery, e prepara `memory/<agente>/` para cada especialista da lista (identity, dossier, decisions, handoff, trust.json com score 50). Para cada especialista, o registro de `subagent_type` vai para `.claude/agents/<role>.md`.
+O `init` cria a estrutura de pastas, copia os templates de memória, gera `multiagents-decanting.toml` com defaults + ajustes do Discovery, prepara `memory/<agente>/` para cada especialista (identity, dossier, decisions, handoff, trust.json com score 50), copia `scripts/`, `dashboard/`, hooks e wira os hooks em `.claude/settings.json`. Para cada especialista, o registro de `subagent_type` vai para `.claude/agents/<role>.md`.
 
 Antes de rodar o `init`, **sugira a lista de especialistas** com base no tipo de projeto e confirme com o usuário:
 
@@ -56,8 +66,8 @@ Depois que o `init` rodar, complemente `CLAUDE.md` e `docs/00_OBJETIVO.md` com a
 
 Por fim:
 
-- Inicie o dashboard em background: `python3 scripts/decanting.py dashboard --background`
-- Verifique a saúde: `python3 scripts/decanting.py doctor`
+- Inicie o dashboard em background: `"$PY" scripts/decanting.py dashboard --background`
+- Verifique a saúde: `"$PY" scripts/decanting.py doctor`
 
 ## Despacho de especialistas (como o Arquiteto trabalha depois)
 
