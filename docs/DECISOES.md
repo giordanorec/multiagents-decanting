@@ -188,3 +188,31 @@ Side-effect do sed corrigido: URLs do GitHub voltaram a `multiagents-decanting`
 **Como reabrir:** Se "mad" provar ambíguo na prática.
 
 **Feature relacionada:** rebrand final / versionamento.
+
+---
+
+## 2026-06-27 — Decisão #9: Monorepo com dois plugins (mad + brainstorm)
+
+**Decisão:** O repo `multiagents-decanting` hospeda DOIS plugins independentes num
+mesmo marketplace: `mad` (raiz) e `claude-brainstorm-multiagent` (em
+`plugins/brainstorm/`). `marketplace.json` lista ambos. Comandos `/mad-*` e
+`/brainstorm` coexistem.
+
+**Alternativas consideradas:** Fundir o brainstorm dentro do plugin `mad`.
+Rejeitado: o brainstorm é MCP-based com stack pesada (numpy/sklearn/pyribs/
+sentence-transformers→PyTorch via uvx) e dashboard próprio na porta 8765 — fundir
+mataria a leveza do `mad` (dep única websockets), colidiria porta, e inflaria o
+custo always-on de todo usuário do `mad`.
+
+**Por quê:** Dois plugins num repo (à la `mattpocock/skills`) dá ao usuário tudo
+no mesmo lugar sem acoplar arquiteturas. Cada um leve no que é. Nome do plugin
+brainstorm preservado (`claude-brainstorm-multiagent`) para não quebrar os
+subagent_types internos dos 8 agentes dele.
+
+**Restrição decorrente:** São independentes — instala-se cada um. O primeiro
+`/brainstorm` é lento (uvx baixa a stack ML). Atualizações do brainstorm vêm do
+upstream e são re-sincronizadas no subdir.
+
+**Como reabrir:** Se fizer sentido um "meta-plugin" que dependa dos dois.
+
+**Feature relacionada:** monorepo / brainstorm.
