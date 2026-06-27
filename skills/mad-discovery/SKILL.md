@@ -53,7 +53,22 @@ Não existe postura fixa; existe leitura. Module pela temperatura:
 
 ---
 
-## 2. Disciplina Mom-Test (a qualidade do dado)
+## 2. Disciplina de dado: explore antes de perguntar, e Mom-Test
+
+Duas guardas para não desperdiçar o usuário nem contaminar o dado.
+
+### Explore antes de perguntar (self-serve)
+
+**Se a pergunta pode ser respondida explorando o código ou o contexto, explore — não
+pergunte.** Antes de perguntar stack, convenções, ou "como é feito hoje", você mesmo
+olha: `package.json`/`pyproject.toml`/`go.mod` (stack e deps), grep de padrões
+(convenções), `git log` (história recente), `README`/`docs/` existentes, e os
+arquivos que a tarefa toca. Torrar o tempo do usuário com o que você descobre sozinho
+é falha — e a memória dele é menos confiável que o código. Pergunte só o que
+genuinamente **não dá** pra descobrir: intenção, prioridade, trade-offs, o futuro.
+(Princípio destilado da `grill-me` do Matt Pocock.)
+
+### Mom-Test (a qualidade do dado)
 
 Pergunta capciosa contamina tudo. Guarde-se contra dois venenos:
 
