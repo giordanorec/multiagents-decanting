@@ -4,8 +4,13 @@
 
 ## Em andamento agora
 - v1.0 Tier 1 implementado e verde (54 testes). Commitado.
-- Faltam: CI cross-platform, validação real Win/Mac, instalação como plugin e
-  dogfood E2E da invocação via Agent tool num projeto real.
+- PLUGIN INSTALADO no Claude Code (marketplace local `multiagents-decanting-dev`).
+  Empacotamento validado: `claude plugin details` mostra 3 agentes + 11 skills.
+  Init E2E da cópia instalada funciona (32 arquivos, doctor verde-amarelo).
+- Corrigido bug chicken-and-egg: /decanting-init usa ${CLAUDE_PLUGIN_ROOT}.
+- PENDENTE (precisa sessão nova do Claude): dogfood ao vivo da invocação via
+  Agent tool. Dir pronto em /home/grec/Projetos/decanting-dogfood/.
+- Faltam ainda: CI rodar de verdade (repo no GitHub), validação Win/Mac.
 
 ## Próximos passos imediatos
 1. Escrever `.github/workflows/ci.yml` (matrix os × python).
