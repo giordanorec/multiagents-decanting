@@ -35,7 +35,7 @@ MEMORY_FILES = ["identity.md", "dossier.md", "decisions.md", "handoff.md",
 # (hooks vão só para .claude/hooks, tratado à parte — não duplicar)
 COPY_TREES = ["dashboard", "bin", "locale"]
 COPY_SCRIPTS = ["decanting.py", "init.py", "doctor.py", "inspect_agent.py",
-                "dashboard_server.py", "_utils.py"]
+                "dashboard_server.py", "resilience.py", "_utils.py"]
 
 
 def _subst(text: str, mapping: dict) -> str:
@@ -225,6 +225,9 @@ def hooks_config() -> dict:
             ]},
             {"matcher": "Edit|Write|MultiEdit", "hooks": [
                 sh("pre-guardrail-identity-change.sh"),
+            ]},
+            {"matcher": "Agent|Task", "hooks": [
+                py("pre-budget-circuit.py"),
             ]},
         ],
         "PostToolUse": [
