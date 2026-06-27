@@ -26,10 +26,12 @@ Use `"$PY" "$PLUGIN_ROOT/scripts/mad.py" <subcomando>` para o **init**. Depois q
 2. Verifique Python 3.9+: rode `python3 --version` (ou `python --version`). Se não houver Python ou for < 3.9, aborte com instrução curta de instalação.
 3. Verifique a versão do Claude Code: `claude --version`. Se >= 2.1.77, informe que SendMessage está disponível (continuação multi-turn via `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`). Se for mais antigo, informe que a continuidade entre calls será via boot reconstruindo de `handoff.md` (fallback universal, funcionalmente equivalente).
 
-## Discovery (conduza pela skill `mad-discovery`)
+## Discovery (conduzido pela skill `mad-discovery`)
 
-**Não faça um formulário.** Conduza um Discovery de verdade seguindo a skill
-`mad-discovery` (carregue-a). Em resumo:
+**Primeiro, invoque a skill `mad-discovery`** (via a ferramenta Skill, ou carregando
+`skills/mad-discovery/SKILL.md` do plugin) e conduza o Discovery por ela — é o
+protocolo completo (postura + rigor). **Não faça um formulário.** O resumo abaixo é
+só o esqueleto; o detalhe (mapa de cobertura, premortem, saturação) vive na skill:
 
 1. **Calibre a profundidade no começo** — pergunte se o usuário quer modo **expresso**
    ou **profundo**, recomendando com base no que farejou.
