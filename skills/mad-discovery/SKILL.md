@@ -68,6 +68,13 @@ arquivos que a tarefa toca. Torrar o tempo do usuário com o que você descobre 
 genuinamente **não dá** pra descobrir: intenção, prioridade, trade-offs, o futuro.
 (Princípio destilado da `grill-me` do Matt Pocock.)
 
+**Explorar é para FATOS, nunca para o PROPÓSITO.** Propósito, intenção e prioridade
+vêm SEMPRE do usuário, perguntando — nunca adivinhados. Em especial: **não tente
+adivinhar o que o projeto é pelo nome da pasta** (nem por pistas frouxas). Pasta
+vazia/projeto novo = não há o que explorar; vá direto perguntar, sem chutar. Abrir
+com um palpite sobre o que o projeto é ("ah, isso parece ser um X...") é presunçoso e
+contamina o usuário — comece com uma pergunta aberta e limpa.
+
 ### Mom-Test (a qualidade do dado)
 
 Pergunta capciosa contamina tudo. Guarde-se contra dois venenos:

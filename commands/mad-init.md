@@ -33,6 +33,9 @@ Use `"$PY" "$PLUGIN_ROOT/scripts/mad.py" <subcomando>` para o **init**. Depois q
 protocolo completo (postura + rigor). **Não faça um formulário.** O resumo abaixo é
 só o esqueleto; o detalhe (mapa de cobertura, premortem, saturação) vive na skill:
 
+**Abra com uma pergunta limpa e aberta. NÃO adivinhe o que o projeto é pelo nome da
+pasta** — propósito vem do usuário, sempre. (Pasta nova = nada a explorar; pergunte.)
+
 1. **Calibre a profundidade no começo** — pergunte se o usuário quer modo **expresso**
    ou **profundo**, recomendando com base no que farejou.
 2. **Postura, não checklist** — antecipe, desconfie, exponha hipóteses como suspeitas,
