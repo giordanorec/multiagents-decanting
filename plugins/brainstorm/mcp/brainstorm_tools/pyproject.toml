@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "brainstorm-tools"
+version = "0.1.0"
+description = "MCP server providing Quality-Diversity (MAP-Elites) bookkeeping and semantic operations for the claude-brainstorm-multiagent plugin."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [
+    { name = "claude-brainstorm-multiagent" }
+]
+keywords = ["mcp", "brainstorming", "map-elites", "quality-diversity", "claude"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "mcp[cli]>=1.2.0",
+    "fastmcp>=0.4.0",
+    "numpy>=1.24",
+    "scikit-learn>=1.3",
+    "pyribs>=0.7.0",
+    "sentence-transformers>=2.7.0",
+    "hdbscan>=0.8.33",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+]
+
+[project.scripts]
+brainstorm-tools = "brainstorm_tools.server:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["brainstorm_tools*"]
+exclude = ["tests*"]

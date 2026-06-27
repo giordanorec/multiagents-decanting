@@ -1,0 +1,33 @@
+{
+  "name": "claude-brainstorm-multiagent",
+  "version": "0.1.2",
+  "description": "Ideacao multi-agente com Quality-Diversity (MAP-Elites), decomposicao morfologica, criticos adversariais e dashboard force-graph vivo. Combate conformidade de LLM por diversificacao estrutural.",
+  "homepage": "https://github.com/giordanorec/claude-brainstorm-multiagent",
+  "repository": "https://github.com/giordanorec/claude-brainstorm-multiagent",
+  "author": {
+    "name": "giordanorec",
+    "url": "https://github.com/giordanorec"
+  },
+  "license": "MIT",
+  "keywords": [
+    "brainstorm",
+    "ideation",
+    "multi-agent",
+    "quality-diversity",
+    "map-elites",
+    "creativity",
+    "design-space",
+    "morphological-analysis",
+    "claude-code"
+  ],
+  "mcpServers": {
+    "brainstorm-tools": {
+      "command": "uvx",
+      "args": [
+        "--from",
+        "${CLAUDE_PLUGIN_DIR}/mcp/brainstorm_tools",
+        "brainstorm-tools"
+      ]
+    }
+  }
+}

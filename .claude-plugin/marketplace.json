@@ -26,6 +26,22 @@
         "orchestration",
         "cross-platform"
       ]
+    },
+    {
+      "name": "claude-brainstorm-multiagent",
+      "source": "./plugins/brainstorm",
+      "description": "Ideação multi-agente com Quality-Diversity (MAP-Elites), decomposição morfológica, críticos adversariais e dashboard force-graph vivo. Combate conformidade de LLM por diversificação estrutural. Plugin independente (stack MCP própria: numpy, scikit-learn, pyribs, sentence-transformers via uvx). Comando /brainstorm.",
+      "version": "0.1.2",
+      "category": "ideation",
+      "tags": [
+        "brainstorm",
+        "ideation",
+        "multi-agent",
+        "quality-diversity",
+        "map-elites",
+        "creativity",
+        "claude-code"
+      ]
     }
   ]
 }
