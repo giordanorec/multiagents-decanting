@@ -1,11 +1,11 @@
 {
-  "name": "multiagents-decanting-dev",
+  "name": "multiagents-decanting",
   "owner": {
     "name": "giordanorec",
     "email": "grec@cin.ufpe.br"
   },
   "metadata": {
-    "description": "Marketplace local de desenvolvimento do multiagents-decanting",
+    "description": "Marketplace do Giordano: mad (MultiAgent Decanting) + claude-brainstorm-multiagent.",
     "version": "1.0.0"
   },
   "plugins": [
