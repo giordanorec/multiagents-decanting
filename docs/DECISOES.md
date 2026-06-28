@@ -244,3 +244,29 @@ solo. Atualizações de versão do mad: bump no plugin.json + (catálogo lê do 
 **Como reabrir:** Se um plugin precisar de marketplace próprio por algum motivo.
 
 **Feature relacionada:** distribuição / marketplace.
+
+---
+
+## 2026-06-27 — Decisão #11: Discovery canônica em giordanorec/skills; mad self-contained
+
+**Decisão:** A metodologia de discovery (postura + rigor) é canônica na skill
+`giordanorec/skills/discovery` (tool-agnóstica, cross-tool). O `mad` mantém uma
+**cópia self-contained** (`skills/mad-discovery/`) = a metodologia + a saída
+específica do mad (synth para `docs/00_OBJETIVO.md` + params do `mad.py init`).
+
+**Alternativas consideradas:** mad-discovery como ponteiro fino dependente da skill
+discovery instalada à parte (zero dup). Rejeitado pelo Giordano: prefere UX de um
+install só; a dup de conteúdo é manutenção (não atrito do usuário).
+
+**Por quê:** Plugin self-contained instala e funciona sozinho. A fonte da verdade é
+a skill cross-tool; a cópia do mad é sincronizada a partir dela.
+
+**Restrição decorrente:** Ao evoluir a metodologia, editar
+`giordanorec/skills/discovery` primeiro e sincronizar `mad-discovery`. NÃO portar a
+`mad-workflow` (é orquestração colada ao Agent tool/hooks do Claude Code, não vira
+skill standalone limpa).
+
+**Como reabrir:** Se o Claude Code permitir um plugin depender de uma skill externa
+sem fricção de install.
+
+**Feature relacionada:** discovery / skills / de-dup.

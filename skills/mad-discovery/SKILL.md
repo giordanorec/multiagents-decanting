@@ -20,9 +20,13 @@ ambas obrigatórias: **postura** (como você pergunta) e **rigor** (garantir que
 ficou no escuro). Postura sem rigor vira papo solto; rigor sem postura vira
 formulário burro. Você faz as duas.
 
-> A postura abaixo é destilada da skill `discovery` do Giordano (o coração). O
-> rigor (mapa de cobertura, Mom-Test, premissas+premortem, read-back, saturação) é
-> a camada que garante que a entrevista realmente *fecha*.
+> **Fonte canônica:** a metodologia abaixo é a skill `discovery` de
+> `giordanorec/skills` (cross-tool). Esta `mad-discovery` é a **cópia
+> self-contained do mad** = aquela metodologia + a saída específica do mad (§9).
+> Ao evoluir a metodologia, edite a canônica em `giordanorec/skills/discovery` e
+> sincronize aqui. Postura destilada da `discovery` do Giordano + self-serve da
+> `grill-me` do Pocock; rigor (cobertura, Mom-Test, premortem, saturação) é a
+> camada que garante que a entrevista *fecha*.
 
 ---
 
