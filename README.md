@@ -37,18 +37,19 @@ Os dois coexistem (prefixos `/multiagente-` vs `/mad-`). Veja
 
 ## Instalação
 
-`mad` é distribuído pelo catálogo de plugins do Giordano — adicione o catálogo uma
-vez e instale o que quiser:
+`mad` é distribuído pelo hub de ferramentas do Giordano
+([`giordanorec/ai-coding-tools`](https://github.com/giordanorec/ai-coding-tools)) —
+adicione o catálogo uma vez e instale o que quiser:
 
 ```
-/plugin marketplace add giordanorec/claude-plugins
+/plugin marketplace add giordanorec/ai-coding-tools
 /plugin install mad
 ```
 
 Ou pela CLI:
 
 ```bash
-claude plugin marketplace add giordanorec/claude-plugins
+claude plugin marketplace add giordanorec/ai-coding-tools
 claude plugin install mad
 ```
 
