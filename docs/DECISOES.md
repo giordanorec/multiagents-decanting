@@ -216,3 +216,31 @@ upstream e são re-sincronizadas no subdir.
 **Como reabrir:** Se fizer sentido um "meta-plugin" que dependa dos dois.
 
 **Feature relacionada:** monorepo / brainstorm.
+
+---
+
+## 2026-06-27 — Decisão #10: Catálogo único (reverte a #9)
+
+**Decisão:** Em vez de o repo `mad` ser seu próprio marketplace (com o brainstorm
+copiado dentro), todos os plugins do Giordano ficam num **catálogo único**:
+`giordanorec/claude-plugins` (marketplace `giordanorec`). Cada plugin vive no SEU
+repo; o catálogo só referencia via `source: github`. O `mad` foi adicionado lá.
+
+**O que mudou no repo `mad`:** removidos `plugins/brainstorm/` (cópia redundante e
+congelada — o catálogo aponta pro repo standalone `giordanorec/claude-brainstorm-
+multiagent`) e `.claude-plugin/marketplace.json` (o repo é só um plugin agora, não
+um marketplace solo). README passa a instruir instalação via catálogo.
+
+**Alternativas consideradas:** Manter o monorepo da #9. Rejeitado pelo Giordano:
+duplica o brainstorm e fragmenta os marketplaces. Um catálogo, plugins escolhíveis.
+
+**Por quê:** Marketplace é catálogo; `source` pode apontar pra repos diferentes.
+Um lugar só pra todos os plugins, usuário instala o que quer. Sem duplicação.
+
+**Restrição decorrente:** Install canônico = `marketplace add giordanorec/claude-
+plugins` + `install <plugin>`. O repo `mad` não é mais instalável como marketplace
+solo. Atualizações de versão do mad: bump no plugin.json + (catálogo lê do repo).
+
+**Como reabrir:** Se um plugin precisar de marketplace próprio por algum motivo.
+
+**Feature relacionada:** distribuição / marketplace.

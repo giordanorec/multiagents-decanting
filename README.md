@@ -37,34 +37,30 @@ Os dois coexistem (prefixos `/multiagente-` vs `/mad-`). Veja
 
 ## Instalação
 
-Este repositório é um **marketplace** com dois plugins independentes:
-**`mad`** (este — orquestração multi-agente) e **`claude-brainstorm-multiagent`**
-(ideação multi-agente com Quality-Diversity).
-
-Dentro do Claude Code:
+`mad` é distribuído pelo catálogo de plugins do Giordano — adicione o catálogo uma
+vez e instale o que quiser:
 
 ```
-/plugin marketplace add giordanorec/multiagents-decanting
+/plugin marketplace add giordanorec/claude-plugins
 /plugin install mad
-/plugin install claude-brainstorm-multiagent   # opcional
 ```
 
 Ou pela CLI:
 
 ```bash
-claude plugin marketplace add giordanorec/multiagents-decanting
+claude plugin marketplace add giordanorec/claude-plugins
 claude plugin install mad
-claude plugin install claude-brainstorm-multiagent   # opcional
 ```
 
-Reinicie/abra uma sessão nova para carregar. Depois: `/mad-init`.
+O mesmo catálogo traz outros plugins do Giordano (instale sob demanda):
+`claude-brainstorm-multiagent` (ideação multi-agente), `multiagentes-giordano`
+(fluxo multi-agente legado em tmux). Reinicie/abra uma sessão nova para carregar.
+Depois: `/mad-init`.
 
 ### Requisitos
 
-- **`mad`**: Claude Code (capacidades detectadas em runtime) + Python 3.9+
+- Claude Code (capacidades detectadas em runtime) + Python 3.9+
   (`pip install websockets` — dependência única, para o dashboard).
-- **`claude-brainstorm-multiagent`**: Python 3.10+ e `uv`/`uvx` (a stack ML do MCP
-  é baixada na primeira execução de `/brainstorm`).
 
 ## Início rápido
 
