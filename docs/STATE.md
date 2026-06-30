@@ -1,43 +1,41 @@
-# Estado — multiagents-decanting (plugin) — 2026-06-27
+# Estado — multiagents-decanting (plugin) — 2026-06-30
 
 > Snapshot global do desenvolvimento do plugin. Sobrescrito a cada sessão.
 
 ## Onde estamos
 
-v1.0 Tier 1 implementado e verde (54 testes). Núcleo, agentes, comandos, hooks,
-dashboard, resiliência e i18n funcionais e validados end-to-end no Linux.
+**v1.1 (Tier 2) implementado e verde (59 testes).** v1.0 (Tier 1) lançada e
+publicada (tag `mad--v1.0.0`, release no GitHub). Plugin instalado e dogfoodado
+pelo Giordano (discovery, rename para `mad`, etc.). Distribuição via hub
+`giordanorec/ai-coding-tools`.
 
 ## Componentes
 
 | Componente | Estado |
 |---|---|
-| CLI Python (`_utils`, `decanting`, `doctor`, `init`, `inspect_agent`, `dashboard_server`, `resilience`) | ✅ funcional |
-| 3 agentes (arquiteto, pipeline-dev, qa-tester) | ✅ self-contained |
-| 10 slash commands `/mad-*` | ✅ |
-| Skill `mad-workflow` | ✅ |
-| 8 hooks (4 guardrails + budget/circuit + OTel + trust + decant-check) | ✅ wireados via settings.json |
+| CLI Python (`_utils`, `mad`, `doctor`, `init`, `inspect_agent`, `dashboard_server`, `resilience`) | ✅ funcional |
+| 7 agentes (arquiteto, pipeline-dev, qa-tester + Tier 2: dba, frontend-dev, devops-installer, docs-writer) | ✅ self-contained |
+| 12 slash commands `/mad-*` (inclui migração v0.2) | ✅ |
+| Skills `mad-workflow` + `mad-discovery` (postura + rigor) | ✅ |
+| 8 hooks (guardrails + budget/circuit + OTel + trust + decant-check) | ✅ wireados via settings.json |
 | Dashboard HTML+WS+PWA vanilla + 11 avatares | ✅ servindo HTTP + WS ao vivo |
-| Templates (memory/docs/spec/report/agent) | ✅ validados |
-| Locale PT-BR/EN | ✅ |
-| Wrappers shell (bash/bat/ps1) | ✅ |
-| Testes (54, pytest) | ✅ verde |
+| Templates, Locale PT-BR/EN, wrappers shell | ✅ |
+| Testes (59, pytest) | ✅ verde |
+| Distribuição (hub catálogo + release v1.0) | ✅ |
 
-## Gaps conhecidos (honestos)
+## Gaps conhecidos / Tier 2 restante (honesto)
 
-- **Execução real Win/macOS:** código portável (pathlib, utf-8, sem unix-only),
-  mas só rodado no Linux. Validar nas máquinas-alvo (CA-080/081).
-- **CA-017 decant de emergência SIGTERM:** em modo frio não há processo de agente
-  para sinalizar; o mecanismo real é o protocolo "atualiza handoff a cada
-  milestone". Não há signal handler dedicado.
-- **CA-073 métricas OTel formais:** emitimos spans com atributos de token/custo
-  que o dashboard agrega; não emitimos instrumentos de métrica OTLP separados.
-- **CI matrix cross-platform (CA-080..082):** workflow do GitHub Actions ainda
-  não escrito.
+- **Dashboard polish (CA-201..204):** drag-drop reorder, filtros, pin, sons — não
+  feito (secundário).
+- **Extended thinking adaptive (CA-207):** não feito.
+- **Execução real Win/macOS:** código portável, só rodado no Linux. CI matrix
+  (`.github/workflows/ci.yml`) escrito mas só roda quando Actions for habilitado.
+- **CA-017 SIGTERM / CA-073 métricas OTel formais:** decisões de design (ver
+  release v1.0); mecanismos atuais cobrem o essencial.
 
 ## Próximos passos
 
-1. CI GitHub Actions (matrix Win/Mac/Linux × Python 3.9-3.13).
-2. Validação real nas máquinas-alvo.
-3. Instalar como plugin no Claude Code do Giordano e dogfoodar `/mad-init`
-   num projeto real (E2E da invocação via Agent tool — fora do escopo dos testes).
-4. Tier 2 (dba/frontend-dev/devops-installer/docs-writer + migração v0.2).
+1. Tier 2 polish: dashboard (drag-drop/filtros/pin/sons), extended thinking.
+2. Validação real Win/macOS + habilitar CI.
+3. Tier 3 (llm-prompt, mobile-dev, asset-designer, security-auditor; voice; etc.).
+4. Portar `mad` cross-tool (dual-format) — estrutura do `catalog.json` já pronta.
