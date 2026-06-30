@@ -1,0 +1,13 @@
+{
+  "name": "mad — MultiAgent Decanting",
+  "image": "mcr.microsoft.com/devcontainers/python:3.12",
+  "features": {
+    "ghcr.io/anthropics/devcontainer-features/claude-code:1": {}
+  },
+  "postCreateCommand": "pip install -r requirements.txt && python scripts/mad.py version",
+  "forwardPorts": [8765, 9765],
+  "portsAttributes": {
+    "8765": { "label": "mad dashboard", "onAutoForward": "openBrowser" },
+    "9765": { "label": "mad dashboard ws", "onAutoForward": "silent" }
+  }
+}

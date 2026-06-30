@@ -63,6 +63,21 @@ def _cmd_dashboard(args) -> int:
     return dashboard_server.cli(args)
 
 
+def _cmd_notify(args) -> int:
+    import notify
+    return notify.cli(args.message)
+
+
+def _cmd_a2a(args) -> int:
+    import a2a
+    return a2a.cli(args.agente, write=args.write)
+
+
+def _cmd_voice(args) -> int:
+    import voice
+    return voice.cli(args)
+
+
 def _cmd_version(args) -> int:
     print(f"mad (MultiAgent Decanting) {PLUGIN_VERSION}")
     ccv = u.get_claude_code_version()
@@ -110,6 +125,20 @@ def build_parser() -> argparse.ArgumentParser:
     dash.add_argument("--port", type=int, default=None)
     dash.add_argument("--bind", default=None)
     dash.set_defaults(func=_cmd_dashboard)
+
+    n = sub.add_parser("notify", help="envia notificação (Telegram/Slack) se configurado")
+    n.add_argument("message")
+    n.set_defaults(func=_cmd_notify)
+
+    a = sub.add_parser("a2a", help="gera Agent Card A2A de um agente")
+    a.add_argument("agente")
+    a.add_argument("--write", action="store_true")
+    a.set_defaults(func=_cmd_a2a)
+
+    vo = sub.add_parser("voice", help="transcreve áudio localmente (faster-whisper opcional)")
+    vo.add_argument("audio")
+    vo.add_argument("--model", default=None)
+    vo.set_defaults(func=_cmd_voice)
 
     v = sub.add_parser("version", help="versões")
     v.set_defaults(func=_cmd_version)

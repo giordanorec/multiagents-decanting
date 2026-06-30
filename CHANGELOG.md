@@ -2,6 +2,25 @@
 
 Formato: [Keep a Changelog](https://keepachangelog.com/). Versionamento semântico.
 
+## [1.2.0] — 2026-06-30 (Tier 3)
+
+### Adicionado
+- **4 agentes Tier 3**: `llm-prompt` (design/tuning de prompts, regressão),
+  `mobile-dev` (PWA/responsivo/Capacitor), `asset-designer` (sprites/ícones/paletas),
+  `security-auditor` (OWASP, secrets, supply chain — opus, revisor não-implementador).
+- **Notificações** (`/mad-notify`, `scripts/notify.py`): Telegram + Slack via stdlib,
+  opt-in por `[notify]`/env vars.
+- **A2A Agent Card** (`/mad-a2a`, `scripts/a2a.py`): gera card compatível com A2A a
+  partir do `identity.md`.
+- **Voz local** (`/mad-voice`, `scripts/voice.py`): transcrição via faster-whisper
+  (opt-in, 100% local).
+- **Docker** (`Dockerfile`, `.dockerignore`) + **devcontainer** para Codespaces.
+- Config: `[thinking]`, `[notify]`, `[voice]`, `[models]` (Ollama roadmap) no toml.
+
+### Dashboard polish (Tier 2)
+- Drag-drop reorder, filtros (todos/só working/esconder sleeping), pin no topo,
+  sons WebAudio em eventos. Tudo persistido, zero deps.
+
 ## [1.1.0] — 2026-06-30 (Tier 2)
 
 ### Adicionado

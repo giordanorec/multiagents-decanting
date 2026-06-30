@@ -1,0 +1,13 @@
+.git
+.venv
+__pycache__
+*.pyc
+.pytest_cache
+logs
+status
+tests
+_spec
+plugins
+.github
+*.md
+!README.md

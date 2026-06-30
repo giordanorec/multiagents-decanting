@@ -56,3 +56,26 @@ strategy = "auto"
 # - "always": sempre fundo (mais lento/caro)
 # - "off": sem extended thinking
 mode = "adaptive"
+
+[notify]
+# Notificações opt-in (CA-302/304). Deixe vazio para desligar. Env vars
+# (TELEGRAM_BOT_TOKEN/CHAT_ID, SLACK_WEBHOOK_URL) sobrescrevem estes valores.
+enabled = true
+telegram_bot_token = ""
+telegram_chat_id = ""
+slack_webhook_url = ""
+
+[voice]
+# Entrada por voz local (CA-300) via faster-whisper (opt-in; não é dep do mad).
+# Instale com: pip install faster-whisper
+enabled = false
+model = "small"
+
+[models]
+# Fallback de modelo (CA-042) e Ollama (CA-305). O despacho de modelo é do
+# Claude Code; estas chaves são preferências/diretrizes para o Arquiteto.
+opus_to_sonnet = true
+sonnet_to_haiku = true
+# Ollama (LLM local via API OpenAI-compatible) — roadmap; preencha para habilitar.
+ollama_base_url = ""   # ex: http://localhost:11434/v1
+ollama_model = ""      # ex: llama3.1

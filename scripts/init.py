@@ -35,7 +35,8 @@ MEMORY_FILES = ["identity.md", "dossier.md", "decisions.md", "handoff.md",
 # (hooks vão só para .claude/hooks, tratado à parte — não duplicar)
 COPY_TREES = ["dashboard", "bin", "locale"]
 COPY_SCRIPTS = ["mad.py", "init.py", "doctor.py", "inspect_agent.py",
-                "dashboard_server.py", "resilience.py", "_utils.py"]
+                "dashboard_server.py", "resilience.py", "notify.py",
+                "a2a.py", "voice.py", "_utils.py"]
 
 
 def _subst(text: str, mapping: dict) -> str:
