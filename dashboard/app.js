@@ -4,8 +4,14 @@
 
   // ---- config / state -------------------------------------------------
   var THEME_KEY = "multiagente.theme";
+  var ORDER_KEY = "multiagente.order";
+  var PINNED_KEY = "multiagente.pinned";
+  var FILTER_KEY = "multiagente.filter";
+  var SOUND_KEY = "multiagente.sound";
   var THEMES = ["auto", "dark", "light"];
   var THEME_GLYPH = { auto: "🌓", dark: "🌙", light: "☀" };
+  var FILTERS = ["all", "active", "no-sleeping"];
+  var FILTER_LABEL = { all: "todos", active: "só working", "no-sleeping": "esconder sleeping" };
 
   var colors = {};          // agent -> hex color (from colors.json)
   var avatarCache = {};     // agent -> svg markup
@@ -13,6 +19,14 @@
   var reconnectDelay = 1000;
   var reconnectTimer = null;
   var lastSnapshot = null;
+  var prevSnapshot = null;  // para detectar eventos (sons)
+
+  var order = loadJSON(ORDER_KEY, []);        // ordem custom (slugs)
+  var pinned = loadJSON(PINNED_KEY, []);      // slugs pinados (topo)
+  var filterMode = localStorage.getItem(FILTER_KEY) || "all";
+  if (FILTERS.indexOf(filterMode) === -1) filterMode = "all";
+  var soundOn = localStorage.getItem(SOUND_KEY) === "1";
+  var dragSlug = null;
 
   // status -> {glyph, label}
   var STATUS = {
@@ -25,12 +39,18 @@
     sleeping:      { glyph: "○", label: "sleeping" },
   };
 
-  // map agent slug -> avatar file (fallback to slug itself)
   var AVATARS = [
     "arquiteto", "pipeline-dev", "qa-tester", "dba", "frontend-dev",
     "devops-installer", "docs-writer", "llm-prompt", "mobile-dev",
     "asset-designer", "security-auditor",
   ];
+
+  // ---- storage helpers ------------------------------------------------
+  function loadJSON(key, def) {
+    try { var v = JSON.parse(localStorage.getItem(key)); return v == null ? def : v; }
+    catch (e) { return def; }
+  }
+  function saveJSON(key, v) { try { localStorage.setItem(key, JSON.stringify(v)); } catch (e) {} }
 
   // ---- theme ----------------------------------------------------------
   function applyTheme(t) {
@@ -49,6 +69,74 @@
       localStorage.setItem(THEME_KEY, next);
       applyTheme(next);
     });
+  }
+
+  // ---- controls (filtro + som) — injetados na topbar ------------------
+  function initControls() {
+    var bar = document.querySelector(".topbar-actions") || document.querySelector(".topbar") || document.body;
+
+    var filterBtn = el("button", "ctrl-btn", FILTER_LABEL[filterMode]);
+    filterBtn.id = "filter-toggle";
+    filterBtn.title = "filtrar agentes";
+    filterBtn.setAttribute("aria-label", "filtrar agentes");
+    filterBtn.addEventListener("click", function () {
+      filterMode = FILTERS[(FILTERS.indexOf(filterMode) + 1) % FILTERS.length];
+      localStorage.setItem(FILTER_KEY, filterMode);
+      filterBtn.textContent = FILTER_LABEL[filterMode];
+      if (lastSnapshot) renderTeam(lastSnapshot.agents || []);
+    });
+
+    var soundBtn = el("button", "ctrl-btn", soundOn ? "🔔" : "🔕");
+    soundBtn.id = "sound-toggle";
+    soundBtn.title = "sons de notificação";
+    soundBtn.setAttribute("aria-label", "alternar sons");
+    soundBtn.addEventListener("click", function () {
+      soundOn = !soundOn;
+      localStorage.setItem(SOUND_KEY, soundOn ? "1" : "0");
+      soundBtn.textContent = soundOn ? "🔔" : "🔕";
+      if (soundOn) beep(660, 0.06); // feedback
+    });
+
+    bar.insertBefore(soundBtn, bar.firstChild);
+    bar.insertBefore(filterBtn, bar.firstChild);
+  }
+
+  // ---- sound (WebAudio, sem assets) -----------------------------------
+  var audioCtx = null;
+  function beep(freq, dur) {
+    if (!soundOn) return;
+    try {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      var o = audioCtx.createOscillator();
+      var g = audioCtx.createGain();
+      o.type = "sine"; o.frequency.value = freq;
+      g.gain.setValueAtTime(0.0001, audioCtx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.15, audioCtx.currentTime + 0.01);
+      g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + (dur || 0.12));
+      o.connect(g); g.connect(audioCtx.destination);
+      o.start(); o.stop(audioCtx.currentTime + (dur || 0.12));
+    } catch (e) {}
+  }
+
+  function detectEvents(snap) {
+    if (!prevSnapshot) return;
+    // feature concluída -> tom de sucesso (sobe)
+    var nf = (snap.metrics || {}).features_completed || 0;
+    var of = (prevSnapshot.metrics || {}).features_completed || 0;
+    if (nf > of) { beep(880, 0.12); }
+    // agente entrou em erro -> tom de alerta (desce, duplo)
+    var prevStatus = {};
+    (prevSnapshot.agents || []).forEach(function (a) { prevStatus[a.agente] = a.status; });
+    (snap.agents || []).forEach(function (a) {
+      if (a.status === "error" && prevStatus[a.agente] !== "error") {
+        beep(330, 0.1); setTimeout(function () { beep(247, 0.14); }, 110);
+      }
+    });
+    // budget cruzou 80% -> aviso
+    var m = snap.metrics || {}, pm = prevSnapshot.metrics || {};
+    var np = pct(m.cost_today_usd, m.max_cost_per_day_usd);
+    var pp = pct(pm.cost_today_usd, pm.max_cost_per_day_usd);
+    if (np != null && np >= 80 && (pp == null || pp < 80)) { beep(550, 0.18); }
   }
 
   // ---- assets ---------------------------------------------------------
@@ -71,11 +159,11 @@
 
   // ---- connection indicator ------------------------------------------
   function setConn(state) {
-    var el = document.getElementById("conn");
-    if (!el) return;
-    el.className = "conn conn--" + state;
+    var el2 = document.getElementById("conn");
+    if (!el2) return;
+    el2.className = "conn conn--" + state;
     var label = { online: "ao vivo", connecting: "conectando…", offline: "reconectando…" }[state];
-    el.querySelector(".conn-label").textContent = label;
+    el2.querySelector(".conn-label").textContent = label;
     var banner = document.getElementById("offline-banner");
     if (banner) banner.hidden = (state === "online");
   }
@@ -97,14 +185,13 @@
     try { url = wsUrl(); } catch (e) { scheduleReconnect(); return; }
     try { ws = new WebSocket(url); } catch (e) { scheduleReconnect(); return; }
 
-    ws.onopen = function () {
-      reconnectDelay = 1000;
-      setConn("online");
-    };
+    ws.onopen = function () { reconnectDelay = 1000; setConn("online"); };
     ws.onmessage = function (ev) {
       var msg;
       try { msg = JSON.parse(ev.data); } catch (e) { return; }
       if (msg && msg.type === "snapshot") {
+        detectEvents(msg);
+        prevSnapshot = lastSnapshot;
         lastSnapshot = msg;
         render(msg);
         setConn("online");
@@ -117,10 +204,7 @@
   function scheduleReconnect() {
     setConn("offline");
     if (reconnectTimer) return;
-    reconnectTimer = setTimeout(function () {
-      reconnectTimer = null;
-      connect();
-    }, reconnectDelay);
+    reconnectTimer = setTimeout(function () { reconnectTimer = null; connect(); }, reconnectDelay);
     reconnectDelay = Math.min(reconnectDelay * 1.6, 15000);
   }
 
@@ -145,29 +229,92 @@
     return e;
   }
 
+  // pinados primeiro, depois ordem custom, depois default
+  function arrangeAgents(agents) {
+    var bySlug = {};
+    agents.forEach(function (a) { bySlug[a.agente] = a; });
+    var slugs = agents.map(function (a) { return a.agente; });
+    slugs.sort(function (x, y) {
+      var px = pinned.indexOf(x) !== -1, py = pinned.indexOf(y) !== -1;
+      if (px !== py) return px ? -1 : 1;
+      var ox = order.indexOf(x), oy = order.indexOf(y);
+      if (ox === -1) ox = 1e6; if (oy === -1) oy = 1e6;
+      if (ox !== oy) return ox - oy;
+      return x.localeCompare(y);
+    });
+    return slugs.map(function (s) { return bySlug[s]; });
+  }
+
+  function passesFilter(a) {
+    if (filterMode === "active") return a.status === "working" || a.status === "decanting";
+    if (filterMode === "no-sleeping") return a.status !== "sleeping";
+    return true;
+  }
+
+  function saveOrderFromDOM(root) {
+    var ord = [];
+    Array.prototype.forEach.call(root.querySelectorAll(".agent"), function (c) {
+      if (c.dataset.slug) ord.push(c.dataset.slug);
+    });
+    order = ord; saveJSON(ORDER_KEY, order);
+  }
+
   function renderTeam(agents) {
     var root = document.getElementById("team");
-    if (!agents.length) {
-      root.innerHTML = '<div class="team-empty" id="team-empty">aguardando agentes…</div>';
+    var arranged = arrangeAgents(agents).filter(passesFilter);
+    if (!arranged.length) {
+      root.innerHTML = '<div class="team-empty" id="team-empty">' +
+        (agents.length ? "nenhum agente no filtro atual" : "aguardando agentes…") + "</div>";
       return;
     }
     root.innerHTML = "";
-    agents.forEach(function (a) {
+    arranged.forEach(function (a) {
       var status = STATUS[a.status] ? a.status : "idle";
       var meta = STATUS[status];
       var c = colorFor(a.agente);
+      var isPinned = pinned.indexOf(a.agente) !== -1;
 
-      var card = el("div", "agent agent--" + status);
+      var card = el("div", "agent agent--" + status + (isPinned ? " agent--pinned" : ""));
       card.style.setProperty("--agent-color", c);
+      card.dataset.slug = a.agente;
+      card.setAttribute("draggable", "true");
+
+      // drag-drop reorder
+      card.addEventListener("dragstart", function (e) {
+        dragSlug = a.agente; card.classList.add("dragging");
+        try { e.dataTransfer.effectAllowed = "move"; } catch (x) {}
+      });
+      card.addEventListener("dragend", function () {
+        card.classList.remove("dragging"); saveOrderFromDOM(root);
+      });
+      card.addEventListener("dragover", function (e) {
+        e.preventDefault();
+        var dragging = root.querySelector(".dragging");
+        if (!dragging || dragging === card) return;
+        var rect = card.getBoundingClientRect();
+        var after = (e.clientY - rect.top) > rect.height / 2;
+        root.insertBefore(dragging, after ? card.nextSibling : card);
+      });
+
+      // pin
+      var pin = el("button", "agent-pin", isPinned ? "📌" : "📍");
+      pin.title = isPinned ? "desafixar" : "fixar no topo";
+      pin.setAttribute("aria-label", pin.title);
+      pin.addEventListener("click", function (e) {
+        e.stopPropagation();
+        var i = pinned.indexOf(a.agente);
+        if (i === -1) pinned.push(a.agente); else pinned.splice(i, 1);
+        saveJSON(PINNED_KEY, pinned);
+        if (lastSnapshot) renderTeam(lastSnapshot.agents || []);
+      });
+      card.appendChild(pin);
 
       if (status === "sleeping") card.appendChild(el("span", "zzz", "z z z"));
 
       var avatar = el("div", "agent-avatar");
       avatar.setAttribute("aria-hidden", "true");
       card.appendChild(avatar);
-      loadAvatar(a.agente).then(function (svg) {
-        avatar.innerHTML = svg || defaultAvatar();
-      });
+      loadAvatar(a.agente).then(function (svg) { avatar.innerHTML = svg || defaultAvatar(); });
 
       card.appendChild(el("div", "agent-name", a.agente));
 
@@ -176,8 +323,7 @@
       st.appendChild(el("span", null, meta.label));
       card.appendChild(st);
 
-      var bubbleText = a.bubble || a.note || "—";
-      card.appendChild(el("div", "agent-bubble", bubbleText));
+      card.appendChild(el("div", "agent-bubble", a.bubble || a.note || "—"));
 
       var trust = (typeof a.trust === "number") ? a.trust : 50;
       var tw = el("div", "agent-trust");
@@ -201,24 +347,13 @@
       '<circle cx="32" cy="24" r="11"/><path d="M14 52 a18 14 0 0 1 36 0" stroke-linecap="round"/></svg>';
   }
 
-  function fmtInt(n) {
-    return (n || 0).toLocaleString("pt-BR");
-  }
-  function pct(used, max) {
-    if (!max || max <= 0) return null;
-    return Math.min(100, (used / max) * 100);
-  }
-  function barClass(p) {
-    if (p == null) return "";
-    if (p >= 90) return "is-danger";
-    if (p >= 80) return "is-warn";
-    return "";
-  }
+  function fmtInt(n) { return (n || 0).toLocaleString("pt-BR"); }
+  function pct(used, max) { if (!max || max <= 0) return null; return Math.min(100, (used / max) * 100); }
+  function barClass(p) { if (p == null) return ""; if (p >= 90) return "is-danger"; if (p >= 80) return "is-warn"; return ""; }
 
   function renderMetrics(m) {
     var tokens = m.tokens_today || 0;
     document.getElementById("m-tokens").textContent = fmtInt(tokens);
-    // no token budget in contract; show tokens with no bar reference
     var tFill = document.getElementById("m-tokens-bar");
     tFill.style.width = tokens > 0 ? "100%" : "0";
     tFill.className = "bar-fill";
@@ -240,10 +375,7 @@
 
   function renderActivity(items) {
     var ul = document.getElementById("activity-list");
-    if (!items.length) {
-      ul.innerHTML = '<li class="activity-empty">sem atividade recente</li>';
-      return;
-    }
+    if (!items.length) { ul.innerHTML = '<li class="activity-empty">sem atividade recente</li>'; return; }
     ul.innerHTML = "";
     items.forEach(function (it) {
       var li = el("li");
@@ -266,10 +398,9 @@
   // ---- boot -----------------------------------------------------------
   function boot() {
     initTheme();
+    initControls();
     registerSW();
     loadColors().then(connect);
-    // re-render on system theme change while in auto mode (CSS handles it,
-    // but update the toggle glyph stays accurate — nothing else needed).
   }
 
   if (document.readyState === "loading") {

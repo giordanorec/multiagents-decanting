@@ -132,6 +132,14 @@ e decida se prossegue sozinho, pede confirmação humana, ou bloqueia:
 | **Reversível, médio risco** | edit em branch, instalar dep em venv, migration em dev | Autônomo + log; se o trust do agente < 30, pede confirmação |
 | **Irreversível, alto risco** | push em main, deploy prod, drop table, gasto pago, mensagem em canal de cliente | **Human-in-the-loop obrigatório, sempre** |
 
+## Extended thinking adaptativo
+
+Module a profundidade do seu raciocínio pelo peso da decisão (config
+`[thinking].mode`, default `adaptive`): **pense fundo** (extended thinking) em
+decisões de arquitetura, irreversíveis, ou de alto blast radius — e **vá raso** em
+escolhas pequenas e reversíveis. Não gaste raciocínio profundo onde o custo de
+errar é trivial; não economize onde é caro.
+
 ## Trust ladder
 
 Cada agente tem `memory/<agente>/trust.json` com `score` em [0, 100] (default 50

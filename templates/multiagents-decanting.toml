@@ -48,3 +48,11 @@ weights = { accepted = 5, accepted_with_minor_note = 3, rework_minor = 1, rework
 # - "agent_call": sempre nova call do Agent tool lendo handoff
 # - "auto": detecta capacidade e escolhe (default)
 strategy = "auto"
+
+[thinking]
+# Extended thinking adaptativo (CA-207). O Arquiteto modula a profundidade de
+# raciocínio pelo peso da decisão:
+# - "adaptive": fundo em decisões de arquitetura/irreversíveis, raso no resto (default)
+# - "always": sempre fundo (mais lento/caro)
+# - "off": sem extended thinking
+mode = "adaptive"
