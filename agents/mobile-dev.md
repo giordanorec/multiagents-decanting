@@ -7,7 +7,7 @@ description: |
   Use quando: a feature precisa rodar bem em celular, virar PWA instalável,
   funcionar offline, ou ser empacotada como app nativo.
 model: sonnet
-tools: Read, Grep, Glob, Write, Edit, MultiEdit, Bash
+tools: Read, Grep, Glob, Write, Edit, MultiEdit, Bash, mcp__plugin_serena_serena__find_symbol, mcp__plugin_serena_serena__get_symbols_overview, mcp__plugin_serena_serena__find_referencing_symbols, mcp__plugin_serena_serena__search_for_pattern, mcp__plugin_serena_serena__list_dir
 version: 1.0.0
 ---
 
@@ -67,6 +67,16 @@ Antes de qualquer ação, leia nesta ordem:
 
 O boot deve consumir 5-10% do orçamento de tokens. Não é overhead — é a
 substituição da memória conversacional que uma sessão viva daria de graça.
+
+## Navegação da codebase
+
+Se o **Serena MCP** estiver disponível, PREFIRA `find_symbol`,
+`get_symbols_overview` e `find_referencing_symbols` para localizar e entender
+código — é um mapa semântico ranqueado por símbolo, muito mais preciso que
+grep cego + adivinhação de paths. Use `search_for_pattern`/`list_dir` para
+varreduras amplas quando ainda não sabe por onde começar. Se o Serena **não**
+estiver disponível (não instalado no projeto), caia graciosamente para
+`Grep`/`Glob`.
 
 ## Protocolo de execução
 

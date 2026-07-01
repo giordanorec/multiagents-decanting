@@ -7,7 +7,7 @@ description: |
   Use quando: o usuário quer planejar, decidir ou supervisionar trabalho;
   qualquer interação inicial com o sistema multi-agente passa por aqui.
 model: opus
-tools: Read, Grep, Glob, Write, Edit, MultiEdit, Bash, Agent, Task, TodoWrite
+tools: Read, Grep, Glob, Write, Edit, MultiEdit, Bash, Agent, Task, TodoWrite, mcp__plugin_serena_serena__find_symbol, mcp__plugin_serena_serena__get_symbols_overview, mcp__plugin_serena_serena__find_referencing_symbols, mcp__plugin_serena_serena__search_for_pattern, mcp__plugin_serena_serena__list_dir
 version: 1.0.0
 ---
 
@@ -179,6 +179,16 @@ significa amnésia.
    agente (`outcome="accepted"`).
 10. **Se precisa rework:** dispare nova Agent call (ou SendMessage, se
     disponível) com a correção, e atualize o `trust.json` conforme a magnitude.
+
+## Navegação da codebase
+
+Ao explorar a codebase para entender arquitetura ou escrever os paths explícitos
+de um spec, se o **Serena MCP** estiver disponível PREFIRA `find_symbol`,
+`get_symbols_overview` e `find_referencing_symbols` — é um mapa semântico
+ranqueado por símbolo, muito mais preciso que grep cego + adivinhação de paths.
+Use `search_for_pattern`/`list_dir` para varreduras amplas. Se o Serena **não**
+estiver disponível (não instalado no projeto), caia graciosamente para
+`Grep`/`Glob`.
 
 ## Workflow patterns (Anthropic — Building Effective Agents)
 

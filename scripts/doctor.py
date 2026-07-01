@@ -293,6 +293,24 @@ def run(root: Path | None = None, as_json: bool = False) -> int:
             if hk not in starts:
                 rep.fail(items, f"hook {hk} não está wireado em settings.json — enforcement DESLIGADO.")
 
+    # --- 8. Interoperabilidade (MCP) ---
+    items = rep.section("Interoperabilidade")
+    mcp_path = root / ".mcp.json"
+    serena_found = False
+    if mcp_path.is_file():
+        mcp_cfg = u.read_json(mcp_path, {}) or {}
+        if isinstance(mcp_cfg, dict):
+            servers = mcp_cfg.get("mcpServers")
+            if not isinstance(servers, dict):
+                servers = mcp_cfg  # tolera formato sem wrapper "mcpServers"
+            serena_found = any("serena" in str(k).lower() for k in servers)
+    if serena_found:
+        rep.ok(items, "Serena MCP configurado em .mcp.json — agentes de código "
+                      "navegam por símbolos (find_symbol / overview / references)")
+    else:
+        rep.warn(items, "Serena MCP não configurado — agentes de código usam grep; "
+                        "para mapa semântico da codebase, adicione o Serena")
+
     # --- saída ---
     if as_json:
         out = {

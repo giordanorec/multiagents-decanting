@@ -242,17 +242,37 @@ def otel_dir(root: Path | None = None) -> Path:
     return d
 
 
+def _active_trace_id(root: Path | None) -> str:
+    """trace_id = id da feature ativa (agrupa o run multi-agente numa árvore)."""
+    try:
+        r = root or find_project_root()
+        wd = read_json(r / ".mad" / "workflow_state.json", {}) or {}
+        af = wd.get("active_feature") or {}
+        return af.get("id") or wd.get("current_phase") or "session"
+    except Exception:
+        return "session"
+
+
 def emit_span(name: str, attributes: dict | None = None, root: Path | None = None) -> dict:
     """
-    Grava um span OTel GenAI-compatível (subset) em logs/otel/<date>.jsonl.
+    Grava um span OTel GenAI-compatível (subset) em logs/otel/<date>.jsonl, com
+    trace_id (feature), span_id e (opcional) parent_span_id/duration_ms — o run
+    multi-agente vira uma árvore causal, não eventos flat.
     Se OTEL_EXPORTER_OTLP_ENDPOINT estiver setado, tenta exportar via OTLP HTTP
     (best-effort, silencioso em falha — telemetria nunca derruba o fluxo).
     """
+    import uuid as _uuid
+    attrs = dict(attributes or {})
     span = {
         "name": name,
         "timestamp": iso_now(),
-        "attributes": attributes or {},
+        "span_id": attrs.pop("span_id", None) or _uuid.uuid4().hex[:16],
+        "trace_id": attrs.pop("trace_id", None) or _active_trace_id(root),
+        "attributes": attrs,
     }
+    for opt in ("parent_span_id", "duration_ms"):
+        if opt in attrs:
+            span[opt] = attrs.pop(opt)
     path = otel_dir(root) / f"{today_str()}.jsonl"
     append_text(path, json.dumps(span, ensure_ascii=False) + "\n")
     endpoint = os.environ.get("OTEL_EXPORTER_OTLP_ENDPOINT")

@@ -2,6 +2,17 @@
 
 Formato: [Keep a Changelog](https://keepachangelog.com/). Versionamento semântico.
 
+## [1.13.0] — 2026-07-01 (big bets: mapa da codebase + fundação de trace)
+
+### Adicionado
+- **Mapa semântico da codebase (Serena MCP):** os 5 agentes de código (arquiteto,
+  pipeline-dev, frontend-dev, mobile-dev, dba) ganham os tools do Serena
+  (find_symbol/get_symbols_overview/find_referencing_symbols/…) e são instruídos a
+  preferir navegação por símbolos a grep cego (fallback gracioso). /mad-doctor detecta
+  se o Serena está configurado.
+- **Fundação de observabilidade causal:** `emit_span` agora carimba `trace_id` (por
+  feature) + `span_id` (+ parent_span_id/duration opcionais) — o run multi-agente
+  forma uma árvore por feature, base pro trace/waterfall real. Aditivo (não quebra o painel).
 ## [1.12.0] — 2026-07-01 (Cluster D: hardening)
 
 ### Adicionado
