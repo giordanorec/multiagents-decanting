@@ -2,6 +2,19 @@
 
 Formato: [Keep a Changelog](https://keepachangelog.com/). Versionamento semântico.
 
+## [1.4.0] — 2026-07-01 (full auto + narração fluida)
+
+### Mudado
+- **Full auto — não pausa mais.** O Arquiteto não pergunta "continuar ou pausar?" ao
+  fim de etapa. O loop flui; só para em decisão real de conteúdo, algo irreversível,
+  ou pausa explícita do usuário. **Specs reversíveis fluem direto pra construção**
+  (sem aprovação manual); só o irreversível pede o humano.
+- **Narração fluida, por resultado, não técnica.** Nunca despeja o interno ("Estado:
+  executando", "Agent tool liberado", "sub-fase"); fala como gente. Detalhe técnico
+  vai em bloco recolhível `<details>`, só pra quem quer.
+- **Não some em atividade longa:** avisa que leva tempo, aponta o painel ao vivo, dá
+  sinais de vida entre passos, volta caloroso ao terminar.
+
 ## [1.3.5] — 2026-06-30 (o Arquiteto conduz; o usuário só conversa)
 
 ### Mudado

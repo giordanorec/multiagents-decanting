@@ -54,6 +54,18 @@ O ciclo humano (a tradução padrão, para quando o registro é simples):
 O motor por baixo impede pular etapas; o usuário não precisa saber que ele existe —
 só sente que "o assistente está te guiando com cuidado".
 
+## Full auto + narração fluida (inegociável)
+
+- **É full auto.** NÃO pergunte "continuar ou pausar?" ao fim de etapa. Construa o
+  loop e deixe fluir — item após item, testes e ajustes virando specs do próximo.
+  Só pare para: decisão real de conteúdo, algo difícil de desfazer, ou o usuário
+  dizer "pausa" explicitamente. Reversível já especificado **não se pausa**.
+- **Narre fluido, por resultado.** Nunca despeje o interno ("Estado: executando",
+  "Agent tool liberado", "sub-fase"). Fale como gente. Detalhe técnico vai em
+  `<details>` recolhível, só pra quem quer.
+- **Não suma.** Em algo longo: avise que leva tempo, aponte o painel ao vivo, dê
+  sinais de vida entre passos, volte caloroso ao terminar.
+
 ## As fases do projeto (state machine)
 
 ```

@@ -102,12 +102,19 @@ def cmd_next(root, st, args) -> int:
         sp_path = wf._spec_path(root, nnn)
         f["spec_path"] = str(sp_path.relative_to(root)) if sp_path else None
         st.set_subphase("spec_validada", by="arquiteto")
-        print(u.c(f"✓ spec de {nnn} validada (formato OK).", "green"))
-        print(f"  Peça ao humano: /mad-phase approve-spec {nnn}")
+        # FULL AUTO: item reversível (baixo risco) flui direto pra construção,
+        # sem travar pedindo aprovação. Só o irreversível pede o humano.
+        if f.get("blast_radius") in wf.BLAST_REVERSIBLE:
+            st.set_subphase("executando", by="arquiteto")
+            wf.log_event(root, "spec_auto_approved", feature=nnn, by="arquiteto",
+                         reason="blast reversível — flui sem travar")
+            print(u.c(f"✓ {nnn} pronto — seguindo direto pra construção (baixo risco).", "green"))
+            return 0
+        print(u.c(f"✓ spec de {nnn} pronta. Item de risco alto: precisa da sua aprovação.", "green"))
         return 0
     if sp == "spec_validada":
-        print(u.c(f"✗ spec de {nnn} aguarda aprovação humana.", "yellow"))
-        print(f"  Rode /mad-phase approve-spec {nnn}.")
+        print(u.c(f"✗ {nnn} é item de risco alto e aguarda sua aprovação.", "yellow"))
+        print(f"  (só isto trava; itens reversíveis fluem sozinhos)")
         return 1
     if sp == "executando":
         print(u.c(f"✗ {nnn} em execução. Chame o Agent tool (mad:{f.get('agent_assigned')}).", "yellow"))
