@@ -2,6 +2,17 @@
 
 Formato: [Keep a Changelog](https://keepachangelog.com/). Versionamento semântico.
 
+## [1.8.3] — 2026-07-01 (correção crítica do gate de validação + roadmap SOTA)
+
+### Corrigido
+- **BUG CRÍTICO:** `gate_arquiteto_validated` usava o regex `- [[x ]]`, que casava
+  também `- [ ]` (desmarcado) — uma feature podia FECHAR com todos os critérios de
+  aceite em aberto, anulando o Art. 4 da Constituição. Agora exige ≥1 `[x]` e nenhum
+  `[ ]` sem uma linha `WAIVER: <motivo>` explícita. Teste de regressão adicionado.
+
+### Adicionado
+- **docs/ROADMAP_SOTA.md** — auditoria multi-agente do mad contra o estado da arte
+  mundial (11 quick wins, 6 big bets, 10 pontos já classe mundial). Guia de execução.
 ## [1.8.2] — 2026-07-01
 
 ### Mudado

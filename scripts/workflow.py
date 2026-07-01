@@ -315,8 +315,14 @@ def gate_arquiteto_validated(root: Path, nnn: str):
     if not m.is_file():
         return False, f"Falta reports/feature-{num}/arquiteto-merge.md."
     text = u.read_text(m)
-    if not re.search(r"- \[[x ]\]", text):
-        return False, "arquiteto-merge.md sem critérios marcados [x]/[ ]."
+    checked = re.findall(r"- \[[xX]\]", text)
+    unchecked = re.findall(r"- \[ \]", text)
+    if not checked:
+        return False, "arquiteto-merge.md sem NENHUM critério marcado [x]."
+    if unchecked and "WAIVER:" not in text.upper():
+        return False, (f"{len(unchecked)} critério(s) ainda [ ] (não atendidos). "
+                       f"Atenda-os, ou justifique com uma linha 'WAIVER: <motivo>'. "
+                       f"Feature não fecha com critério de aceite em aberto (Art. 4).")
     return True, ""
 
 

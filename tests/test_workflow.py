@@ -133,6 +133,23 @@ def test_mad_phase_approve_spec(tmp_project):
     assert st2.feature["approvals"]["spec_approved_by_human"]
 
 
+def test_gate_validated_rejects_unchecked(tmp_project):
+    # BUG histórico: regex casava '- [ ]'. Não pode fechar com critério em aberto.
+    d = tmp_project / "reports" / "feature-001"
+    u.write_text(d / "arquiteto-merge.md", "# merge\n- [ ] critério 1\n- [ ] critério 2\n")
+    ok, _ = wf.gate_arquiteto_validated(tmp_project, "F-001")
+    assert not ok
+    # com waiver justificado, passa
+    u.write_text(d / "arquiteto-merge.md",
+                 "# merge\n- [x] critério 1 — ok\n- [ ] critério 2\nWAIVER: item 2 fora do escopo desta feature.\n")
+    ok, _ = wf.gate_arquiteto_validated(tmp_project, "F-001")
+    assert ok
+    # sem nenhum marcado, bloqueia
+    u.write_text(d / "arquiteto-merge.md", "# merge\n- [ ] só isso\n")
+    ok, _ = wf.gate_arquiteto_validated(tmp_project, "F-001")
+    assert not ok
+
+
 def test_gate_docs_synced_blocks_and_passes(tmp_project):
     st = _advance_to_loop(tmp_project)
     # sem o arquivo -> bloqueia
