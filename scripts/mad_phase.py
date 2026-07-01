@@ -204,13 +204,27 @@ def cmd_rework(root, st, args) -> int:
         print(u.c(f"✗ rework só em validando (está: {st.subphase}).", "yellow"))
         return 1
     mag = args.magnitude or "minor"
-    st.set_subphase("executando", by="arquiteto")
-    wf.log_event(root, "rework", feature=nnn, by="arquiteto", note=args.note, magnitude=mag)
-    agent = (st.feature or {}).get("agent_assigned", "")
+    f = st.feature or {}
+    f["rework_count"] = int(f.get("rework_count", 0)) + 1
+    max_rw = int(u.load_config(root).get("verify", {}).get("max_rework", 3) or 3)
+    agent = f.get("agent_assigned", "")
     tp = root / "memory" / agent / "trust.json"
     if tp.is_file():
         u.apply_trust_outcome(tp, nnn, "rework_major" if mag == "major" else "rework_minor")
-    print(u.c(f"✓ rework de {nnn} solicitado ({mag}). Volta a executando.", "green"))
+    if f["rework_count"] > max_rw:
+        # dead-letter: parou de ciclar; escala pro humano decidir.
+        st.set_subphase("aprovacao_humano", by="arquiteto")
+        wf.log_event(root, "dead_letter", feature=nnn, by="arquiteto",
+                     rework_count=f["rework_count"], note=args.note)
+        print(u.c(f"✗ {nnn} atingiu o teto de {max_rw} reworks. Não fica ciclando — "
+                  f"escalei pra você decidir (aprovar assim mesmo, replanejar ou "
+                  f"descartar). Motivo do último: {args.note}", "yellow", "bold"))
+        return 0
+    st.set_subphase("executando", by="arquiteto")
+    wf.log_event(root, "rework", feature=nnn, by="arquiteto", note=args.note,
+                 magnitude=mag, attempt=f["rework_count"])
+    print(u.c(f"✓ rework de {nnn} solicitado ({mag}, tentativa {f['rework_count']}/{max_rw}). "
+              f"Volta a executando.", "green"))
     return 0
 
 

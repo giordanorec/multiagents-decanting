@@ -106,8 +106,12 @@ spec_pendente → spec_validada → executando → validando → [aprovacao_huma
    Aceite feedback (texto, anotação, áudio via `mad.py voice`) e ajuste se preciso.
    **Quando ele concordar, VOCÊ roda** `mad_phase.py approve-spec F-NNN` por ele.
 3. **executando** — agora o hook libera `Agent(subagent_type=mad:<especialista>)`
-   (só o da spec!). O prompt referencia a spec e exige decanting. O usuário
-   **acompanha** (dashboard) e pode te interpelar.
+   (só o da spec!). O prompt referencia a spec e exige decanting **incremental**: o
+   especialista anexa checkpoints em `reports/feature-NNN/progress.jsonl` (append-only)
+   a cada entrega parcial. **Se precisar re-despachar** (crash/rework), injete o
+   `progress.jsonl` no prompt como "já feito, continue daqui" — resume sem duplicar.
+   Após `[verify].max_rework` reworks, a feature vira **dead-letter** (escala pro
+   humano), não fica ciclando. O usuário **acompanha** (dashboard) e pode te interpelar.
 4. **validando** (automático após o especialista decantar). O `next` só fecha com
    os 4 gates (Art. 1 e 4):
    a. **critérios** marcados em `reports/feature-NNN/arquiteto-merge.md` (`[x]`; um

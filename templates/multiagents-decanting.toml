@@ -24,6 +24,8 @@ coverage_min = 0                  # 0 = sem exigência de cobertura
 # VEREDITO de aprovação de um agente DIFERENTE do que a construiu.
 require_independent_review = true
 independent_reviewer = "qa-tester"
+max_rework = 3                    # após N reworks, a feature vira dead-letter (escala
+                                  # pro humano) em vez de ciclar infinitamente
 
 [resilience]
 retry_attempts = 3

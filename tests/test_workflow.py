@@ -403,3 +403,15 @@ def test_audit_log_hash_chain(tmp_project):
     logf.write_text("\n".join(lines) + "\n")
     ok, _ = wf.verify_log_chain(tmp_project)
     assert not ok
+
+
+def test_rework_dead_letter_cap(tmp_project):
+    st = _advance_to_loop(tmp_project)
+    st.feature["agent_assigned"] = "pipeline-dev"; st.save()
+    mp = str(tmp_project / "scripts" / "mad_phase.py")
+    for _ in range(4):
+        s = wf.WorkflowState.load(tmp_project); s.set_subphase("validando", by="t")
+        subprocess.run([sys.executable, mp, "rework", "F-001", "--note", "x"],
+                       cwd=str(tmp_project), capture_output=True, text=True)
+    # após 3 reworks, o 4º vira dead-letter -> aprovacao_humano (não cicla infinito)
+    assert wf.WorkflowState.load(tmp_project).subphase == "aprovacao_humano"

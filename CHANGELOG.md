@@ -2,6 +2,14 @@
 
 Formato: [Keep a Changelog](https://keepachangelog.com/). Versionamento semântico.
 
+## [1.14.0] — 2026-07-01 (big bet: durable execution — checkpoint + dead-letter)
+
+### Adicionado
+- **Teto de rework (dead-letter):** após `[verify].max_rework` (3) reworks, a feature
+  escala pro humano em vez de ciclar infinitamente. Fim do loop de rework sem fim.
+- **Decanting incremental (checkpoint/resume):** o especialista anexa checkpoints em
+  `reports/feature-NNN/progress.jsonl`; no re-despacho o Arquiteto injeta "já feito,
+  continue daqui" — resume sem duplicar (skill + spec).
 ## [1.13.0] — 2026-07-01 (big bets: mapa da codebase + fundação de trace)
 
 ### Adicionado
