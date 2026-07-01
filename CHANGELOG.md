@@ -2,6 +2,12 @@
 
 Formato: [Keep a Changelog](https://keepachangelog.com/). Versionamento semântico.
 
+## [1.8.2] — 2026-07-01
+
+### Mudado
+- **/mad-audit vira gate DURO**: não se vai ao ar (PRE_RELEASE → PILOTO) sem a
+  auditoria de coerência (reports/audits/*.md). Era a única peça "guardião"; agora
+  é enforçada. Constituição Art. 1 fechada de ponta a ponta.
 ## [1.8.1] — 2026-07-01 (constituição composta + coerência contínua)
 
 ### Mudado

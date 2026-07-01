@@ -17,8 +17,9 @@ Especificação, documentação, código, testes e decisões **nunca divergem en
 - Quando dois artefatos discordam, isso é um **bug a corrigir**, não a ignorar.
 
 *Garantia:* nenhuma feature fecha sem `reports/feature-<NNN>/docs-sync.md` (spec
-as-built + docs vivos + decisão real) — o hook bloqueia. `/mad-audit` revisa a
-coerência real; `/mad-doctor` avisa quando o código está mais novo que os docs.
+as-built + docs vivos + decisão real) — o hook bloqueia. E **não se vai ao ar
+(pré-release → piloto) sem a auditoria de coerência** `/mad-audit` — gate duro.
+`/mad-doctor` avisa quando o código está mais novo que os docs.
 
 ## Art. 2 — Rastreabilidade  ⟦auditado⟧
 

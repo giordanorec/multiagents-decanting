@@ -365,6 +365,12 @@ def gate_pilot_ready(root: Path):
     f = root / "reports" / "backtesting" / "v1.md"
     if not f.is_file():
         return False, "Falta reports/backtesting/v1.md."
+    # CONSTITUIÇÃO Art. 1: não vai ao ar sem auditoria de coerência (doc↔código).
+    ad = root / "reports" / "audits"
+    audits = list(ad.glob("*.md")) if ad.is_dir() else []
+    if not audits:
+        return False, ("Falta a auditoria de coerência. Rode /mad-audit e gere "
+                       "reports/audits/<data>-coerencia.md antes de ir ao ar (Art. 1).")
     return True, ""
 
 
