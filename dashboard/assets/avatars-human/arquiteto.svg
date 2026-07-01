@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <path d="M13 61 v-5 a19 13 0 0 1 38 0 v5 Z" fill="#96897c"/>
+  <path d="M25 45 q7 5 14 0 l-4 8 h-6 Z" fill="currentColor"/>
+  <rect x="28.5" y="35" width="7" height="9" fill="#e6b184"/>
+  <circle cx="32" cy="24" r="13" fill="#f4cba3"/>
+  <circle cx="19.5" cy="25" r="2.3" fill="#f4cba3"/>
+  <circle cx="44.5" cy="25" r="2.3" fill="#f4cba3"/>
+  <circle cx="27.5" cy="24.5" r="1.6" fill="#3a2a1e"/>
+  <circle cx="36.5" cy="24.5" r="1.6" fill="#3a2a1e"/>
+  <path d="M27.5 30 q4.5 3.5 9 0" fill="none" stroke="#3a2a1e" stroke-width="1.6" stroke-linecap="round"/>
+  <!-- captain hat -->
+  <path d="M19 15 q13 -12 26 0 Z" fill="currentColor"/>
+  <rect x="16" y="14.5" width="32" height="4" rx="2" fill="currentColor"/>
+  <circle cx="32" cy="10.5" r="2.3" fill="#fdf6ee"/>
+</svg>

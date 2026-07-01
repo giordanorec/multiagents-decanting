@@ -121,9 +121,14 @@ def snapshot(root: Path) -> dict:
         agents.append({
             "agente": ag, "status": status, "bubble": bubble,
             "trust": int(tj.get("score", 50)), "note": note,
+            "stream": _agent_stream(spans, ag),
         })
     cfg = u.load_config(root)
     budget = cfg.get("budget", {})
+    # modo: assinatura (Claude Max, SEM custo em $) é o padrão do mad — o Agent
+    # tool roda dentro da assinatura, não via claude -p/API paga. Só mostra $ se
+    # o usuário explicitamente estiver em API paga.
+    mode = str(budget.get("mode", "subscription")).lower()
     completed = _features_completed_today(root)
     return {
         "type": "snapshot",
@@ -131,8 +136,9 @@ def snapshot(root: Path) -> dict:
         "agents": agents,
         "workflow": _workflow_summary(root),
         "metrics": {
-            "tokens_today": tokens_today,
-            "cost_today_usd": round(cost_today, 4),
+            "mode": mode,                      # "subscription" | "paid_api"
+            "tokens_today": tokens_today,       # uso (informativo)
+            "cost_today_usd": round(cost_today, 4),   # estimativa; só relevante em paid_api
             "max_cost_per_day_usd": float(budget.get("max_cost_per_day_usd", 0) or 0),
             "features_completed": completed,
         },
@@ -203,6 +209,50 @@ def _features_completed_today(root: Path) -> int:
                 except OSError:
                     pass
     return n
+
+
+# estilo do stream por agente (espelha o _stream_pretty do v0.2 no tmux)
+STREAM_KIND = {
+    "Read": ("📖", "read"), "Write": ("📝", "write"), "Edit": ("✏️", "edit"),
+    "MultiEdit": ("✏️", "edit"), "Bash": ("⚡", "bash"), "Grep": ("🔍", "grep"),
+    "Glob": ("🗂️", "grep"), "WebFetch": ("🌐", "web"), "WebSearch": ("🔎", "web"),
+    "Task": ("🤖", "agent"), "Agent": ("🤖", "agent"),
+}
+EVENT_KIND = {
+    "agent.start": ("◆", "start", "começou a trabalhar"),
+    "agent.boot": ("·", "dim", "carregando memória"),
+    "model.call": ("🧠", "think", "pensando"),
+    "decanting.start": ("✎", "decant", "guardando o aprendizado…"),
+    "decanting.complete": ("✓", "ok", "aprendizado guardado ✓"),
+    "agent.error": ("✗", "error", "erro"),
+    "agent.end": ("■", "dim", "terminou"),
+}
+
+
+def _stream_line(sp: dict) -> dict | None:
+    a = sp.get("attributes", {}) or {}
+    name = sp.get("name", "")
+    ts = sp.get("timestamp", "")[11:19]
+    # texto rico já pronto no span?
+    detail = a.get("detail") or a.get("say")
+    if name in ("tool.use",):
+        tool = a.get("tool.name", "?")
+        icon, kind = STREAM_KIND.get(tool, ("🔧", "tool"))
+        txt = detail or a.get("tool.args") or tool
+        return {"ts": ts, "icon": icon, "kind": kind, "text": f"{tool}: {txt}" if detail else str(txt)}
+    if name in EVENT_KIND:
+        icon, kind, default = EVENT_KIND[name]
+        return {"ts": ts, "icon": icon, "kind": kind, "text": detail or default}
+    if name == "say":  # narração livre do agente
+        return {"ts": ts, "icon": "💬", "kind": "say", "text": detail or ""}
+    return None
+
+
+def _agent_stream(spans: list[dict], agent: str, limit: int = 16) -> list[dict]:
+    mine = [s for s in spans if s.get("attributes", {}).get("agent.name") == agent]
+    mine.sort(key=lambda s: s.get("_ts") or s.get("timestamp", ""))
+    lines = [ln for s in mine if (ln := _stream_line(s))]
+    return lines[-limit:]
 
 
 def _recent_activity(spans: list[dict], limit: int = 20) -> list[dict]:

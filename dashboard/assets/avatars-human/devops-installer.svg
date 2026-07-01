@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <path d="M13 61 v-5 a19 13 0 0 1 38 0 v5 Z" fill="#96897c"/>
+  <path d="M25 45 q7 5 14 0 l-4 8 h-6 Z" fill="currentColor"/>
+  <rect x="28.5" y="35" width="7" height="9" fill="#e6b184"/>
+  <circle cx="32" cy="24" r="13" fill="#f4cba3"/>
+  <circle cx="19.5" cy="25" r="2.3" fill="#f4cba3"/>
+  <circle cx="44.5" cy="25" r="2.3" fill="#f4cba3"/>
+  <circle cx="27.5" cy="24.5" r="1.6" fill="#3a2a1e"/>
+  <circle cx="36.5" cy="24.5" r="1.6" fill="#3a2a1e"/>
+  <path d="M27.5 30 q4.5 3.5 9 0" fill="none" stroke="#3a2a1e" stroke-width="1.6" stroke-linecap="round"/>
+  <!-- hard hat -->
+  <path d="M18 18 a14 13 0 0 1 28 0 Z" fill="currentColor"/>
+  <rect x="14.5" y="17" width="35" height="4" rx="2" fill="currentColor"/>
+  <rect x="30.5" y="8" width="3" height="9" rx="1.2" fill="#fdf6ee"/>
+  <!-- gear on chest -->
+  <g stroke="#fdf6ee" stroke-width="1.5">
+    <circle cx="32" cy="53" r="3" fill="none"/>
+    <path d="M32 47.5 v-2 M32 58.5 v2 M26.5 53 h-2 M37.5 53 h2 M28.4 49.4 l-1.4 -1.4 M35.6 56.6 l1.4 1.4 M35.6 49.4 l1.4 -1.4 M28.4 56.6 l-1.4 1.4" fill="none"/>
+  </g>
+</svg>

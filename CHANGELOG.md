@@ -2,6 +2,23 @@
 
 Formato: [Keep a Changelog](https://keepachangelog.com/). Versionamento semântico.
 
+## [1.6.0] — 2026-07-01 (stream por agente + avatares humanizados + uso, não $)
+
+### Adicionado
+- **Stream por agente (estilo tmux).** Cada agente tem um mini-terminal no card
+  mostrando ao vivo o texto real que produz (say/Read/Edit/Bash/decanting…),
+  colorido por tipo. Vários agentes visíveis = dá pra ver o time trabalhando EM
+  PARALELO, cada um no seu terminal. Backend: `agents[].stream` no snapshot.
+- **Avatares humanizados + escolha.** 11 mascotes calorosos em `assets/avatars-human/`
+  + botão na topbar pra alternar "🙂 personagens" ⇄ "⬡ ícones" (padrão personagens).
+  Basta soltar PNGs próprios na pasta para usar imagens.
+
+### Mudado (correção importante)
+- **Custo em $ → USO em tokens.** O mad roda dentro da assinatura (Agent tool nativo,
+  sem claude -p / API paga), então NÃO há custo em dólar. Padrão `[budget].mode=
+  "subscription"`: painel mostra "uso (tokens)", sem "$" nem budget em dólar. A guarda
+  contra loop virou teto de tokens/dia + circuit breaker. "$" só em `mode="paid_api"`.
+
 ## [1.5.0] — 2026-07-01 (aja por padrão + observabilidade que abre sozinha)
 
 ### Adicionado

@@ -38,14 +38,42 @@ def test_guard_allows_under_budget(tmp_project):
     assert g.allowed
 
 
-def test_guard_blocks_over_budget(tmp_project):
-    # estoura o teto (web => budget 50 default; ml fixture usa default 50)
+def _set_mode(root, mode, max_tokens_day=None):
+    import re
+    p = root / "multiagents-decanting.toml"
+    txt = u.read_text(p).replace('mode = "subscription"', f'mode = "{mode}"')
+    if max_tokens_day is not None:
+        txt = re.sub(r"max_tokens_per_day\s*=\s*\d+",
+                     f"max_tokens_per_day = {max_tokens_day}", txt)
+    u.write_text(p, txt)
+
+
+def test_guard_subscription_no_dollar_block(tmp_project):
+    # assinatura (padrão): custo em $ NÃO bloqueia (não há $ de verdade)
+    u.emit_span("model.call",
+                {"agent.name": "pipeline-dev", "gen_ai.cost.estimate": 999.0},
+                root=tmp_project)
+    assert r.guard(tmp_project).allowed
+
+
+def test_guard_paid_api_blocks_over_budget(tmp_project):
+    _set_mode(tmp_project, "paid_api")
     u.emit_span("model.call",
                 {"agent.name": "pipeline-dev", "gen_ai.cost.estimate": 999.0},
                 root=tmp_project)
     g = r.guard(tmp_project)
     assert not g.allowed
-    assert "Teto diário" in g.reason
+    assert "API paga" in g.reason
+
+
+def test_guard_token_cap_blocks(tmp_project):
+    _set_mode(tmp_project, "subscription", max_tokens_day=1000)
+    u.emit_span("model.call",
+                {"agent.name": "x", "gen_ai.usage.input_tokens": 1200,
+                 "gen_ai.usage.output_tokens": 500}, root=tmp_project)
+    g = r.guard(tmp_project)
+    assert not g.allowed
+    assert "uso diário" in g.reason
 
 
 def test_guard_circuit_breaker_opens(tmp_project):
@@ -68,6 +96,7 @@ def test_warning_threshold(tmp_project):
 
 def test_budget_hook_blocks_over_budget(tmp_project):
     import json
+    _set_mode(tmp_project, "paid_api")  # em paid_api o teto em $ trava
     u.emit_span("model.call",
                 {"agent.name": "x", "gen_ai.cost.estimate": 999.0}, root=tmp_project)
     hook = tmp_project / ".claude" / "hooks" / "pre-budget-circuit.py"

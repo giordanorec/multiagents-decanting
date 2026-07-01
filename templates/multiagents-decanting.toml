@@ -2,8 +2,14 @@
 version = "1.0.0"
 
 [budget]
-max_tokens_per_feature = 100000   # alerta no Arquiteto se ultrapassar numa única feature
-max_cost_per_day_usd = 50.0       # encerra calls subsequentes; força decanting do que está em curso
+# O mad roda dentro da assinatura (Claude Max) via Agent tool nativo — NÃO usa
+# claude -p / API paga. Logo, em "subscription" NÃO há custo em dólar; o painel
+# mostra USO (tokens), não "$". Só use "paid_api" se você realmente roteia para
+# uma API paga (aí o teto em $ e a estimativa passam a fazer sentido).
+mode = "subscription"              # "subscription" (padrão, sem $) | "paid_api"
+max_tokens_per_feature = 100000    # alerta no Arquiteto se ultrapassar numa feature
+max_tokens_per_day = 0             # 0 = sem teto; >0 = guarda contra loop descontrolado
+max_cost_per_day_usd = 50.0        # só vale em mode="paid_api"
 warning_threshold = 0.8            # avisa em 80% do limite
 
 [resilience]

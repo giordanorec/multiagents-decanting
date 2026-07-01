@@ -72,6 +72,25 @@ def cost_today_usd(root: Path) -> float:
     return total
 
 
+def tokens_today(root: Path) -> int:
+    today = u.today_str()
+    f = root / "logs" / "otel" / f"{today}.jsonl"
+    if not f.is_file():
+        return 0
+    total = 0
+    for line in u.read_text(f).splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            a = json.loads(line).get("attributes", {})
+        except json.JSONDecodeError:
+            continue
+        total += int(a.get("gen_ai.usage.input_tokens", 0) or 0)
+        total += int(a.get("gen_ai.usage.output_tokens", 0) or 0)
+    return total
+
+
 def recent_failures(root: Path, window_s: int) -> int:
     d = root / "logs" / "otel"
     if not d.is_dir():
@@ -109,15 +128,26 @@ def guard(root: Path | None = None) -> Guard:
     cfg = u.load_config(root)
     budget = cfg.get("budget", {})
     resil = cfg.get("resilience", {})
+    mode = str(budget.get("mode", "subscription")).lower()
 
-    max_cost = float(budget.get("max_cost_per_day_usd", 0) or 0)
-    if max_cost > 0:
-        spent = cost_today_usd(root)
-        if spent >= max_cost:
+    # Assinatura (padrão): NÃO há custo em $ — o Agent tool roda dentro da
+    # assinatura Max, não via API paga. Então não bloqueamos por dólar; a
+    # proteção contra loop descontrolado é o teto de tokens/dia + circuit breaker.
+    if mode == "paid_api":
+        max_cost = float(budget.get("max_cost_per_day_usd", 0) or 0)
+        if max_cost > 0:
+            spent = cost_today_usd(root)
+            if spent >= max_cost:
+                return Guard(False,
+                             f"Teto diário de API paga atingido: ${spent:.2f} / ${max_cost:.2f}.")
+    max_tok = int(budget.get("max_tokens_per_day", 0) or 0)
+    if max_tok > 0:
+        used = tokens_today(root)
+        if used >= max_tok:
             return Guard(False,
-                         f"Teto diário atingido: ${spent:.2f} / ${max_cost:.2f}. "
-                         f"Force decanting do trabalho em curso e retome amanhã, "
-                         f"ou ajuste max_cost_per_day_usd em multiagents-decanting.toml.")
+                         f"Teto de uso diário atingido: {used:,} / {max_tok:,} tokens. "
+                         f"Ajuste max_tokens_per_day em multiagents-decanting.toml, ou "
+                         f"deixe o loop retomar depois. (Sem custo em $ — é só um limite de uso.)")
 
     cb_failures = int(resil.get("circuit_breaker_failures", 0) or 0)
     cb_reset = int(resil.get("circuit_breaker_reset_seconds", 300) or 300)

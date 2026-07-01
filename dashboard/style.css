@@ -479,6 +479,57 @@ body {
   word-break: break-word;
 }
 
+/* ---------- mini-terminal por agente (stream ao vivo) ---------- */
+.agent-term {
+  height: 140px;
+  overflow-y: auto;
+  background: color-mix(in srgb, var(--bg) 88%, #000);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 6px 8px;
+  font-family: var(--mono);
+  font-size: .66rem;
+  line-height: 1.45;
+  scrollbar-width: thin;
+  scroll-behavior: smooth;
+}
+:root[data-theme="light"] .agent-term { background: color-mix(in srgb, var(--bg-soft) 80%, #000 6%); }
+@media (prefers-color-scheme: light) {
+  :root[data-theme="auto"] .agent-term { background: color-mix(in srgb, var(--bg-soft) 80%, #000 6%); }
+}
+.term-line {
+  display: flex;
+  gap: 6px;
+  align-items: baseline;
+  color: var(--text-dim);
+  padding: 1px 0;
+}
+.term-ts { color: var(--text-faint); flex: 0 0 auto; font-size: .92em; }
+.term-ic { flex: 0 0 auto; width: 1.25em; text-align: center; }
+.term-tx { flex: 1 1 auto; white-space: pre-wrap; word-break: break-word; min-width: 0; }
+.term-add { color: var(--green); font-weight: 600; }
+
+/* cores semânticas por kind (espelham o _stream_pretty do v0.2 no tmux) */
+.term--read   { color: var(--accent); }
+.term--write  { color: var(--green); }
+.term--ok     { color: var(--green); }
+.term--edit   { color: #e6cf5a; }
+.term--edit .term-add { color: var(--green); }
+.term--bash   { color: #cf86e0; }
+.term--grep   { color: #48c8c8; }
+.term--web    { color: #56b8e6; }
+.term--agent  { color: var(--accent-2); }
+.term--think,
+.term--dim    { color: var(--text-faint); font-style: italic; }
+.term--decant { color: var(--gold); }
+.term--error  { color: var(--red); font-weight: 600; }
+.term--start  { color: var(--text); font-weight: 700; }
+.term--say    { color: var(--text); }
+:root[data-theme="light"] .term--edit { color: #a9860f; }
+@media (prefers-color-scheme: light) {
+  :root[data-theme="auto"] .term--edit { color: #a9860f; }
+}
+
 .agent-trust { margin-top: 2px; }
 .agent-trust-head {
   display: flex;
@@ -693,6 +744,7 @@ body {
   .brand h1 { font-size: .9rem; }
   .conn-label { display: none; }
   .activity-list { font-size: .7rem; }
+  .agent-term { height: 118px; font-size: .62rem; }
 }
 
 /* ---- controles (filtro/som), pin, drag-drop ---------------- */

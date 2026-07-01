@@ -8,13 +8,14 @@
   var PINNED_KEY = "multiagente.pinned";
   var FILTER_KEY = "multiagente.filter";
   var SOUND_KEY = "multiagente.sound";
+  var AVATAR_STYLE_KEY = "multiagente.avatarStyle";
   var THEMES = ["auto", "dark", "light"];
   var THEME_GLYPH = { auto: "🌓", dark: "🌙", light: "☀" };
   var FILTERS = ["all", "active", "no-sleeping"];
   var FILTER_LABEL = { all: "todos", active: "só working", "no-sleeping": "esconder sleeping" };
 
   var colors = {};          // agent -> hex color (from colors.json)
-  var avatarCache = {};     // agent -> svg markup
+  var avatarCache = { human: {}, icon: {} };  // style -> {agent -> svg markup}
   var ws = null;
   var reconnectDelay = 1000;
   var reconnectTimer = null;
@@ -26,7 +27,15 @@
   var filterMode = localStorage.getItem(FILTER_KEY) || "all";
   if (FILTERS.indexOf(filterMode) === -1) filterMode = "all";
   var soundOn = localStorage.getItem(SOUND_KEY) === "1";
+  var avatarStyle = localStorage.getItem(AVATAR_STYLE_KEY);
+  if (avatarStyle !== "icon" && avatarStyle !== "human") avatarStyle = "human"; // default: personagens
   var dragSlug = null;
+
+  // stream kinds válidos (espelham o contrato do server / _stream_pretty do v0.2)
+  var STREAM_KINDS = {
+    read: 1, write: 1, edit: 1, bash: 1, grep: 1, web: 1, agent: 1,
+    think: 1, decant: 1, ok: 1, error: 1, start: 1, say: 1, dim: 1, tool: 1,
+  };
 
   // status -> {glyph, label}
   var STATUS = {
@@ -97,8 +106,24 @@
       if (soundOn) beep(660, 0.06); // feedback
     });
 
+    var avatarBtn = el("button", "ctrl-btn", avatarLabel());
+    avatarBtn.id = "avatar-toggle";
+    avatarBtn.title = "estilo dos avatares";
+    avatarBtn.setAttribute("aria-label", "alternar estilo dos avatares");
+    avatarBtn.addEventListener("click", function () {
+      avatarStyle = (avatarStyle === "human") ? "icon" : "human";
+      localStorage.setItem(AVATAR_STYLE_KEY, avatarStyle);
+      avatarBtn.textContent = avatarLabel();
+      if (lastSnapshot) renderTeam(lastSnapshot.agents || []);
+    });
+
     bar.insertBefore(soundBtn, bar.firstChild);
     bar.insertBefore(filterBtn, bar.firstChild);
+    bar.insertBefore(avatarBtn, bar.firstChild);
+  }
+
+  function avatarLabel() {
+    return avatarStyle === "human" ? "🙂 personagens" : "⬡ ícones";
   }
 
   // ---- sound (WebAudio, sem assets) -----------------------------------
@@ -146,14 +171,28 @@
       .then(function (j) { colors = j || {}; })
       .catch(function () { colors = {}; });
   }
-  function loadAvatar(agent) {
-    if (avatarCache[agent] !== undefined) return Promise.resolve(avatarCache[agent]);
+  function loadAvatar(agent, style) {
+    style = (style === "icon") ? "icon" : "human";
+    var cache = avatarCache[style] || (avatarCache[style] = {});
+    if (cache[agent] !== undefined) return Promise.resolve(cache[agent]);
     var name = AVATARS.indexOf(agent) !== -1 ? agent : null;
-    if (!name) { avatarCache[agent] = null; return Promise.resolve(null); }
-    return fetch("/assets/avatars/" + name + ".svg")
+    if (!name) { cache[agent] = null; return Promise.resolve(null); }
+    var dir = style === "human" ? "/assets/avatars-human/" : "/assets/avatars/";
+    return fetch(dir + name + ".svg")
       .then(function (r) { return r.ok ? r.text() : null; })
-      .then(function (svg) { avatarCache[agent] = svg; return svg; })
-      .catch(function () { avatarCache[agent] = null; return null; });
+      .then(function (svg) {
+        // sem SVG humano -> cai no ícone frio
+        if (svg == null && style === "human") {
+          return loadAvatar(agent, "icon").then(function (ic) { cache[agent] = ic; return ic; });
+        }
+        cache[agent] = svg; return svg;
+      })
+      .catch(function () {
+        if (style === "human") {
+          return loadAvatar(agent, "icon").then(function (ic) { cache[agent] = ic; return ic; });
+        }
+        cache[agent] = null; return null;
+      });
   }
   function colorFor(agent) { return colors[agent] || "var(--accent)"; }
 
@@ -414,7 +453,7 @@
       var avInner = el("div", "agent-avatar-inner");
       avatar.appendChild(avInner);
       card.appendChild(avatar);
-      loadAvatar(a.agente).then(function (svg) { avInner.innerHTML = svg || defaultAvatar(); });
+      loadAvatar(a.agente, avatarStyle).then(function (svg) { avInner.innerHTML = svg || defaultAvatar(); });
 
       card.appendChild(el("div", "agent-name", a.agente));
 
@@ -424,6 +463,14 @@
       card.appendChild(st);
 
       card.appendChild(el("div", "agent-bubble", a.bubble || a.note || "—"));
+
+      // mini-terminal ao vivo (estilo tmux) — só se houver stream
+      if (Array.isArray(a.stream) && a.stream.length) {
+        var term = buildTerminal(a.stream);
+        card.appendChild(term);
+        // auto-scroll pro fim quando chega linha nova
+        requestAnimationFrame(function () { term.scrollTop = term.scrollHeight; });
+      }
 
       var trust = (typeof a.trust === "number") ? a.trust : 50;
       var tw = el("div", "agent-trust");
@@ -458,28 +505,76 @@
       '<circle cx="32" cy="24" r="11"/><path d="M14 52 a18 14 0 0 1 36 0" stroke-linecap="round"/></svg>';
   }
 
+  // ---- mini-terminal por agente (stream ao vivo) ---------------------
+  function buildTerminal(stream) {
+    var term = el("div", "agent-term");
+    term.setAttribute("role", "log");
+    term.setAttribute("aria-label", "stream ao vivo do agente");
+    stream.forEach(function (ln) {
+      if (!ln) return;
+      var kind = STREAM_KINDS[ln.kind] ? ln.kind : "tool";
+      var row = el("div", "term-line term--" + kind);
+      if (ln.ts) row.appendChild(el("span", "term-ts", ln.ts));
+      row.appendChild(el("span", "term-ic", ln.icon || "·"));
+      var tx = el("span", "term-tx");
+      if (kind === "edit") appendEditText(tx, ln.text || "");
+      else tx.textContent = ln.text || "";
+      row.appendChild(tx);
+      term.appendChild(row);
+    });
+    return term;
+  }
+
+  // destaca as adições ("+ …") em verde nas linhas de edição
+  function appendEditText(node, text) {
+    var i = text.indexOf("+ ");
+    if (i === -1) { node.textContent = text; return; }
+    if (i > 0) node.appendChild(document.createTextNode(text.slice(0, i)));
+    node.appendChild(el("span", "term-add", text.slice(i)));
+  }
+
   function fmtInt(n) { return (n || 0).toLocaleString("pt-BR"); }
   function pct(used, max) { if (!max || max <= 0) return null; return Math.min(100, (used / max) * 100); }
   function barClass(p) { if (p == null) return ""; if (p >= 90) return "is-danger"; if (p >= 80) return "is-warn"; return ""; }
 
   function renderMetrics(m) {
+    // modo: "subscription" (padrão, Claude Max — SEM custo em $) ou "paid_api"
+    var paid = m.mode === "paid_api";
     var tokens = m.tokens_today || 0;
-    document.getElementById("m-tokens").textContent = fmtInt(tokens);
-    var tFill = document.getElementById("m-tokens-bar");
-    tFill.style.width = tokens > 0 ? "100%" : "0";
-    tFill.className = "bar-fill";
-    document.getElementById("m-tokens-sub").textContent = fmtInt(tokens) + " tokens hoje";
 
-    var cost = m.cost_today_usd || 0;
-    var maxCost = m.max_cost_per_day_usd || 0;
-    document.getElementById("m-cost").textContent = "$" + cost.toFixed(2) +
-      (maxCost ? " / $" + maxCost.toFixed(2) : "");
-    var p = pct(cost, maxCost);
-    var cFill = document.getElementById("m-cost-bar");
-    cFill.style.width = (p == null ? 0 : p) + "%";
-    cFill.className = "bar-fill bar-fill--cost " + barClass(p);
-    document.getElementById("m-cost-sub").textContent =
-      p == null ? "sem budget definido" : p.toFixed(1) + "% do budget diário";
+    document.getElementById("m-tokens").textContent = fmtInt(tokens);
+    var tLabel = document.getElementById("m-tokens-label");
+    var tBarWrap = document.getElementById("m-tokens-barwrap");
+    var tFill = document.getElementById("m-tokens-bar");
+    var tSub = document.getElementById("m-tokens-sub");
+    var costMetric = document.getElementById("metric-cost");
+
+    if (paid) {
+      // API paga: mostra $ e barra de budget
+      tLabel.textContent = "Tokens";
+      if (tBarWrap) tBarWrap.hidden = false;
+      tFill.style.width = tokens > 0 ? "100%" : "0";
+      tFill.className = "bar-fill";
+      tSub.textContent = fmtInt(tokens) + " tokens hoje";
+
+      if (costMetric) costMetric.hidden = false;
+      var cost = m.cost_today_usd || 0;
+      var maxCost = m.max_cost_per_day_usd || 0;
+      document.getElementById("m-cost").textContent = "$" + cost.toFixed(2) +
+        (maxCost ? " / $" + maxCost.toFixed(2) : "");
+      var p = pct(cost, maxCost);
+      var cFill = document.getElementById("m-cost-bar");
+      cFill.style.width = (p == null ? 0 : p) + "%";
+      cFill.className = "bar-fill bar-fill--cost " + barClass(p);
+      document.getElementById("m-cost-sub").textContent =
+        p == null ? "sem budget definido" : p.toFixed(1) + "% do budget diário";
+    } else {
+      // assinatura (padrão): uso informativo, sem $ nem budget
+      tLabel.textContent = "Uso hoje";
+      if (tBarWrap) tBarWrap.hidden = true;   // não é budget, esconde a barra
+      tSub.textContent = fmtInt(tokens) + " tokens usados · informativo (assinatura, sem custo em $)";
+      if (costMetric) costMetric.hidden = true;
+    }
 
     document.getElementById("m-features").textContent = String(m.features_completed || 0);
   }
@@ -520,6 +615,8 @@
     initTheme();
     initControls();
     registerSW();
+    // hook de dev/teste: permite injetar um snapshot manualmente sem WS
+    window.__madRender = function (s) { lastSnapshot = s; render(s); };
     loadColors().then(connect);
   }
 

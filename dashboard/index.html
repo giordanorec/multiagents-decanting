@@ -65,15 +65,15 @@
         <section class="metrics" aria-label="métricas de hoje">
           <h2 class="section-title"><span>Métricas hoje</span></h2>
           <div class="metrics-grid">
-            <div class="metric">
+            <div class="metric" id="metric-tokens">
               <div class="metric-head">
-                <span class="metric-label">Tokens</span>
+                <span class="metric-label" id="m-tokens-label">Uso</span>
                 <span class="metric-value" id="m-tokens">—</span>
               </div>
-              <div class="bar"><div class="bar-fill" id="m-tokens-bar"></div></div>
+              <div class="bar" id="m-tokens-barwrap"><div class="bar-fill" id="m-tokens-bar"></div></div>
               <div class="metric-sub" id="m-tokens-sub"></div>
             </div>
-            <div class="metric">
+            <div class="metric" id="metric-cost">
               <div class="metric-head">
                 <span class="metric-label">Custo</span>
                 <span class="metric-value" id="m-cost">—</span>
