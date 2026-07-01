@@ -129,6 +129,7 @@ def snapshot(root: Path) -> dict:
         "type": "snapshot",
         "project": root.name,
         "agents": agents,
+        "workflow": _workflow_summary(root),
         "metrics": {
             "tokens_today": tokens_today,
             "cost_today_usd": round(cost_today, 4),
@@ -137,6 +138,37 @@ def snapshot(root: Path) -> dict:
         },
         "activity": _recent_activity(spans),
     }
+
+
+def _workflow_summary(root: Path) -> dict:
+    """Estado da state machine (v1.3) para o banner do dashboard. {} se v1.2."""
+    wd = u.read_json(root / ".mad" / "workflow_state.json", None)
+    if not isinstance(wd, dict):
+        return {}
+    af = wd.get("active_feature") or {}
+    return {
+        "phase": wd.get("current_phase"),
+        "feature": af.get("id"),
+        "subphase": af.get("subphase"),
+        "next": _wf_next(wd),
+        "warnings": len(wd.get("warnings", []) or []),
+        "bypasses": sum(1 for w in (wd.get("warnings") or []) if "Bypass" in w),
+        "phases": ["BOOTSTRAP", "DISCOVERY", "ESPEC_V1", "SETUP_TIME",
+                   "LOOP_FEATURES", "PRE_RELEASE", "PILOTO"],
+    }
+
+
+def _wf_next(wd: dict) -> str:
+    phase = wd.get("current_phase")
+    if phase != "LOOP_FEATURES":
+        return {"BOOTSTRAP": "rode /mad-init", "DISCOVERY": "faça a discovery",
+                "ESPEC_V1": "escreva o backlog", "SETUP_TIME": "habilite especialistas",
+                "PRE_RELEASE": "backtesting", "PILOTO": "em piloto"}.get(phase, "")
+    af = wd.get("active_feature") or {}
+    return {"spec_pendente": "escreva a spec", "spec_validada": "humano aprova a spec",
+            "executando": "especialista trabalhando", "validando": "arquiteto valida",
+            "aprovacao_humano": "humano aprova o merge",
+            "concluida": "próxima feature"}.get(af.get("subphase"), "ative uma feature")
 
 
 def _features_completed_today(root: Path) -> int:

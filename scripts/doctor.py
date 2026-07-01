@@ -215,6 +215,29 @@ def run(root: Path | None = None, as_json: bool = False) -> int:
     if not any_alert:
         rep.ok(items, "Nenhum alerta.")
 
+    # --- 7. Workflow (v1.3 state machine) ---
+    items = rep.section("Workflow")
+    wf_path = root / ".mad" / "workflow_state.json"
+    if not wf_path.is_file():
+        rep.warn(items, "Sem .mad/workflow_state.json (projeto v1.2). "
+                        "Rode /mad-init (migra automaticamente) para a state machine v1.3.")
+    else:
+        wd = u.read_json(wf_path, {}) or {}
+        phase = wd.get("current_phase", "?")
+        rep.ok(items, f"Fase atual: {phase}")
+        af = wd.get("active_feature")
+        if af:
+            rep.ok(items, f"Feature ativa: {af.get('id')} / {af.get('subphase')}")
+        for w in wd.get("warnings", []):
+            rep.warn(items, f"workflow: {w}")
+        # sanity: hooks do workflow wireados?
+        st_settings = u.read_json(root / ".claude" / "settings.json", {}) or {}
+        hooks = st_settings.get("hooks", {})
+        starts = json.dumps(hooks)
+        for hk in ["pre-workflow-gate.py", "session-start-inject-state.py"]:
+            if hk not in starts:
+                rep.fail(items, f"hook {hk} não está wireado em settings.json — enforcement DESLIGADO.")
+
     # --- saída ---
     if as_json:
         out = {

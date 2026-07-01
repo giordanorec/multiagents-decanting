@@ -211,9 +211,43 @@
   // ---- render ---------------------------------------------------------
   function render(snap) {
     renderTitle(snap.project);
+    renderWorkflow(snap.workflow || {});
     renderTeam(snap.agents || []);
     renderMetrics(snap.metrics || {});
     renderActivity(snap.activity || []);
+  }
+
+  function renderWorkflow(wf) {
+    var team = document.getElementById("team");
+    if (!team) return;
+    var banner = document.getElementById("wf-banner");
+    if (!wf || !wf.phase) { if (banner) banner.remove(); return; }
+    if (!banner) {
+      banner = el("div", "wf-banner");
+      banner.id = "wf-banner";
+      team.parentNode.insertBefore(banner, team);
+    }
+    banner.innerHTML = "";
+    var phases = wf.phases || [];
+    var steps = el("div", "wf-steps");
+    phases.forEach(function (p) {
+      var cur = p === wf.phase;
+      var idx = phases.indexOf(p), curIdx = phases.indexOf(wf.phase);
+      var cls = "wf-step" + (cur ? " is-current" : (idx < curIdx ? " is-done" : ""));
+      var s = el("span", cls, p);
+      steps.appendChild(s);
+    });
+    banner.appendChild(steps);
+    var line = el("div", "wf-next");
+    var txt = "Fase: " + wf.phase;
+    if (wf.feature) txt += " · " + wf.feature + " / " + (wf.subphase || "");
+    if (wf.next) txt += "  →  " + wf.next;
+    line.textContent = txt;
+    banner.appendChild(line);
+    if (wf.bypasses > 0) {
+      var b = el("span", "wf-bypass", "⚠ " + wf.bypasses + " bypass");
+      banner.appendChild(b);
+    }
   }
 
   function renderTitle(project) {

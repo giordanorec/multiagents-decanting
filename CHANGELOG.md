@@ -2,6 +2,36 @@
 
 Formato: [Keep a Changelog](https://keepachangelog.com/). Versionamento semântico.
 
+## [1.3.0] — 2026-06-30 (Workflow State Machine)
+
+> ⚠️ **MUDANÇA SIGNIFICATIVA NO WORKFLOW.** O processo do projeto deixa de ser
+> prosa (sugestão) e vira uma **state machine hardcoded imposta por hooks**. O
+> Arquiteto NÃO consegue mais pular fases. Corrige o buraco estrutural da v1.2.
+
+### Adicionado
+- **State machine** (`scripts/workflow.py`): 7 fases (BOOTSTRAP→…→PILOTO) +
+  sub-máquina por feature, com gates puros e testáveis.
+- **Hooks de enforcement**: `session-start-inject-state.py` (injeta o estado no
+  contexto a cada sessão), `pre-workflow-gate.py` (BLOQUEIA tool call fora de
+  estado — fail-closed), `post-decanting-update-state.py` (avança sub-fase ao
+  decantar).
+- **Comandos** `/mad-phase status|next|next-phase|approve-spec|approve-merge|
+  rework|rollback|emergency-bypass` — única forma legítima de avançar.
+- **`/mad-init` em cascata** (`scripts/mad_init.py`): idempotente e context-aware —
+  RETOMA / MIGRA (v1.2) / ADOTA (trabalho prévio) / CRIA do zero.
+- **Migração** `scripts/migrate_v1_3.py` + `/mad-migrate-to-v1_3` (backup + infere
+  fase + instala hooks, preserva memória).
+- **Logs de auditoria** `logs/workflow.jsonl` (sanitizado, append-only).
+- Dashboard: banner de fase; doctor: seção de integridade do workflow.
+
+### Mudado (breaking)
+- Skill `mad-workflow` **reescrita** como state machine.
+- `agents/arquiteto.md`: bloco de aviso da state machine no topo.
+
+### Migração
+Rode `/mad-init` — ele detecta e migra/adota automaticamente. Ver
+`docs/MIGRATING_TO_V1_3.md`.
+
 ## [1.2.0] — 2026-06-30 (Tier 3)
 
 ### Adicionado

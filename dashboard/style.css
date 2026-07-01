@@ -455,3 +455,21 @@ body {
   outline: 2px dashed var(--agent-color, var(--accent, #4ea1ff));
   outline-offset: -2px;
 }
+
+/* ---- v1.3: banner de fase do workflow ---- */
+.wf-banner {
+  margin: 0 0 14px; padding: 10px 14px; border-radius: 10px;
+  background: var(--surface-2, rgba(127,127,127,0.10));
+  border: 1px solid var(--border, rgba(127,127,127,0.25));
+}
+.wf-steps { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; }
+.wf-step {
+  font-size: 0.7rem; padding: 2px 8px; border-radius: 999px;
+  background: rgba(127,127,127,0.15); color: var(--fg-dim, #999);
+}
+.wf-step.is-done { opacity: 0.6; text-decoration: line-through; }
+.wf-step.is-current {
+  background: var(--accent, #4ea1ff); color: #fff; font-weight: 700;
+}
+.wf-next { font-size: 0.85rem; color: var(--fg, inherit); }
+.wf-bypass { color: #e55; font-weight: 700; font-size: 0.8rem; }

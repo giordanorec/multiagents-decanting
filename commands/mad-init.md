@@ -20,9 +20,28 @@ PY=python3; command -v python3 >/dev/null 2>&1 || PY=python
 
 Use `"$PY" "$PLUGIN_ROOT/scripts/mad.py" <subcomando>` para o **init**. Depois que o init rodar, o projeto passa a ter seu próprio `scripts/`, e os demais comandos podem usar `"$PY" scripts/mad.py <subcomando>` (ou continuar usando `$PLUGIN_ROOT` — ambos funcionam).
 
+## Passo 0 — CASCATA DE DETECÇÃO (SEMPRE primeiro)
+
+`/mad-init` é idempotente e inteligente: ele **detecta** se deve retomar, migrar, adotar ou criar do zero. Você NUNCA reinicia um trabalho já começado. Rode:
+
+```bash
+"$PY" "$PLUGIN_ROOT/scripts/mad_init.py" detect
+```
+
+Isso imprime um JSON com `"action"`. Ramifique conforme o valor:
+
+- **`"resume"`** — já há `.mad/workflow_state.json`. Mostre `project`/`phase`/`subphase`/`next` ao usuário e pergunte: *"Projeto '<project>' está em <phase>. Continuar daqui? [S/n]"*. Se sim: **não recrie nada** — diga o próximo passo (`next`) e sugira `/mad-phase status`. Se não: ofereça `/mad-phase rollback` ou `/mad-reset` (com cautela). **Fim.**
+- **`"migrate"`** — projeto v1.2 (sem state machine). Rode `"$PY" "$PLUGIN_ROOT/scripts/migrate_v1_3.py"` (ele faz backup, infere a fase e instala os hooks). Reporte a fase e mande abrir sessão nova. **Fim.**
+- **`"adopt"`** — há trabalho prévio (docs_projeto/, _spec/, discovery já feita). Mostre ao usuário o que foi detectado (`docs_files`, `suspect_dirs`, `inferred_phase`, `confidence`). Se `confidence >= 0.7`, pergunte *"Adotar em fase <inferred_phase>? [S/n]"*; se `< 0.7`, **pergunte explicitamente qual fase** (liste BOOTSTRAP/DISCOVERY/ESPEC_V1/SETUP_TIME/LOOP_FEATURES). Depois rode `"$PY" "$PLUGIN_ROOT/scripts/mad_init.py" adopt --phase <FASE>`. Reporte e mande abrir sessão nova. **Fim.**
+- **`"repair"`** — state corrompido. Não recrie; oriente `/mad-doctor`. **Fim.**
+- **`"new"`** — projeto genuinamente vazio. Siga o fluxo de criação abaixo (Discovery do zero).
+
+**Só continue para o Pré-check e o Discovery abaixo se `action == "new"`** (ou se o usuário passou `--force-new`, que exige confirmação dupla digitando "EU ENTENDO" e loga um aviso).
+
 ## Pré-check
 
-1. Verifique se já existe `multiagents-decanting.toml` na raiz. Se sim, o projeto já foi inicializado — **aborte** com a mensagem: "Projeto já tem multiagentes ativo; use /mad-dashboard ou /mad-doctor."
+1. (A cascata já tratou projeto existente. Aqui `action == "new"`.) Verifique Python 3.9+: rode `python3 --version` (ou `python --version`). Se não houver Python ou for < 3.9, aborte com instrução curta de instalação.
+1b. (legado) Se por algum motivo já existir `multiagents-decanting.toml` sem `.mad/`, prefira a cascata (`migrate`).
 2. Verifique Python 3.9+: rode `python3 --version` (ou `python --version`). Se não houver Python ou for < 3.9, aborte com instrução curta de instalação.
 3. Verifique a versão do Claude Code: `claude --version`. Se >= 2.1.77, informe que SendMessage está disponível (continuação multi-turn via `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`). Se for mais antigo, informe que a continuidade entre calls será via boot reconstruindo de `handoff.md` (fallback universal, funcionalmente equivalente).
 

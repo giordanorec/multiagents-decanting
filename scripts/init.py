@@ -36,7 +36,8 @@ MEMORY_FILES = ["identity.md", "dossier.md", "decisions.md", "handoff.md",
 COPY_TREES = ["dashboard", "bin", "locale"]
 COPY_SCRIPTS = ["mad.py", "init.py", "doctor.py", "inspect_agent.py",
                 "dashboard_server.py", "resilience.py", "notify.py",
-                "a2a.py", "voice.py", "_utils.py"]
+                "a2a.py", "voice.py", "workflow.py", "mad_phase.py",
+                "mad_init.py", "migrate_v1_3.py", "_utils.py"]
 
 
 def _subst(text: str, mapping: dict) -> str:
@@ -192,6 +193,9 @@ def run(name=None, project_type="outro", agents=None, budget_usd=50.0,
         if reg:
             all_created.append(reg)
 
+    # --- workflow state machine (v1.3): cria .mad/workflow_state.json ---
+    _init_workflow_state(target, project, agents)
+
     u.emit_span("project.init",
                 {"project.name": project, "project.type": project_type,
                  "agents": agents}, root=target)
@@ -218,7 +222,12 @@ def hooks_config() -> dict:
     sh = lambda f: {"type": "command", "command": f'bash "{h}/{f}"'}
     py = lambda f: {"type": "command", "command": f'python3 "{h}/{f}"'}
     return {
+        "SessionStart": [
+            {"hooks": [py("session-start-inject-state.py")]},
+        ],
         "PreToolUse": [
+            # workflow gate PRIMEIRO (bloqueia despacho fora de estado)
+            {"matcher": "*", "hooks": [py("pre-workflow-gate.py")]},
             {"matcher": "Bash", "hooks": [
                 sh("pre-guardrail-force-push.sh"),
                 sh("pre-guardrail-rm-rf.sh"),
@@ -233,12 +242,41 @@ def hooks_config() -> dict:
         ],
         "PostToolUse": [
             {"matcher": "*", "hooks": [py("post-otel-emit.py")]},
-            {"matcher": "Agent|Task", "hooks": [py("post-trust-update.py")]},
+            {"matcher": "Agent|Task", "hooks": [
+                py("post-trust-update.py"),
+                py("post-decanting-update-state.py"),
+            ]},
         ],
         "SessionEnd": [
             {"hooks": [py("session-end-decant-check.py")]},
         ],
     }
+
+
+def _init_workflow_state(target: Path, project: str, agents: list[str]):
+    """Cria .mad/workflow_state.json na fase DISCOVERY (bootstrap concluído
+    pelo próprio init). Idempotente: não sobrescreve estado existente."""
+    if (target / ".mad" / "workflow_state.json").is_file():
+        return
+    try:
+        import workflow as wf
+    except Exception:
+        return
+    (target / ".mad").mkdir(parents=True, exist_ok=True)
+    data = wf.initial_state(project)
+    now = u.iso_now()
+    data["team_enabled"] = [{"role": a, "enabled_at": now} for a in agents]
+    # bootstrap → discovery (init fez o bootstrap: estrutura, toml, identity)
+    data["current_phase"] = "DISCOVERY"
+    data["phase_entered_at"] = now
+    data["phase_transitions"] = [{
+        "from": "BOOTSTRAP", "to": "DISCOVERY", "at": now, "by": "init",
+        "gates_checked": ["gate_bootstrap_done"],
+        "evidence": {"created_by": "mad-init"},
+    }]
+    st = wf.WorkflowState(target, data)
+    st.save()
+    wf.log_event(target, "init", project=project, agents=agents)
 
 
 def _write_hooks_settings(target: Path):

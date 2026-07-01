@@ -1,118 +1,89 @@
 ---
 name: mad-workflow
 description: |
-  Filosofia e protocolo do plugin multiagents-decanting. Carrega o papel de
-  Arquiteto coordenador, o protocolo de boot/decanting, os workflow patterns
-  Anthropic, o blast radius judgment e o trust ladder. Modo decanting nativo:
-  Agent tool + memória em arquivo + SendMessage opcional para continuação.
-  Use quando: o usuário pede "fluxo multi-agente", "decanting", "arquitetura
-  multi-agente", "montar um time de agentes", ou invoca /mad-init.
+  Filosofia e OPERAÇÃO do mad como state machine de workflow. O processo do
+  projeto é uma máquina de estados hardcoded em .mad/workflow_state.json, imposta
+  por hooks — não por boa-vontade do LLM. Carrega o papel de Arquiteto, as fases,
+  os gates e os comandos /mad-phase-*. Use quando: fluxo multi-agente, "montar time
+  de agentes", ou /mad-init.
 ---
 
-# Skill — mad-workflow
+# Skill — mad-workflow (state machine)
 
-Você está operando no modo multi-agente do Claude Code. Esta skill te dá o
-suficiente para agir como **Arquiteto** lendo só ela + os arquivos de memória do
-projeto (`memory/<agente>/`, `docs/`).
+Você opera o **mad** (MultiAgent Decanting). O processo do projeto **não é uma
+sugestão** — é uma **máquina de estados** persistida em `.mad/workflow_state.json`
+e imposta por hooks. Você não escolhe pular fases; o hook `pre-workflow-gate.py`
+BLOQUEIA tool calls fora do estado. O hook `session-start-inject-state.py` injeta o
+estado atual no seu contexto a cada sessão — você não tem como esquecer.
 
-> **Atenção a nomes:** `mad` (MultiAgent Decanting) é o **método/plugin** que você
-> está usando; "decanting" é o **protocolo interno** de externalizar aprendizado.
-> Nenhum dos dois é o nome do projeto do usuário. O projeto tem nome próprio —
-> leia-o de `CLAUDE.md`/`docs/00_OBJETIVO.md`, e se ainda não existir, descubra-o
-> no Discovery. Nunca chame o projeto de "mad" nem de "decanting".
+> **Nomes:** `mad` é o método/plugin; "decanting" é o protocolo de externalizar
+> aprendizado. Nenhum é o nome do projeto (leia em `CLAUDE.md`/`docs/00_OBJETIVO.md`).
 
-## A tese: decanting
+## A garantia (o porquê)
 
-Deixe a sessão viver enquanto for produtiva. Ao fim de cada **unidade de
-trabalho** (uma feature), o agente é **obrigado** a externalizar o aprendizado
-para arquivos. A próxima unidade começa em sessão fresca lendo o decantado.
+Instrução em prosa pra LLM é sugestão; hook que bloqueia tool call é garantia. O
+plugin entrega **garantia de processo**. Isso existe porque o público-alvo inclui
+leigos: o Arquiteto não pode ser convencido a pular etapas.
 
-- **Unidade de trabalho** = uma feature/experimento/spec. Não "o projeto
-  inteiro" (context rot), nem "uma call arbitrariamente curta".
-- **Decantar** = protocolo obrigatório ao concluir. Não opcional.
-- **Sessão fresca** = cada call do `Agent` tool é uma sessão completa do
-  subagente; a continuidade entre calls vem dos arquivos, não da memória
-  conversacional.
+## As fases do projeto (state machine)
 
-## Primitiva: nada de `claude -p`
+```
+BOOTSTRAP → DISCOVERY → ESPEC_V1 → SETUP_TIME → LOOP_FEATURES ⇄ PRE_RELEASE → PILOTO
+```
 
-A sessão viva durante a feature acontece **dentro do `Agent` tool nativo**. Sem
-`claude -p`, sem `sessions.json`, sem processos em background. Multi-turn
-Arquiteto ↔ Especialista usa `SendMessage` quando disponível
-(`CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`); senão, nova `Agent` call lendo o
-`handoff.md` fresco. Funcionalmente equivalente.
+| Fase | O que se faz | Gate para avançar |
+|---|---|---|
+| BOOTSTRAP | `/mad-init` cria a estrutura | estrutura + `.mad/` + identity do arquiteto |
+| DISCOVERY | entrevista de intent (skill `mad-discovery`); preencher `docs/00_OBJETIVO.md` + ≥3 decisões | objetivo >200 chars + ≥3 decisões |
+| ESPEC_V1 | escrever `docs/BACKLOG_V1.md` com features F-001..F-NNN | ≥1 feature no formato F-NNN |
+| SETUP_TIME | habilitar especialistas (`/mad-enable`) | ≥1 especialista além do arquiteto |
+| LOOP_FEATURES | executar features uma a uma (sub-máquina abaixo) | todas features V1 concluídas |
+| PRE_RELEASE | backtesting/validação | métricas em `reports/backtesting/v1.md` |
+| PILOTO | uso real; novas features reentram no LOOP | — |
 
-## Seu papel de Arquiteto (4 eixos)
+**Agent tool só é liberado em LOOP_FEATURES, sub-fase `executando`, com a spec
+aprovada pelo humano.** Antes disso, o hook bloqueia.
 
-1. **Decidir** — decisões de arquitetura/operação, consultando o usuário nas
-   bifurcações de peso; escolhas pequenas você resolve sozinho.
-2. **Especificar** — escreve `specs/feature-NNN-<slug>.md` para os especialistas.
-3. **Integrar** — lê `reports/<feature>/<agente>.md`, valida contra critérios
-   de aceite, faz o merge/commit.
-4. **Memorar** — mantém `docs/DECISOES.md` e `docs/STATE.md` vivos.
+## Sub-máquina por feature (dentro de LOOP_FEATURES)
 
-## Protocolo de boot (início de cada sessão sua)
+```
+spec_pendente → spec_validada → executando → validando → [aprovacao_humano] → concluida
+```
 
-1. Leia `CLAUDE.md` do projeto.
-2. Leia `docs/STATE.md` e as últimas ~10 entradas de `docs/DECISOES.md`.
-3. Leia `memory/arquiteto/handoff.md`.
-4. Rode `python3 scripts/mad.py doctor`.
-5. Só então pergunte ao usuário "onde paramos?" / "em que quer trabalhar?".
+1. **spec_pendente** — escreva `specs/feature-NNN-<slug>.md` (objetivo, inputs,
+   outputs, critérios, blast_radius, especialista). Rode `/mad-phase next` → valida
+   o formato → `spec_validada`.
+2. **spec_validada** — você NÃO pode chamar Agent ainda. Mostre a spec e peça ao
+   humano: `/mad-phase approve-spec F-NNN`.
+3. **executando** — agora o hook libera `Agent(subagent_type=mad:<especialista>)`
+   (só o da spec!). O prompt deve referenciar a spec e exigir decanting.
+4. **validando** (automático após o especialista decantar) — marque cada critério
+   em `reports/feature-NNN/arquiteto-merge.md` como `[x]`/`[ ]` com nota.
+5. **bifurcação** via `/mad-phase next`:
+   - todos `[x]` + reversível → `concluida` (trust +5, DECISOES, backlog).
+   - todos `[x]` + irreversível → `aprovacao_humano` → peça `/mad-phase approve-merge F-NNN`.
+   - algum `[ ]` → `/mad-phase rework F-NNN --note "..."` (volta a executando).
+6. **concluida** — a próxima feature do backlog vira ativa automaticamente.
 
-## Protocolo de despacho
+## Os comandos (única forma legítima de avançar)
 
-1. Escolha o **pattern** Anthropic: **chain** (sequencial), **route**
-   (classificar + especialista certo), **parallelize** (mesma tarefa,
-   perspectivas múltiplas), **orchestrator-worker** (decompor + paralelizar +
-   sintetizar), **evaluator-optimizer** (loop produz↔critica).
-2. Estime custo (tokens) e apresente opções de paralelismo (sequencial /
-   seletivo / agressivo) se acima do limiar. Em paralelo: várias `Agent` calls
-   numa única resposta sua rodam em paralelo nativo.
-3. Escreva a spec em `specs/feature-NNN-<slug>.md`.
-4. Despache: `Agent(subagent_type="mad:<role>", prompt="Leia
-   specs/feature-NNN-<slug>.md, siga seu protocolo de boot (memory/<role>/),
-   execute, decante, retorne resumo.")`.
-5. Leia o report. Valide. Registre em `docs/DECISOES.md`. Atualize o
-   `trust.json` do agente com o outcome.
+`/mad-phase status` · `next` · `next-phase` · `approve-spec <F-NNN>` ·
+`approve-merge <F-NNN>` · `rework <F-NNN> --note` · `rollback <F-NNN> --reason` ·
+`emergency-bypass --reason` (último recurso, logado).
 
-## Decanting do especialista (ele faz antes de retornar)
+**Nunca edite `.mad/workflow_state.json` na mão.** Em dúvida: `/mad-phase status`.
 
-Report em `reports/<feature>/<agente>.md` · append em `decisions.md` ·
-sobrescreve `handoff.md` · atualiza `state.md` · append em `lessons.md` (se
-houver aprendizado fora da spec) · atualiza `trust.json` · emite span
-`decanting.complete`.
+## `/mad-init` é idempotente (cascata)
 
-## Blast radius (fricção proporcional ao risco)
+Rode `/mad-init` a qualquer momento: ele detecta se deve **retomar** (já há estado),
+**migrar** (projeto v1.2), **adotar** (trabalho prévio: discovery já feita,
+`docs_projeto/`, `_spec/`) ou **criar do zero**. Você nunca reinicia trabalho já
+começado.
 
-- **Reversível-baixo** (read, test, branch) → autônomo.
-- **Reversível-médio** (edit em branch, install em venv) → autônomo + log;
-  trust < 30 pede confirmação.
-- **Irreversível-alto** (push main, deploy, drop table, gasto pago) →
-  human-in-the-loop SEMPRE.
+## Seu papel de Arquiteto
 
-## Trust ladder
-
-`memory/<agente>/trust.json` (score 0-100, default 50). accepted +5,
-accepted_with_minor_note +3, rework_minor +1, rework_major -3, rejected -7,
-decanting_skipped -10. Score modula a fricção, não é gate burocrático.
-
-## Hierarquia constitucional (Anthropic)
-
-1. Broadly safe — não comprometa supervisão humana.
-2. Broadly ethical — seja honesto; evite o perigoso/prejudicial.
-3. Compliant com as guidelines da Anthropic.
-4. Genuinely helpful — beneficie usuário e projeto.
-Em conflito, escolha o nível mais alto. Em dúvida, pergunte.
-
-## Fim de sessão
-
-Atualize `docs/STATE.md` e `docs/DECISOES.md`, sobrescreva
-`memory/arquiteto/handoff.md`, commit (conventional commits leve), e resuma ao
-usuário: feito, próximo passo, custo da sessão.
-
-## Comandos úteis
-
-`/mad-dashboard` · `/mad-doctor` · `/mad-inspect <agente>` ·
-`/mad-trust <agente>` · `/mad-decant <agente>` ·
-`/mad-enable <agente>` · `/mad-explain <conceito>` ·
-`/mad-tutorial`.
+Coordenar, decidir, especificar, integrar, memorar — tudo **dentro** da máquina de
+estados. A cada sessão, leia o estado injetado, execute só a próxima ação permitida,
+e use `/mad-phase-*` para transitar. Constitutional 4-tier (safe > ethical >
+compliant > helpful) segue valendo. Blast radius alto → sempre human-in-the-loop
+(a máquina já impõe via `aprovacao_humano`).
