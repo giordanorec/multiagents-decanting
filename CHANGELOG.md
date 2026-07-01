@@ -2,6 +2,20 @@
 
 Formato: [Keep a Changelog](https://keepachangelog.com/). Versionamento semântico.
 
+## [1.9.0] — 2026-07-01 (Cluster A: verificação com DENTES)
+
+### Adicionado
+- **Teste REAL como gate** (`/mad-verify`, scripts/verify.py, seção `[verify]` no
+  toml): roda test_cmd/lint_cmd/typecheck_cmd de verdade e grava verify.json. Se
+  test_cmd está setado, a feature NÃO fecha sem `all_passed=true`. Fim do "teste é
+  prosa que o LLM escreve".
+- **Revisor independente obrigatório** (autor ≠ verificador): a feature não fecha sem
+  um agente diferente do que a construiu escrever `VEREDITO: aprovar`. Separação de
+  deveres enforçada (gate_independent_review).
+
+### Corrigido
+- (1.8.3) gate de validação aceitava critério desmarcado — corrigido e agora com
+  gates de teste e revisão empilhados no fechamento.
 ## [1.8.3] — 2026-07-01 (correção crítica do gate de validação + roadmap SOTA)
 
 ### Corrigido

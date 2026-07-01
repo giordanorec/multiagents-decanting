@@ -171,23 +171,59 @@ def test_close_blocked_without_docs_sync(tmp_project):
     st.set_subphase("executando", by="t"); st.set_subphase("validando", by="t")
     u.write_text(tmp_project / "reports" / "feature-001" / "arquiteto-merge.md",
                  "# merge\n- [x] critério 1 — ok\n")
+    # revisão independente presente (isola o gate de docs-sync)
+    u.write_text(tmp_project / "reports" / "feature-001" / "qa-tester.md",
+                 "revisei\nVEREDITO: aprovar\n")
     mp = str(tmp_project / "scripts" / "mad_phase.py")
     # sem docs-sync: next em validando NÃO fecha
     r = subprocess.run([sys.executable, mp, "next"], cwd=str(tmp_project),
                        capture_output=True, text=True)
     assert r.returncode == 1 and "doc" in (r.stdout + r.stderr).lower()
     assert wf.WorkflowState.load(tmp_project).subphase == "validando"
-    # com docs-sync: fecha
+    # revisão independente (autor != verificador) + docs-sync: aí fecha
+    u.write_text(tmp_project / "reports" / "feature-001" / "qa-tester.md",
+                 "# Revisão QA\nRodei os critérios e testei o fluxo.\nVEREDITO: aprovar\n")
     u.write_text(tmp_project / "reports" / "feature-001" / "docs-sync.md",
                  "# Doc-sync\n## Spec as-built\nok, sem divergência do planejado.\n"
                  "## Docs vivos\nnenhum doc vivo afetado nesta feature de scaffold.\n"
                  "## Decisão\nEstrutura inicial criada conforme a arquitetura combinada.\n")
     r = subprocess.run([sys.executable, mp, "next"], cwd=str(tmp_project),
                        capture_output=True, text=True)
-    assert r.returncode == 0
+    assert r.returncode == 0, r.stdout + r.stderr
     st2 = wf.WorkflowState.load(tmp_project)
     assert any(x["id"] == "F-001" and x["status"] == "concluida"
-               for x in st2.data["backlog_features"])
+               for x in st2.data["backlog_features"]), r.stdout + r.stderr
+
+
+def test_gate_independent_review(tmp_project):
+    st = _advance_to_loop(tmp_project)
+    st.feature["agent_assigned"] = "pipeline-dev"
+    st.save()
+    d = tmp_project / "reports" / "feature-001"
+    # relatório do PRÓPRIO autor não conta
+    u.write_text(d / "pipeline-dev.md", "feito\nVEREDITO: aprovar\n")
+    ok, _ = wf.gate_independent_review(tmp_project, "F-001")
+    assert not ok
+    # revisor diferente aprovando conta
+    u.write_text(d / "qa-tester.md", "revisei\nVEREDITO: aprovar\n")
+    ok, _ = wf.gate_independent_review(tmp_project, "F-001")
+    assert ok
+
+
+def test_gate_tests_green(tmp_project):
+    # sem test_cmd configurado -> passa (nada a rodar)
+    ok, _ = wf.gate_tests_green(tmp_project, "F-001")
+    assert ok
+    # com test_cmd configurado mas sem verify.json -> bloqueia
+    p = tmp_project / "multiagents-decanting.toml"
+    u.write_text(p, u.read_text(p).replace('test_cmd = ""', 'test_cmd = "true"'))
+    ok, msg = wf.gate_tests_green(tmp_project, "F-001")
+    assert not ok and "verify" in msg.lower()
+    # com verify.json all_passed -> passa
+    u.write_json(tmp_project / "reports" / "feature-001" / "verify.json",
+                 {"all_passed": True, "results": [{"name": "test_cmd", "passed": True}]})
+    ok, _ = wf.gate_tests_green(tmp_project, "F-001")
+    assert ok
 
 
 def test_rework_requires_note(tmp_project):

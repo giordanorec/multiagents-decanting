@@ -108,12 +108,18 @@ spec_pendente → spec_validada → executando → validando → [aprovacao_huma
 3. **executando** — agora o hook libera `Agent(subagent_type=mad:<especialista>)`
    (só o da spec!). O prompt referencia a spec e exige decanting. O usuário
    **acompanha** (dashboard) e pode te interpelar.
-4. **validando** (automático após o especialista decantar) — marque cada critério em
-   `reports/feature-NNN/arquiteto-merge.md`. Apresente o resultado ao usuário.
-   **SINCRONIZE (Constituição Art. 1, obrigatório):** atualize a **spec** pro
-   as-built, atualize os **docs vivos** afetados, e escreva
-   `reports/feature-NNN/docs-sync.md` (spec as-built + docs vivos + decisão real).
-   **Sem isso o `next` bloqueia** — a feature não fecha com doc desatualizado.
+4. **validando** (automático após o especialista decantar). O `next` só fecha com
+   os 4 gates (Art. 1 e 4):
+   a. **critérios** marcados em `reports/feature-NNN/arquiteto-merge.md` (`[x]`; um
+      `[ ]` só passa com linha `WAIVER: <motivo>`);
+   b. **teste REAL:** rode `/mad-verify F-NNN` (ou `python scripts/verify.py F-NNN`)
+      — se `[verify].test_cmd` está setado, precisa passar de verdade (não prosa);
+   c. **revisor INDEPENDENTE:** despache um agente ≠ autor (ex.: `qa-tester`;
+      +`security-auditor` se blast ≥ médio ou toca auth/input/segredo) que escreve
+      `reports/feature-NNN/<agente>.md` com `VEREDITO: aprovar|reprovar`. Reprovou →
+      `/mad-phase rework F-NNN --note "<motivo>"`;
+   d. **SINCRONIZE (Art. 1):** spec pro as-built + docs vivos + `docs-sync.md`.
+   Sem qualquer um, o `next` bloqueia.
 5. **bifurcação** (você roda `mad_phase.py next`, que só passa com docs-sync feito):
    - todos `[x]` + reversível → concluída.
    - todos `[x]` + algo difícil de desfazer → mostre o resultado, pergunte *"posso

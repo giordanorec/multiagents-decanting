@@ -348,6 +348,50 @@ def gate_docs_synced(root: Path, nnn: str):
     return True, ""
 
 
+def gate_tests_green(root: Path, nnn: str):
+    """Teste é ground-truth executável. Se [verify].test_cmd está setado, a
+    feature não fecha sem verify.json com all_passed=true."""
+    cfg = u.load_config(root).get("verify", {})
+    if not str(cfg.get("test_cmd", "") or "").strip() \
+       and not str(cfg.get("lint_cmd", "") or "").strip() \
+       and not str(cfg.get("typecheck_cmd", "") or "").strip():
+        return True, ""  # nada configurado -> nada a rodar (projeto sem testes ainda)
+    num = nnn.replace("F-", "").lstrip("0").zfill(3)
+    vj = u.read_json(root / "reports" / f"feature-{num}" / "verify.json", None)
+    if not isinstance(vj, dict):
+        return False, ("Falta reports/feature-{}/verify.json — rode /mad-verify {} "
+                       "(teste real, não prosa).".format(num, nnn))
+    if vj.get("all_passed") is not True:
+        fails = [r.get("name") for r in vj.get("results", []) if not r.get("passed")]
+        return False, f"verificação falhou em: {', '.join(fails) or '?'}. Corrija e re-rode /mad-verify."
+    return True, ""
+
+
+def gate_independent_review(root: Path, nnn: str):
+    """Autor != verificador. Uma feature não fecha sem VEREDITO de aprovação de um
+    agente DIFERENTE do que a construiu (separação de deveres)."""
+    cfg = u.load_config(root).get("verify", {})
+    if not cfg.get("require_independent_review", True):
+        return True, ""
+    st = WorkflowState.load(root)
+    author = (st.feature or {}).get("agent_assigned", "")
+    num = nnn.replace("F-", "").lstrip("0").zfill(3)
+    rdir = root / "reports" / f"feature-{num}"
+    if not rdir.is_dir():
+        return False, f"Sem reports/feature-{num}/ — falta a revisão independente."
+    for md in rdir.glob("*.md"):
+        reviewer = md.stem
+        if reviewer in ("arquiteto-merge", "docs-sync") or reviewer == author:
+            continue
+        t = u.read_text(md)
+        if re.search(r"VEREDITO:\s*aprovar", t, re.IGNORECASE):
+            return True, ""
+    rev = cfg.get("independent_reviewer", "qa-tester")
+    return False, (f"Falta revisão independente: um agente != {author or 'autor'} "
+                   f"(ex.: {rev}) precisa escrever reports/feature-{num}/<agente>.md "
+                   f"com uma linha 'VEREDITO: aprovar'. Autor não valida o próprio trabalho.")
+
+
 def gate_human_approve_merge(root: Path, nnn: str):
     if _log_has(root, "approve_merge", nnn):
         return True, ""

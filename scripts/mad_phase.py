@@ -125,6 +125,16 @@ def cmd_next(root, st, args) -> int:
         if not ok:
             print(u.c(f"✗ validação de {nnn} incompleta: {msg}", "yellow"))
             return 1
+        # Art. 4: teste é ground-truth executável (não prosa).
+        ok, msg = wf.gate_tests_green(root, nnn)
+        if not ok:
+            print(u.c(f"✗ {nnn} — verificação: {msg}", "yellow"))
+            return 1
+        # Separação de deveres: autor != verificador.
+        ok, msg = wf.gate_independent_review(root, nnn)
+        if not ok:
+            print(u.c(f"✗ {nnn} — revisão independente: {msg}", "yellow"))
+            return 1
         # CONSTITUIÇÃO Art. 1: não fecha (nem vai pra aprovação) sem spec+docs
         # espelhando o código.
         ok, msg = wf.gate_docs_synced(root, nnn)
