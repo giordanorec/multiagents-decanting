@@ -319,6 +319,28 @@ def gate_arquiteto_validated(root: Path, nnn: str):
     return True, ""
 
 
+def gate_docs_synced(root: Path, nnn: str):
+    """Constituição Art. 1: feature não fecha sem spec+docs espelhando o código."""
+    num = nnn.replace("F-", "").lstrip("0").zfill(3)
+    f = root / "reports" / f"feature-{num}" / "docs-sync.md"
+    if not f.is_file():
+        return False, (
+            f"Falta reports/feature-{num}/docs-sync.md. A feature NÃO fecha sem "
+            f"provar que spec e docs espelham o código (Constituição, Art. 1). "
+            f"O registro precisa de 3 seções: (1) spec as-built atualizada; "
+            f"(2) docs vivos atualizados (ou 'nenhum afetado'); (3) a decisão real.")
+    t = u.read_text(f).lower()
+    checks = [(("as-built" in t) or ("as build" in t) or ("spec" in t), "seção da spec as-built"),
+              ("doc" in t, "seção de docs vivos"),
+              ("decis" in t, "seção de decisão")]
+    missing = [d for ok, d in checks if not ok]
+    if missing:
+        return False, "docs-sync.md incompleto: falta " + ", ".join(missing) + "."
+    if len(t.strip()) < 120:
+        return False, "docs-sync.md muito curto — descreva de verdade o que foi sincronizado."
+    return True, ""
+
+
 def gate_human_approve_merge(root: Path, nnn: str):
     if _log_has(root, "approve_merge", nnn):
         return True, ""

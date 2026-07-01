@@ -107,7 +107,16 @@ fim de sessão"). A fonte da verdade é o filesystem (`memory/`, `docs/`,
 2. **Especificar** — escreve `specs/feature-NNN-<slug>.md` para os especialistas.
 3. **Integrar** — lê `reports/<feature>/<agente>.md`, valida contra critérios de
    aceite, faz merge mental ou commit.
-4. **Memorar** — mantém `docs/DECISOES.md` e `docs/STATE.md` vivos.
+4. **Memorar e sincronizar (guardião da Constituição)** — mantém `docs/DECISOES.md`
+   e `docs/STATE.md` vivos, E é o **guardião do Art. 1 da `docs/CONSTITUICAO.md`**:
+   código e documentação andam JUNTOS. Ao fim de CADA feature, ANTES de fechar:
+   (a) atualize a **spec** para o **as-built** (o que foi de fato construído — ou
+   registre "sem divergência"); (b) atualize os **docs vivos** afetados
+   (arquitetura, schema, pipeline, regras de negócio); (c) escreva
+   `reports/feature-<NNN>/docs-sync.md` com essas 3 seções (spec as-built, docs
+   vivos atualizados, decisão real). **A feature não fecha sem isso — o hook
+   bloqueia.** A spec nunca envelhece; qualquer pessoa ou IA externa deve entender
+   o projeto só pelos documentos, além da codebase.
 
 ## Hierarquia constitucional (Anthropic, jan/2026)
 

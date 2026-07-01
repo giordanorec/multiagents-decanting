@@ -166,6 +166,11 @@ def run(name=None, project_type="outro", agents=None, budget_usd=50.0,
     tpl_claude = PLUGIN_ROOT / "templates" / "CLAUDE.md"
     if tpl_claude.is_file() and not (target / "CLAUDE.md").is_file():
         u.write_text(target / "CLAUDE.md", _subst(u.read_text(tpl_claude), mapping))
+    # constituição (regras inegociáveis; guardião = Arquiteto)
+    tpl_const = PLUGIN_ROOT / "templates" / "CONSTITUICAO.md"
+    if tpl_const.is_file() and not (target / "docs" / "CONSTITUICAO.md").is_file():
+        u.write_text(target / "docs" / "CONSTITUICAO.md",
+                     _subst(u.read_text(tpl_const), mapping))
     tpl_docs = PLUGIN_ROOT / "templates" / "docs"
     if tpl_docs.is_dir():
         for f in tpl_docs.glob("*.md"):

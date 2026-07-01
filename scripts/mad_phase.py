@@ -125,6 +125,14 @@ def cmd_next(root, st, args) -> int:
         if not ok:
             print(u.c(f"✗ validação de {nnn} incompleta: {msg}", "yellow"))
             return 1
+        # CONSTITUIÇÃO Art. 1: não fecha (nem vai pra aprovação) sem spec+docs
+        # espelhando o código.
+        ok, msg = wf.gate_docs_synced(root, nnn)
+        if not ok:
+            print(u.c(f"✗ {nnn} — doc desatualizado: {msg}", "yellow"))
+            print("  Atualize a spec pro as-built + os docs vivos afetados, e escreva")
+            print(f"  reports/feature-{nnn.replace('F-','').lstrip('0').zfill(3)}/docs-sync.md.")
+            return 1
         # FULL AUTO por padrão: flui mesmo se irreversível. Só trava se o projeto
         # pediu explicitamente ([workflow].confirm_irreversible = true).
         cfg = u.load_config(root).get("workflow", {})
@@ -249,10 +257,14 @@ def _close_feature(root, st, nnn, args) -> int:
     tp = root / "memory" / agent / "trust.json"
     if tp.is_file():
         u.apply_trust_outcome(tp, nnn, "accepted")
+    num = nnn.replace("F-", "").lstrip("0").zfill(3)
+    sync = root / "reports" / f"feature-{num}" / "docs-sync.md"
+    sync_txt = u.read_text(sync).strip() if sync.is_file() else ""
     u.append_text(root / "docs" / "DECISOES.md",
-                  f"\n## {u.today_str()} — {nnn} concluída\n\n"
-                  f"Feature {nnn} ({f.get('slug','')}) concluída por {agent}. "
-                  f"Blast: {f.get('blast_radius')}.\n")
+                  f"\n## {u.today_str()} — {nnn} concluída ({f.get('slug','')})\n\n"
+                  f"Por {agent}. Blast: {f.get('blast_radius')}. "
+                  f"Spec e docs sincronizados (Constituição Art. 1).\n\n"
+                  + (f"{sync_txt}\n" if sync_txt else ""))
     for feat in st.data.get("backlog_features", []):
         if feat["id"] == nnn:
             feat["status"] = "concluida"

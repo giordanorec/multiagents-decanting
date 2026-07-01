@@ -133,6 +133,46 @@ def test_mad_phase_approve_spec(tmp_project):
     assert st2.feature["approvals"]["spec_approved_by_human"]
 
 
+def test_gate_docs_synced_blocks_and_passes(tmp_project):
+    st = _advance_to_loop(tmp_project)
+    # sem o arquivo -> bloqueia
+    ok, msg = wf.gate_docs_synced(tmp_project, "F-001")
+    assert not ok and "docs-sync" in msg
+    # com as 3 seções -> passa
+    u.write_text(tmp_project / "reports" / "feature-001" / "docs-sync.md",
+                 "# Doc-sync F-001\n## Spec as-built\nAtualizada, sem divergência.\n"
+                 "## Docs vivos\ndocs/03_SCHEMA.md — adicionada tabela produtos.\n"
+                 "## Decisão\nUsamos Decimal para preço em vez de float, para evitar erro de arredondamento.\n")
+    ok, msg = wf.gate_docs_synced(tmp_project, "F-001")
+    assert ok, msg
+
+
+def test_close_blocked_without_docs_sync(tmp_project):
+    st = _advance_to_loop(tmp_project)
+    st.feature["agent_assigned"] = "pipeline-dev"
+    st.feature["blast_radius"] = "reversivel_baixo"
+    st.set_subphase("executando", by="t"); st.set_subphase("validando", by="t")
+    u.write_text(tmp_project / "reports" / "feature-001" / "arquiteto-merge.md",
+                 "# merge\n- [x] critério 1 — ok\n")
+    mp = str(tmp_project / "scripts" / "mad_phase.py")
+    # sem docs-sync: next em validando NÃO fecha
+    r = subprocess.run([sys.executable, mp, "next"], cwd=str(tmp_project),
+                       capture_output=True, text=True)
+    assert r.returncode == 1 and "doc" in (r.stdout + r.stderr).lower()
+    assert wf.WorkflowState.load(tmp_project).subphase == "validando"
+    # com docs-sync: fecha
+    u.write_text(tmp_project / "reports" / "feature-001" / "docs-sync.md",
+                 "# Doc-sync\n## Spec as-built\nok, sem divergência do planejado.\n"
+                 "## Docs vivos\nnenhum doc vivo afetado nesta feature de scaffold.\n"
+                 "## Decisão\nEstrutura inicial criada conforme a arquitetura combinada.\n")
+    r = subprocess.run([sys.executable, mp, "next"], cwd=str(tmp_project),
+                       capture_output=True, text=True)
+    assert r.returncode == 0
+    st2 = wf.WorkflowState.load(tmp_project)
+    assert any(x["id"] == "F-001" and x["status"] == "concluida"
+               for x in st2.data["backlog_features"])
+
+
 def test_rework_requires_note(tmp_project):
     _advance_to_loop(tmp_project)
     r = subprocess.run([sys.executable, str(tmp_project / "scripts" / "mad_phase.py"),

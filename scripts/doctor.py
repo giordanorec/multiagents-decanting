@@ -130,6 +130,27 @@ def run(root: Path | None = None, as_json: bool = False) -> int:
     else:
         rep.warn(items, ".gitignore ausente (logs/ e status/ deveriam ser ignorados)")
 
+    # --- Constituição & sincronia doc↔código (Art. 1) ---
+    items = rep.section("Constituição & docs")
+    if (docs / "CONSTITUICAO.md").is_file():
+        rep.ok(items, "docs/CONSTITUICAO.md presente (regras inegociáveis)")
+    else:
+        rep.warn(items, "docs/CONSTITUICAO.md ausente — rode /mad-init ou crie a constituição.")
+    wd = u.read_json(root / ".mad" / "workflow_state.json", {}) or {}
+    concl = [f for f in wd.get("backlog_features", []) if f.get("status") == "concluida"]
+    unsynced = []
+    for f in concl:
+        num = str(f.get("id", "")).replace("F-", "").lstrip("0").zfill(3)
+        if not (root / "reports" / f"feature-{num}" / "docs-sync.md").is_file():
+            unsynced.append(f.get("id"))
+    if not concl:
+        rep.ok(items, "nenhuma feature concluída ainda (nada a sincronizar)")
+    elif unsynced:
+        rep.warn(items, f"features concluídas SEM docs-sync.md (spec/docs podem estar "
+                        f"desatualizados): {', '.join(unsynced)}")
+    else:
+        rep.ok(items, f"todas as {len(concl)} features concluídas têm docs-sync (Art. 1 ok)")
+
     agents = _agents(root)
     if not agents:
         rep.warn(items, "Nenhum agente habilitado ainda (memory/ vazio)")

@@ -2,6 +2,23 @@
 
 Formato: [Keep a Changelog](https://keepachangelog.com/). Versionamento semântico.
 
+## [1.8.0] — 2026-07-01 (Constituição + sincronia doc↔código garantida)
+
+### Adicionado
+- **docs/CONSTITUICAO.md** — regras inegociáveis do projeto. Art. 1: código e
+  documentação andam JUNTOS; nenhuma feature fecha com doc desatualizado; o
+  Arquiteto é o guardião. Criada no init, injetada no contexto do Arquiteto toda sessão.
+- **Gate de fechamento `docs_synced`** (garantia de máquina, não sugestão): uma
+  feature NÃO fecha (nem vai pra aprovação) sem `reports/feature-<NNN>/docs-sync.md`
+  provando (a) spec atualizada pro as-built, (b) docs vivos afetados atualizados,
+  (c) a decisão real. O hook/`mad_phase next` bloqueia. Resolve o "spec envelhece
+  enquanto o código anda".
+- **/mad-doctor**: seção "Constituição & docs" — avisa features concluídas sem
+  docs-sync e ausência da constituição.
+
+### Mudado
+- Fechamento de feature grava no `DECISOES.md` a decisão REAL (do docs-sync), não um toco.
+- Arquiteto, skill e injeção do SessionStart reforçam o dever de guardião da sincronia.
 ## [1.7.0] — 2026-07-01 (mapa de workflow + 20 skins + fullscreen + atividade do Arquiteto)
 
 ### Adicionado

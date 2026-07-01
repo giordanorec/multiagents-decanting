@@ -110,7 +110,11 @@ spec_pendente → spec_validada → executando → validando → [aprovacao_huma
    **acompanha** (dashboard) e pode te interpelar.
 4. **validando** (automático após o especialista decantar) — marque cada critério em
    `reports/feature-NNN/arquiteto-merge.md`. Apresente o resultado ao usuário.
-5. **bifurcação** (você roda `mad_phase.py next`):
+   **SINCRONIZE (Constituição Art. 1, obrigatório):** atualize a **spec** pro
+   as-built, atualize os **docs vivos** afetados, e escreva
+   `reports/feature-NNN/docs-sync.md` (spec as-built + docs vivos + decisão real).
+   **Sem isso o `next` bloqueia** — a feature não fecha com doc desatualizado.
+5. **bifurcação** (você roda `mad_phase.py next`, que só passa com docs-sync feito):
    - todos `[x]` + reversível → concluída.
    - todos `[x]` + algo difícil de desfazer → mostre o resultado, pergunte *"posso
      colocar isso pra valer?"*, e ao concordar VOCÊ roda `mad_phase.py approve-merge F-NNN`.
