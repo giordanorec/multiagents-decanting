@@ -2,6 +2,23 @@
 
 Formato: [Keep a Changelog](https://keepachangelog.com/). Versionamento semântico.
 
+## [1.5.0] — 2026-07-01 (aja por padrão + observabilidade que abre sozinha)
+
+### Adicionado
+- **Painel abre sozinho.** Hook SessionStart `session-start-dashboard.py` sobe o
+  dashboard e mostra o link a cada sessão, sem o usuário pedir (opt-out via
+  `[dashboard].auto_start=false`). Observabilidade é item central: dá pra ver os
+  assistentes trabalhando ao vivo.
+- **Dashboard reformado** — bonito e observável: etapa atual em linguagem humana (com
+  trilha de fases), personagens vivos por status, feed de atividade ao vivo, métricas
+  com barras. Nunca mostra nomes técnicos na tela.
+
+### Mudado
+- **Aja por padrão, não fique ocioso.** O usuário leigo só testa o resultado; não
+  microgerencia. O sistema age e comunica (chat + painel), sem parar esperando
+  resposta. Só para em bifurcação CRÍTICA. Irreversível também flui por padrão
+  (`[workflow].confirm_irreversible=false`); guardrails catastróficos seguem duros.
+
 ## [1.4.0] — 2026-07-01 (full auto + narração fluida)
 
 ### Mudado

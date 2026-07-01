@@ -28,44 +28,79 @@
   </header>
 
   <main class="content">
-    <section id="team" class="team" aria-label="sala de equipe">
-      <div class="team-empty" id="team-empty">aguardando agentes…</div>
-    </section>
 
-    <section class="metrics" aria-label="métricas de hoje">
-      <h2 class="section-title">Métricas hoje</h2>
-      <div class="metrics-grid">
-        <div class="metric">
-          <div class="metric-head">
-            <span class="metric-label">Tokens</span>
-            <span class="metric-value" id="m-tokens">—</span>
-          </div>
-          <div class="bar"><div class="bar-fill" id="m-tokens-bar"></div></div>
-          <div class="metric-sub" id="m-tokens-sub"></div>
-        </div>
-        <div class="metric">
-          <div class="metric-head">
-            <span class="metric-label">Custo</span>
-            <span class="metric-value" id="m-cost">—</span>
-          </div>
-          <div class="bar"><div class="bar-fill bar-fill--cost" id="m-cost-bar"></div></div>
-          <div class="metric-sub" id="m-cost-sub"></div>
-        </div>
-        <div class="metric metric--mini">
-          <div class="metric-head">
-            <span class="metric-label">Features completadas</span>
-            <span class="metric-value metric-value--big" id="m-features">0</span>
-          </div>
-        </div>
+    <!-- ===== HERO: etapa atual em linguagem humana ===== -->
+    <section class="hero" id="hero" aria-label="etapa atual" hidden>
+      <div class="hero-glow" aria-hidden="true"></div>
+      <div class="hero-main">
+        <span class="hero-eyebrow">Etapa atual</span>
+        <h2 class="hero-title" id="hero-title" title=""></h2>
+        <p class="hero-doing" id="hero-doing"></p>
+      </div>
+      <div class="hero-aside">
+        <div class="hero-item" id="hero-item" hidden></div>
+        <div class="hero-flags" id="hero-flags"></div>
+        <div class="hero-next" id="hero-next" hidden></div>
       </div>
     </section>
 
-    <section class="activity" aria-label="atividade em tempo real">
-      <h2 class="section-title">Atividade em tempo real</h2>
-      <ul class="activity-list" id="activity-list">
-        <li class="activity-empty">sem atividade recente</li>
-      </ul>
+    <!-- ===== STEPPER: trilha de etapas ===== -->
+    <section class="stepper-wrap" id="stepper-wrap" aria-label="trilha de etapas" hidden>
+      <ol class="stepper" id="stepper"></ol>
     </section>
+
+    <!-- ===== GRID: sala de equipe | métricas + atividade ===== -->
+    <div class="dash-grid">
+      <section class="team-col" aria-label="sala de equipe">
+        <h2 class="section-title">
+          <span>Sala de equipe</span>
+          <span class="team-count" id="team-count"></span>
+        </h2>
+        <div id="team" class="team">
+          <div class="team-empty" id="team-empty">aguardando agentes…</div>
+        </div>
+      </section>
+
+      <aside class="side-col">
+        <section class="metrics" aria-label="métricas de hoje">
+          <h2 class="section-title"><span>Métricas hoje</span></h2>
+          <div class="metrics-grid">
+            <div class="metric">
+              <div class="metric-head">
+                <span class="metric-label">Tokens</span>
+                <span class="metric-value" id="m-tokens">—</span>
+              </div>
+              <div class="bar"><div class="bar-fill" id="m-tokens-bar"></div></div>
+              <div class="metric-sub" id="m-tokens-sub"></div>
+            </div>
+            <div class="metric">
+              <div class="metric-head">
+                <span class="metric-label">Custo</span>
+                <span class="metric-value" id="m-cost">—</span>
+              </div>
+              <div class="bar"><div class="bar-fill bar-fill--cost" id="m-cost-bar"></div></div>
+              <div class="metric-sub" id="m-cost-sub"></div>
+            </div>
+            <div class="metric metric--mini">
+              <div class="metric-head">
+                <span class="metric-label">Itens concluídos</span>
+                <span class="metric-value metric-value--big" id="m-features">0</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="activity" aria-label="atividade em tempo real">
+          <h2 class="section-title">
+            <span>Atividade ao vivo</span>
+            <span class="live-dot" aria-hidden="true"></span>
+          </h2>
+          <ul class="activity-list" id="activity-list">
+            <li class="activity-empty">sem atividade recente</li>
+          </ul>
+        </section>
+      </aside>
+    </div>
   </main>
 
   <div id="offline-banner" class="offline-banner" hidden>

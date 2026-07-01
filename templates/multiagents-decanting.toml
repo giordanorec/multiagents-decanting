@@ -79,3 +79,10 @@ sonnet_to_haiku = true
 # Ollama (LLM local via API OpenAI-compatible) — roadmap; preencha para habilitar.
 ollama_base_url = ""   # ex: http://localhost:11434/v1
 ollama_model = ""      # ex: llama3.1
+
+[workflow]
+# Autonomia do loop (v1.4+). Por padrão o sistema AGE e flui; não fica ocioso
+# esperando o usuário. Só para em bifurcação crítica ou se o usuário pedir pausa.
+# confirm_irreversible=true reativa a trava de aprovação humana para itens
+# irreversíveis (mais cauteloso, menos fluido).
+confirm_irreversible = false

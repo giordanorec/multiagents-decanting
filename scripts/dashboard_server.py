@@ -146,15 +146,30 @@ def _workflow_summary(root: Path) -> dict:
     if not isinstance(wd, dict):
         return {}
     af = wd.get("active_feature") or {}
+    phase = wd.get("current_phase")
+    # rótulos humanos (o painel mostra ISTO, não os nomes técnicos)
+    try:
+        import workflow as wf
+        human = wf.PHASE_HUMAN
+        ph_list = [{"id": p, "label": wf.PHASE_HUMAN.get(p, (p, ""))[0]} for p in wf.PHASES]
+        cur_label = wf.human_label(phase)
+        cur_doing = wf.human_doing(phase)
+        sub_human = wf.SUBPHASE_HUMAN.get(af.get("subphase"), af.get("subphase"))
+    except Exception:
+        ph_list = [{"id": phase, "label": phase}]
+        cur_label, cur_doing, sub_human = phase, "", af.get("subphase")
     return {
-        "phase": wd.get("current_phase"),
+        "phase": phase,
+        "phase_label": cur_label,
+        "phase_doing": cur_doing,
         "feature": af.get("id"),
+        "feature_slug": af.get("slug"),
         "subphase": af.get("subphase"),
+        "subphase_human": sub_human,
         "next": _wf_next(wd),
         "warnings": len(wd.get("warnings", []) or []),
         "bypasses": sum(1 for w in (wd.get("warnings") or []) if "Bypass" in w),
-        "phases": ["BOOTSTRAP", "DISCOVERY", "ESPEC_V1", "SETUP_TIME",
-                   "LOOP_FEATURES", "PRE_RELEASE", "PILOTO"],
+        "phases": ph_list,
     }
 
 

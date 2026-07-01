@@ -217,37 +217,100 @@
     renderActivity(snap.activity || []);
   }
 
+  // helper: index de fase por id (phases agora é lista de {id,label})
+  function phaseIndex(phases, id) {
+    for (var i = 0; i < phases.length; i++) {
+      if (phases[i] && phases[i].id === id) return i;
+    }
+    return -1;
+  }
+
   function renderWorkflow(wf) {
-    var team = document.getElementById("team");
-    if (!team) return;
-    var banner = document.getElementById("wf-banner");
-    if (!wf || !wf.phase) { if (banner) banner.remove(); return; }
-    if (!banner) {
-      banner = el("div", "wf-banner");
-      banner.id = "wf-banner";
-      team.parentNode.insertBefore(banner, team);
+    var hero = document.getElementById("hero");
+    var stepWrap = document.getElementById("stepper-wrap");
+    if (!hero || !stepWrap) return;
+
+    // degrade com elegância: sem workflow válido -> esconde tudo
+    var label = wf && (wf.phase_label || wf.phase);
+    if (!label) {
+      hero.hidden = true;
+      stepWrap.hidden = true;
+      return;
     }
-    banner.innerHTML = "";
-    var phases = wf.phases || [];
-    var steps = el("div", "wf-steps");
-    phases.forEach(function (p) {
-      var cur = p === wf.phase;
-      var idx = phases.indexOf(p), curIdx = phases.indexOf(wf.phase);
-      var cls = "wf-step" + (cur ? " is-current" : (idx < curIdx ? " is-done" : ""));
-      var s = el("span", cls, p);
-      steps.appendChild(s);
-    });
-    banner.appendChild(steps);
-    var line = el("div", "wf-next");
-    var txt = "Fase: " + wf.phase;
-    if (wf.feature) txt += " · " + wf.feature + " / " + (wf.subphase || "");
-    if (wf.next) txt += "  →  " + wf.next;
-    line.textContent = txt;
-    banner.appendChild(line);
+    hero.hidden = false;
+
+    // --- título humano + o que está fazendo ---
+    var title = document.getElementById("hero-title");
+    title.textContent = wf.phase_label || wf.phase;
+    // fase técnica só num tooltip discreto
+    title.title = wf.phase ? "fase: " + wf.phase : "";
+    var doing = document.getElementById("hero-doing");
+    doing.textContent = wf.phase_doing || "";
+    doing.style.display = wf.phase_doing ? "" : "none";
+
+    // --- item atual ---
+    var item = document.getElementById("hero-item");
+    if (wf.feature) {
+      item.hidden = false;
+      item.innerHTML = "";
+      item.appendChild(el("span", "hi-badge", wf.feature));
+      var txt = el("span", "hi-text");
+      var slug = wf.feature_slug || wf.feature;
+      txt.appendChild(el("span", "hi-slug", "Construindo: " + slug));
+      var sub = wf.subphase_human || wf.subphase;
+      if (sub) {
+        txt.appendChild(document.createTextNode(" "));
+        txt.appendChild(el("span", "hi-sub", "— " + sub));
+      }
+      item.appendChild(txt);
+    } else {
+      item.hidden = true;
+      item.innerHTML = "";
+    }
+
+    // --- flags: warnings / bypasses ---
+    var flags = document.getElementById("hero-flags");
+    flags.innerHTML = "";
     if (wf.bypasses > 0) {
-      var b = el("span", "wf-bypass", "⚠ " + wf.bypasses + " bypass");
-      banner.appendChild(b);
+      flags.appendChild(el("span", "flag flag--bypass", "⚠ " + wf.bypasses + " bypass" + (wf.bypasses > 1 ? "es" : "")));
     }
+    var warnOnly = (wf.warnings || 0) - (wf.bypasses || 0);
+    if (warnOnly > 0) {
+      flags.appendChild(el("span", "flag flag--warn", "▲ " + warnOnly + " aviso" + (warnOnly > 1 ? "s" : "")));
+    }
+
+    // --- próximo passo ---
+    var next = document.getElementById("hero-next");
+    if (wf.next) {
+      next.hidden = false;
+      next.innerHTML = "";
+      next.appendChild(el("b", null, "A seguir: "));
+      next.appendChild(document.createTextNode(wf.next));
+    } else {
+      next.hidden = true;
+    }
+
+    // --- stepper (trilha de etapas) ---
+    var phases = wf.phases || [];
+    if (!phases.length) {
+      stepWrap.hidden = true;
+      return;
+    }
+    stepWrap.hidden = false;
+    var ol = document.getElementById("stepper");
+    ol.innerHTML = "";
+    var curIdx = phaseIndex(phases, wf.phase);
+    phases.forEach(function (p, i) {
+      var cls = "step";
+      if (curIdx !== -1) {
+        if (i < curIdx) cls += " is-done";
+        else if (i === curIdx) cls += " is-current";
+      }
+      var li = el("li", cls);
+      li.appendChild(el("span", "step-dot"));
+      li.appendChild(el("span", "step-label", p.label || p.id || ""));
+      ol.appendChild(li);
+    });
   }
 
   function renderTitle(project) {
@@ -295,6 +358,7 @@
 
   function renderTeam(agents) {
     var root = document.getElementById("team");
+    updateTeamCount(agents);
     var arranged = arrangeAgents(agents).filter(passesFilter);
     if (!arranged.length) {
       root.innerHTML = '<div class="team-empty" id="team-empty">' +
@@ -347,8 +411,10 @@
 
       var avatar = el("div", "agent-avatar");
       avatar.setAttribute("aria-hidden", "true");
+      var avInner = el("div", "agent-avatar-inner");
+      avatar.appendChild(avInner);
       card.appendChild(avatar);
-      loadAvatar(a.agente).then(function (svg) { avatar.innerHTML = svg || defaultAvatar(); });
+      loadAvatar(a.agente).then(function (svg) { avInner.innerHTML = svg || defaultAvatar(); });
 
       card.appendChild(el("div", "agent-name", a.agente));
 
@@ -362,8 +428,8 @@
       var trust = (typeof a.trust === "number") ? a.trust : 50;
       var tw = el("div", "agent-trust");
       var head = el("div", "agent-trust-head");
-      head.appendChild(el("span", null, "trust"));
-      head.appendChild(el("span", null, String(trust)));
+      head.appendChild(el("span", null, "confiança"));
+      head.appendChild(el("b", null, String(trust)));
       tw.appendChild(head);
       var bar = el("div", "trust-bar");
       var fill = el("div", "trust-bar-fill");
@@ -374,6 +440,17 @@
 
       root.appendChild(card);
     });
+  }
+
+  function updateTeamCount(agents) {
+    var badge = document.getElementById("team-count");
+    if (!badge) return;
+    var total = agents.length;
+    var active = 0;
+    agents.forEach(function (a) {
+      if (a.status === "working" || a.status === "decanting") active++;
+    });
+    badge.textContent = total ? (active + " ativo" + (active === 1 ? "" : "s") + " · " + total + " no time") : "";
   }
 
   function defaultAvatar() {
@@ -407,19 +484,28 @@
     document.getElementById("m-features").textContent = String(m.features_completed || 0);
   }
 
+  var seenActivity = {};   // key -> true, para animar só o que é novo
   function renderActivity(items) {
     var ul = document.getElementById("activity-list");
     if (!items.length) { ul.innerHTML = '<li class="activity-empty">sem atividade recente</li>'; return; }
+    var firstRender = Object.keys(seenActivity).length === 0;
+    var nextSeen = {};
     ul.innerHTML = "";
     items.forEach(function (it) {
-      var li = el("li");
+      var key = (it.ts || "") + "|" + (it.text || "");
+      nextSeen[key] = true;
+      var isNew = !firstRender && !seenActivity[key];
+      var li = el("li", isNew ? "act-new" : null);
       li.appendChild(el("span", "act-ts", it.ts || ""));
       var ic = el("span", "act-icon", it.icon || "·");
       ic.setAttribute("data-i", it.icon || "·");
       li.appendChild(ic);
-      li.appendChild(el("span", "act-text", it.text || ""));
+      var text = el("span", "act-text", it.text || "");
+      text.title = it.text || "";
+      li.appendChild(text);
       ul.appendChild(li);
     });
+    seenActivity = nextSeen;
   }
 
   // ---- service worker -------------------------------------------------

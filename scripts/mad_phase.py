@@ -125,11 +125,14 @@ def cmd_next(root, st, args) -> int:
         if not ok:
             print(u.c(f"✗ validação de {nnn} incompleta: {msg}", "yellow"))
             return 1
-        if f.get("blast_radius") in wf.BLAST_REVERSIBLE:
+        # FULL AUTO por padrão: flui mesmo se irreversível. Só trava se o projeto
+        # pediu explicitamente ([workflow].confirm_irreversible = true).
+        cfg = u.load_config(root).get("workflow", {})
+        confirm = bool(cfg.get("confirm_irreversible", False))
+        if f.get("blast_radius") in wf.BLAST_REVERSIBLE or not confirm:
             return _close_feature(root, st, nnn, args)
         st.set_subphase("aprovacao_humano", by="arquiteto")
-        print(u.c(f"✓ {nnn} validado. Blast irreversível → precisa aprovação humana.", "green"))
-        print(f"  Rode /mad-phase approve-merge {nnn}.")
+        print(u.c(f"✓ {nnn} validado. Item difícil de desfazer — pede sua confirmação.", "green"))
         return 0
     if sp == "aprovacao_humano":
         print(u.c(f"✗ {nnn} aguarda /mad-phase approve-merge {nnn}.", "yellow"))

@@ -223,7 +223,10 @@ def hooks_config() -> dict:
     py = lambda f: {"type": "command", "command": f'python3 "{h}/{f}"'}
     return {
         "SessionStart": [
-            {"hooks": [py("session-start-inject-state.py")]},
+            {"hooks": [
+                py("session-start-inject-state.py"),
+                py("session-start-dashboard.py"),
+            ]},
         ],
         "PreToolUse": [
             # workflow gate PRIMEIRO (bloqueia despacho fora de estado)
