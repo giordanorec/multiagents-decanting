@@ -2,6 +2,17 @@
 
 Formato: [Keep a Changelog](https://keepachangelog.com/). Versionamento semântico.
 
+## [1.3.1] — 2026-06-30
+
+### Adicionado
+- **Auto-spawn de especialistas na adoção** (`/mad-init` cascata, passo adopt): ao
+  adotar um projeto com trabalho prévio, o mad detecta o backlog (docs/BACKLOG_V1.md,
+  docs_projeto/tecnico/06_backlog_v1.md, etc.), **habilita automaticamente** os
+  especialistas mencionados (campo `**Especialista:**`) e **avança a fase** conforme
+  o que já está pronto — podendo ir direto pra LOOP_FEATURES com a 1ª feature ativa,
+  sem exigir `/mad-enable` manual. Especialista inexistente → aviso, sem falhar;
+  arquiteto sempre habilitado; idempotente.
+
 ## [1.3.0] — 2026-06-30 (Workflow State Machine)
 
 > ⚠️ **MUDANÇA SIGNIFICATIVA NO WORKFLOW.** O processo do projeto deixa de ser

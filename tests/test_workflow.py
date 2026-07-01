@@ -196,6 +196,75 @@ def test_adopt_creates_state(tmp_path, monkeypatch):
     assert (tmp_path / ".claude" / "hooks" / "pre-workflow-gate.py").is_file()
 
 
+# ---- auto-spawn de especialistas do backlog (T-INIT-008..016) ----
+def _adopt_dir_with_backlog(tmp_path, backlog_text):
+    dp = tmp_path / "docs_projeto"
+    dp.mkdir(parents=True, exist_ok=True)
+    (dp / "a.md").write_text("x" * 800)
+    (dp / "b.md").write_text("y" * 800)
+    (tmp_path / "docs").mkdir(exist_ok=True)
+    (tmp_path / "docs" / "BACKLOG_V1.md").write_text(backlog_text, encoding="utf-8")
+    return tmp_path
+
+
+def test_backlog_parse_extracts_specialist(tmp_path):
+    import mad_init
+    bl = tmp_path / "b.md"
+    bl.write_text("### F-001 — scaffold\n- **Especialista:** `pipeline-dev`\n- **Blast:** reversivel_baixo\n")
+    feats = mad_init.parse_backlog_rich(bl)
+    assert feats[0]["id"] == "F-001"
+    assert feats[0]["agent"] == "pipeline-dev"
+
+
+def test_autospawn_enables_and_skips_unknown(tmp_path, monkeypatch):
+    import mad_init
+    monkeypatch.chdir(tmp_path)
+    _adopt_dir_with_backlog(tmp_path,
+        "### F-001 — a\n- **Especialista:** `pipeline-dev`\n\n"
+        "### F-002 — b\n- **Especialista:** `especialista-ficticio`\n")
+    aut = mad_init.autospawn_from_backlog(tmp_path)
+    assert "pipeline-dev" in aut["spawned"]
+    assert "especialista-ficticio" in aut["skipped"]
+    assert (tmp_path / ".claude" / "agents" / "pipeline-dev.md").is_file()
+    # arquiteto sempre
+    assert (tmp_path / ".claude" / "agents" / "arquiteto.md").is_file()
+
+
+def test_enable_specialist_idempotent(tmp_path):
+    import mad_init
+    assert mad_init.enable_specialist(tmp_path, "qa-tester") is True
+    assert mad_init.enable_specialist(tmp_path, "qa-tester") is False
+
+
+def test_compute_final_phase_loop(tmp_path):
+    import mad_init
+    aut = {"backlog_found": True, "spawned": ["pipeline-dev"],
+           "first_feature": {"id": "F-001"},
+           "features": [{"id": "F-001", "status": "pendente"}]}
+    assert mad_init.compute_final_phase("ESPEC_V1", aut) == "LOOP_FEATURES"
+
+
+def test_compute_final_phase_pre_release(tmp_path):
+    import mad_init
+    aut = {"backlog_found": True, "spawned": [], "first_feature": None,
+           "features": [{"id": "F-001", "status": "concluida"}]}
+    assert mad_init.compute_final_phase("ESPEC_V1", aut) == "PRE_RELEASE"
+
+
+def test_adopt_with_backlog_reaches_loop(tmp_path, monkeypatch):
+    import mad_init
+    monkeypatch.chdir(tmp_path)
+    _adopt_dir_with_backlog(tmp_path,
+        "### F-001 — scaffold\n- **Especialista:** `pipeline-dev`\n\n"
+        "### F-002 — schema\n- **Especialista:** `dba`\n")
+    rc = mad_init.adopt(tmp_path, "ESPEC_V1")
+    assert rc == 0
+    st = wf.WorkflowState.load(tmp_path)
+    assert st.phase == "LOOP_FEATURES"
+    assert st.feature and st.feature["id"] == "F-001"
+    assert st.feature["agent_assigned"] == "pipeline-dev"
+
+
 # ---- log ----
 def test_log_sanitizes_secret(tmp_project):
     wf.log_event(tmp_project, "test", payload="api_key=SECRETVALUE12345")

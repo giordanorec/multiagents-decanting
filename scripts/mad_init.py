@@ -25,6 +25,116 @@ import workflow as wf  # noqa: E402
 
 PLUGIN_ROOT = Path(__file__).resolve().parent.parent
 SUSPECT_DIRS = ["docs_projeto", "_artigo", "_spec", "_docs", "_mad_v1.3_spec"]
+BACKLOG_LOCATIONS = [
+    "docs/BACKLOG_V1.md", "docs_projeto/tecnico/06_backlog_v1.md",
+    "docs_projeto/BACKLOG_V1.md", "BACKLOG.md", "BACKLOG_V1.md",
+]
+
+
+def available_specialists() -> list[str]:
+    ad = PLUGIN_ROOT / "agents"
+    return [p.stem for p in ad.glob("*.md")] if ad.is_dir() else []
+
+
+def find_backlog(root: Path) -> Path | None:
+    for rel in BACKLOG_LOCATIONS:
+        p = root / rel
+        if p.is_file():
+            return p
+    return None
+
+
+def parse_backlog_rich(path: Path) -> list[dict]:
+    """Extrai features do backlog: id, slug, especialista, blast_radius, status.
+
+    Formato flexível: cada feature é uma linha/bloco com `F-NNN` e, opcionalmente,
+    uma linha `**Especialista:** <role>` e `**Blast:** <br>` no bloco seguinte.
+    """
+    text = u.read_text(path)
+    # divide em blocos por ocorrência de F-NNN
+    feats = []
+    parts = re.split(r"(?=\bF-\d{3}\b)", text)
+    seen = set()
+    for blk in parts:
+        m = re.search(r"\bF-(\d{3})\b", blk)
+        if not m:
+            continue
+        fid = "F-" + m.group(1)
+        if fid in seen:
+            continue
+        seen.add(fid)
+        # slug: texto após o F-NNN na mesma linha
+        line = blk.splitlines()[0] if blk.splitlines() else ""
+        after = re.sub(r".*\bF-\d{3}\b\s*[—:\-]?\s*", "", line).strip()
+        slug = re.sub(r"[^a-z0-9]+", "-", after.lower()).strip("-")[:40] or "feature"
+        spec_m = re.search(r"(?i)\*\*especialista:?\*\*\s*`?([a-z][a-z0-9-]+)`?", blk)
+        br_m = re.search(r"(?i)\*\*blast[_ ]?radius:?\*\*\s*`?([a-z_]+)`?", blk)
+        st_m = re.search(r"(?i)\*\*(status|situa[çc][ãa]o):?\*\*\s*`?(\w+)`?", blk)
+        status = (st_m.group(2).lower() if st_m else "pendente")
+        if status in ("concluida", "concluída", "done", "feito"):
+            status = "concluida"
+        feats.append({
+            "id": fid, "slug": slug,
+            "agent": spec_m.group(1) if spec_m else "",
+            "blast_radius": br_m.group(1).lower() if br_m else "reversivel_baixo",
+            "status": status, "concluded_at": None,
+        })
+    return feats
+
+
+def enable_specialist(root: Path, role: str) -> bool:
+    """Idempotente: cria .claude/agents/<role>.md + memory/<role>/. True se criou."""
+    import init as _init
+    if (root / ".claude" / "agents" / f"{role}.md").is_file():
+        return False
+    _init._scaffold_memory(root, role, root.name)
+    _init._register_agent(root, role)
+    return True
+
+
+def autospawn_from_backlog(root: Path) -> dict:
+    bp = find_backlog(root)
+    res = {"backlog_found": bp is not None, "backlog_path": str(bp.relative_to(root)) if bp else None,
+           "features": [], "spawned": [], "skipped": [], "first_feature": None, "warnings": []}
+    if bp is None:
+        return res
+    feats = parse_backlog_rich(bp)
+    res["features"] = feats
+    if not feats:
+        res["warnings"].append(f"Backlog em {res['backlog_path']} sem features F-NNN parseáveis.")
+        return res
+    avail = available_specialists()
+    required = []
+    for f in feats:
+        r = f.get("agent")
+        if r and r not in required:
+            required.append(r)
+    for role in required:
+        if role in avail:
+            enable_specialist(root, role)
+            res["spawned"].append(role)
+        else:
+            res["skipped"].append(role)
+            res["warnings"].append(
+                f"Backlog menciona '{role}', mas o plugin não tem esse agente. Ignorado.")
+    # arquiteto sempre
+    enable_specialist(root, "arquiteto")
+    first = next((f for f in feats if f.get("status") == "pendente"), None)
+    res["first_feature"] = first
+    return res
+
+
+def compute_final_phase(inferred: str, aut: dict) -> str:
+    feats = aut.get("features", [])
+    if aut.get("backlog_found") and feats:
+        if aut.get("spawned") and aut.get("first_feature"):
+            return "LOOP_FEATURES"
+        if all(f.get("status") == "concluida" for f in feats):
+            return "PRE_RELEASE"
+        if aut.get("spawned"):
+            return "LOOP_FEATURES"  # tem time; ativa próxima
+        return "SETUP_TIME"
+    return inferred
 
 
 # ---------------------------------------------------------------------------
@@ -161,27 +271,56 @@ def adopt(target: Path, phase: str) -> int:
         ref += f"- {ctx['claude_memory_files']} arquivo(s) de memória persistente do Claude Code\n"
     u.append_text(target / "docs" / "DECISOES.md", ref)
 
-    # estado na fase adotada
+    # AUTO-SPAWN de especialistas a partir do backlog (spec 13 §Auto-spawn)
+    aut = autospawn_from_backlog(target)
+    final_phase = compute_final_phase(phase, aut)
+
+    # estado na fase final
     now = u.iso_now()
     others = [p.stem for p in (target / ".claude" / "agents").glob("*.md")]
     data = wf.initial_state(target.name)
     data["team_enabled"] = [{"role": r, "enabled_at": now} for r in others]
-    data["backlog_features"] = wf.parse_backlog(target)
-    data["current_phase"] = phase
+    # backlog rico (com agente) se houver; senão o simples
+    if aut.get("features"):
+        data["backlog_features"] = [
+            {"id": f["id"], "slug": f["slug"], "status": f["status"], "concluded_at": None,
+             "agent": f.get("agent", ""), "blast_radius": f.get("blast_radius", "reversivel_baixo")}
+            for f in aut["features"]]
+    else:
+        data["backlog_features"] = wf.parse_backlog(target)
+    data["current_phase"] = final_phase
     data["phase_entered_at"] = now
     data["phase_transitions"] = [{
-        "from": "BOOTSTRAP", "to": phase, "at": now, "by": "adoption",
-        "gates_checked": ["mad_init_adopt"], "evidence": {"backup": str(backup.name)},
+        "from": "BOOTSTRAP", "to": final_phase, "at": now, "by": "adoption",
+        "gates_checked": ["mad_init_adopt"],
+        "evidence": {"backup": str(backup.name), "inferred": phase,
+                     "autospawn": aut.get("spawned", [])},
     }]
-    data["warnings"] = ["Projeto adotado; revise a fase com /mad-phase status se algo destoar."]
-    wf.WorkflowState(target, data).save()
-    wf.log_event(target, "adopted", phase=phase, backup=str(backup.name),
-                 prior_files=ctx.get("docs_files", 0))
+    warns = ["Projeto adotado; revise a fase com /mad-phase status se algo destoar."]
+    warns += aut.get("warnings", [])
+    data["warnings"] = warns
+    st = wf.WorkflowState(target, data)
+    # ativa a primeira feature pendente se entramos em LOOP_FEATURES
+    if final_phase == "LOOP_FEATURES" and aut.get("first_feature"):
+        st._activate_next_from_backlog()
+    st.save()
+    wf.log_event(target, "adopted", phase=final_phase, inferred=phase,
+                 backup=str(backup.name), specialists_autospawned=aut.get("spawned", []),
+                 first_feature=(aut.get("first_feature") or {}).get("id"))
 
-    print(u.c(f"\n✓ Projeto adotado em fase {phase}.", "green", "bold"))
+    print(u.c(f"\n✓ Projeto adotado em fase {final_phase}.", "green", "bold"))
     print(f"  Backup: {backup.name}")
+    if aut.get("spawned"):
+        print(f"  Especialistas habilitados automaticamente (do backlog): {', '.join(aut['spawned'])}")
+    for w in aut.get("warnings", []):
+        print(u.c(f"  ▲ {w}", "yellow"))
+    if final_phase == "LOOP_FEATURES" and st.feature:
+        print(f"  Primeira feature ativa: {st.feature['id']} — {st.feature.get('slug','')} "
+              f"(sub-fase spec_pendente).")
+        print(f"  Próximo: o Arquiteto escreve specs/feature-{st.feature['id'][2:]}-*.md.")
+    else:
+        print("  Próximo: abra uma sessão nova e rode /mad-phase status.")
     print("  Docs pré-existentes preservados. Hooks do workflow instalados.")
-    print("  Próximo: abra uma sessão nova e rode /mad-phase status.")
     return 0
 
 
