@@ -148,6 +148,15 @@ def main():
         if sid:
             attrs["session.id"] = sid
         _utils.emit_span("tool.use", attrs, root=root)
+        # Ressuscita o circuit breaker: quando um DESPACHO de especialista falha,
+        # emite agent.error (que resilience.recent_failures conta). Sem isso o
+        # breaker é placebo (nenhum agent.error jamais é emitido).
+        if tool_name in ("Agent", "Task") and attrs["tool.outcome"] == "error":
+            sub = (d.get("tool_input") or {}).get("subagent_type", "")
+            _utils.emit_span("agent.error", {
+                "agent.name": sub or agent, "error.type": "dispatch_failed",
+                "detail": (args.get("detail") if isinstance(args, dict) else "") or "despacho falhou",
+            }, root=root)
     except Exception:
         pass
     _silent_ok()

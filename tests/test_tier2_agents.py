@@ -55,3 +55,42 @@ def test_web_project_includes_frontend_dev(tmp_path, monkeypatch):
     init.run(name="w", project_type="web", target=tmp_path)
     assert (tmp_path / "memory" / "frontend-dev").is_dir()
     assert (tmp_path / ".claude" / "agents" / "frontend-dev.md").is_file()
+
+
+def _parse_frontmatter(text):
+    """Extrai o bloco YAML entre a primeira e a segunda linha '---'."""
+    lines = text.splitlines()
+    if not lines or lines[0].strip() != "---":
+        return {}
+    body = []
+    for line in lines[1:]:
+        if line.strip() == "---":
+            break
+        body.append(line)
+    # parser mínimo chave: valor (só chaves top-level, ignora continuações
+    # indentadas de blocos '|'). Suficiente para checar a presença de 'tools:'.
+    result = {}
+    for line in body:
+        if not line or line[0] in (" ", "\t"):
+            continue
+        if ":" not in line:
+            continue
+        key, _, val = line.partition(":")
+        result[key.strip()] = val.strip()
+    return result
+
+
+def test_all_agents_declare_tools():
+    agents_dir = PLUGIN_ROOT / "agents"
+    md_files = sorted(agents_dir.glob("*.md"))
+    assert md_files, "nenhum agente encontrado em agents/*.md"
+    faltando = []
+    for f in md_files:
+        fm = _parse_frontmatter(u.read_text(f))
+        tools = fm.get("tools", "").strip()
+        if not tools:
+            faltando.append(f.name)
+    assert not faltando, (
+        "agentes sem allowlist 'tools:' não-vazia no frontmatter: "
+        + ", ".join(faltando)
+    )

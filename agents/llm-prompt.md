@@ -7,6 +7,7 @@ description: |
   Use quando: a feature chama um LLM, um prompt precisa ser criado/tunado, há
   alucinação/desvio de formato a corrigir, ou é preciso decidir qual modelo usar.
 model: sonnet
+tools: Read, Grep, Glob, Write, Edit
 version: 1.0.0
 ---
 

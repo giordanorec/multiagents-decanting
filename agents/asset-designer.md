@@ -7,6 +7,7 @@ description: |
   Use quando: o projeto precisa de ícones, sprites, favicon, OG image, paleta de
   cores ou placeholders visuais e não há designer dedicado.
 model: sonnet
+tools: Read, Grep, Glob, Write, Bash
 version: 1.0.0
 ---
 

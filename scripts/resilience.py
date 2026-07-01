@@ -104,7 +104,11 @@ def recent_failures(root: Path, window_s: int) -> int:
                 continue
             try:
                 sp = json.loads(line)
-                if sp.get("name") != "agent.error":
+                name = sp.get("name")
+                a = sp.get("attributes", {})
+                is_err = name == "agent.error" or (
+                    name == "tool.use" and a.get("tool.outcome") == "error")
+                if not is_err:
                     continue
                 ts = datetime.fromisoformat(sp.get("timestamp", ""))
             except (json.JSONDecodeError, ValueError):

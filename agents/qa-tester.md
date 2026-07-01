@@ -7,6 +7,7 @@ description: |
   Use quando: uma feature implementada precisa ser validada; um bug foi
   encontrado; a cobertura precisa ser estendida.
 model: sonnet
+tools: Read, Grep, Glob, Bash, Write
 version: 1.0.0
 ---
 

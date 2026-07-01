@@ -2,6 +2,22 @@
 
 Formato: [Keep a Changelog](https://keepachangelog.com/). Versionamento semântico.
 
+## [1.10.0] — 2026-07-01 (Cluster B: segurança / least-privilege)
+
+### Adicionado
+- **Least-privilege por agente:** os 11 agentes agora declaram `tools:` (allowlist)
+  no frontmatter — antes todos herdavam TODAS as ferramentas. Só o arquiteto despacha
+  Agent/Task; qa/security/docs/llm sem Bash executável em src; devops é o único com
+  amplo acesso. Mecanismo NATIVO do Claude Code, antes desperdiçado.
+- **Hook de escopo de escrita** (`pre-guardrail-write-scope.py`): protege
+  `.mad/workflow_state.json`, `logs/workflow.jsonl` e `sessions.json` de edição à mão,
+  e enforça o escopo de paths por papel (via MAD_AGENT) — ninguém escreve na memória
+  de outro agente nem no DECISOES.
+
+### Corrigido
+- **Circuit breaker ressuscitado:** `agent.error` passa a ser emitido quando um
+  despacho de especialista falha (antes NENHUM era emitido → breaker placebo), e
+  `recent_failures` conta também tool.use com erro. O breaker agora funciona de verdade.
 ## [1.9.0] — 2026-07-01 (Cluster A: verificação com DENTES)
 
 ### Adicionado

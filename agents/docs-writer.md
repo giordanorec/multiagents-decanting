@@ -7,6 +7,7 @@ description: |
   Use quando: a feature precisa de documentação, o README está
   desatualizado, ou um release exige entrada no CHANGELOG.
 model: sonnet
+tools: Read, Grep, Glob, Write, Edit
 version: 1.0.0
 ---
 

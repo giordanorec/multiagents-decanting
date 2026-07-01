@@ -246,6 +246,7 @@ def hooks_config() -> dict:
             ]},
             {"matcher": "Edit|Write|MultiEdit", "hooks": [
                 sh("pre-guardrail-identity-change.sh"),
+                py("pre-guardrail-write-scope.py"),
             ]},
             {"matcher": "Agent|Task", "hooks": [
                 py("pre-budget-circuit.py"),

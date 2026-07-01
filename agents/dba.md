@@ -7,6 +7,7 @@ description: |
   Use quando: a feature exige mudança de schema, migration, índice, tuning
   de query ou política de retenção/backup.
 model: sonnet
+tools: Read, Grep, Glob, Write, Edit, MultiEdit, Bash
 version: 1.0.0
 ---
 

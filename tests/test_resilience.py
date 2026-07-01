@@ -115,3 +115,13 @@ def test_budget_hook_allows_non_agent_tool(tmp_project):
     res = subprocess.run([sys.executable, str(hook)], input=json.dumps(payload),
                          text=True, cwd=str(tmp_project), capture_output=True)
     assert res.returncode == 0
+
+
+def test_recent_failures_counts_tooluse_error(tmp_project):
+    # circuit breaker ressuscitado: tool.use com outcome=error conta como falha
+    for _ in range(3):
+        u.emit_span("tool.use", {"agent.name": "pipeline-dev", "tool.name": "Bash",
+                                 "tool.outcome": "error"}, root=tmp_project)
+    assert r.recent_failures(tmp_project, 3600) >= 3
+    g = r.guard(tmp_project)
+    assert not g.allowed and "Circuit breaker" in g.reason

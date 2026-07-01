@@ -7,6 +7,7 @@ description: |
   Use quando: o usuário quer planejar, decidir ou supervisionar trabalho;
   qualquer interação inicial com o sistema multi-agente passa por aqui.
 model: opus
+tools: Read, Grep, Glob, Write, Edit, MultiEdit, Bash, Agent, Task, TodoWrite
 version: 1.0.0
 ---
 

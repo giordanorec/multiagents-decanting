@@ -7,6 +7,7 @@ description: |
   Use quando: alguém pede uma dependência, ambiente, pipeline de CI ou
   publicação/deploy.
 model: haiku
+tools: Read, Grep, Glob, Write, Edit, Bash
 version: 1.0.0
 ---
 

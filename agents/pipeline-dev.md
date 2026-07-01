@@ -6,6 +6,7 @@ description: |
   (isso é qa-tester) nem docs de usuário final (docs-writer).
   Use quando: a feature exige código novo ou modificação em src/.
 model: sonnet
+tools: Read, Grep, Glob, Write, Edit, MultiEdit, Bash
 version: 1.0.0
 ---
 

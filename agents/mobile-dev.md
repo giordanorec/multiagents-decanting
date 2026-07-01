@@ -7,6 +7,7 @@ description: |
   Use quando: a feature precisa rodar bem em celular, virar PWA instalável,
   funcionar offline, ou ser empacotada como app nativo.
 model: sonnet
+tools: Read, Grep, Glob, Write, Edit, MultiEdit, Bash
 version: 1.0.0
 ---
 

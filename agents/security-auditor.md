@@ -8,6 +8,7 @@ description: |
   Use quando: uma feature toca autenticação/autorização, entrada de usuário,
   dependências novas, secrets, ou antes de um release que exige revisão de segurança.
 model: opus
+tools: Read, Grep, Glob, Bash, Write
 version: 1.0.0
 ---
 

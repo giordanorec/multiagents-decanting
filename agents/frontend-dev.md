@@ -6,6 +6,7 @@ description: |
   acessível. Não cuida de backend, infra nem testes E2E (qa-tester).
   Use quando: a feature exige interface, componente, tela ou ajuste de UX.
 model: sonnet
+tools: Read, Grep, Glob, Write, Edit, MultiEdit, Bash
 version: 1.0.0
 ---
 
