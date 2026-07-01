@@ -2,6 +2,15 @@
 
 Formato: [Keep a Changelog](https://keepachangelog.com/). Versionamento semântico.
 
+## [1.11.0] — 2026-07-01 (Cluster C: confiabilidade do estado)
+
+### Corrigido/Adicionado
+- **Lock com dono (PID/host):** `_acquire_lock` grava {pid,host,ts} e só ROUBA o
+  lock se o dono claramente morreu (os.kill), não mais por timeout cego — dois
+  escritores não corrompem mais o estado. Dono vivo preso → erro claro, não corrupção.
+- **Backup + auto-recuperação:** `save()` rotaciona `.mad/workflow_state.json.bak`
+  antes de sobrescrever; `load()` cai no `.bak` se o principal estiver corrompido.
+  O estado deixou de ser ponto único de falha.
 ## [1.10.0] — 2026-07-01 (Cluster B: segurança / least-privilege)
 
 ### Adicionado

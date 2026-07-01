@@ -174,6 +174,37 @@ NEXT_SUBPHASE = {
 BLAST_REVERSIBLE = ("reversivel_baixo", "reversivel_medio")
 STATE_FILE = ".mad/workflow_state.json"
 LOCK_FILE = ".mad/workflow_state.lock"
+
+
+def _hostname() -> str:
+    try:
+        import socket
+        return socket.gethostname()
+    except Exception:
+        return "?"
+
+
+def _lock_owner_dead(lock: Path) -> bool:
+    """True se o dono do lock claramente morreu (mesmo host + PID inexistente),
+    ou se o lock está ilegível/antigo. Conservador entre hosts: não rouba."""
+    try:
+        info = json.loads(lock.read_text())
+    except Exception:
+        return True  # formato antigo/corrompido -> pode roubar
+    pid, host = info.get("pid"), info.get("host")
+    if host and host != _hostname():
+        return False  # outro host — não dá pra checar, não rouba
+    if not pid:
+        return True
+    try:
+        os.kill(int(pid), 0)
+        return False  # processo vivo
+    except ProcessLookupError:
+        return True   # morto
+    except PermissionError:
+        return False  # existe (de outro user)
+    except Exception:
+        return True
 LOG_FILE = "logs/workflow.jsonl"
 
 SPEC_REQUIRED_FIELDS = ["objetivo", "critério", "blast", "especialista"]
@@ -470,7 +501,13 @@ class WorkflowState:
     def load(cls, root: Path) -> "WorkflowState":
         data = u.read_json(cls.path(root), None)
         if not isinstance(data, dict) or data.get("current_phase") not in PHASES:
-            raise ValueError("workflow_state.json ausente ou corrompido")
+            # auto-recuperação: tenta o backup antes de desistir
+            bak = cls.path(root).parent / (cls.path(root).name + ".bak")
+            bdata = u.read_json(bak, None)
+            if isinstance(bdata, dict) and bdata.get("current_phase") in PHASES:
+                return cls(root, bdata)
+            raise ValueError("workflow_state.json ausente ou corrompido "
+                             "(e sem .bak válido). Rode /mad-doctor.")
         return cls(root, data)
 
     def _acquire_lock(self, timeout: float = 60.0):
@@ -480,22 +517,38 @@ class WorkflowState:
         while True:
             try:
                 fd = os.open(str(lock), os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+                os.write(fd, json.dumps({"pid": os.getpid(),
+                                         "host": _hostname(),
+                                         "ts": u.iso_now()}).encode())
                 os.close(fd)
                 return lock
             except FileExistsError:
-                if time.monotonic() > deadline:
+                # só rouba o lock se o DONO morreu (não por tempo cego).
+                if _lock_owner_dead(lock):
                     try:
-                        lock.unlink()  # lock velho, força
+                        lock.unlink()
                     except OSError:
                         pass
                     continue
+                if time.monotonic() > deadline:
+                    # dono vivo mas preso além do timeout — desiste, não corrompe.
+                    raise RuntimeError(
+                        "workflow_state.lock preso por processo vivo "
+                        f"({u.read_text(lock)[:120] if lock.exists() else '?'}). "
+                        "Se travou de vez: /mad-doctor.")
                 time.sleep(0.05)
 
     def save(self):
         assert self.data["current_phase"] in PHASES
         lock = self._acquire_lock()
         try:
-            u.write_json(self.path(self.root), self.data)
+            p = self.path(self.root)
+            if p.is_file():  # rotaciona backup antes de sobrescrever
+                try:
+                    (p.parent / (p.name + ".bak")).write_bytes(p.read_bytes())
+                except OSError:
+                    pass
+            u.write_json(p, self.data)
         finally:
             try:
                 lock.unlink()

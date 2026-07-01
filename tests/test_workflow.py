@@ -226,6 +226,29 @@ def test_gate_tests_green(tmp_project):
     assert ok
 
 
+def test_state_backup_and_recovery(tmp_project):
+    st = wf.WorkflowState.load(tmp_project)
+    st.save()  # gera .bak a partir do estado atual
+    bak = tmp_project / ".mad" / "workflow_state.json.bak"
+    assert bak.is_file()
+    # corrompe o principal -> load recupera do .bak
+    (tmp_project / ".mad" / "workflow_state.json").write_text("{corrompido")
+    st2 = wf.WorkflowState.load(tmp_project)
+    assert st2.phase in wf.PHASES
+
+
+def test_lock_owner_dead_detection(tmp_project):
+    lock = tmp_project / ".mad" / "workflow_state.lock"
+    lock.parent.mkdir(parents=True, exist_ok=True)
+    import json as _j, os as _o
+    # PID vivo (este processo) no mesmo host -> não rouba
+    lock.write_text(_j.dumps({"pid": _o.getpid(), "host": wf._hostname()}))
+    assert wf._lock_owner_dead(lock) is False
+    # PID morto -> rouba
+    lock.write_text(_j.dumps({"pid": 2 ** 22, "host": wf._hostname()}))
+    assert wf._lock_owner_dead(lock) is True
+
+
 def test_rework_requires_note(tmp_project):
     _advance_to_loop(tmp_project)
     r = subprocess.run([sys.executable, str(tmp_project / "scripts" / "mad_phase.py"),
