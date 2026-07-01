@@ -20,12 +20,13 @@ PY=python3; command -v python3 >/dev/null 2>&1 || PY=python
 
 Use `"$PY" "$PLUGIN_ROOT/scripts/mad.py" <subcomando>` para o **init**. Depois que o init rodar, o projeto passa a ter seu próprio `scripts/`, e os demais comandos podem usar `"$PY" scripts/mad.py <subcomando>` (ou continuar usando `$PLUGIN_ROOT` — ambos funcionam).
 
-## REGRA DE LINGUAGEM (inegociável)
+## REGISTRO DE LINGUAGEM (adapte ao usuário)
 
-O usuário é **leigo**. Ao falar com ele, **NUNCA** use os nomes técnicos internos
-(`DISCOVERY`, `ESPEC_V1`, `SETUP_TIME`, `LOOP_FEATURES`, `PRE_RELEASE`, `PILOTO`,
-"fase", "sub-fase", "adopt", "gate", "backlog", "state machine"). Fale do que ele de
-fato faz. O ciclo, em linguagem de gente:
+**Leia o nível do usuário e ajuste.** Por **padrão**, fale simples — o público inclui
+leigos que nunca ouviram `DISCOVERY`/`SETUP_TIME`/"fase"/"gate"/"backlog"/"adopt";
+para eles, esses termos são ruído. **Mas se o usuário for técnico** (usa jargão, pede
+detalhe, demonstra domínio), suba o registro e fale no nível dele. Não infantilize um
+sênior nem afogue um leigo. O ciclo, na tradução simples (padrão):
 
 1. **entender a sua ideia** (o problema, o objetivo, para quem é);
 2. **combinar o que vamos construir** (a lista de coisas a fazer);

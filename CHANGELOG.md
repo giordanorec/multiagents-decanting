@@ -2,6 +2,15 @@
 
 Formato: [Keep a Changelog](https://keepachangelog.com/). Versionamento semântico.
 
+## [1.3.3] — 2026-06-30 (linguagem ADAPTATIVA, não fixa)
+
+### Mudado
+- Correção do registro de linguagem: não é "nunca jargão" — é **ler o usuário e
+  adaptar**. Padrão simples (público inclui leigos); mas com usuário técnico, sobe o
+  registro (fases, tokens, arquitetura). Não infantiliza sênior nem afoga leigo. É a
+  dança do discovery aplicada à linguagem. Ajustado na skill, no arquiteto, no
+  /mad-init e na injeção do SessionStart.
+
 ## [1.3.2] — 2026-06-30 (linguagem humana, zero jargão)
 
 ### Mudado
