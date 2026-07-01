@@ -228,6 +228,9 @@ def hooks_config() -> dict:
                 py("session-start-dashboard.py"),
             ]},
         ],
+        "UserPromptSubmit": [
+            {"hooks": [py("prompt-arquiteto-activity.py")]},
+        ],
         "PreToolUse": [
             # workflow gate PRIMEIRO (bloqueia despacho fora de estado)
             {"matcher": "*", "hooks": [py("pre-workflow-gate.py")]},

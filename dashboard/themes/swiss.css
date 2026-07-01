@@ -1,0 +1,202 @@
+/* =========================================================================
+   Swiss / Estilo Tipográfico Internacional
+   Grid rígido, Helvetica, preto sobre branco, um único vermelho de sinal.
+   Zero sombra, zero raio, filetes de 1px, hierarquia 100% tipográfica,
+   labels em caixa-alta com tracking. Ordem, silêncio, precisão.
+   Escopo: html[data-skin="swiss"]
+   ========================================================================= */
+
+html[data-skin="swiss"] {
+  --bg: #ffffff;
+  --bg-soft: #f2f2f2;
+  --surface: #ffffff;
+  --surface-2: #f4f4f4;
+  --border: #111111;
+  --text: #111111;
+  --text-dim: #555555;
+  --text-faint: #888888;
+  --accent: #e2231a;          /* vermelho de sinal suíço */
+  --accent-2: #111111;
+  --gold: #111111;
+  --orange: #e2231a;
+  --red: #e2231a;
+  --green: #111111;
+  --grey: #999999;
+  --radius: 0px;
+  --radius-lg: 0px;
+  --shadow: none;
+  --shadow-soft: none;
+  --gap: 1px;                 /* cartões coesos como um grid tipográfico */
+  --font-sans: "Helvetica Neue", Helvetica, Arial, "Liberation Sans", sans-serif;
+  --font-mono: "Helvetica Neue", Arial, monospace;
+}
+
+html[data-skin="swiss"] body { background: #ffffff; background-image: none; }
+
+/* topbar: filete inferior grosso, tudo alinhado à esquerda */
+html[data-skin="swiss"] .topbar {
+  background: #ffffff;
+  backdrop-filter: none;
+  border-bottom: 2px solid #111;
+}
+html[data-skin="swiss"] .brand h1 {
+  font-weight: 700;
+  letter-spacing: -.02em;
+  text-transform: uppercase;
+}
+html[data-skin="swiss"] .brand-dot { color: var(--accent); }
+
+/* controles: retângulos de filete, sem raio */
+html[data-skin="swiss"] .icon-btn,
+html[data-skin="swiss"] .ctrl-btn,
+html[data-skin="swiss"] .skin-select,
+html[data-skin="swiss"] .conn,
+html[data-skin="swiss"] .team-count {
+  background: #fff;
+  border: 1px solid #111;
+  border-radius: 0;
+  color: #111;
+}
+html[data-skin="swiss"] .icon-btn:hover,
+html[data-skin="swiss"] .ctrl-btn:hover,
+html[data-skin="swiss"] .skin-select:hover { background: #111; color: #fff; }
+
+/* títulos de seção: caixa-alta, tracking largo, filete embaixo */
+html[data-skin="swiss"] .section-title {
+  color: #111;
+  border-bottom: 1px solid #111;
+  padding-bottom: 6px;
+  letter-spacing: .16em;
+}
+
+/* HERO: tipografia dominante, sem gradiente nem glow */
+html[data-skin="swiss"] .hero {
+  background: #fff;
+  border: 1px solid #111;
+  border-left: 8px solid var(--accent);
+}
+html[data-skin="swiss"] .hero-glow { display: none; }
+html[data-skin="swiss"] .hero-eyebrow { color: var(--accent); letter-spacing: .2em; }
+html[data-skin="swiss"] .hero-title {
+  background: none;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  color: #111;
+  font-weight: 800;
+  letter-spacing: -.03em;
+  text-transform: uppercase;
+  line-height: .98;
+}
+html[data-skin="swiss"] .hero-item {
+  background: #f4f4f4;
+  border: 1px solid #111;
+}
+html[data-skin="swiss"] .hi-badge { background: var(--accent); color: #fff; border-radius: 0; }
+html[data-skin="swiss"] .flag { border-radius: 0; border: 1px solid #111; background: #fff; color: #111; }
+html[data-skin="swiss"] .flag--bypass, html[data-skin="swiss"] .flag--warn { color: var(--accent); }
+
+/* mapa do workflow: retículo racional, quadrados, sem sombra */
+html[data-skin="swiss"] .wfmap-wrap { border: 2px solid #111; border-radius: 0; box-shadow: none; background: #fff; }
+html[data-skin="swiss"] .wfmap-hint { text-transform: uppercase; letter-spacing: .12em; }
+html[data-skin="swiss"] .wfnode-badge { border-radius: 0; background: #fff; border: 2px solid #111; }
+html[data-skin="swiss"] .wfnode.is-done .wfnode-badge { background: #111; }
+html[data-skin="swiss"] .wfnode.is-done .wfnode-icon { filter: invert(1) grayscale(1) brightness(2); }
+html[data-skin="swiss"] .wfnode-check { border-radius: 0; background: var(--accent); border-color: #fff; }
+html[data-skin="swiss"] .wfnode.is-current .wfnode-badge { background: var(--accent); border-color: var(--accent); box-shadow: none; animation: none; }
+html[data-skin="swiss"] .wfnode.is-selected .wfnode-badge { box-shadow: 0 0 0 3px #111; }
+html[data-skin="swiss"] .wfnode-here,
+html[data-skin="swiss"] .wfx-tag--here { border-radius: 0; background: var(--accent); color: #fff; border-color: var(--accent); }
+html[data-skin="swiss"] .wfedge-line, html[data-skin="swiss"] .wfedge-line::after { background: #111; }
+html[data-skin="swiss"] .wfedge-line::after { border-left-color: #111; }
+html[data-skin="swiss"] .wfedge.is-current .wfedge-line { background: var(--accent); animation: none; }
+html[data-skin="swiss"] .wfedge.is-current .wfedge-line::after { border-left-color: var(--accent); }
+html[data-skin="swiss"] .wfedge-label,
+html[data-skin="swiss"] .wfsub-step,
+html[data-skin="swiss"] .wf-explainer,
+html[data-skin="swiss"] .wfsub,
+html[data-skin="swiss"] .wfnode-branch,
+html[data-skin="swiss"] .wfx-when { border-radius: 0; }
+html[data-skin="swiss"] .wfsub { border-left: 6px solid var(--accent); }
+html[data-skin="swiss"] .wfsub-step { border: 2px solid #111; }
+html[data-skin="swiss"] .wfsub-step.is-current { background: var(--accent); color: #fff; border-color: var(--accent); box-shadow: none; }
+html[data-skin="swiss"] .wf-explainer { border: 2px solid #111; }
+html[data-skin="swiss"] .wfreturn { border-radius: 0; border: 2px dashed #111; background: #f4f4f4; }
+html[data-skin="swiss"] .wfreturn-arrow, html[data-skin="swiss"] .wfx-to, html[data-skin="swiss"] .wfsub-loop { color: var(--accent); }
+
+/* TIME: grid de cartões encostados, filete único */
+html[data-skin="swiss"] .team { gap: 1px; background: #111; padding: 1px; }
+html[data-skin="swiss"] .agent {
+  background: #fff;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 18px 16px;
+}
+html[data-skin="swiss"] .agent::before {
+  height: 6px;
+  background: var(--agent-color);
+}
+html[data-skin="swiss"] .agent:hover { transform: none; background: #f4f4f4; }
+html[data-skin="swiss"] .agent-avatar::before,
+html[data-skin="swiss"] .fs-avatar::before { border-radius: 0; border-width: 1px; }
+html[data-skin="swiss"] .agent-name {
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: .02em;
+}
+html[data-skin="swiss"] .agent-status,
+html[data-skin="swiss"] .fs-status {
+  border-radius: 0;
+  border: 1px solid #111;
+  background: #fff;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  font-size: .66rem;
+}
+html[data-skin="swiss"] .agent-bubble,
+html[data-skin="swiss"] .fs-bubble {
+  background: #f4f4f4;
+  border-radius: 0;
+  border-left: 3px solid #111;
+}
+
+/* terminal: papel branco, texto preto, sem cantos */
+html[data-skin="swiss"] .agent-term {
+  background: #fafafa;
+  border: 1px solid #111;
+  border-radius: 0;
+  color: #111;
+}
+html[data-skin="swiss"] .term-ts, html[data-skin="swiss"] .term--dim, html[data-skin="swiss"] .term--think { color: #888; }
+html[data-skin="swiss"] .term--error { color: var(--accent); }
+
+/* confiança / barras: retângulos duros */
+html[data-skin="swiss"] .trust-bar, html[data-skin="swiss"] .bar { border-radius: 0; background: #e6e6e6; }
+html[data-skin="swiss"] .trust-bar-fill { border-radius: 0; background: #111; box-shadow: none; }
+html[data-skin="swiss"] .bar-fill { border-radius: 0; background: var(--accent); }
+
+/* métricas: números grandes, Helvetica */
+html[data-skin="swiss"] .metric { border: 1px solid #111; border-radius: 0; }
+html[data-skin="swiss"] .metric-value--big { color: #111; font-weight: 800; }
+html[data-skin="swiss"] .metric-value, html[data-skin="swiss"] .metric-sub { font-family: var(--font-sans); }
+
+/* atividade: lista de filetes */
+html[data-skin="swiss"] .activity-list { border: 1px solid #111; border-radius: 0; font-family: var(--font-sans); }
+html[data-skin="swiss"] .activity-list li { border-bottom: 1px solid #ddd; }
+html[data-skin="swiss"] .live-dot { border-radius: 0; background: var(--accent); }
+
+/* fullscreen: folha branca, filete, vermelho de sinal */
+html[data-skin="swiss"] .fs-backdrop { background: rgba(17,17,17,0.55); backdrop-filter: none; }
+html[data-skin="swiss"] .fs-panel {
+  background: #fff;
+  border: 2px solid #111;
+  border-radius: 0;
+  box-shadow: none;
+}
+html[data-skin="swiss"] .fs-panel::before { background: var(--accent); }
+html[data-skin="swiss"] .fs-name { text-transform: uppercase; font-weight: 800; letter-spacing: -.02em; }
+html[data-skin="swiss"] .fs-close { border-radius: 0; border: 1px solid #111; background: #fff; color: #111; }
+html[data-skin="swiss"] .fs-close:hover { background: #111; color: #fff; }
+html[data-skin="swiss"] .fs-term-empty { border-radius: 0; }
+
+html[data-skin="swiss"] .offline-banner { border-radius: 0; background: var(--accent); }

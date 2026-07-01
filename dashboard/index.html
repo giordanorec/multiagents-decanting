@@ -9,6 +9,21 @@
   <link rel="icon" href="/assets/icon-192.png" type="image/png" />
   <link rel="apple-touch-icon" href="/assets/icon-192.png" />
   <link rel="stylesheet" href="/style.css" />
+  <!-- skin loader: apply saved skin synchronously to avoid FOUC -->
+  <script>
+    (function () {
+      try {
+        var s = localStorage.getItem("multiagente.skin") || "visionos";
+        document.documentElement.dataset.skin = s;
+        var l = document.createElement("link");
+        l.rel = "stylesheet";
+        l.id = "skin-css-" + s;
+        l.href = "/themes/" + s + ".css";
+        l.onerror = function () { /* theme file not present yet — base style still applies */ };
+        document.head.appendChild(l);
+      } catch (e) {}
+    })();
+  </script>
 </head>
 <body>
   <header class="topbar">
@@ -21,6 +36,10 @@
         <span class="conn-dot" aria-hidden="true"></span>
         <span class="conn-label">conectando…</span>
       </span>
+      <label class="skin-picker" title="design system">
+        <span class="sr-only">tema visual</span>
+        <select id="skin-select" class="skin-select" aria-label="escolher design system"></select>
+      </label>
       <button id="theme-toggle" class="icon-btn" type="button" aria-label="alternar tema" title="tema">
         <span class="theme-glyph">☀</span>
       </button>
@@ -44,9 +63,18 @@
       </div>
     </section>
 
-    <!-- ===== STEPPER: trilha de etapas ===== -->
-    <section class="stepper-wrap" id="stepper-wrap" aria-label="trilha de etapas" hidden>
-      <ol class="stepper" id="stepper"></ol>
+    <!-- ===== MAPA DO WORKFLOW: jornada educativa (estado + ramificações) ===== -->
+    <section class="wfmap-wrap" id="wfmap-wrap" aria-label="mapa do fluxo do projeto" hidden>
+      <div class="wfmap-head">
+        <h2 class="section-title">
+          <span>Mapa do projeto</span>
+          <span class="wfmap-hint">onde estamos e pra onde pode ir</span>
+        </h2>
+      </div>
+      <div class="wfmap" id="wfmap" role="list" aria-label="fases do projeto"></div>
+      <div class="wfreturn" id="wfreturn" aria-hidden="true" hidden></div>
+      <div class="wfsub" id="wfsub" hidden></div>
+      <div class="wf-explainer" id="wf-explainer" role="region" aria-live="polite" aria-label="explicação da fase" hidden></div>
     </section>
 
     <!-- ===== GRID: sala de equipe | métricas + atividade ===== -->

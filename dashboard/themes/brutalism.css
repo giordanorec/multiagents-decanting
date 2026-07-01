@@ -1,0 +1,688 @@
+/* =========================================================================
+   Brutalism — web cru, "não-estilizado" proposital
+   Preto sobre off-white, monoespaçado, bordas grossas e duras, radius 0,
+   ZERO sombra, alto contraste. Rótulos em caixa-alta, links de cor pura,
+   deslocamentos "hard offset" só com borda (nada de blur/glow).
+   Escopo: html[data-skin="brutalism"]
+   ========================================================================= */
+
+html[data-skin="brutalism"] {
+  --bg: #eae7dd;              /* off-white amarelado, papel cru */
+  --bg-soft: #dedacb;
+  --surface: #f4f2e9;        /* superfície quase branca */
+  --surface-2: #ffffff;      /* branco puro para inputs/pílulas */
+  --border: #000000;         /* preto duro em tudo */
+  --text: #000000;
+  --text-dim: #3a3a3a;
+  --text-faint: #6a6a6a;
+  --accent: #0000ee;         /* azul de hyperlink cru */
+  --accent-2: #d10062;       /* magenta berrante */
+  --gold: #c98a00;
+  --orange: #e05a00;
+  --red: #e0001b;
+  --green: #008a2e;
+  --grey: #808080;
+  --radius: 0px;
+  --radius-lg: 0px;
+  --shadow: none;
+  --shadow-soft: none;
+  --gap: 14px;
+  --font-sans: "Helvetica Neue", Helvetica, Arial, "Liberation Sans", system-ui, sans-serif;
+  --font-mono: "Courier New", "Courier", ui-monospace, "DejaVu Sans Mono", monospace;
+}
+
+/* fundo chapado, sem gradiente nenhum */
+html[data-skin="brutalism"] body {
+  background: var(--bg);
+  background-image: none;
+  color: var(--text);
+}
+
+/* Reset duro de sombra: nada no tema inteiro tem sombra suave. */
+html[data-skin="brutalism"] * {
+  text-shadow: none;
+}
+
+/* ---- CHROME / TOPBAR ---- */
+html[data-skin="brutalism"] .topbar {
+  background: var(--surface);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-bottom: 4px solid var(--border);
+}
+html[data-skin="brutalism"] .brand h1 {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: .02em;
+  font-weight: 700;
+}
+html[data-skin="brutalism"] .brand h1::before {
+  content: "[ ";
+  color: var(--text-faint);
+}
+html[data-skin="brutalism"] .brand h1::after {
+  content: " ]";
+  color: var(--text-faint);
+}
+html[data-skin="brutalism"] .brand-dot {
+  background: var(--accent-2);
+  border: 2px solid var(--border);
+  border-radius: 0;
+  box-shadow: none;
+}
+
+html[data-skin="brutalism"] .conn,
+html[data-skin="brutalism"] .team-count {
+  background: var(--surface-2);
+  color: var(--text);
+  border: 2px solid var(--border);
+  border-radius: 0;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+html[data-skin="brutalism"] .conn-dot { border-radius: 0; box-shadow: none; }
+html[data-skin="brutalism"] .conn--online .conn-dot { background: var(--green); }
+html[data-skin="brutalism"] .conn--connecting .conn-dot { background: var(--gold); }
+html[data-skin="brutalism"] .conn--offline .conn-dot { background: var(--red); }
+
+html[data-skin="brutalism"] .icon-btn,
+html[data-skin="brutalism"] .ctrl-btn,
+html[data-skin="brutalism"] .skin-select {
+  background: var(--surface-2);
+  color: var(--text);
+  border: 3px solid var(--border);
+  border-radius: 0;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  box-shadow: none;
+  transition: none;
+}
+/* hover brutalista: inverte preto/branco, sem transição suave */
+html[data-skin="brutalism"] .icon-btn:hover,
+html[data-skin="brutalism"] .ctrl-btn:hover,
+html[data-skin="brutalism"] .skin-select:hover {
+  background: var(--border);
+  color: var(--surface);
+}
+html[data-skin="brutalism"] .skin-picker {
+  border: 3px solid var(--border);
+  background: var(--surface-2);
+}
+html[data-skin="brutalism"] .skin-select { border-width: 0; }
+
+/* ---- TÍTULOS DE SEÇÃO ---- */
+html[data-skin="brutalism"] .section-title {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  font-weight: 700;
+  color: var(--text);
+}
+html[data-skin="brutalism"] .section-title span:first-child::before {
+  content: "// ";
+  color: var(--text-faint);
+}
+html[data-skin="brutalism"] .live-dot {
+  border-radius: 0;
+  background: var(--red);
+  box-shadow: none;
+  border: 1px solid var(--border);
+}
+
+/* ---- HERO ---- */
+html[data-skin="brutalism"] .hero {
+  background: var(--surface);
+  border: 4px solid var(--border);
+  border-radius: 0;
+  box-shadow: none;
+}
+html[data-skin="brutalism"] .hero-glow { display: none; }
+html[data-skin="brutalism"] .hero-eyebrow {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: .16em;
+  color: var(--text);
+  background: var(--accent-2);
+  color: #fff;
+  border: 2px solid var(--border);
+  padding: 2px 8px;
+  display: inline-block;
+}
+html[data-skin="brutalism"] .hero-title {
+  background: none;
+  -webkit-text-fill-color: var(--text);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-weight: 800;
+  letter-spacing: -.02em;
+  text-transform: uppercase;
+}
+html[data-skin="brutalism"] .hero-doing {
+  font-family: var(--font-mono);
+  color: var(--text-dim);
+}
+html[data-skin="brutalism"] .hero-aside,
+html[data-skin="brutalism"] .hero-item {
+  background: var(--surface-2);
+  border: 3px solid var(--border);
+  border-radius: 0;
+  box-shadow: none;
+}
+html[data-skin="brutalism"] .hi-badge {
+  background: var(--border);
+  color: var(--surface);
+  border-radius: 0;
+  font-family: var(--font-mono);
+  font-weight: 700;
+}
+html[data-skin="brutalism"] .hi-slug {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+}
+html[data-skin="brutalism"] .hero-flags .flag,
+html[data-skin="brutalism"] .flag {
+  border-radius: 0;
+  border: 2px solid var(--border);
+  background: var(--surface-2);
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  box-shadow: none;
+}
+html[data-skin="brutalism"] .flag--warn { background: var(--gold); color: #000; }
+html[data-skin="brutalism"] .flag--bypass { background: var(--red); color: #fff; }
+html[data-skin="brutalism"] .hero-next {
+  font-family: var(--font-mono);
+  color: var(--text-faint);
+}
+
+/* ========================================================================
+   MAPA DO WORKFLOW — caixas duras, conectores retos, [x]/[>]/[ ] em mono
+   ======================================================================== */
+html[data-skin="brutalism"] .wfmap-wrap {
+  background: var(--surface);
+  border: 4px solid var(--border);
+  border-radius: 0;
+  box-shadow: none;
+}
+html[data-skin="brutalism"] .wfmap-head .section-title span:first-child::before {
+  content: "// ";
+  color: var(--text-faint);
+}
+html[data-skin="brutalism"] .wfmap-hint {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--text-dim);
+}
+
+/* NÓS */
+html[data-skin="brutalism"] .wfnode-badge {
+  border-radius: 0;
+  background: var(--surface-2);
+  border: 3px solid var(--border);
+  box-shadow: none;
+}
+html[data-skin="brutalism"] .wfnode.is-done .wfnode-badge {
+  background: var(--green);
+  border-color: var(--border);
+  box-shadow: none;
+}
+html[data-skin="brutalism"] .wfnode-check {
+  border-radius: 0;
+  background: var(--border);
+  color: var(--surface);
+  border: 2px solid var(--surface);
+}
+html[data-skin="brutalism"] .wfnode.is-current .wfnode-badge {
+  background: var(--accent);
+  border-color: var(--border);
+  box-shadow: none;
+  animation: none;
+}
+html[data-skin="brutalism"] .wfnode.is-current .wfnode-icon { color: #fff; }
+html[data-skin="brutalism"] .wfnode.is-future .wfnode-badge {
+  background: var(--bg-soft);
+  border-style: dashed;
+}
+html[data-skin="brutalism"] .wfnode.is-selected .wfnode-badge {
+  outline: 3px solid var(--accent-2);
+  outline-offset: 2px;
+}
+html[data-skin="brutalism"] .wfnode-label {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: .03em;
+  color: var(--text);
+}
+html[data-skin="brutalism"] .wfnode.is-done .wfnode-label::before {
+  content: "[x] ";
+  color: var(--green);
+}
+html[data-skin="brutalism"] .wfnode.is-current .wfnode-label::before {
+  content: "[>] ";
+  color: var(--accent);
+}
+html[data-skin="brutalism"] .wfnode.is-future .wfnode-label::before {
+  content: "[ ] ";
+  color: var(--text-faint);
+}
+html[data-skin="brutalism"] .wfnode-here,
+html[data-skin="brutalism"] .wfx-tag--here {
+  border-radius: 0;
+  background: var(--accent);
+  color: #fff;
+  border: 2px solid var(--border);
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+html[data-skin="brutalism"] .wfnode-here-dot { background: #fff; border-radius: 0; box-shadow: none; }
+html[data-skin="brutalism"] .wfnode-doing {
+  font-family: var(--font-mono);
+  color: var(--text-dim);
+}
+html[data-skin="brutalism"] .wfnode-branch,
+html[data-skin="brutalism"] .wfnode-branches {
+  border-radius: 0;
+}
+html[data-skin="brutalism"] .wfnode-branch {
+  background: var(--surface-2);
+  border: 2px solid var(--border);
+  font-family: var(--font-mono);
+}
+html[data-skin="brutalism"] .wfbr-arrow { color: var(--accent-2); }
+
+/* ARESTAS: linhas grossas retas, seta quadrada */
+html[data-skin="brutalism"] .wfedge-line,
+html[data-skin="brutalism"] .wfedge-line::after { background: var(--border); }
+html[data-skin="brutalism"] .wfedge-line { height: 3px; }
+html[data-skin="brutalism"] .wfedge-line::after { border-left-color: var(--border); }
+html[data-skin="brutalism"] .wfedge.is-done .wfedge-line { background: var(--green); }
+html[data-skin="brutalism"] .wfedge.is-done .wfedge-line::after { border-left-color: var(--green); }
+html[data-skin="brutalism"] .wfedge.is-current .wfedge-line {
+  background: var(--accent);
+  animation: none;
+  box-shadow: none;
+}
+html[data-skin="brutalism"] .wfedge.is-current .wfedge-line::after { border-left-color: var(--accent); }
+html[data-skin="brutalism"] .wfedge-label {
+  border-radius: 0;
+  background: var(--surface-2);
+  border: 2px solid var(--border);
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: .03em;
+  color: var(--text);
+}
+
+/* TRILHO DE RETORNO */
+html[data-skin="brutalism"] .wfreturn {
+  border-radius: 0;
+  border: 3px dashed var(--border);
+  background: var(--bg-soft);
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  box-shadow: none;
+}
+html[data-skin="brutalism"] .wfreturn.is-active {
+  border-color: var(--accent-2);
+  border-style: solid;
+  background: var(--surface-2);
+}
+html[data-skin="brutalism"] .wfreturn-arrow { color: var(--accent-2); }
+
+/* SUB-LOOP "Construindo" */
+html[data-skin="brutalism"] .wfsub {
+  border-radius: 0;
+  border: 3px solid var(--border);
+  border-left-width: 8px;
+  background: var(--surface);
+  box-shadow: none;
+}
+html[data-skin="brutalism"] .wfsub-head,
+html[data-skin="brutalism"] .wfsub-head-ic {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+html[data-skin="brutalism"] .wfsub-step {
+  border-radius: 0;
+  border: 2px solid var(--border);
+  background: var(--surface-2);
+  font-family: var(--font-mono);
+  box-shadow: none;
+}
+html[data-skin="brutalism"] .wfsub-step.is-done { background: var(--green); color: #fff; }
+html[data-skin="brutalism"] .wfsub-step.is-done .wfsub-label::before { content: "[x] "; }
+html[data-skin="brutalism"] .wfsub-step.is-current {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: none;
+}
+html[data-skin="brutalism"] .wfsub-step.is-current .wfsub-label::before { content: "[>] "; }
+html[data-skin="brutalism"] .wfsub-step.is-current .wfsub-icon { color: #fff; }
+html[data-skin="brutalism"] .wfsub-arrow,
+html[data-skin="brutalism"] .wfsub-loop { color: var(--accent-2); }
+
+/* PAINEL EXPLICADOR */
+html[data-skin="brutalism"] .wf-explainer {
+  border-radius: 0;
+  border: 3px solid var(--border);
+  background: var(--surface-2);
+  box-shadow: none;
+}
+html[data-skin="brutalism"] .wfx-head,
+html[data-skin="brutalism"] .wfx-icon { font-family: var(--font-mono); }
+html[data-skin="brutalism"] .wfx-title {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  font-weight: 700;
+}
+html[data-skin="brutalism"] .wfx-tag {
+  border-radius: 0;
+  border: 2px solid var(--border);
+  background: var(--surface);
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: .03em;
+}
+html[data-skin="brutalism"] .wfx-tag--muted { color: var(--text-faint); background: var(--bg-soft); }
+html[data-skin="brutalism"] .wfx-pin {
+  border-radius: 0;
+  border: 2px solid var(--border);
+  background: var(--surface);
+}
+html[data-skin="brutalism"] .wfx-pin:hover { background: var(--border); color: var(--surface); }
+html[data-skin="brutalism"] .wfx-row,
+html[data-skin="brutalism"] .wfx-when,
+html[data-skin="brutalism"] .wfx-list {
+  border-radius: 0;
+  font-family: var(--font-mono);
+}
+html[data-skin="brutalism"] .wfx-when {
+  border: 2px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+}
+html[data-skin="brutalism"] .wfx-k { color: var(--text-faint); text-transform: uppercase; }
+html[data-skin="brutalism"] .wfx-to,
+html[data-skin="brutalism"] .wfx-advance .wfx-k { color: var(--accent); }
+html[data-skin="brutalism"] .wfx-goes .wfx-k { color: var(--accent-2); }
+
+/* ========================================================================
+   CARDS DE AGENTE — o coração: caixas duras, barra de topo chapada
+   ======================================================================== */
+html[data-skin="brutalism"] .team-empty {
+  border: 3px dashed var(--border);
+  border-radius: 0;
+  background: var(--surface);
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+html[data-skin="brutalism"] .agent {
+  background: var(--surface);
+  border: 3px solid var(--border);
+  border-radius: 0;
+  box-shadow: none;
+  transition: none;
+}
+html[data-skin="brutalism"] .agent::before {
+  height: 8px;
+  background: var(--agent-color, var(--border));
+  border-bottom: 3px solid var(--border);
+}
+/* hover: em vez de sombra, um deslocamento duro via borda dupla externa */
+html[data-skin="brutalism"] .agent:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: none;
+  outline: 3px solid var(--border);
+  outline-offset: 3px;
+}
+html[data-skin="brutalism"] .agent--working {
+  outline: 3px solid var(--agent-color, var(--accent));
+  outline-offset: 0;
+}
+html[data-skin="brutalism"] .agent--error {
+  border-color: var(--red);
+  outline: 3px solid var(--red);
+  outline-offset: 0;
+}
+html[data-skin="brutalism"] .agent--needs_recovery { border-style: dashed; border-color: var(--red); }
+html[data-skin="brutalism"] .agent--human_driving { outline: 3px solid var(--orange); outline-offset: 0; }
+html[data-skin="brutalism"] .agent--decanting { outline: 3px solid var(--gold); outline-offset: 0; }
+html[data-skin="brutalism"] .agent--sleeping,
+html[data-skin="brutalism"] .agent--idle { opacity: 1; }
+html[data-skin="brutalism"] .agent--sleeping { border-style: dashed; }
+html[data-skin="brutalism"] .agent--pinned { border-width: 4px; }
+html[data-skin="brutalism"] .agent.dragging { outline: 3px dashed var(--accent-2); }
+
+html[data-skin="brutalism"] .agent-avatar,
+html[data-skin="brutalism"] .fs-avatar {
+  border-radius: 0;
+}
+html[data-skin="brutalism"] .agent-avatar-inner,
+html[data-skin="brutalism"] .fs-avatar-inner {
+  border-radius: 0;
+  font-family: var(--font-mono);
+  font-weight: 700;
+}
+html[data-skin="brutalism"] .agent-avatar::before,
+html[data-skin="brutalism"] .fs-avatar::before {
+  border-radius: 0;
+  border-width: 3px;
+  box-shadow: none;
+}
+html[data-skin="brutalism"] .agent-name,
+html[data-skin="brutalism"] .fs-name {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  font-weight: 700;
+}
+html[data-skin="brutalism"] .agent-status,
+html[data-skin="brutalism"] .fs-status {
+  background: var(--surface-2);
+  border: 2px solid var(--border);
+  border-radius: 0;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--text);
+  box-shadow: none;
+}
+html[data-skin="brutalism"] .agent-bubble,
+html[data-skin="brutalism"] .fs-bubble {
+  background: var(--surface-2);
+  border: 2px solid var(--border);
+  border-radius: 0;
+  font-family: var(--font-mono);
+  color: var(--text-dim);
+}
+html[data-skin="brutalism"] .agent-bubble::before {
+  content: "> ";
+  color: var(--text-faint);
+}
+html[data-skin="brutalism"] .agent-pin,
+html[data-skin="brutalism"] .agent-open-hint {
+  border-radius: 0;
+  border: 2px solid var(--border);
+  background: var(--surface-2);
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+}
+html[data-skin="brutalism"] .agent-pin:hover,
+html[data-skin="brutalism"] .agent-open-hint:hover { background: var(--border); color: var(--surface); }
+html[data-skin="brutalism"] .zzz { color: var(--text-faint); font-family: var(--font-mono); }
+
+/* ---- MINI-TERMINAL / STREAM ---- */
+html[data-skin="brutalism"] .agent-term {
+  background: var(--surface-2);
+  border: 3px solid var(--border);
+  border-radius: 0;
+  color: var(--text);
+  font-family: var(--font-mono);
+}
+html[data-skin="brutalism"] .term-line { border-bottom: 1px dotted var(--border); }
+html[data-skin="brutalism"] .term-ts { color: var(--text-faint); }
+html[data-skin="brutalism"] .term-add { color: var(--green); }
+/* cores por tipo — puras, alto contraste sobre branco */
+html[data-skin="brutalism"] .term--read { color: var(--accent); }
+html[data-skin="brutalism"] .term--write,
+html[data-skin="brutalism"] .term--ok { color: var(--green); }
+html[data-skin="brutalism"] .term--edit { color: var(--orange); }
+html[data-skin="brutalism"] .term--bash { color: #000; font-weight: 700; }
+html[data-skin="brutalism"] .term--grep { color: var(--accent-2); }
+html[data-skin="brutalism"] .term--web { color: var(--accent); }
+html[data-skin="brutalism"] .term--agent { color: var(--accent-2); }
+html[data-skin="brutalism"] .term--think { color: var(--text-faint); font-style: italic; }
+html[data-skin="brutalism"] .term--decant { color: var(--gold); }
+html[data-skin="brutalism"] .term--error { color: var(--red); font-weight: 700; }
+html[data-skin="brutalism"] .term--start { color: var(--text); font-weight: 700; }
+html[data-skin="brutalism"] .term--say { color: var(--text); }
+html[data-skin="brutalism"] .term--dim,
+html[data-skin="brutalism"] .term--tool { color: var(--text-dim); }
+
+/* ---- BARRA DE CONFIANÇA ---- */
+html[data-skin="brutalism"] .agent-trust-head {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+html[data-skin="brutalism"] .trust-bar,
+html[data-skin="brutalism"] .bar {
+  border-radius: 0;
+  background: var(--surface-2);
+  border: 2px solid var(--border);
+  box-shadow: none;
+}
+html[data-skin="brutalism"] .trust-bar-fill {
+  border-radius: 0;
+  background: var(--accent);
+  box-shadow: none;
+}
+html[data-skin="brutalism"] .bar-fill { border-radius: 0; background: var(--border); box-shadow: none; }
+html[data-skin="brutalism"] .bar-fill--cost { background: var(--gold); }
+html[data-skin="brutalism"] .bar-fill.is-warn { background: var(--orange); }
+html[data-skin="brutalism"] .bar-fill.is-danger { background: var(--red); }
+
+/* ---- MÉTRICAS ---- */
+html[data-skin="brutalism"] .metric {
+  background: var(--surface);
+  border: 3px solid var(--border);
+  border-radius: 0;
+  box-shadow: none;
+}
+html[data-skin="brutalism"] .metric-head,
+html[data-skin="brutalism"] .metric-label {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--text-dim);
+}
+html[data-skin="brutalism"] .metric-value,
+html[data-skin="brutalism"] .metric-value--big {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--text);
+}
+html[data-skin="brutalism"] .metric-sub { font-family: var(--font-mono); color: var(--text-faint); }
+
+/* ---- ATIVIDADE (feed) ---- */
+html[data-skin="brutalism"] .activity-list {
+  background: var(--surface);
+  border: 3px solid var(--border);
+  border-radius: 0;
+  box-shadow: none;
+}
+html[data-skin="brutalism"] .activity-list li {
+  border-bottom: 2px solid var(--border);
+  font-family: var(--font-mono);
+}
+html[data-skin="brutalism"] .activity-list li:last-child { border-bottom: 0; }
+html[data-skin="brutalism"] .activity-empty {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+html[data-skin="brutalism"] .act-ts { color: var(--text-faint); }
+html[data-skin="brutalism"] .act-new { background: color-mix(in srgb, var(--accent) 14%, var(--surface)); }
+html[data-skin="brutalism"] .act-icon[data-i="▶"] { color: var(--accent); }
+html[data-skin="brutalism"] .act-icon[data-i="◆"] { color: var(--gold); }
+html[data-skin="brutalism"] .act-icon[data-i="✓"] { color: var(--green); }
+html[data-skin="brutalism"] .act-icon[data-i="✗"] { color: var(--red); }
+
+/* ========================================================================
+   FULLSCREEN
+   ======================================================================== */
+html[data-skin="brutalism"] .fs-backdrop {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+html[data-skin="brutalism"] .fs-panel {
+  background: var(--surface);
+  border: 5px solid var(--border);
+  border-radius: 0;
+  box-shadow: none;
+}
+html[data-skin="brutalism"] .fs-panel::before {
+  height: 8px;
+  background: var(--agent-color, var(--border));
+  border-bottom: 3px solid var(--border);
+}
+html[data-skin="brutalism"] .fs-close {
+  background: var(--surface-2);
+  color: var(--text);
+  border: 3px solid var(--border);
+  border-radius: 0;
+  font-family: var(--font-mono);
+  font-weight: 700;
+}
+html[data-skin="brutalism"] .fs-close:hover { background: var(--red); color: #fff; }
+html[data-skin="brutalism"] .fs-status-label,
+html[data-skin="brutalism"] .fs-trust-head,
+html[data-skin="brutalism"] .fs-trust-val,
+html[data-skin="brutalism"] .fs-term-label {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+html[data-skin="brutalism"] .fs-term-wrap,
+html[data-skin="brutalism"] .fs-term-holder {
+  border-radius: 0;
+}
+html[data-skin="brutalism"] .fs-term {
+  background: var(--surface-2);
+  border: 3px solid var(--border);
+  border-radius: 0;
+}
+html[data-skin="brutalism"] .fs-term-empty {
+  border: 3px dashed var(--border);
+  border-radius: 0;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+/* ---- BANNER OFFLINE ---- */
+html[data-skin="brutalism"] .offline-banner {
+  background: var(--red);
+  color: #fff;
+  border: 3px solid var(--border);
+  border-radius: 0;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  box-shadow: none;
+}
+
+/* ---- MOVIMENTO: brutalismo é seco; corta transições/animações suaves ---- */
+@media (prefers-reduced-motion: reduce) {
+  html[data-skin="brutalism"] .agent:hover { transform: none; }
+}

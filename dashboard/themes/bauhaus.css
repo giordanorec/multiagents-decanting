@@ -1,0 +1,623 @@
+/* =========================================================================
+   Bauhaus — Weimar/Dessau, 1919–1933
+   Cores primárias puras (vermelho / azul / amarelo) + preto sobre off-white.
+   Geometria dura: cantos retos (radius 0), sem sombra difusa (só offset preto
+   sólido), grotesk pesado em caixa-alta, formas (círculo · triângulo · quadrado)
+   como acento. Composição tipo cartaz de Herbert Bayer / Josef Albers.
+   Escopo: html[data-skin="bauhaus"]
+   ========================================================================= */
+
+html[data-skin="bauhaus"] {
+  --bg: #f2ede3;            /* off-white / papel */
+  --bg-soft: #e7e0d2;
+  --surface: #f7f3ea;
+  --surface-2: #ece5d6;
+  --border: #111111;        /* linha preta dura */
+  --text: #141414;
+  --text-dim: #4a4640;
+  --text-faint: #8a8478;
+  --accent: #d42222;        /* vermelho primário */
+  --accent-2: #1f4fd6;      /* azul primário */
+  --gold: #f2b705;          /* amarelo primário */
+  --orange: #e56b1f;
+  --red: #d42222;
+  --green: #1f7a3a;
+  --grey: #8a8478;
+  --radius: 0px;
+  --radius-lg: 0px;
+  --shadow: 6px 6px 0 #111111;
+  --shadow-soft: 4px 4px 0 #111111;
+  --gap: 16px;
+  --font-sans: "Futura", "Century Gothic", "Josefin Sans", "Twentieth Century",
+    "Helvetica Neue", Arial, system-ui, sans-serif;
+  --font-mono: "Courier New", "Courier", ui-monospace, monospace;
+}
+
+/* fundo: papel off-white com uma composição geométrica sutil de fundo
+   (círculo azul, triângulo amarelo, faixa vermelha) — puro cartaz Bauhaus */
+html[data-skin="bauhaus"] body {
+  background-color: #f2ede3;
+  background-image:
+    radial-gradient(circle at 88% 12%, rgba(31, 79, 214, 0.10) 0 120px, transparent 121px),
+    radial-gradient(circle at 6% 92%, rgba(212, 34, 34, 0.09) 0 90px, transparent 91px),
+    linear-gradient(0deg, rgba(242, 183, 5, 0.07) 0 6px, transparent 6px);
+  background-attachment: fixed;
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- CHROME / TOPBAR ---------- */
+html[data-skin="bauhaus"] .topbar {
+  background: var(--bg);
+  backdrop-filter: none;
+  border-bottom: 3px solid #111111;
+}
+html[data-skin="bauhaus"] .brand h1 {
+  text-transform: uppercase;
+  letter-spacing: .16em;
+  font-weight: 800;
+  color: #111111;
+}
+/* ponto da marca vira círculo vermelho sólido */
+html[data-skin="bauhaus"] .brand-dot {
+  color: var(--accent);
+  background: var(--accent);
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  border: 2px solid #111;
+}
+
+html[data-skin="bauhaus"] .conn,
+html[data-skin="bauhaus"] .team-count {
+  background: var(--surface);
+  border: 2px solid #111111;
+  border-radius: 0;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  font-weight: 700;
+  color: #111;
+}
+html[data-skin="bauhaus"] .conn-dot { border-radius: 50%; }
+html[data-skin="bauhaus"] .conn--online .conn-dot { background: var(--green); }
+html[data-skin="bauhaus"] .conn--connecting .conn-dot { background: var(--gold); }
+html[data-skin="bauhaus"] .conn--offline .conn-dot { background: var(--red); }
+
+html[data-skin="bauhaus"] .icon-btn,
+html[data-skin="bauhaus"] .ctrl-btn,
+html[data-skin="bauhaus"] .skin-select {
+  background: var(--surface);
+  color: #111;
+  border: 2px solid #111111;
+  border-radius: 0;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  box-shadow: 2px 2px 0 #111;
+  transition: transform .08s, box-shadow .08s, background .12s;
+}
+html[data-skin="bauhaus"] .icon-btn:hover,
+html[data-skin="bauhaus"] .ctrl-btn:hover,
+html[data-skin="bauhaus"] .skin-select:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 4px 4px 0 #111;
+  background: var(--gold);
+}
+html[data-skin="bauhaus"] .icon-btn:active,
+html[data-skin="bauhaus"] .ctrl-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 0 0 0 #111;
+}
+html[data-skin="bauhaus"] .skin-picker { position: relative; }
+
+html[data-skin="bauhaus"] .section-title {
+  color: #111;
+  text-transform: uppercase;
+  letter-spacing: .14em;
+  font-weight: 800;
+}
+/* quadradinho vermelho antes de cada título de seção */
+html[data-skin="bauhaus"] .section-title span:first-child::before {
+  content: "";
+  display: inline-block;
+  width: 12px; height: 12px;
+  margin-right: 8px;
+  background: var(--accent);
+  vertical-align: baseline;
+}
+html[data-skin="bauhaus"] .live-dot { border-radius: 50%; background: var(--red); box-shadow: none; }
+
+/* ---------- HERO (cartaz) ---------- */
+html[data-skin="bauhaus"] .hero {
+  background: var(--surface);
+  border: 3px solid #111111;
+  border-radius: 0;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+/* faixa geométrica: barra tricolor no topo do hero */
+html[data-skin="bauhaus"] .hero::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 8px;
+  background: linear-gradient(90deg,
+    var(--accent) 0 33.33%, var(--accent-2) 33.33% 66.66%, var(--gold) 66.66% 100%);
+  z-index: 2;
+}
+/* triângulo amarelo grande como "glow" geométrico */
+html[data-skin="bauhaus"] .hero-glow {
+  background: none;
+  opacity: 1;
+  filter: none;
+  width: 0; height: 0;
+  border-left: 90px solid transparent;
+  border-right: 90px solid transparent;
+  border-bottom: 150px solid rgba(242, 183, 5, 0.35);
+  border-radius: 0;
+}
+html[data-skin="bauhaus"] .hero-eyebrow {
+  color: var(--accent-2);
+  text-transform: uppercase;
+  letter-spacing: .24em;
+  font-weight: 800;
+}
+html[data-skin="bauhaus"] .hero-title {
+  background: none;
+  -webkit-text-fill-color: #111;
+  color: #111;
+  text-transform: uppercase;
+  letter-spacing: -.01em;
+  font-weight: 800;
+  line-height: .98;
+}
+html[data-skin="bauhaus"] .hero-doing { color: var(--text-dim); font-weight: 600; }
+html[data-skin="bauhaus"] .hero-item {
+  background: var(--bg);
+  border: 2px solid #111;
+  border-radius: 0;
+}
+html[data-skin="bauhaus"] .hi-badge {
+  background: var(--accent-2);
+  color: #fff;
+  border-radius: 0;
+  border: 2px solid #111;
+  font-weight: 800;
+}
+html[data-skin="bauhaus"] .hi-slug { color: #111; font-weight: 700; }
+html[data-skin="bauhaus"] .flag {
+  border-radius: 0;
+  border: 2px solid #111;
+  background: var(--surface);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  font-weight: 700;
+}
+html[data-skin="bauhaus"] .flag--warn { background: var(--gold); color: #111; }
+html[data-skin="bauhaus"] .flag--bypass { background: var(--accent); color: #fff; }
+html[data-skin="bauhaus"] .hero-next { color: var(--text-dim); font-weight: 600; }
+
+/* ---------- MAPA DO WORKFLOW ---------- */
+html[data-skin="bauhaus"] .wfmap-wrap {
+  background: var(--surface);
+  border: 3px solid #111111;
+  border-radius: 0;
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="bauhaus"] .wfmap-hint {
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  color: var(--accent-2);
+  font-weight: 700;
+}
+
+/* nó = quadrado preto duro; badge = círculo (a forma canônica Bauhaus) */
+html[data-skin="bauhaus"] .wfnode-badge {
+  border-radius: 50%;
+  background: var(--surface);
+  border: 3px solid #111111;
+  box-shadow: 3px 3px 0 #111;
+}
+html[data-skin="bauhaus"] .wfnode.is-future .wfnode-badge {
+  background: var(--bg);
+  border-color: var(--text-faint);
+  box-shadow: none;
+}
+html[data-skin="bauhaus"] .wfnode.is-done .wfnode-badge {
+  background: var(--accent-2);
+  border-color: #111;
+}
+html[data-skin="bauhaus"] .wfnode.is-done .wfnode-icon { color: #fff; }
+html[data-skin="bauhaus"] .wfnode-check {
+  border-radius: 50%;
+  background: var(--green);
+  color: #fff;
+  border: 2px solid #111;
+}
+html[data-skin="bauhaus"] .wfnode.is-current .wfnode-badge {
+  background: var(--gold);
+  border-color: #111;
+  box-shadow: 4px 4px 0 #111;
+  animation: bhs-pulse 1.6s ease-in-out infinite;
+}
+html[data-skin="bauhaus"] .wfnode.is-current .wfnode-icon { color: #111; }
+html[data-skin="bauhaus"] .wfnode.is-selected .wfnode-badge {
+  box-shadow: 0 0 0 3px var(--accent), 4px 4px 0 #111;
+}
+html[data-skin="bauhaus"] .wfnode-label {
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  font-weight: 700;
+  color: #111;
+}
+html[data-skin="bauhaus"] .wfnode-here,
+html[data-skin="bauhaus"] .wfx-tag--here {
+  border-radius: 0;
+  background: var(--accent);
+  color: #fff;
+  border: 2px solid #111;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  font-weight: 700;
+}
+html[data-skin="bauhaus"] .wfnode-here-dot { background: #fff; border-radius: 50%; }
+html[data-skin="bauhaus"] .wfnode-doing { color: var(--text-dim); font-weight: 600; }
+html[data-skin="bauhaus"] .wfnode-branch {
+  border-radius: 0;
+  background: var(--surface-2);
+  border: 2px solid #111;
+  font-weight: 600;
+}
+html[data-skin="bauhaus"] .wfbr-arrow { color: var(--accent); }
+
+/* arestas: linha preta dura, condição em chip amarelo */
+html[data-skin="bauhaus"] .wfedge-line { background: #111; }
+html[data-skin="bauhaus"] .wfedge-line::after { border-left-color: #111; }
+html[data-skin="bauhaus"] .wfedge.is-done .wfedge-line { background: var(--accent-2); }
+html[data-skin="bauhaus"] .wfedge.is-done .wfedge-line::after { border-left-color: var(--accent-2); }
+html[data-skin="bauhaus"] .wfedge.is-current .wfedge-line { background: var(--accent); animation: none; }
+html[data-skin="bauhaus"] .wfedge.is-current .wfedge-line::after { border-left-color: var(--accent); }
+html[data-skin="bauhaus"] .wfedge-label {
+  background: var(--gold);
+  color: #111;
+  border: 2px solid #111;
+  border-radius: 0;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  font-weight: 700;
+}
+
+/* trilho de retorno: seta vermelha grossa */
+html[data-skin="bauhaus"] .wfreturn {
+  border-radius: 0;
+  border: 2px dashed #111;
+  background: rgba(212, 34, 34, 0.10);
+}
+html[data-skin="bauhaus"] .wfreturn.is-active {
+  border-style: solid;
+  border-color: var(--accent);
+  background: rgba(212, 34, 34, 0.16);
+}
+html[data-skin="bauhaus"] .wfreturn-arrow { color: var(--accent); }
+html[data-skin="bauhaus"] .wfreturn-label {
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  font-weight: 700;
+  color: #111;
+}
+
+/* sub-loop "Construindo" */
+html[data-skin="bauhaus"] .wfsub {
+  background: var(--bg);
+  border: 2px solid #111;
+  border-left: 8px solid var(--accent-2);
+  border-radius: 0;
+}
+html[data-skin="bauhaus"] .wfsub-head { text-transform: uppercase; letter-spacing: .1em; font-weight: 800; color: #111; }
+html[data-skin="bauhaus"] .wfsub-head-ic { color: var(--accent-2); }
+html[data-skin="bauhaus"] .wfsub-step {
+  background: var(--surface);
+  border: 2px solid #111;
+  border-radius: 0;
+  font-weight: 600;
+}
+html[data-skin="bauhaus"] .wfsub-step.is-done { background: var(--accent-2); color: #fff; border-color: #111; }
+html[data-skin="bauhaus"] .wfsub-step.is-current {
+  background: var(--gold);
+  color: #111;
+  border-color: #111;
+  box-shadow: 3px 3px 0 #111;
+}
+html[data-skin="bauhaus"] .wfsub-icon { color: inherit; }
+html[data-skin="bauhaus"] .wfsub-arrow { color: #111; }
+html[data-skin="bauhaus"] .wfsub-loop { color: var(--accent); }
+
+/* explicador */
+html[data-skin="bauhaus"] .wf-explainer {
+  background: var(--surface);
+  border: 3px solid #111;
+  border-radius: 0;
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="bauhaus"] .wfx-icon { color: var(--accent-2); }
+html[data-skin="bauhaus"] .wfx-title { text-transform: uppercase; letter-spacing: .06em; font-weight: 800; color: #111; }
+html[data-skin="bauhaus"] .wfx-tag {
+  border-radius: 0;
+  border: 2px solid #111;
+  background: var(--surface-2);
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  font-weight: 700;
+}
+html[data-skin="bauhaus"] .wfx-tag--muted { background: var(--bg); color: var(--text-dim); }
+html[data-skin="bauhaus"] .wfx-pin {
+  border-radius: 0;
+  border: 2px solid #111;
+  background: var(--gold);
+  color: #111;
+  font-weight: 700;
+}
+html[data-skin="bauhaus"] .wfx-row { border-color: #111; }
+html[data-skin="bauhaus"] .wfx-k { color: var(--accent-2); font-weight: 800; text-transform: uppercase; letter-spacing: .05em; }
+html[data-skin="bauhaus"] .wfx-when {
+  border-radius: 0;
+  border: 2px solid #111;
+  background: var(--gold);
+  color: #111;
+  font-weight: 700;
+}
+html[data-skin="bauhaus"] .wfx-to { color: var(--accent); font-weight: 700; }
+html[data-skin="bauhaus"] .wfx-advance .wfx-k { color: var(--accent); }
+
+/* ---------- CARD DE AGENTE (o coração) ---------- */
+html[data-skin="bauhaus"] .agent {
+  background: var(--surface);
+  border: 3px solid #111111;
+  border-radius: 0;
+  box-shadow: var(--shadow-soft);
+  transition: transform .1s cubic-bezier(.2,.8,.2,1), box-shadow .1s;
+}
+/* barra chapada do topo: usa a cor do agente, dura */
+html[data-skin="bauhaus"] .agent::before {
+  height: 6px;
+  background: var(--agent-color);
+  border-bottom: 2px solid #111;
+}
+html[data-skin="bauhaus"] .agent:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 8px 8px 0 #111;
+}
+html[data-skin="bauhaus"] .agent--working {
+  box-shadow: 6px 6px 0 var(--agent-color), 6px 6px 0 2px #111;
+}
+html[data-skin="bauhaus"] .agent--error {
+  box-shadow: 6px 6px 0 var(--red);
+  border-color: var(--red);
+}
+html[data-skin="bauhaus"] .agent--human_driving {
+  box-shadow: 6px 6px 0 var(--gold);
+}
+html[data-skin="bauhaus"] .agent--decanting {
+  box-shadow: 6px 6px 0 var(--gold);
+}
+html[data-skin="bauhaus"] .agent--sleeping { opacity: .78; }
+html[data-skin="bauhaus"] .agent--pinned { border-color: var(--accent); }
+html[data-skin="bauhaus"] .agent.dragging { box-shadow: 10px 10px 0 #111; }
+
+/* avatar: círculo com anel preto duro */
+html[data-skin="bauhaus"] .agent-avatar,
+html[data-skin="bauhaus"] .fs-avatar { border-radius: 50%; }
+html[data-skin="bauhaus"] .agent-avatar::before,
+html[data-skin="bauhaus"] .fs-avatar::before {
+  border-radius: 50%;
+  border-width: 3px;
+  border-color: #111;
+  box-shadow: none;
+}
+html[data-skin="bauhaus"] .agent-avatar-inner,
+html[data-skin="bauhaus"] .fs-avatar-inner { border-radius: 50%; }
+
+html[data-skin="bauhaus"] .agent-name {
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  font-weight: 800;
+  color: #111;
+}
+html[data-skin="bauhaus"] .agent-status,
+html[data-skin="bauhaus"] .fs-status {
+  background: var(--bg);
+  border: 2px solid #111;
+  border-radius: 0;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  font-weight: 700;
+  color: var(--text-dim);
+}
+html[data-skin="bauhaus"] .agent-bubble,
+html[data-skin="bauhaus"] .fs-bubble {
+  background: var(--bg);
+  border: 2px solid #111;
+  border-radius: 0;
+  color: var(--text-dim);
+}
+html[data-skin="bauhaus"] .agent-pin {
+  color: var(--accent);
+  background: var(--gold);
+  border: 2px solid #111;
+  border-radius: 0;
+}
+html[data-skin="bauhaus"] .agent-open-hint {
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  font-weight: 700;
+  color: var(--accent-2);
+}
+
+/* ---------- MINI-TERMINAL ---------- */
+html[data-skin="bauhaus"] .agent-term,
+html[data-skin="bauhaus"] .fs-term {
+  background: #141414;
+  border: 2px solid #111;
+  border-radius: 0;
+  color: #f2ede3;
+  font-family: var(--font-mono);
+}
+html[data-skin="bauhaus"] .term-ts { color: #8a8478; }
+html[data-skin="bauhaus"] .term--read { color: #6f9bff; }
+html[data-skin="bauhaus"] .term--write,
+html[data-skin="bauhaus"] .term--ok { color: #5fd07a; }
+html[data-skin="bauhaus"] .term--edit { color: var(--gold); }
+html[data-skin="bauhaus"] .term--bash { color: #f2b705; }
+html[data-skin="bauhaus"] .term--grep { color: #6f9bff; }
+html[data-skin="bauhaus"] .term--web { color: #7dc6ff; }
+html[data-skin="bauhaus"] .term--think,
+html[data-skin="bauhaus"] .term--dim { color: #8a8478; }
+html[data-skin="bauhaus"] .term--decant { color: var(--gold); }
+html[data-skin="bauhaus"] .term--error { color: #ff5c5c; }
+html[data-skin="bauhaus"] .term--start,
+html[data-skin="bauhaus"] .term--say { color: #f2ede3; }
+html[data-skin="bauhaus"] .term-add { color: #5fd07a; }
+
+/* ---------- BARRAS ---------- */
+html[data-skin="bauhaus"] .agent-trust-head,
+html[data-skin="bauhaus"] .fs-trust-head {
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  font-weight: 700;
+  color: var(--text-dim);
+}
+html[data-skin="bauhaus"] .trust-bar,
+html[data-skin="bauhaus"] .bar {
+  border-radius: 0;
+  background: var(--bg);
+  border: 2px solid #111;
+}
+html[data-skin="bauhaus"] .trust-bar-fill {
+  border-radius: 0;
+  background: var(--accent-2);
+  box-shadow: none;
+}
+html[data-skin="bauhaus"] .bar-fill { border-radius: 0; background: var(--accent-2); }
+html[data-skin="bauhaus"] .bar-fill--cost { background: var(--gold); }
+html[data-skin="bauhaus"] .bar-fill.is-warn { background: var(--orange); }
+html[data-skin="bauhaus"] .bar-fill.is-danger { background: var(--red); }
+
+/* ---------- MÉTRICAS ---------- */
+html[data-skin="bauhaus"] .metric {
+  background: var(--surface);
+  border: 3px solid #111;
+  border-radius: 0;
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="bauhaus"] .metric-label {
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  font-weight: 700;
+  color: var(--text-dim);
+}
+html[data-skin="bauhaus"] .metric-value,
+html[data-skin="bauhaus"] .metric-value--big {
+  color: #111;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+html[data-skin="bauhaus"] .metric-value--big { color: var(--accent); }
+html[data-skin="bauhaus"] .metric-sub { color: var(--text-faint); }
+
+/* ---------- ATIVIDADE (feed) ---------- */
+html[data-skin="bauhaus"] .activity-list {
+  background: var(--surface);
+  border: 3px solid #111;
+  border-radius: 0;
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="bauhaus"] .activity-list li { border-bottom: 2px solid #111; }
+html[data-skin="bauhaus"] .activity-list li:last-child { border-bottom: none; }
+html[data-skin="bauhaus"] .act-ts { color: var(--text-faint); font-family: var(--font-mono); }
+html[data-skin="bauhaus"] .act-new { background: rgba(242, 183, 5, 0.28); }
+html[data-skin="bauhaus"] .act-icon[data-i="▶"] { color: var(--accent-2); }
+html[data-skin="bauhaus"] .act-icon[data-i="◆"] { color: var(--gold); }
+html[data-skin="bauhaus"] .act-icon[data-i="✓"] { color: var(--green); }
+html[data-skin="bauhaus"] .act-icon[data-i="✗"] { color: var(--red); }
+
+/* ---------- FULLSCREEN ---------- */
+html[data-skin="bauhaus"] .fs-backdrop {
+  background: rgba(20, 20, 20, 0.55);
+  backdrop-filter: none;
+}
+html[data-skin="bauhaus"] .fs-panel {
+  background: var(--surface);
+  border: 4px solid #111;
+  border-radius: 0;
+  box-shadow: 12px 12px 0 #111;
+}
+html[data-skin="bauhaus"] .fs-panel::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 8px;
+  background: linear-gradient(90deg,
+    var(--accent) 0 33.33%, var(--accent-2) 33.33% 66.66%, var(--gold) 66.66% 100%);
+}
+html[data-skin="bauhaus"] .fs-name {
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  font-weight: 800;
+  color: #111;
+}
+html[data-skin="bauhaus"] .fs-close {
+  background: var(--accent);
+  color: #fff;
+  border: 3px solid #111;
+  border-radius: 0;
+  font-weight: 800;
+  box-shadow: 3px 3px 0 #111;
+  transition: transform .08s, box-shadow .08s;
+}
+html[data-skin="bauhaus"] .fs-close:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 5px 5px 0 #111;
+}
+html[data-skin="bauhaus"] .fs-close:active {
+  transform: translate(3px, 3px);
+  box-shadow: 0 0 0 #111;
+}
+html[data-skin="bauhaus"] .fs-term-label {
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  font-weight: 700;
+  color: var(--accent-2);
+}
+html[data-skin="bauhaus"] .fs-term-empty {
+  border: 2px dashed #111;
+  border-radius: 0;
+  color: var(--text-faint);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+html[data-skin="bauhaus"] .fs-trust-val { font-weight: 800; color: #111; }
+
+/* ---------- OFFLINE BANNER ---------- */
+html[data-skin="bauhaus"] .offline-banner {
+  background: var(--accent);
+  color: #fff;
+  border-radius: 0;
+  border-bottom: 3px solid #111;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  font-weight: 800;
+}
+
+/* ---------- ANIMAÇÃO PRÓPRIA ---------- */
+@keyframes bhs-pulse {
+  0%, 100% { box-shadow: 4px 4px 0 #111; }
+  50%      { box-shadow: 4px 4px 0 #111, 0 0 0 6px rgba(242, 183, 5, 0.35); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-skin="bauhaus"] .wfnode.is-current .wfnode-badge { animation: none; }
+  html[data-skin="bauhaus"] .agent,
+  html[data-skin="bauhaus"] .icon-btn,
+  html[data-skin="bauhaus"] .ctrl-btn,
+  html[data-skin="bauhaus"] .skin-select,
+  html[data-skin="bauhaus"] .fs-close { transition: none; }
+}

@@ -154,6 +154,7 @@ def _workflow_summary(root: Path) -> dict:
     af = wd.get("active_feature") or {}
     phase = wd.get("current_phase")
     # rótulos humanos (o painel mostra ISTO, não os nomes técnicos)
+    guide = None
     try:
         import workflow as wf
         human = wf.PHASE_HUMAN
@@ -161,6 +162,7 @@ def _workflow_summary(root: Path) -> dict:
         cur_label = wf.human_label(phase)
         cur_doing = wf.human_doing(phase)
         sub_human = wf.SUBPHASE_HUMAN.get(af.get("subphase"), af.get("subphase"))
+        guide = wf.phase_guide()
     except Exception:
         ph_list = [{"id": phase, "label": phase}]
         cur_label, cur_doing, sub_human = phase, "", af.get("subphase")
@@ -176,6 +178,7 @@ def _workflow_summary(root: Path) -> dict:
         "warnings": len(wd.get("warnings", []) or []),
         "bypasses": sum(1 for w in (wd.get("warnings") or []) if "Bypass" in w),
         "phases": ph_list,
+        "guide": guide,
     }
 
 

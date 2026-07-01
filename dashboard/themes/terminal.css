@@ -1,0 +1,219 @@
+/* =========================================================================
+   Terminal / TUI — fósforo verde sobre preto
+   Monoespaçado em TUDO, brilho de CRT, scanlines, cantos retos, filetes de
+   1px verde-escuro, rótulos em caixa-alta com colchetes. Um cursor pisca.
+   Escopo: html[data-skin="terminal"]
+   ========================================================================= */
+
+html[data-skin="terminal"] {
+  --bg: #000600;
+  --bg-soft: #011201;
+  --surface: #010f01;
+  --surface-2: #021a02;
+  --border: #0f3d0f;
+  --text: #33ff66;
+  --text-dim: #1fb84f;
+  --text-faint: #128a34;
+  --accent: #39ff14;          /* verde neon */
+  --accent-2: #7dffb0;
+  --gold: #ffb000;            /* âmbar de terminal */
+  --orange: #ff9000;
+  --red: #ff3b3b;
+  --green: #33ff66;
+  --grey: #0f6f2f;
+  --radius: 0px;
+  --radius-lg: 0px;
+  --shadow: 0 0 0 1px #0f3d0f, 0 0 24px rgba(57,255,20,0.10);
+  --shadow-soft: 0 0 0 1px #0f3d0f;
+  --gap: 10px;
+  /* mono em tudo: sobrescreve até a fonte "sans" da UI */
+  --font-sans: "JetBrains Mono", "SF Mono", ui-monospace, "DejaVu Sans Mono", Menlo, Consolas, monospace;
+  --font-mono: "JetBrains Mono", "SF Mono", ui-monospace, "DejaVu Sans Mono", Menlo, Consolas, monospace;
+}
+
+html[data-skin="terminal"] body {
+  background: #000600;
+  background-image: none;
+  color: var(--text);
+}
+html[data-skin="terminal"],
+html[data-skin="terminal"] body { text-shadow: 0 0 4px rgba(57,255,20,0.45); }
+
+/* scanlines + vinheta de CRT sobre tudo (sem bloquear cliques) */
+html[data-skin="terminal"] body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 90;
+  background:
+    repeating-linear-gradient(0deg, rgba(0,0,0,0) 0px, rgba(0,0,0,0) 2px, rgba(0,0,0,0.28) 3px, rgba(0,0,0,0) 4px),
+    radial-gradient(120% 120% at 50% 50%, transparent 62%, rgba(0,0,0,0.55) 100%);
+  mix-blend-mode: multiply;
+}
+
+/* chrome */
+html[data-skin="terminal"] .topbar {
+  background: #000600;
+  backdrop-filter: none;
+  border-bottom: 1px solid var(--border);
+}
+html[data-skin="terminal"] .brand h1 { text-transform: uppercase; letter-spacing: .12em; }
+html[data-skin="terminal"] .brand h1::before { content: "root@mad:~$ "; color: var(--text-faint); }
+html[data-skin="terminal"] .brand-dot { color: var(--accent); }
+
+html[data-skin="terminal"] .icon-btn,
+html[data-skin="terminal"] .ctrl-btn,
+html[data-skin="terminal"] .skin-select,
+html[data-skin="terminal"] .conn,
+html[data-skin="terminal"] .team-count {
+  background: #010f01;
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 0;
+  text-transform: lowercase;
+}
+html[data-skin="terminal"] .ctrl-btn::before { content: "["; }
+html[data-skin="terminal"] .ctrl-btn::after { content: "]"; }
+html[data-skin="terminal"] .icon-btn:hover,
+html[data-skin="terminal"] .ctrl-btn:hover,
+html[data-skin="terminal"] .skin-select:hover { background: #032003; color: var(--accent); }
+
+html[data-skin="terminal"] .section-title { color: var(--accent); letter-spacing: .1em; }
+html[data-skin="terminal"] .section-title span:first-child::before { content: "// "; color: var(--text-faint); }
+
+/* HERO como um cabeçalho de log */
+html[data-skin="terminal"] .hero {
+  background: #010f01;
+  border: 1px solid var(--border);
+  border-radius: 0;
+  box-shadow: var(--shadow);
+}
+html[data-skin="terminal"] .hero-glow { display: none; }
+html[data-skin="terminal"] .hero-eyebrow { color: var(--gold); letter-spacing: .18em; }
+html[data-skin="terminal"] .hero-eyebrow::before { content: ">> "; }
+html[data-skin="terminal"] .hero-title {
+  background: none; color: var(--accent); -webkit-text-fill-color: var(--accent);
+  text-transform: uppercase; letter-spacing: .02em;
+}
+html[data-skin="terminal"] .hero-title::after {
+  content: "_";
+  animation: term-cursor 1s steps(1) infinite;
+  color: var(--accent);
+}
+html[data-skin="terminal"] .hero-item { background: #021a02; border: 1px solid var(--border); }
+html[data-skin="terminal"] .hi-badge { background: var(--accent); color: #000; border-radius: 0; }
+html[data-skin="terminal"] .flag { border-radius: 0; border: 1px solid currentColor; background: #010f01; }
+
+/* mapa do workflow: ASCII/TUI — [x] feito, [>] atual, [ ] a fazer */
+html[data-skin="terminal"] .wfmap-wrap { border: 1px solid var(--border); border-radius: 0; box-shadow: none; background: var(--surface); }
+html[data-skin="terminal"] .wfmap-head .section-title span:first-child::before { content: "// "; color: var(--text-faint); }
+html[data-skin="terminal"] .wfmap-hint { text-transform: uppercase; letter-spacing: .08em; color: var(--gold); }
+html[data-skin="terminal"] .wfnode-badge { border-radius: 0; background: #010f01; border: 1px solid var(--border); }
+html[data-skin="terminal"] .wfnode.is-done .wfnode-badge { border-color: var(--green); box-shadow: 0 0 8px color-mix(in srgb, var(--green) 45%, transparent); }
+html[data-skin="terminal"] .wfnode-check { border-radius: 0; background: var(--green); color: #010f01; border-color: #010f01; }
+html[data-skin="terminal"] .wfnode.is-current .wfnode-badge { border-color: var(--accent); box-shadow: 0 0 12px var(--accent); background: color-mix(in srgb, var(--accent) 18%, #010f01); animation: none; }
+html[data-skin="terminal"] .wfnode.is-selected .wfnode-badge { box-shadow: 0 0 0 2px var(--accent), 0 0 12px var(--accent); }
+html[data-skin="terminal"] .wfnode-label { text-transform: uppercase; letter-spacing: .04em; }
+html[data-skin="terminal"] .wfnode.is-current .wfnode-label::before { content: "> "; }
+html[data-skin="terminal"] .wfnode.is-done .wfnode-label::before { content: "[x] "; color: var(--green); }
+html[data-skin="terminal"] .wfnode.is-future .wfnode-label::before { content: "[ ] "; color: var(--text-faint); }
+html[data-skin="terminal"] .wfnode-here,
+html[data-skin="terminal"] .wfx-tag--here { border-radius: 0; background: color-mix(in srgb, var(--accent) 18%, transparent); border-color: var(--accent); }
+html[data-skin="terminal"] .wfedge-line, html[data-skin="terminal"] .wfedge-line::after { background: var(--border); }
+html[data-skin="terminal"] .wfedge-line::after { border-left-color: var(--border); }
+html[data-skin="terminal"] .wfedge.is-done .wfedge-line { background: var(--green); }
+html[data-skin="terminal"] .wfedge.is-done .wfedge-line::after { border-left-color: var(--green); }
+html[data-skin="terminal"] .wfedge.is-current .wfedge-line { background: var(--accent); animation: none; box-shadow: 0 0 6px var(--accent); }
+html[data-skin="terminal"] .wfedge.is-current .wfedge-line::after { border-left-color: var(--accent); }
+html[data-skin="terminal"] .wfedge-label,
+html[data-skin="terminal"] .wfnode-branch,
+html[data-skin="terminal"] .wfsub-step,
+html[data-skin="terminal"] .wf-explainer,
+html[data-skin="terminal"] .wfsub,
+html[data-skin="terminal"] .wfx-when,
+html[data-skin="terminal"] .wfreturn { border-radius: 0; }
+html[data-skin="terminal"] .wfedge-label { background: var(--surface); text-transform: uppercase; letter-spacing: .04em; }
+html[data-skin="terminal"] .wfsub { border-left: 2px solid var(--accent); }
+html[data-skin="terminal"] .wfsub-step.is-current { background: color-mix(in srgb, var(--accent) 16%, #010f01); box-shadow: 0 0 8px color-mix(in srgb, var(--accent) 40%, transparent); }
+html[data-skin="terminal"] .wfsub-step.is-current .wfsub-label::before { content: "> "; }
+html[data-skin="terminal"] .wfsub-step.is-done .wfsub-label::before { content: "[x] "; color: var(--green); }
+html[data-skin="terminal"] .wfx-title { text-transform: uppercase; }
+html[data-skin="terminal"] .wfreturn { border-style: dashed; border-color: var(--accent-2); background: color-mix(in srgb, var(--accent-2) 10%, transparent); }
+html[data-skin="terminal"] .wfreturn-arrow, html[data-skin="terminal"] .wfsub-loop, html[data-skin="terminal"] .wfx-to { color: var(--accent-2); }
+
+/* CARTÕES: painéis de TUI com filete e leve glow */
+html[data-skin="terminal"] .agent {
+  background: #010f01;
+  border: 1px solid var(--border);
+  border-radius: 0;
+  box-shadow: var(--shadow-soft);
+  transition: box-shadow .2s;
+}
+html[data-skin="terminal"] .agent::before { height: 2px; background: var(--agent-color); }
+html[data-skin="terminal"] .agent:hover { transform: none; box-shadow: 0 0 0 1px var(--accent), 0 0 22px rgba(57,255,20,0.22); }
+html[data-skin="terminal"] .agent--working { box-shadow: 0 0 0 1px var(--agent-color), 0 0 26px color-mix(in srgb, var(--agent-color) 40%, transparent); }
+html[data-skin="terminal"] .agent-avatar::before,
+html[data-skin="terminal"] .fs-avatar::before { border-radius: 0; border-width: 1px; }
+html[data-skin="terminal"] .agent-name { text-transform: uppercase; letter-spacing: .06em; }
+html[data-skin="terminal"] .agent-name::before { content: "● "; color: var(--agent-color); }
+html[data-skin="terminal"] .agent-status,
+html[data-skin="terminal"] .fs-status {
+  background: #021a02; border: 1px solid var(--border); border-radius: 0;
+  text-transform: uppercase; letter-spacing: .06em; color: var(--text-dim);
+}
+html[data-skin="terminal"] .agent-bubble,
+html[data-skin="terminal"] .fs-bubble {
+  background: #000a00; border: 1px solid var(--border); border-radius: 0; color: var(--text-dim);
+}
+html[data-skin="terminal"] .agent-bubble::before { content: "$ "; color: var(--text-faint); }
+
+/* terminal: já é o habitat natural — reforça o glow */
+html[data-skin="terminal"] .agent-term {
+  background: #000600;
+  border: 1px solid var(--border);
+  border-radius: 0;
+  color: var(--text);
+}
+html[data-skin="terminal"] .term--read { color: #35c3ff; }
+html[data-skin="terminal"] .term--bash { color: var(--accent-2); }
+html[data-skin="terminal"] .term--ok, html[data-skin="terminal"] .term--write { color: var(--green); }
+html[data-skin="terminal"] .term--decant { color: var(--gold); }
+html[data-skin="terminal"] .term--error { color: var(--red); }
+
+/* barras: blocos de caractere */
+html[data-skin="terminal"] .trust-bar, html[data-skin="terminal"] .bar {
+  border-radius: 0; background: #021a02; border: 1px solid var(--border);
+}
+html[data-skin="terminal"] .trust-bar-fill { border-radius: 0; background: var(--accent); box-shadow: 0 0 10px var(--accent); }
+html[data-skin="terminal"] .bar-fill { border-radius: 0; background: var(--gold); }
+
+/* métricas + atividade */
+html[data-skin="terminal"] .metric { background: #010f01; border: 1px solid var(--border); border-radius: 0; }
+html[data-skin="terminal"] .metric-value--big { color: var(--accent); }
+html[data-skin="terminal"] .activity-list { background: #000600; border: 1px solid var(--border); border-radius: 0; }
+html[data-skin="terminal"] .activity-list li { border-bottom: 1px solid var(--border); }
+html[data-skin="terminal"] .live-dot { border-radius: 0; background: var(--accent); box-shadow: 0 0 10px var(--accent); }
+
+/* fullscreen */
+html[data-skin="terminal"] .fs-backdrop { background: rgba(0,6,0,0.8); backdrop-filter: blur(1px); }
+html[data-skin="terminal"] .fs-panel {
+  background: #010f01; border: 1px solid var(--accent); border-radius: 0;
+  box-shadow: 0 0 40px rgba(57,255,20,0.25);
+}
+html[data-skin="terminal"] .fs-panel::before { height: 2px; }
+html[data-skin="terminal"] .fs-name { text-transform: uppercase; letter-spacing: .06em; }
+html[data-skin="terminal"] .fs-name::before { content: "● "; color: var(--agent-color); }
+html[data-skin="terminal"] .fs-close {
+  background: #021a02; color: var(--accent); border: 1px solid var(--border); border-radius: 0;
+}
+html[data-skin="terminal"] .fs-close:hover { background: #032a03; }
+html[data-skin="terminal"] .fs-term-label { color: var(--accent); }
+html[data-skin="terminal"] .fs-term-empty { border-style: dashed; border-color: var(--border); color: var(--text-faint); border-radius: 0; }
+
+html[data-skin="terminal"] .offline-banner { background: var(--red); color: #000; border-radius: 0; text-transform: uppercase; }
+
+@keyframes term-cursor { 0%,50% { opacity: 1; } 50.01%,100% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  html[data-skin="terminal"] .hero-title::after { animation: none; }
+}

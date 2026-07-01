@@ -1,0 +1,520 @@
+/* =========================================================================
+   Material Design 3 — superfícies tonais, elevação, acento dinâmico
+   Fundo tonal escuro-arroxeado, cartões com tonal-surface + sombra de
+   elevação, cantos 12–16px, acento roxo/verde-água (M3 "dynamic color"),
+   tipografia tipo Roboto, botões com estados (hover/press) e state layers.
+   Escopo: html[data-skin="material"]
+   ========================================================================= */
+
+html[data-skin="material"] {
+  /* --- superfícies tonais (M3 dark surface tones) --- */
+  --bg: #131318;            /* surface (dim) */
+  --bg-soft: #1c1b20;       /* surface-container-low */
+  --surface: #211f26;       /* surface-container */
+  --surface-2: #2b2930;     /* surface-container-high */
+  --border: #48454e;        /* outline-variant */
+  --text: #e6e1e9;          /* on-surface */
+  --text-dim: #cac4d0;      /* on-surface-variant */
+  --text-faint: #948f99;    /* muted */
+
+  /* acento dinâmico: roxo primário + verde-água secundário */
+  --accent: #d0bcff;        /* primary (M3 dark) */
+  --accent-2: #7fd8c4;      /* tertiary/teal */
+  --gold: #efb8c8;          /* rosé/tertiary-container feel */
+  --orange: #ffb59d;        /* on warm */
+  --red: #f2b8b5;           /* error (M3 dark) */
+  --green: #7fd8c4;         /* success teal */
+  --grey: #948f99;
+
+  /* cantos M3: 12 (small) / 16 (medium) */
+  --radius: 16px;
+  --radius-lg: 28px;        /* extra-large (dialogs) */
+
+  /* elevação por sombra suave (M3 elevation levels) */
+  --shadow: 0 6px 10px 4px rgba(0,0,0,.30), 0 2px 3px rgba(0,0,0,.34);
+  --shadow-soft: 0 1px 3px 1px rgba(0,0,0,.26), 0 1px 2px rgba(0,0,0,.30);
+
+  --gap: 16px;
+  --font-sans: "Roboto", "Roboto Flex", "Google Sans", system-ui, "Segoe UI", Arial, sans-serif;
+  --font-mono: "Roboto Mono", ui-monospace, "JetBrains Mono", Menlo, Consolas, monospace;
+}
+
+/* fundo tonal com halos primário/tertiário muito suaves */
+html[data-skin="material"] body {
+  background:
+    radial-gradient(1100px 620px at 88% -12%, rgba(208,188,255,0.10), transparent 62%),
+    radial-gradient(900px 620px at -6% 8%, rgba(127,216,196,0.08), transparent 60%),
+    var(--bg);
+  background-attachment: fixed;
+  color: var(--text);
+  letter-spacing: .1px;
+}
+
+/* =======================  TOPBAR / CHROME  ======================= */
+html[data-skin="material"] .topbar {
+  background: color-mix(in srgb, var(--bg-soft) 88%, transparent);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="material"] .brand h1 {
+  font-weight: 500;
+  letter-spacing: .1px;
+}
+html[data-skin="material"] .brand-dot { color: var(--accent); }
+
+html[data-skin="material"] .conn,
+html[data-skin="material"] .team-count {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text-dim);
+}
+html[data-skin="material"] .conn--online .conn-dot { color: var(--green); }
+html[data-skin="material"] .conn--offline .conn-dot { color: var(--red); }
+
+/* botões M3: pílula, state layer no hover/press */
+html[data-skin="material"] .icon-btn,
+html[data-skin="material"] .ctrl-btn,
+html[data-skin="material"] .skin-select {
+  background: var(--surface-2);
+  border: 1px solid transparent;
+  border-radius: 999px;
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-weight: 500;
+  transition: background-color .18s cubic-bezier(.2,0,0,1),
+              box-shadow .18s cubic-bezier(.2,0,0,1),
+              transform .12s cubic-bezier(.2,0,0,1);
+}
+html[data-skin="material"] .icon-btn:hover,
+html[data-skin="material"] .ctrl-btn:hover,
+html[data-skin="material"] .skin-select:hover {
+  background: color-mix(in srgb, var(--accent) 14%, var(--surface-2));
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="material"] .icon-btn:active,
+html[data-skin="material"] .ctrl-btn:active {
+  background: color-mix(in srgb, var(--accent) 22%, var(--surface-2));
+  transform: scale(.96);
+}
+html[data-skin="material"] .skin-picker,
+html[data-skin="material"] .skin-select {
+  border-radius: 999px;
+}
+html[data-skin="material"] .skin-select { border: 1px solid var(--border); }
+
+html[data-skin="material"] .section-title {
+  font-weight: 500;
+  letter-spacing: .1px;
+  color: var(--text);
+}
+html[data-skin="material"] .live-dot {
+  background: var(--accent-2);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent-2) 22%, transparent);
+}
+
+/* =======================  HERO  ======================= */
+html[data-skin="material"] .hero {
+  background: linear-gradient(180deg,
+    color-mix(in srgb, var(--accent) 12%, var(--surface)) 0%,
+    var(--surface) 60%);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="material"] .hero-glow {
+  background: radial-gradient(60% 90% at 82% 0%,
+    color-mix(in srgb, var(--accent) 40%, transparent), transparent 70%);
+  opacity: .7;
+}
+html[data-skin="material"] .hero-eyebrow {
+  color: var(--accent-2);
+  letter-spacing: .8px;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+html[data-skin="material"] .hero-title {
+  background: none;
+  -webkit-text-fill-color: var(--text);
+  color: var(--text);
+  font-weight: 500;
+  letter-spacing: -.2px;
+}
+html[data-skin="material"] .hero-item {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+html[data-skin="material"] .hi-badge {
+  background: color-mix(in srgb, var(--accent) 26%, var(--surface-2));
+  color: var(--accent);
+  border-radius: 999px;
+}
+html[data-skin="material"] .flag {
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  font-weight: 500;
+}
+html[data-skin="material"] .flag--warn {
+  color: var(--orange);
+  border-color: color-mix(in srgb, var(--orange) 50%, var(--border));
+  background: color-mix(in srgb, var(--orange) 14%, var(--surface-2));
+}
+html[data-skin="material"] .flag--bypass {
+  color: var(--red);
+  border-color: color-mix(in srgb, var(--red) 50%, var(--border));
+  background: color-mix(in srgb, var(--red) 14%, var(--surface-2));
+}
+
+/* =======================  MAPA DO WORKFLOW  ======================= */
+html[data-skin="material"] .wfmap-wrap {
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="material"] .wfmap-hint {
+  color: var(--text-dim);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+}
+
+/* nó = FAB tonal: círculo com sombra e state layer */
+html[data-skin="material"] .wfnode-badge {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 18px;              /* squircle M3 */
+  box-shadow: var(--shadow-soft);
+  transition: box-shadow .2s cubic-bezier(.2,0,0,1),
+              transform .2s cubic-bezier(.2,0,0,1),
+              background-color .2s;
+}
+html[data-skin="material"] .wfnode-btn:hover .wfnode-badge {
+  background: color-mix(in srgb, var(--accent) 14%, var(--surface-2));
+  transform: translateY(-1px);
+}
+html[data-skin="material"] .wfnode.is-current .wfnode-badge {
+  background: color-mix(in srgb, var(--accent) 24%, var(--surface));
+  border-color: var(--accent);
+  color: var(--accent);
+  box-shadow: 0 0 0 6px color-mix(in srgb, var(--accent) 18%, transparent),
+              var(--shadow);
+}
+html[data-skin="material"] .wfnode.is-done .wfnode-badge {
+  border-color: color-mix(in srgb, var(--accent-2) 60%, var(--border));
+  background: color-mix(in srgb, var(--accent-2) 16%, var(--surface-2));
+}
+html[data-skin="material"] .wfnode.is-selected .wfnode-badge {
+  box-shadow: 0 0 0 3px var(--accent), var(--shadow);
+}
+html[data-skin="material"] .wfnode-check {
+  background: var(--accent-2);
+  color: #05201a;
+  border: 2px solid var(--surface);
+  border-radius: 999px;
+}
+html[data-skin="material"] .wfnode-label {
+  font-weight: 500;
+  color: var(--text-dim);
+}
+html[data-skin="material"] .wfnode.is-current .wfnode-label { color: var(--text); }
+html[data-skin="material"] .wfnode-here,
+html[data-skin="material"] .wfx-tag--here {
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 55%, var(--border));
+  color: var(--accent);
+  border-radius: 999px;
+}
+html[data-skin="material"] .wfnode-here-dot { background: var(--accent); }
+html[data-skin="material"] .wfnode-branch {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text-dim);
+}
+html[data-skin="material"] .wfbr-arrow { color: var(--accent-2); }
+
+/* arestas */
+html[data-skin="material"] .wfedge-line,
+html[data-skin="material"] .wfedge-line::after { background: var(--border); }
+html[data-skin="material"] .wfedge-line::after { border-left-color: var(--border); }
+html[data-skin="material"] .wfedge.is-done .wfedge-line { background: var(--accent-2); }
+html[data-skin="material"] .wfedge.is-done .wfedge-line::after { border-left-color: var(--accent-2); }
+html[data-skin="material"] .wfedge.is-current .wfedge-line {
+  background: var(--accent);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--accent) 55%, transparent);
+}
+html[data-skin="material"] .wfedge.is-current .wfedge-line::after { border-left-color: var(--accent); }
+html[data-skin="material"] .wfedge-label {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text-dim);
+  font-weight: 500;
+}
+
+/* trilho de retorno do ciclo */
+html[data-skin="material"] .wfreturn {
+  background: color-mix(in srgb, var(--accent-2) 12%, var(--surface));
+  border: 1px dashed color-mix(in srgb, var(--accent-2) 55%, var(--border));
+  border-radius: 999px;
+  color: var(--text-dim);
+}
+html[data-skin="material"] .wfreturn.is-active {
+  border-style: solid;
+  border-color: var(--accent-2);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent-2) 16%, transparent);
+}
+html[data-skin="material"] .wfreturn-arrow { color: var(--accent-2); }
+
+/* sub-loop "Construindo" */
+html[data-skin="material"] .wfsub {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="material"] .wfsub-head-ic { color: var(--accent); }
+html[data-skin="material"] .wfsub-step {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--text-dim);
+  transition: background-color .2s, box-shadow .2s;
+}
+html[data-skin="material"] .wfsub-step.is-current {
+  background: color-mix(in srgb, var(--accent) 20%, var(--surface-2));
+  border-color: var(--accent);
+  color: var(--text);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 14%, transparent);
+}
+html[data-skin="material"] .wfsub-step.is-done {
+  border-color: color-mix(in srgb, var(--accent-2) 55%, var(--border));
+}
+html[data-skin="material"] .wfsub-arrow,
+html[data-skin="material"] .wfsub-loop { color: var(--accent-2); }
+
+/* painel explicador */
+html[data-skin="material"] .wf-explainer {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="material"] .wfx-icon { color: var(--accent); }
+html[data-skin="material"] .wfx-title { font-weight: 500; color: var(--text); }
+html[data-skin="material"] .wfx-tag {
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text-dim);
+}
+html[data-skin="material"] .wfx-tag--muted { color: var(--text-faint); }
+html[data-skin="material"] .wfx-row,
+html[data-skin="material"] .wfx-when {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+html[data-skin="material"] .wfx-k { color: var(--text-faint); font-weight: 500; }
+html[data-skin="material"] .wfx-advance .wfx-k { color: var(--accent); }
+html[data-skin="material"] .wfx-to,
+html[data-skin="material"] .wfx-goes { color: var(--accent-2); }
+
+/* =======================  CARD DE AGENTE  ======================= */
+html[data-skin="material"] .agent {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+  transition: transform .2s cubic-bezier(.2,0,0,1),
+              box-shadow .2s cubic-bezier(.2,0,0,1),
+              background-color .2s;
+}
+html[data-skin="material"] .agent::before {
+  height: 4px;
+  background: var(--agent-color);
+  opacity: .9;
+}
+html[data-skin="material"] .agent:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+  background: color-mix(in srgb, var(--agent-color) 7%, var(--surface));
+}
+html[data-skin="material"] .agent--working {
+  box-shadow: var(--shadow),
+    0 0 0 1px color-mix(in srgb, var(--agent-color) 55%, transparent);
+}
+html[data-skin="material"] .agent--human_driving {
+  box-shadow: var(--shadow-soft),
+    0 0 0 2px color-mix(in srgb, var(--orange) 60%, transparent);
+}
+html[data-skin="material"] .agent--error,
+html[data-skin="material"] .agent--needs_recovery {
+  box-shadow: var(--shadow-soft),
+    0 0 0 2px color-mix(in srgb, var(--red) 60%, transparent);
+}
+html[data-skin="material"] .agent--pinned {
+  box-shadow: var(--shadow),
+    0 0 0 2px color-mix(in srgb, var(--accent) 55%, transparent);
+}
+
+html[data-skin="material"] .agent-avatar::before,
+html[data-skin="material"] .fs-avatar::before {
+  border-width: 2px;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--agent-color) 18%, transparent);
+}
+html[data-skin="material"] .agent-name { font-weight: 500; letter-spacing: .1px; }
+
+/* status = assist chip M3 */
+html[data-skin="material"] .agent-status,
+html[data-skin="material"] .fs-status {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text-dim);
+  font-weight: 500;
+}
+html[data-skin="material"] .agent-bubble,
+html[data-skin="material"] .fs-bubble {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--text-dim);
+}
+html[data-skin="material"] .agent-pin { color: var(--accent); }
+html[data-skin="material"] .agent-open-hint { color: var(--text-faint); }
+
+/* =======================  MINI-TERMINAL  ======================= */
+html[data-skin="material"] .agent-term,
+html[data-skin="material"] .fs-term {
+  background: #101014;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--text);
+  font-family: var(--font-mono);
+}
+html[data-skin="material"] .term-ts { color: var(--text-faint); }
+html[data-skin="material"] .term-add { color: var(--accent-2); }
+html[data-skin="material"] .term--read   { color: #9ecaff; }
+html[data-skin="material"] .term--write  { color: var(--accent-2); }
+html[data-skin="material"] .term--edit   { color: var(--gold); }
+html[data-skin="material"] .term--bash   { color: var(--accent); }
+html[data-skin="material"] .term--grep   { color: #7fd8c4; }
+html[data-skin="material"] .term--web    { color: #9ecaff; }
+html[data-skin="material"] .term--agent  { color: var(--accent); }
+html[data-skin="material"] .term--think  { color: var(--text-faint); font-style: italic; }
+html[data-skin="material"] .term--decant { color: var(--gold); }
+html[data-skin="material"] .term--ok     { color: var(--green); }
+html[data-skin="material"] .term--error  { color: var(--red); }
+html[data-skin="material"] .term--say    { color: var(--text); }
+html[data-skin="material"] .term--dim    { color: var(--text-faint); }
+
+/* =======================  BARRAS / TRUST  ======================= */
+html[data-skin="material"] .agent-trust-head,
+html[data-skin="material"] .fs-trust-head { color: var(--text-dim); }
+html[data-skin="material"] .trust-bar,
+html[data-skin="material"] .bar {
+  background: color-mix(in srgb, var(--accent) 16%, var(--surface-2));
+  border-radius: 999px;
+}
+html[data-skin="material"] .trust-bar-fill {
+  background: var(--agent-color, var(--accent));
+  border-radius: 999px;
+}
+html[data-skin="material"] .bar-fill {
+  background: var(--accent);
+  border-radius: 999px;
+}
+html[data-skin="material"] .bar-fill--cost { background: var(--gold); }
+html[data-skin="material"] .bar-fill.is-warn { background: var(--orange); }
+html[data-skin="material"] .bar-fill.is-danger { background: var(--red); }
+
+/* =======================  MÉTRICAS  ======================= */
+html[data-skin="material"] .metric {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="material"] .metric-label { color: var(--text-dim); }
+html[data-skin="material"] .metric-value,
+html[data-skin="material"] .metric-value--big { color: var(--text); font-weight: 500; }
+html[data-skin="material"] .metric-value--big { color: var(--accent); }
+html[data-skin="material"] .metric-sub { color: var(--text-faint); }
+
+/* =======================  ATIVIDADE  ======================= */
+html[data-skin="material"] .activity-list {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="material"] .activity-list li { border-bottom: 1px solid var(--border); }
+html[data-skin="material"] .act-ts { color: var(--text-faint); }
+html[data-skin="material"] .act-text { color: var(--text-dim); }
+html[data-skin="material"] .act-new { animation: mat-actin .4s cubic-bezier(.2,0,0,1); }
+html[data-skin="material"] .act-icon[data-i="▶"] { color: var(--accent); }
+html[data-skin="material"] .act-icon[data-i="◆"] { color: var(--gold); }
+html[data-skin="material"] .act-icon[data-i="✓"] { color: var(--green); }
+html[data-skin="material"] .act-icon[data-i="✗"] { color: var(--red); }
+
+/* =======================  FULLSCREEN  ======================= */
+html[data-skin="material"] .fs-backdrop {
+  background: rgba(0,0,0,.5);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+html[data-skin="material"] .fs-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+}
+html[data-skin="material"] .fs-panel::before { height: 4px; background: var(--agent-color); }
+html[data-skin="material"] .fs-name { font-weight: 500; }
+html[data-skin="material"] .fs-close {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text);
+  transition: background-color .18s, transform .12s;
+}
+html[data-skin="material"] .fs-close:hover {
+  background: color-mix(in srgb, var(--accent) 16%, var(--surface-2));
+}
+html[data-skin="material"] .fs-close:active { transform: scale(.94); }
+html[data-skin="material"] .fs-term-label { color: var(--accent); font-weight: 500; }
+html[data-skin="material"] .fs-term-empty {
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+  color: var(--text-faint);
+}
+
+/* =======================  OFFLINE  ======================= */
+html[data-skin="material"] .offline-banner {
+  background: color-mix(in srgb, var(--red) 90%, #000);
+  color: #3a0906;
+  border-radius: 999px;
+  font-weight: 500;
+  box-shadow: var(--shadow-soft);
+}
+
+/* =======================  MOVIMENTO  ======================= */
+@keyframes mat-actin {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-skin="material"] .agent,
+  html[data-skin="material"] .icon-btn,
+  html[data-skin="material"] .ctrl-btn,
+  html[data-skin="material"] .fs-close,
+  html[data-skin="material"] .wfnode-badge,
+  html[data-skin="material"] .wfsub-step { transition: none; }
+  html[data-skin="material"] .act-new { animation: none; }
+}

@@ -1,0 +1,548 @@
+/* =========================================================================
+   Windows 98 — cinza prata, biséis 3D, barras de título azuis
+   Desktop teal clássico, painéis prata com bevel outset/inset (highlight
+   branco em cima/esquerda, sombra preta embaixo/direita), title bars em
+   degradê navy→azul com texto branco negrito, cantos retos, fonte de UI
+   estilo MS Sans Serif e console monoespaçado preto. Botões afundam ao
+   pressionar. Parece o Program Manager rodando.
+   Escopo: html[data-skin="win98"]
+   ========================================================================= */
+
+html[data-skin="win98"] {
+  --bg: #008080;               /* o icônico desktop teal do Win98 */
+  --bg-soft: #c0c0c0;
+  --surface: #c0c0c0;          /* prata: face dos controles */
+  --surface-2: #ffffff;        /* campos afundados (input/listbox) */
+  --border: #808080;           /* sombra média do bisel */
+  --text: #000000;
+  --text-dim: #404040;
+  --text-faint: #808080;
+  --accent: #000080;           /* navy da title bar ativa */
+  --accent-2: #1084d0;         /* azul do degradê da title bar */
+  --gold: #a68000;
+  --orange: #d97700;
+  --red: #c00000;
+  --green: #008000;
+  --grey: #808080;
+  --radius: 0px;
+  --radius-lg: 0px;
+  --shadow: 2px 2px 0 rgba(0,0,0,0.45);
+  --shadow-soft: 1px 1px 0 rgba(0,0,0,0.30);
+  --gap: 6px;
+  --font-sans: Tahoma, "MS Sans Serif", "Segoe UI", Geneva, Verdana, sans-serif;
+  --font-mono: "Lucida Console", "Courier New", "Consolas", monospace;
+
+  /* biséis reutilizáveis (padrão 98.css de 2px) */
+  --w98-raise: inset -1px -1px #0a0a0a, inset 1px 1px #ffffff, inset -2px -2px #808080, inset 2px 2px #dfdfdf;
+  --w98-sink:  inset -1px -1px #ffffff, inset 1px 1px #0a0a0a, inset -2px -2px #dfdfdf, inset 2px 2px #808080;
+  --w98-etch:  inset -1px -1px #ffffff, inset 1px 1px #808080;
+  --w98-title: linear-gradient(90deg, #000080, #1084d0);
+}
+
+/* ------- desktop ------- */
+html[data-skin="win98"] body {
+  background: #008080;
+  background-image: none;
+  color: var(--text);
+  font-size: 12px;
+  -webkit-font-smoothing: none;
+  image-rendering: pixelated;
+}
+
+/* barras de rolagem chunky do Win98 (webkit) */
+html[data-skin="win98"] *::-webkit-scrollbar { width: 16px; height: 16px; }
+html[data-skin="win98"] *::-webkit-scrollbar-track {
+  background:
+    repeating-conic-gradient(#c0c0c0 0% 25%, #ababab 0% 50%) 50% / 2px 2px;
+}
+html[data-skin="win98"] *::-webkit-scrollbar-thumb {
+  background: #c0c0c0;
+  box-shadow: var(--w98-raise);
+  border: 0;
+}
+html[data-skin="win98"] *::-webkit-scrollbar-button {
+  background: #c0c0c0;
+  box-shadow: var(--w98-raise);
+  display: block;
+  height: 16px;
+  width: 16px;
+}
+
+/* ------- topbar = barra de menu do Program Manager ------- */
+html[data-skin="win98"] .topbar {
+  background: #c0c0c0;
+  backdrop-filter: none;
+  border: 0;
+  box-shadow: var(--w98-raise);
+  border-bottom: 1px solid #000;
+}
+html[data-skin="win98"] .brand h1 {
+  color: #000;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+html[data-skin="win98"] .brand-dot {
+  color: #000080;
+  border-radius: 0;
+}
+
+/* botões de chrome: controles prata que afundam ao pressionar */
+html[data-skin="win98"] .icon-btn,
+html[data-skin="win98"] .ctrl-btn,
+html[data-skin="win98"] .skin-select,
+html[data-skin="win98"] .conn,
+html[data-skin="win98"] .team-count {
+  background: #c0c0c0;
+  color: #000;
+  border: 0;
+  border-radius: 0;
+  box-shadow: var(--w98-raise);
+  font-family: var(--font-sans);
+}
+html[data-skin="win98"] .icon-btn:active,
+html[data-skin="win98"] .ctrl-btn:active,
+html[data-skin="win98"] .skin-select:active {
+  box-shadow: var(--w98-sink);
+  padding-top: 1px;
+  padding-left: 1px;
+}
+html[data-skin="win98"] .icon-btn:focus-visible,
+html[data-skin="win98"] .ctrl-btn:focus-visible,
+html[data-skin="win98"] .skin-select:focus-visible {
+  outline: 1px dotted #000;
+  outline-offset: -4px;
+}
+html[data-skin="win98"] .skin-picker { color: #000; }
+
+/* conn dots como quadradinhos LED */
+html[data-skin="win98"] .conn-dot { border-radius: 0; box-shadow: inset 1px 1px rgba(0,0,0,.4); }
+html[data-skin="win98"] .conn--online .conn-dot { background: #00c000; }
+html[data-skin="win98"] .conn--connecting .conn-dot { background: var(--gold); }
+html[data-skin="win98"] .conn--offline .conn-dot { background: var(--red); }
+
+/* ------- section titles = title bars azuis ------- */
+html[data-skin="win98"] .section-title {
+  background: var(--w98-title);
+  color: #fff;
+  font-weight: 700;
+  letter-spacing: 0;
+  padding: 3px 6px;
+  box-shadow: var(--w98-raise);
+}
+html[data-skin="win98"] .section-title span,
+html[data-skin="win98"] .section-title * { color: #fff; }
+html[data-skin="win98"] .team-count {
+  color: #000;
+  font-weight: 400;
+}
+html[data-skin="win98"] .live-dot { border-radius: 0; background: #fff; box-shadow: 0 0 0 1px #000080; }
+
+/* ------- HERO = janela com title bar ------- */
+html[data-skin="win98"] .hero {
+  background: #c0c0c0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: var(--w98-raise);
+  padding: 4px;
+}
+html[data-skin="win98"] .hero-glow { display: none; }
+html[data-skin="win98"] .hero-eyebrow {
+  background: var(--w98-title);
+  color: #fff;
+  font-weight: 700;
+  letter-spacing: 0;
+  padding: 3px 6px;
+  margin: -4px -4px 8px;
+  display: block;
+  box-shadow: var(--w98-raise);
+}
+html[data-skin="win98"] .hero-eyebrow::before { content: "\1F5D4  "; }
+html[data-skin="win98"] .hero-title {
+  background: none;
+  color: #000;
+  -webkit-text-fill-color: #000;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+html[data-skin="win98"] .hero-doing { color: var(--text-dim); }
+html[data-skin="win98"] .hero-item {
+  background: #c0c0c0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: var(--w98-raise);
+}
+html[data-skin="win98"] .hi-badge {
+  background: #000080;
+  color: #fff;
+  border-radius: 0;
+  box-shadow: var(--w98-sink);
+}
+html[data-skin="win98"] .hi-slug { color: #000; font-weight: 700; }
+html[data-skin="win98"] .hi-sub, html[data-skin="win98"] .hero-next { color: var(--text-dim); }
+html[data-skin="win98"] .flag {
+  border-radius: 0;
+  border: 0;
+  box-shadow: var(--w98-raise);
+  background: #c0c0c0;
+  color: #000;
+  font-weight: 700;
+}
+html[data-skin="win98"] .flag--warn { color: #7a4a00; }
+html[data-skin="win98"] .flag--bypass { color: var(--red); }
+
+/* ========================================================================
+   MAPA DO WORKFLOW — nós como botões, arestas cinza, explicador como janela
+   ======================================================================== */
+html[data-skin="win98"] .wfmap-wrap {
+  background: #c0c0c0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: var(--w98-raise);
+  padding: 4px;
+}
+html[data-skin="win98"] .wfmap-head .section-title { margin: -4px -4px 8px; }
+html[data-skin="win98"] .wfmap-hint { color: var(--text-dim); }
+
+/* nó = ícone em botão 3D prata */
+html[data-skin="win98"] .wfnode-badge {
+  background: #c0c0c0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: var(--w98-raise);
+  color: #000;
+}
+html[data-skin="win98"] .wfnode-btn:focus-visible .wfnode-badge { outline: 1px dotted #000; outline-offset: 2px; }
+html[data-skin="win98"] .wfnode.is-done .wfnode-badge { color: #000080; }
+html[data-skin="win98"] .wfnode-check {
+  border-radius: 0;
+  background: #000080;
+  color: #fff;
+  border: 1px solid #fff;
+  box-shadow: 0 0 0 1px #808080;
+}
+html[data-skin="win98"] .wfnode.is-current .wfnode-badge {
+  box-shadow: var(--w98-sink);       /* pressionado = "você está aqui" */
+  background: #000080;
+  color: #fff;
+  animation: none;
+}
+html[data-skin="win98"] .wfnode.is-current .wfnode-icon { color: #fff; }
+html[data-skin="win98"] .wfnode.is-selected .wfnode-badge { outline: 1px dotted #000; outline-offset: 2px; }
+html[data-skin="win98"] .wfnode.is-future .wfnode-badge { color: var(--text-faint); }
+html[data-skin="win98"] .wfnode-label { color: #000; font-weight: 700; }
+html[data-skin="win98"] .wfnode.is-future .wfnode-label { color: var(--text-faint); font-weight: 400; }
+html[data-skin="win98"] .wfnode-doing { color: var(--text-dim); }
+html[data-skin="win98"] .wfnode-here {
+  background: var(--w98-title);
+  color: #fff;
+  border: 0;
+  border-radius: 0;
+  box-shadow: var(--w98-raise);
+  font-weight: 700;
+}
+html[data-skin="win98"] .wfnode-here * { color: #fff; }
+html[data-skin="win98"] .wfnode-here-dot { background: #fff; border-radius: 0; }
+html[data-skin="win98"] .wfnode-branches { color: var(--text-dim); }
+html[data-skin="win98"] .wfnode-branch {
+  background: #c0c0c0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: var(--w98-raise);
+  color: #000;
+}
+html[data-skin="win98"] .wfbr-arrow { color: #000080; }
+
+/* aresta: linha cinza sombreada com chip de condição em relevo */
+html[data-skin="win98"] .wfedge-line { background: #808080; box-shadow: 0 1px 0 #fff; }
+html[data-skin="win98"] .wfedge-line::after { border-left-color: #808080; }
+html[data-skin="win98"] .wfedge.is-done .wfedge-line { background: #000080; box-shadow: none; }
+html[data-skin="win98"] .wfedge.is-done .wfedge-line::after { border-left-color: #000080; }
+html[data-skin="win98"] .wfedge.is-current .wfedge-line { background: #1084d0; animation: none; box-shadow: none; }
+html[data-skin="win98"] .wfedge.is-current .wfedge-line::after { border-left-color: #1084d0; }
+html[data-skin="win98"] .wfedge-label {
+  background: #c0c0c0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: var(--w98-raise);
+  color: #000;
+}
+
+/* trilho de retorno do ciclo */
+html[data-skin="win98"] .wfreturn {
+  background: #c0c0c0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: var(--w98-raise);
+  color: #000;
+}
+html[data-skin="win98"] .wfreturn.is-active { box-shadow: var(--w98-sink); }
+html[data-skin="win98"] .wfreturn-arrow, html[data-skin="win98"] .wfsub-loop, html[data-skin="win98"] .wfx-to { color: #000080; }
+html[data-skin="win98"] .wfreturn-label { color: var(--text-dim); }
+
+/* sub-loop "Construindo" = group box afundado */
+html[data-skin="win98"] .wfsub {
+  background: #c0c0c0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: var(--w98-etch);
+  padding: 6px;
+}
+html[data-skin="win98"] .wfsub-head, html[data-skin="win98"] .wfsub-head-ic { color: #000; font-weight: 700; }
+html[data-skin="win98"] .wfsub-step {
+  background: #c0c0c0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: var(--w98-raise);
+  color: #000;
+}
+html[data-skin="win98"] .wfsub-step.is-current { box-shadow: var(--w98-sink); background: #000080; color: #fff; }
+html[data-skin="win98"] .wfsub-step.is-current .wfsub-icon,
+html[data-skin="win98"] .wfsub-step.is-current .wfsub-label { color: #fff; }
+html[data-skin="win98"] .wfsub-step.is-done .wfsub-icon { color: #000080; }
+html[data-skin="win98"] .wfsub-step.is-future { color: var(--text-faint); }
+html[data-skin="win98"] .wfsub-arrow { color: var(--text-faint); }
+
+/* explicador = janela com title bar + corpo prata */
+html[data-skin="win98"] .wf-explainer {
+  background: #c0c0c0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: var(--w98-raise);
+  padding: 4px;
+}
+html[data-skin="win98"] .wfx-head {
+  background: var(--w98-title);
+  color: #fff;
+  margin: -4px -4px 8px;
+  padding: 3px 6px;
+  box-shadow: var(--w98-raise);
+}
+html[data-skin="win98"] .wfx-head *, html[data-skin="win98"] .wfx-icon, html[data-skin="win98"] .wfx-title { color: #fff; }
+html[data-skin="win98"] .wfx-title { font-weight: 700; }
+html[data-skin="win98"] .wfx-tag {
+  background: #c0c0c0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: var(--w98-raise);
+  color: #000;
+}
+html[data-skin="win98"] .wfx-tag--here { background: #000080; color: #fff; box-shadow: var(--w98-sink); }
+html[data-skin="win98"] .wfx-tag--muted { color: var(--text-faint); }
+html[data-skin="win98"] .wfx-pin { color: var(--text-dim); }
+html[data-skin="win98"] .wfx-detail, html[data-skin="win98"] .wfx-k { color: #000; }
+html[data-skin="win98"] .wfx-row {
+  background: #fff;
+  border: 0;
+  border-radius: 0;
+  box-shadow: var(--w98-sink);
+  color: #000;
+}
+html[data-skin="win98"] .wfx-when {
+  background: #c0c0c0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: var(--w98-raise);
+  color: #000;
+}
+html[data-skin="win98"] .wfx-list { color: var(--text-dim); }
+
+/* ========================================================================
+   CARTÕES DE AGENTE — mini-janelas prata com barra colorida no topo
+   ======================================================================== */
+html[data-skin="win98"] .team-empty {
+  background: #fff;
+  box-shadow: var(--w98-sink);
+  border: 0;
+  border-radius: 0;
+  color: var(--text-dim);
+}
+html[data-skin="win98"] .agent {
+  background: #c0c0c0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: var(--w98-raise);
+  transition: none;
+}
+html[data-skin="win98"] .agent::before { height: 4px; background: var(--agent-color); }
+html[data-skin="win98"] .agent:hover { transform: none; box-shadow: var(--w98-raise); }
+html[data-skin="win98"] .agent--working {
+  box-shadow: var(--w98-raise), 0 0 0 2px var(--agent-color);
+}
+html[data-skin="win98"] .agent--pinned { box-shadow: var(--w98-raise), 0 0 0 2px #000080; }
+html[data-skin="win98"] .agent--error { box-shadow: var(--w98-raise), 0 0 0 2px var(--red); }
+html[data-skin="win98"] .agent--human_driving { box-shadow: var(--w98-raise), 0 0 0 2px var(--orange); }
+html[data-skin="win98"] .agent.dragging { box-shadow: var(--w98-raise), var(--shadow); }
+
+/* avatar como ícone quadrado afundado */
+html[data-skin="win98"] .agent-avatar,
+html[data-skin="win98"] .fs-avatar {
+  border-radius: 0;
+  box-shadow: var(--w98-sink);
+  background: #fff;
+}
+html[data-skin="win98"] .agent-avatar::before,
+html[data-skin="win98"] .fs-avatar::before { border-radius: 0; border-width: 2px; }
+html[data-skin="win98"] .agent-avatar-inner,
+html[data-skin="win98"] .fs-avatar-inner { border-radius: 0; }
+
+html[data-skin="win98"] .agent-name { color: #000; font-weight: 700; letter-spacing: 0; }
+html[data-skin="win98"] .agent-status,
+html[data-skin="win98"] .fs-status {
+  background: #c0c0c0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: var(--w98-etch);
+  color: var(--text-dim);
+}
+html[data-skin="win98"] .agent-pin { color: #000080; }
+html[data-skin="win98"] .agent-open-hint { color: var(--text-faint); }
+html[data-skin="win98"] .zzz { color: var(--text-faint); }
+html[data-skin="win98"] .agent-bubble,
+html[data-skin="win98"] .fs-bubble {
+  background: #ffffe1;               /* amarelo de tooltip do Win98 */
+  border: 0;
+  border-radius: 0;
+  box-shadow: inset 0 0 0 1px #000, 1px 1px 0 rgba(0,0,0,.35);
+  color: #000;
+}
+
+/* ------- mini-terminal = janela de console DOS preta afundada ------- */
+html[data-skin="win98"] .agent-term {
+  background: #000000;
+  border: 0;
+  border-radius: 0;
+  box-shadow: var(--w98-sink);
+  color: #c0c0c0;
+  font-family: var(--font-mono);
+}
+html[data-skin="win98"] .term-ts { color: #808080; }
+html[data-skin="win98"] .term--read { color: #00a8a8; }
+html[data-skin="win98"] .term--write, html[data-skin="win98"] .term--ok { color: #00c000; }
+html[data-skin="win98"] .term--edit { color: #c0c000; }
+html[data-skin="win98"] .term--bash { color: #a8a8a8; }
+html[data-skin="win98"] .term--grep { color: #00a8a8; }
+html[data-skin="win98"] .term--web { color: #5c5cff; }
+html[data-skin="win98"] .term--agent, html[data-skin="win98"] .term--think { color: #a800a8; }
+html[data-skin="win98"] .term--decant { color: #c0a000; }
+html[data-skin="win98"] .term--say { color: #ffffff; }
+html[data-skin="win98"] .term--start { color: #00c0c0; }
+html[data-skin="win98"] .term--error { color: #ff5c5c; }
+html[data-skin="win98"] .term--dim, html[data-skin="win98"] .term--tool { color: #808080; }
+html[data-skin="win98"] .term-add { color: #00c000; }
+
+/* ------- barra de confiança + barras: campos afundados ------- */
+html[data-skin="win98"] .agent-trust-head, html[data-skin="win98"] .fs-trust-head { color: var(--text-dim); }
+html[data-skin="win98"] .trust-bar,
+html[data-skin="win98"] .bar {
+  border-radius: 0;
+  background: #fff;
+  box-shadow: var(--w98-sink);
+  border: 0;
+}
+html[data-skin="win98"] .trust-bar-fill {
+  border-radius: 0;
+  background: #000080;
+  box-shadow: none;
+}
+html[data-skin="win98"] .bar-fill { border-radius: 0; background: #000080; }
+html[data-skin="win98"] .bar-fill--cost { background: var(--gold); }
+html[data-skin="win98"] .bar-fill.is-warn { background: var(--orange); }
+html[data-skin="win98"] .bar-fill.is-danger { background: var(--red); }
+
+/* ------- métricas ------- */
+html[data-skin="win98"] .metric {
+  background: #c0c0c0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: var(--w98-raise);
+}
+html[data-skin="win98"] .metric-label, html[data-skin="win98"] .metric-sub { color: var(--text-dim); }
+html[data-skin="win98"] .metric-value,
+html[data-skin="win98"] .metric-value--big { color: #000080; font-weight: 700; font-family: var(--font-mono); }
+
+/* ------- feed de atividade = listbox branco afundado ------- */
+html[data-skin="win98"] .activity-list {
+  background: #fff;
+  border: 0;
+  border-radius: 0;
+  box-shadow: var(--w98-sink);
+  color: #000;
+}
+html[data-skin="win98"] .activity-list li { border-bottom: 1px dotted #c0c0c0; }
+html[data-skin="win98"] .activity-empty { color: var(--text-faint); }
+html[data-skin="win98"] .act-ts { color: var(--text-faint); font-family: var(--font-mono); }
+html[data-skin="win98"] .act-text { color: #000; }
+html[data-skin="win98"] .act-new { background: #000080; }        /* seleção clássica navy */
+html[data-skin="win98"] .act-new .act-text,
+html[data-skin="win98"] .act-new .act-ts { color: #fff; }
+html[data-skin="win98"] .act-icon[data-i="\25B6"] { color: #000080; }
+html[data-skin="win98"] .act-icon[data-i="\25C6"] { color: var(--gold); }
+html[data-skin="win98"] .act-icon[data-i="\2713"] { color: var(--green); }
+html[data-skin="win98"] .act-icon[data-i="\2717"] { color: var(--red); }
+
+/* ========================================================================
+   FULLSCREEN — caixa de diálogo modal com title bar e botão fechar
+   ======================================================================== */
+html[data-skin="win98"] .fs-backdrop {
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: none;
+}
+html[data-skin="win98"] .fs-panel {
+  background: #c0c0c0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: var(--w98-raise), var(--shadow);
+  padding: 4px;
+}
+html[data-skin="win98"] .fs-panel::before { display: none; }
+html[data-skin="win98"] .fs-head {
+  background: var(--w98-title);
+  margin: -4px -4px 12px;
+  padding: 4px 6px;
+  box-shadow: var(--w98-raise);
+}
+html[data-skin="win98"] .fs-name { color: #fff; font-weight: 700; letter-spacing: 0; }
+html[data-skin="win98"] .fs-status { background: rgba(255,255,255,.85); }
+html[data-skin="win98"] .fs-status-label, html[data-skin="win98"] .fs-meta { color: #fff; }
+html[data-skin="win98"] .fs-trust, html[data-skin="win98"] .fs-trust-head, html[data-skin="win98"] .fs-trust-val { color: #fff; }
+html[data-skin="win98"] .fs-close {
+  background: #c0c0c0;
+  color: #000;
+  border: 0;
+  border-radius: 0;
+  box-shadow: var(--w98-raise);
+  font-weight: 700;
+}
+html[data-skin="win98"] .fs-close:active { box-shadow: var(--w98-sink); }
+html[data-skin="win98"] .fs-bubble {
+  background: #ffffe1;
+  box-shadow: inset 0 0 0 1px #000;
+  color: #000;
+}
+html[data-skin="win98"] .fs-term-label { color: #000; font-weight: 700; }
+html[data-skin="win98"] .fs-term {
+  background: #000;
+  box-shadow: var(--w98-sink);
+  color: #c0c0c0;
+}
+html[data-skin="win98"] .fs-term-empty {
+  border: 0;
+  box-shadow: var(--w98-sink);
+  background: #000;
+  color: #808080;
+  border-radius: 0;
+}
+
+/* ------- banner offline = barra de erro do sistema ------- */
+html[data-skin="win98"] .offline-banner {
+  background: #c0c0c0;
+  color: var(--red);
+  border-radius: 0;
+  box-shadow: var(--w98-raise);
+  font-weight: 700;
+}
+
+/* reduce motion: nada aqui anima além do que a base já controla */
+@media (prefers-reduced-motion: reduce) {
+  html[data-skin="win98"] * { animation: none !important; }
+}

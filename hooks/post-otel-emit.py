@@ -79,6 +79,27 @@ def _sanitize(value, key=None, depth=0):
     return _redact(str(value))
 
 
+def _stream_detail(tool: str, args) -> str:
+    """Linha legível pro mini-terminal do agente (o que ele está fazendo)."""
+    if not isinstance(args, dict):
+        return str(tool)
+    if tool in ("Read", "Write", "NotebookRead"):
+        return args.get("file_path", "")
+    if tool in ("Edit", "MultiEdit"):
+        return args.get("file_path", "")
+    if tool == "Bash":
+        return str(args.get("command", ""))[:120]
+    if tool == "Grep":
+        p = args.get("pattern", "")
+        path = args.get("path", "")
+        return f"{p}" + (f"  @ {path}" if path else "")
+    if tool == "Glob":
+        return args.get("pattern", "")
+    if tool in ("WebFetch", "WebSearch"):
+        return args.get("url") or args.get("query", "")
+    return ""
+
+
 def _outcome(d: dict) -> str:
     resp = d.get("tool_response")
     if isinstance(resp, dict):
@@ -108,11 +129,21 @@ def main():
         _silent_ok()
 
     try:
+        # A sessão principal do mad É o Arquiteto (ponto único de contato). Um
+        # subagente pode marcar MAD_AGENT no ambiente para se auto-atribuir.
+        agent = os.environ.get("MAD_AGENT") or "arquiteto"
+        args = _sanitize(d.get("tool_input") or {})
         attrs = {
+            "agent.name": agent,
             "tool.name": tool_name,
-            "tool.args": _sanitize(d.get("tool_input") or {}),
+            "tool.args": args,
             "tool.outcome": _outcome(d),
+            "detail": _stream_detail(tool_name, args),
         }
+        # despacho de especialista aparece de forma humana no stream do Arquiteto
+        if tool_name in ("Agent", "Task"):
+            sub = (d.get("tool_input") or {}).get("subagent_type", "")
+            attrs["detail"] = f"despachando {sub or 'especialista'} para trabalhar"
         sid = d.get("session_id")
         if sid:
             attrs["session.id"] = sid

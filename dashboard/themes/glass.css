@@ -1,0 +1,439 @@
+/* =========================================================================
+   Glass — glassmorphism claro & luminoso
+   Superfícies de vidro fosco translúcido flutuando sobre um gradiente pastel
+   suave (dia claro). Bordas rgba branca sutil + highlight interno, backdrop-blur
+   pesado, cantos muito arredondados, sombras difusas e coloridas, texto grafite
+   para legibilidade AA. Diferente do visionos (vidro escuro/espacial): aqui é
+   ambiente diurno, arejado, quase iridescente.
+   Escopo: html[data-skin="glass"]
+   ========================================================================= */
+
+html[data-skin="glass"] {
+  --bg: #eef1fb;
+  --bg-soft: rgba(255, 255, 255, 0.45);
+  --surface: rgba(255, 255, 255, 0.55);
+  --surface-2: rgba(255, 255, 255, 0.72);
+  --border: rgba(255, 255, 255, 0.65);
+  --text: #26263a;
+  --text-dim: #55566e;
+  --text-faint: #8b8ca6;
+  --accent: #6d5bf0;
+  --accent-2: #b06ef0;
+  --gold: #d99a2b;
+  --orange: #ef8f3c;
+  --red: #ec5a72;
+  --green: #2fbf8f;
+  --grey: #9aa0bd;
+  --radius: 20px;
+  --radius-lg: 30px;
+  --shadow: 0 20px 60px rgba(80, 70, 160, 0.22), 0 1px 0 rgba(255,255,255,0.85) inset;
+  --shadow-soft: 0 10px 34px rgba(90, 80, 160, 0.14), 0 1px 0 rgba(255,255,255,0.75) inset;
+  --gap: 16px;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", system-ui, "Helvetica Neue", sans-serif;
+  --font-mono: "SF Mono", ui-monospace, "JetBrains Mono", Menlo, Consolas, monospace;
+}
+
+/* fundo: gradiente pastel luminoso com "vidros" de luz difusa */
+html[data-skin="glass"] body {
+  background:
+    radial-gradient(1100px 720px at 82% -6%, rgba(176, 110, 240, 0.30), transparent 60%),
+    radial-gradient(980px 700px at -8% 4%, rgba(109, 91, 240, 0.26), transparent 58%),
+    radial-gradient(920px 820px at 42% 118%, rgba(64, 196, 214, 0.24), transparent 60%),
+    radial-gradient(700px 620px at 108% 78%, rgba(240, 158, 190, 0.22), transparent 60%),
+    linear-gradient(160deg, #f2f0fd 0%, #eaf1fb 46%, #eef7f4 100%);
+  background-attachment: fixed;
+  color: var(--text);
+}
+
+/* --- superfície de vidro genérica: fosco + highlight de topo --- */
+html[data-skin="glass"] .topbar {
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: saturate(180%) blur(24px);
+  -webkit-backdrop-filter: saturate(180%) blur(24px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 6px 30px rgba(90, 80, 160, 0.10);
+}
+html[data-skin="glass"] .brand-dot { color: var(--accent); }
+html[data-skin="glass"] .brand h1 { letter-spacing: -.01em; }
+
+html[data-skin="glass"] .agent,
+html[data-skin="glass"] .metric,
+html[data-skin="glass"] .activity-list,
+html[data-skin="glass"] .hero,
+html[data-skin="glass"] .fs-panel {
+  background: linear-gradient(180deg, rgba(255,255,255,0.78), rgba(255,255,255,0.48));
+  backdrop-filter: saturate(180%) blur(22px);
+  -webkit-backdrop-filter: saturate(180%) blur(22px);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow: var(--shadow-soft);
+}
+
+/* cards de agente: placa de vidro com brilho de topo e hover flutuante */
+html[data-skin="glass"] .agent {
+  border-radius: var(--radius);
+  transition: transform .3s cubic-bezier(.2,.8,.2,1), box-shadow .3s;
+  overflow: hidden;
+}
+html[data-skin="glass"] .agent::before { height: 0; }   /* barra chapada vira glow */
+html[data-skin="glass"] .agent::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    radial-gradient(130% 55% at 50% -12%, rgba(255,255,255,0.55), transparent 62%),
+    linear-gradient(180deg, color-mix(in srgb, var(--agent-color) 12%, transparent), transparent 42%);
+  pointer-events: none;
+  opacity: .9;
+}
+html[data-skin="glass"] .agent:hover {
+  transform: translateY(-5px) scale(1.012);
+  box-shadow: var(--shadow), 0 0 0 1px color-mix(in srgb, var(--agent-color) 40%, transparent);
+}
+html[data-skin="glass"] .agent--working {
+  box-shadow: var(--shadow-soft),
+    0 0 0 1px color-mix(in srgb, var(--agent-color) 45%, transparent),
+    0 0 42px color-mix(in srgb, var(--agent-color) 26%, transparent);
+}
+html[data-skin="glass"] .agent--pinned {
+  box-shadow: var(--shadow), 0 0 0 2px color-mix(in srgb, var(--accent) 55%, transparent);
+}
+
+/* avatar: bolha de vidro com anel colorido luminoso */
+html[data-skin="glass"] .agent-avatar::before,
+html[data-skin="glass"] .fs-avatar::before {
+  border-width: 2px;
+  box-shadow: 0 0 20px color-mix(in srgb, var(--agent-color) 40%, transparent);
+}
+html[data-skin="glass"] .agent-name { letter-spacing: -.01em; }
+
+/* pílulas / status / conn: vidro fosco arredondado total */
+html[data-skin="glass"] .agent-status,
+html[data-skin="glass"] .fs-status,
+html[data-skin="glass"] .conn,
+html[data-skin="glass"] .team-count {
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  color: var(--text-dim);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.7) inset;
+}
+
+/* botões de chrome + dropdown de skins: cápsulas de vidro */
+html[data-skin="glass"] .icon-btn,
+html[data-skin="glass"] .ctrl-btn,
+html[data-skin="glass"] .skin-select {
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 14px;
+  color: var(--text);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 4px 16px rgba(90, 80, 160, 0.10), 0 1px 0 rgba(255,255,255,0.8) inset;
+  transition: background .2s, box-shadow .2s, transform .2s;
+}
+html[data-skin="glass"] .icon-btn:hover,
+html[data-skin="glass"] .ctrl-btn:hover,
+html[data-skin="glass"] .skin-select:hover {
+  background: rgba(255, 255, 255, 0.78);
+  transform: translateY(-1px);
+}
+html[data-skin="glass"] .skin-picker { color: var(--text-dim); }
+html[data-skin="glass"] .skin-select option { color: #222; background: #fff; }
+
+/* HERO: placa maior, título em gradiente iridescente */
+html[data-skin="glass"] .hero { border-radius: var(--radius-lg); }
+html[data-skin="glass"] .hero-glow {
+  background: radial-gradient(closest-side, rgba(176,110,240,0.28), transparent 70%);
+  opacity: .9;
+}
+html[data-skin="glass"] .hero-eyebrow { color: var(--accent); letter-spacing: .16em; }
+html[data-skin="glass"] .hero-title {
+  background: linear-gradient(90deg, #6d5bf0, #b06ef0 55%, #ec7bb0);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -.02em;
+}
+html[data-skin="glass"] .hero-item {
+  background: rgba(255,255,255,0.55);
+  border: 1px solid rgba(255,255,255,0.65);
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+}
+html[data-skin="glass"] .hi-badge {
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 14px rgba(109,91,240,0.35);
+}
+html[data-skin="glass"] .flag {
+  border-radius: 999px;
+  background: rgba(255,255,255,0.6);
+  border: 1px solid rgba(255,255,255,0.7);
+  backdrop-filter: blur(8px);
+}
+html[data-skin="glass"] .flag--warn { border-color: color-mix(in srgb, var(--orange) 45%, transparent); color: var(--orange); }
+html[data-skin="glass"] .flag--bypass { border-color: color-mix(in srgb, var(--red) 45%, transparent); color: var(--red); }
+
+html[data-skin="glass"] .agent-bubble,
+html[data-skin="glass"] .fs-bubble {
+  background: rgba(255,255,255,0.5);
+  border: 1px solid rgba(255,255,255,0.6);
+  color: var(--text-dim);
+  border-radius: 14px;
+}
+
+html[data-skin="glass"] .section-title { color: var(--text); letter-spacing: -.01em; }
+html[data-skin="glass"] .live-dot { box-shadow: 0 0 12px color-mix(in srgb, var(--red) 60%, transparent); }
+
+/* --- MAPA DO WORKFLOW: placas de vidro luminosas --- */
+html[data-skin="glass"] .wfmap-wrap {
+  background: linear-gradient(180deg, rgba(255,255,255,0.62), rgba(255,255,255,0.38));
+  border: 1px solid rgba(255,255,255,0.68);
+  border-radius: var(--radius-lg);
+  backdrop-filter: saturate(170%) blur(20px);
+  -webkit-backdrop-filter: saturate(170%) blur(20px);
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="glass"] .wfmap-hint { color: var(--text-dim); }
+
+/* nós (fases) */
+html[data-skin="glass"] .wfnode-badge {
+  background: rgba(255,255,255,0.65);
+  border: 1px solid rgba(255,255,255,0.75);
+  border-radius: 18px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 6px 18px rgba(90,80,160,0.14), 0 1px 0 rgba(255,255,255,0.85) inset;
+  color: var(--text-dim);
+}
+html[data-skin="glass"] .wfnode.is-future .wfnode-badge { opacity: .72; }
+html[data-skin="glass"] .wfnode.is-current .wfnode-badge {
+  border-color: color-mix(in srgb, var(--accent) 55%, white);
+  color: var(--accent);
+  box-shadow: 0 0 0 5px rgba(109,91,240,0.16), 0 0 26px rgba(109,91,240,0.42);
+}
+html[data-skin="glass"] .wfnode.is-done .wfnode-badge {
+  border-color: color-mix(in srgb, var(--green) 55%, white);
+  color: var(--green);
+  box-shadow: 0 0 16px rgba(47,191,143,0.30);
+}
+html[data-skin="glass"] .wfnode.is-selected .wfnode-badge {
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 70%, transparent), 0 0 24px rgba(109,91,240,0.42);
+}
+html[data-skin="glass"] .wfnode-check {
+  background: var(--green);
+  color: #fff;
+  border: 2px solid rgba(255,255,255,0.9);
+  box-shadow: 0 2px 8px rgba(47,191,143,0.4);
+}
+html[data-skin="glass"] .wfnode-label { color: var(--text); }
+html[data-skin="glass"] .wfnode.is-future .wfnode-label { color: var(--text-faint); }
+
+html[data-skin="glass"] .wfnode-here,
+html[data-skin="glass"] .wfx-tag--here {
+  background: rgba(109,91,240,0.14);
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+  color: var(--accent);
+  border-radius: 999px;
+  backdrop-filter: blur(6px);
+}
+html[data-skin="glass"] .wfnode-here-dot { box-shadow: 0 0 10px var(--accent); }
+
+html[data-skin="glass"] .wfnode-branch,
+html[data-skin="glass"] .wfbr-arrow { color: var(--text-dim); }
+html[data-skin="glass"] .wfnode-branch {
+  background: rgba(255,255,255,0.5);
+  border: 1px solid rgba(255,255,255,0.62);
+  border-radius: 12px;
+}
+
+/* arestas (conector + condição) */
+html[data-skin="glass"] .wfedge-line { background: rgba(120,120,160,0.35); }
+html[data-skin="glass"] .wfedge-line::after { border-left-color: rgba(120,120,160,0.45); }
+html[data-skin="glass"] .wfedge.is-done .wfedge-line { background: color-mix(in srgb, var(--green) 60%, transparent); }
+html[data-skin="glass"] .wfedge.is-done .wfedge-line::after { border-left-color: color-mix(in srgb, var(--green) 60%, transparent); }
+html[data-skin="glass"] .wfedge.is-current .wfedge-line {
+  background: color-mix(in srgb, var(--accent) 70%, transparent);
+  box-shadow: 0 0 8px rgba(109,91,240,0.5);
+}
+html[data-skin="glass"] .wfedge.is-current .wfedge-line::after { border-left-color: color-mix(in srgb, var(--accent) 70%, transparent); }
+html[data-skin="glass"] .wfedge-label {
+  background: rgba(255,255,255,0.62);
+  border: 1px solid rgba(255,255,255,0.7);
+  border-radius: 999px;
+  color: var(--text-dim);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* trilho de retorno do ciclo */
+html[data-skin="glass"] .wfreturn {
+  background: rgba(176,110,240,0.12);
+  border: 1px solid color-mix(in srgb, var(--accent-2) 40%, transparent);
+  border-radius: 16px;
+  color: var(--text-dim);
+  backdrop-filter: blur(8px);
+}
+html[data-skin="glass"] .wfreturn.is-active {
+  box-shadow: 0 0 18px rgba(176,110,240,0.3);
+  border-color: color-mix(in srgb, var(--accent-2) 60%, transparent);
+}
+html[data-skin="glass"] .wfreturn-arrow { color: var(--accent-2); }
+
+/* sub-loop "Construindo" */
+html[data-skin="glass"] .wfsub,
+html[data-skin="glass"] .wfsub-step,
+html[data-skin="glass"] .wf-explainer {
+  background: rgba(255,255,255,0.55);
+  border: 1px solid rgba(255,255,255,0.66);
+  border-radius: 16px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+html[data-skin="glass"] .wfsub-head-ic { color: var(--accent-2); }
+html[data-skin="glass"] .wfsub-step.is-current {
+  border-color: color-mix(in srgb, var(--accent) 45%, white);
+  box-shadow: 0 0 16px rgba(109,91,240,0.3);
+}
+html[data-skin="glass"] .wfsub-step.is-done { color: var(--green); }
+html[data-skin="glass"] .wfsub-step.is-future { opacity: .7; }
+html[data-skin="glass"] .wfsub-arrow,
+html[data-skin="glass"] .wfsub-loop { color: var(--accent-2); }
+
+/* explicador */
+html[data-skin="glass"] .wfx-icon { color: var(--accent); }
+html[data-skin="glass"] .wfx-title { color: var(--text); }
+html[data-skin="glass"] .wfx-tag--muted {
+  background: rgba(255,255,255,0.55);
+  border: 1px solid rgba(255,255,255,0.65);
+  color: var(--text-faint);
+  border-radius: 999px;
+}
+html[data-skin="glass"] .wfx-when {
+  background: rgba(255,255,255,0.5);
+  border: 1px solid rgba(255,255,255,0.6);
+  border-radius: 10px;
+}
+html[data-skin="glass"] .wfx-to,
+html[data-skin="glass"] .wfx-goes { color: var(--accent); }
+html[data-skin="glass"] .wfx-k { color: var(--text-faint); }
+
+/* --- mini-terminal / stream: poço de vidro escuro-translúcido (contraste) --- */
+html[data-skin="glass"] .agent-term {
+  background: rgba(30, 30, 52, 0.82);
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 16px;
+  color: #e7e7f6;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  box-shadow: 0 2px 0 rgba(255,255,255,0.08) inset;
+}
+html[data-skin="glass"] .fs-term { background: rgba(24, 24, 42, 0.9); }
+html[data-skin="glass"] .term-ts { color: rgba(255,255,255,0.4); }
+html[data-skin="glass"] .term--read  { color: #7cc4ff; }
+html[data-skin="glass"] .term--write,
+html[data-skin="glass"] .term--ok     { color: #6ee7b0; }
+html[data-skin="glass"] .term--edit   { color: #ffd479; }
+html[data-skin="glass"] .term--bash   { color: #d7a6ff; }
+html[data-skin="glass"] .term--grep   { color: #7fe6e6; }
+html[data-skin="glass"] .term--decant { color: #ffcf7a; }
+html[data-skin="glass"] .term--error  { color: #ff8fa3; }
+html[data-skin="glass"] .term--think,
+html[data-skin="glass"] .term--dim    { color: rgba(231,231,246,0.55); }
+
+/* barras: vidro leitoso com preenchimento luminoso */
+html[data-skin="glass"] .trust-bar,
+html[data-skin="glass"] .bar {
+  background: rgba(255,255,255,0.5);
+  border: 1px solid rgba(255,255,255,0.6);
+  border-radius: 999px;
+}
+html[data-skin="glass"] .trust-bar-fill {
+  border-radius: 999px;
+  box-shadow: 0 0 14px color-mix(in srgb, var(--agent-color) 45%, transparent);
+}
+html[data-skin="glass"] .bar-fill {
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+}
+html[data-skin="glass"] .bar-fill--cost { background: linear-gradient(90deg, var(--gold), var(--orange)); }
+html[data-skin="glass"] .bar-fill.is-warn { background: linear-gradient(90deg, var(--orange), #f2b24c); }
+html[data-skin="glass"] .bar-fill.is-danger { background: linear-gradient(90deg, var(--red), #f2879a); }
+
+/* métricas */
+html[data-skin="glass"] .metric { border-radius: var(--radius); }
+html[data-skin="glass"] .metric-label,
+html[data-skin="glass"] .metric-sub { color: var(--text-faint); }
+html[data-skin="glass"] .metric-value--big {
+  background: linear-gradient(120deg, var(--accent), var(--accent-2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -.02em;
+}
+
+/* atividade (feed) */
+html[data-skin="glass"] .activity-list { border-radius: var(--radius); }
+html[data-skin="glass"] .activity-list li { border-bottom: 1px solid rgba(120,120,160,0.14); }
+html[data-skin="glass"] .act-ts { color: var(--text-faint); }
+html[data-skin="glass"] .act-icon[data-i="▶"] { color: var(--accent); }
+html[data-skin="glass"] .act-icon[data-i="◆"] { color: var(--gold); }
+html[data-skin="glass"] .act-icon[data-i="✓"] { color: var(--green); }
+html[data-skin="glass"] .act-icon[data-i="✗"] { color: var(--red); }
+
+/* --- FULLSCREEN: placa de vidro maior, backdrop borrado claro --- */
+html[data-skin="glass"] .fs-backdrop {
+  background: rgba(230, 232, 248, 0.45);
+  backdrop-filter: saturate(160%) blur(18px);
+  -webkit-backdrop-filter: saturate(160%) blur(18px);
+}
+html[data-skin="glass"] .fs-panel {
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow), 0 0 60px color-mix(in srgb, var(--agent-color) 22%, transparent);
+}
+html[data-skin="glass"] .fs-name { letter-spacing: -.01em; }
+html[data-skin="glass"] .fs-close {
+  background: rgba(255,255,255,0.6);
+  border: 1px solid rgba(255,255,255,0.72);
+  border-radius: 50%;
+  color: var(--text);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+html[data-skin="glass"] .fs-close:hover { background: rgba(255,255,255,0.85); }
+html[data-skin="glass"] .fs-term-label { color: var(--text-dim); }
+html[data-skin="glass"] .fs-term-empty {
+  border: 1px dashed rgba(120,120,160,0.35);
+  color: var(--text-faint);
+  border-radius: 14px;
+}
+
+/* banner offline */
+html[data-skin="glass"] .offline-banner {
+  background: rgba(236, 90, 114, 0.9);
+  color: #fff;
+  border-radius: 14px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* micro-animação própria: reforço de brilho no card em trabalho */
+html[data-skin="glass"] .agent--working::after {
+  background:
+    radial-gradient(130% 55% at 50% -12%, rgba(255,255,255,0.55), transparent 62%),
+    linear-gradient(180deg, color-mix(in srgb, var(--agent-color) 14%, transparent), transparent 42%);
+}
+html[data-skin="glass"] .agent--working .agent-avatar::before {
+  animation: pulse 2.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-skin="glass"] .agent { transition: none; }
+  html[data-skin="glass"] .agent:hover { transform: none; }
+  html[data-skin="glass"] .agent--working .agent-avatar::before { animation: none; }
+}

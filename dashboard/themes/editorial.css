@@ -1,0 +1,550 @@
+/* =========================================================================
+   Editorial / Revista — serifa display, creme & tinta, muito respiro
+   Títulos em serifa de alta editorial (Georgia/serif stack), fundo creme
+   papel, tinta preta, capitular na primeira linha do hero, filetes finos
+   (hairlines) em vez de sombras, cantos quase retos, sensação de colunas
+   e de página impressa. Acento vermelho-tinta de nota de rodapé.
+   Escopo: html[data-skin="editorial"]
+   ========================================================================= */
+
+html[data-skin="editorial"] {
+  --bg: #f3efe4;            /* creme papel */
+  --bg-soft: #ebe5d6;       /* creme recuado */
+  --surface: #faf7ef;       /* branco-marfim de página */
+  --surface-2: #f0ead9;     /* marfim recuado (pílulas, inputs) */
+  --border: #d8cfba;        /* filete bege-tinta */
+  --text: #1a1712;          /* tinta quase preta */
+  --text-dim: #5c554a;      /* cinza-sépia */
+  --text-faint: #948a78;    /* sépia claro para labels */
+  --accent: #8a1c1c;        /* vermelho-tinta editorial */
+  --accent-2: #b5462b;      /* terracota */
+  --gold: #a67c2e;          /* ocre de folha */
+  --orange: #c0631f;        /* laranja queimado */
+  --red: #9c2222;
+  --green: #4a6b3a;         /* verde-oliva impresso */
+  --grey: #948a78;
+  --radius: 2px;
+  --radius-lg: 3px;
+  --shadow: 0 1px 0 var(--border), 0 18px 40px -28px rgba(26,23,18,0.45);
+  --shadow-soft: 0 1px 0 rgba(216,207,186,0.7);
+  --gap: 22px;
+  --font-sans: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, "Times New Roman", serif;
+  --font-mono: "Iosevka", "SF Mono", ui-monospace, "Courier New", Courier, monospace;
+}
+
+/* Fonte serifada display reservada para títulos */
+html[data-skin="editorial"] {
+  --font-display: "Playfair Display", "Didot", "Bodoni MT", "Hoefler Text", Didot, Georgia, serif;
+}
+
+/* fundo de papel com leve textura de vinheta */
+html[data-skin="editorial"] body {
+  background:
+    radial-gradient(1400px 900px at 50% -10%, rgba(255,255,255,0.6), transparent 60%),
+    linear-gradient(180deg, #f5f1e6, #efe9db 60%, #ebe4d4);
+  background-attachment: fixed;
+  color: var(--text);
+  font-family: var(--font-sans);
+}
+
+/* --------------------------------------------------------------------- */
+/* TOPBAR — cabeçalho de revista: fina régua dupla                        */
+/* --------------------------------------------------------------------- */
+html[data-skin="editorial"] .topbar {
+  background: rgba(250,247,239,0.86);
+  backdrop-filter: saturate(105%) blur(6px);
+  -webkit-backdrop-filter: saturate(105%) blur(6px);
+  border-bottom: 3px double #6d6455;
+}
+html[data-skin="editorial"] .brand h1 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: .01em;
+  font-variant: small-caps;
+  font-size: 1.45rem;
+}
+html[data-skin="editorial"] .brand-dot { color: var(--accent); }
+
+/* botões de chrome: retângulos de contorno fino, versaletes */
+html[data-skin="editorial"] .icon-btn,
+html[data-skin="editorial"] .ctrl-btn,
+html[data-skin="editorial"] .skin-select,
+html[data-skin="editorial"] .conn,
+html[data-skin="editorial"] .team-count {
+  background: var(--surface-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-family: var(--font-sans);
+  letter-spacing: .04em;
+}
+html[data-skin="editorial"] .skin-select { font-variant: small-caps; }
+html[data-skin="editorial"] .icon-btn:hover,
+html[data-skin="editorial"] .ctrl-btn:hover,
+html[data-skin="editorial"] .skin-select:hover {
+  background: var(--surface);
+  border-color: var(--text-dim);
+  color: var(--accent);
+}
+html[data-skin="editorial"] .conn-dot { box-shadow: none; }
+
+/* --------------------------------------------------------------------- */
+/* SEÇÕES — kicker/rótulo tipográfico com versaletes                      */
+/* --------------------------------------------------------------------- */
+html[data-skin="editorial"] .section-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-variant: small-caps;
+  letter-spacing: .06em;
+  color: var(--text);
+}
+html[data-skin="editorial"] .section-title span:first-child::after {
+  content: "";
+}
+html[data-skin="editorial"] .live-dot { box-shadow: none; background: var(--accent); }
+
+/* --------------------------------------------------------------------- */
+/* HERO — matéria de capa: título display enorme + capitular              */
+/* --------------------------------------------------------------------- */
+html[data-skin="editorial"] .hero {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: 4px solid var(--text);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  padding-top: 30px;
+}
+html[data-skin="editorial"] .hero-glow { display: none; }
+html[data-skin="editorial"] .hero-eyebrow {
+  font-family: var(--font-sans);
+  font-variant: small-caps;
+  letter-spacing: .28em;
+  color: var(--accent);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 8px;
+}
+html[data-skin="editorial"] .hero-title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(2.2rem, 5vw, 3.6rem);
+  line-height: 1.04;
+  letter-spacing: -.01em;
+  color: var(--text);
+  background: none;
+  -webkit-text-fill-color: currentColor;
+  text-wrap: balance;
+}
+/* capitular — primeira letra do que o hero está "fazendo" */
+html[data-skin="editorial"] .hero-doing {
+  font-family: var(--font-sans);
+  color: var(--text-dim);
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+html[data-skin="editorial"] .hero-doing::first-letter {
+  float: left;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 3.1em;
+  line-height: .82;
+  padding: 4px 10px 0 0;
+  color: var(--accent);
+}
+html[data-skin="editorial"] .hero-aside {
+  border-left: 1px solid var(--border);
+  padding-left: 20px;
+}
+html[data-skin="editorial"] .hero-item {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  border-radius: 0;
+}
+html[data-skin="editorial"] .hi-badge {
+  background: var(--text);
+  color: var(--surface);
+  border-radius: 50%;
+  font-family: var(--font-display);
+  font-weight: 700;
+}
+html[data-skin="editorial"] .hi-slug { font-variant: small-caps; letter-spacing: .04em; }
+html[data-skin="editorial"] .flag {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-variant: small-caps;
+  letter-spacing: .06em;
+}
+html[data-skin="editorial"] .flag--warn { border-color: var(--orange); color: var(--orange); }
+html[data-skin="editorial"] .flag--bypass { border-color: var(--red); color: var(--red); }
+html[data-skin="editorial"] .hero-next { color: var(--text-faint); font-style: italic; }
+
+/* --------------------------------------------------------------------- */
+/* MAPA DO WORKFLOW — diagrama de página impressa                         */
+/* --------------------------------------------------------------------- */
+html[data-skin="editorial"] .wfmap-wrap {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: 3px double #6d6455;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="editorial"] .wfmap-hint {
+  font-style: italic;
+  color: var(--text-faint);
+  letter-spacing: .02em;
+}
+
+/* nós: medalhões de serifa */
+html[data-skin="editorial"] .wfnode-badge {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+}
+html[data-skin="editorial"] .wfnode-label {
+  font-family: var(--font-display);
+  font-variant: small-caps;
+  letter-spacing: .05em;
+  color: var(--text);
+}
+html[data-skin="editorial"] .wfnode.is-done .wfnode-badge {
+  border-color: var(--green);
+  background: color-mix(in srgb, var(--green) 12%, var(--surface));
+}
+html[data-skin="editorial"] .wfnode-check {
+  background: var(--green);
+  color: var(--surface);
+  border-radius: 50%;
+  border-color: var(--surface);
+}
+html[data-skin="editorial"] .wfnode.is-current .wfnode-badge {
+  border-color: var(--accent);
+  border-width: 2px;
+  background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 16%, transparent);
+}
+html[data-skin="editorial"] .wfnode.is-selected .wfnode-badge {
+  box-shadow: 0 0 0 2px var(--text);
+}
+html[data-skin="editorial"] .wfnode.is-future .wfnode-badge { opacity: .55; }
+html[data-skin="editorial"] .wfnode-here,
+html[data-skin="editorial"] .wfx-tag--here {
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  color: var(--accent);
+  font-variant: small-caps;
+  letter-spacing: .06em;
+}
+html[data-skin="editorial"] .wfnode-here-dot { background: var(--accent); box-shadow: none; }
+html[data-skin="editorial"] .wfnode-doing { font-style: italic; color: var(--text-dim); }
+
+/* ramificações */
+html[data-skin="editorial"] .wfnode-branch {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-style: italic;
+  color: var(--text-dim);
+}
+html[data-skin="editorial"] .wfbr-arrow { color: var(--text-faint); }
+
+/* arestas: filetes finos com rótulo de condição em itálico */
+html[data-skin="editorial"] .wfedge-line,
+html[data-skin="editorial"] .wfedge-line::after { background: var(--border); }
+html[data-skin="editorial"] .wfedge-line::after { border-left-color: var(--border); }
+html[data-skin="editorial"] .wfedge.is-done .wfedge-line { background: var(--green); }
+html[data-skin="editorial"] .wfedge.is-done .wfedge-line::after { border-left-color: var(--green); }
+html[data-skin="editorial"] .wfedge.is-current .wfedge-line { background: var(--accent); }
+html[data-skin="editorial"] .wfedge.is-current .wfedge-line::after { border-left-color: var(--accent); }
+html[data-skin="editorial"] .wfedge-label {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-style: italic;
+  font-family: var(--font-sans);
+  color: var(--text-dim);
+  letter-spacing: .01em;
+}
+
+/* trilho de retorno */
+html[data-skin="editorial"] .wfreturn {
+  background: color-mix(in srgb, var(--accent-2) 8%, transparent);
+  border: 1px dashed var(--accent-2);
+  border-radius: var(--radius);
+  color: var(--accent-2);
+  font-style: italic;
+}
+html[data-skin="editorial"] .wfreturn-arrow { color: var(--accent-2); }
+
+/* sub-loop "Construindo" */
+html[data-skin="editorial"] .wfsub {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius);
+}
+html[data-skin="editorial"] .wfsub-head { font-variant: small-caps; letter-spacing: .06em; color: var(--text); }
+html[data-skin="editorial"] .wfsub-step {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+html[data-skin="editorial"] .wfsub-step.is-current {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+}
+html[data-skin="editorial"] .wfsub-step.is-done { border-color: var(--green); }
+html[data-skin="editorial"] .wfsub-label { font-variant: small-caps; letter-spacing: .04em; }
+html[data-skin="editorial"] .wfsub-arrow,
+html[data-skin="editorial"] .wfsub-loop { color: var(--text-faint); }
+
+/* explicador: coluna de nota de revista */
+html[data-skin="editorial"] .wf-explainer {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--text);
+  border-radius: var(--radius);
+}
+html[data-skin="editorial"] .wfx-title {
+  font-family: var(--font-display);
+  font-variant: small-caps;
+  letter-spacing: .05em;
+}
+html[data-skin="editorial"] .wfx-tag,
+html[data-skin="editorial"] .wfx-tag--muted {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-variant: small-caps;
+  letter-spacing: .05em;
+}
+html[data-skin="editorial"] .wfx-when {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-style: italic;
+}
+html[data-skin="editorial"] .wfx-k { color: var(--text-faint); font-variant: small-caps; letter-spacing: .05em; }
+html[data-skin="editorial"] .wfx-to,
+html[data-skin="editorial"] .wfx-goes { color: var(--accent); }
+
+/* --------------------------------------------------------------------- */
+/* CARDS DE AGENTE — verbetes de página, hairline + filete de topo        */
+/* --------------------------------------------------------------------- */
+html[data-skin="editorial"] .team { --gap: 22px; }
+html[data-skin="editorial"] .agent {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+}
+html[data-skin="editorial"] .agent::before {
+  height: 3px;
+  background: var(--agent-color);
+  opacity: .9;
+}
+html[data-skin="editorial"] .agent:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow);
+  border-color: var(--text-dim);
+}
+html[data-skin="editorial"] .agent--working {
+  border-color: color-mix(in srgb, var(--agent-color) 55%, var(--border));
+  box-shadow: var(--shadow-soft), 0 0 0 1px color-mix(in srgb, var(--agent-color) 30%, transparent);
+}
+html[data-skin="editorial"] .agent--human_driving { border-color: var(--orange); }
+html[data-skin="editorial"] .agent--error,
+html[data-skin="editorial"] .agent--needs_recovery { border-color: var(--red); }
+html[data-skin="editorial"] .agent--decanting { border-color: var(--gold); }
+html[data-skin="editorial"] .agent--pinned { border-color: var(--text); }
+
+/* avatar: medalhão de anel fino */
+html[data-skin="editorial"] .agent-avatar::before,
+html[data-skin="editorial"] .fs-avatar::before {
+  border-width: 2px;
+  box-shadow: none;
+}
+html[data-skin="editorial"] .agent-avatar-inner,
+html[data-skin="editorial"] .fs-avatar-inner {
+  font-family: var(--font-display);
+  font-weight: 700;
+}
+
+/* nome do agente: título de verbete em serifa */
+html[data-skin="editorial"] .agent-name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.12rem;
+  letter-spacing: .01em;
+  color: var(--text);
+}
+html[data-skin="editorial"] .agent-status,
+html[data-skin="editorial"] .fs-status {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-variant: small-caps;
+  letter-spacing: .06em;
+  color: var(--text-dim);
+}
+html[data-skin="editorial"] .agent-bubble,
+html[data-skin="editorial"] .fs-bubble {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-dim);
+  font-style: italic;
+}
+html[data-skin="editorial"] .agent-open-hint { color: var(--text-faint); font-variant: small-caps; letter-spacing: .06em; }
+html[data-skin="editorial"] .agent-pin { color: var(--accent); }
+
+/* --------------------------------------------------------------------- */
+/* MINI-TERMINAL — coluna monoespaçada de rodapé, papel escuro suave      */
+/* --------------------------------------------------------------------- */
+html[data-skin="editorial"] .agent-term,
+html[data-skin="editorial"] .fs-term {
+  background: #211d16;          /* tinta quente, quase preto */
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: #d9d0bd;
+  font-family: var(--font-mono);
+}
+html[data-skin="editorial"] .term-ts { color: #8f8672; }
+html[data-skin="editorial"] .term--read  { color: #8fb4c9; }
+html[data-skin="editorial"] .term--write,
+html[data-skin="editorial"] .term--ok    { color: #9dbb7e; }
+html[data-skin="editorial"] .term--edit  { color: #d8b46a; }
+html[data-skin="editorial"] .term--bash  { color: #c9a3d6; }
+html[data-skin="editorial"] .term--grep  { color: #7fc0b8; }
+html[data-skin="editorial"] .term--web   { color: #8fb4c9; }
+html[data-skin="editorial"] .term--think,
+html[data-skin="editorial"] .term--say   { color: #b8ae98; font-style: italic; }
+html[data-skin="editorial"] .term--decant { color: #d8b46a; }
+html[data-skin="editorial"] .term--error { color: #e08a7a; }
+html[data-skin="editorial"] .term--dim   { color: #7c7460; }
+html[data-skin="editorial"] .term-add    { color: #9dbb7e; }
+
+/* --------------------------------------------------------------------- */
+/* BARRA DE CONFIANÇA / BARRAS                                            */
+/* --------------------------------------------------------------------- */
+html[data-skin="editorial"] .agent-trust-head,
+html[data-skin="editorial"] .fs-trust-head {
+  font-variant: small-caps;
+  letter-spacing: .08em;
+  color: var(--text-faint);
+}
+html[data-skin="editorial"] .trust-bar,
+html[data-skin="editorial"] .bar {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+html[data-skin="editorial"] .trust-bar-fill { background: var(--text); border-radius: 0; box-shadow: none; }
+html[data-skin="editorial"] .bar-fill { background: var(--text-dim); border-radius: 0; }
+html[data-skin="editorial"] .bar-fill--cost { background: var(--gold); }
+html[data-skin="editorial"] .bar-fill.is-warn { background: var(--orange); }
+html[data-skin="editorial"] .bar-fill.is-danger { background: var(--red); }
+
+/* --------------------------------------------------------------------- */
+/* MÉTRICAS — números editoriais grandes em serifa                        */
+/* --------------------------------------------------------------------- */
+html[data-skin="editorial"] .metric {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="editorial"] .metric-label {
+  font-variant: small-caps;
+  letter-spacing: .08em;
+  color: var(--text-faint);
+}
+html[data-skin="editorial"] .metric-value,
+html[data-skin="editorial"] .metric-value--big {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -.01em;
+  color: var(--text);
+}
+html[data-skin="editorial"] .metric-sub { color: var(--text-faint); font-style: italic; }
+
+/* --------------------------------------------------------------------- */
+/* FEED DE ATIVIDADE — colunas de notas de rodapé                         */
+/* --------------------------------------------------------------------- */
+html[data-skin="editorial"] .activity-list {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="editorial"] .activity-list li {
+  border-bottom: 1px solid var(--border);
+}
+html[data-skin="editorial"] .act-ts {
+  font-family: var(--font-mono);
+  color: var(--text-faint);
+  font-size: .78em;
+}
+html[data-skin="editorial"] .act-text { color: var(--text-dim); }
+html[data-skin="editorial"] .activity-empty { color: var(--text-faint); font-style: italic; }
+html[data-skin="editorial"] .act-icon[data-i="▶"] { color: var(--green); }
+html[data-skin="editorial"] .act-icon[data-i="◆"] { color: var(--gold); }
+html[data-skin="editorial"] .act-icon[data-i="✓"] { color: var(--green); }
+html[data-skin="editorial"] .act-icon[data-i="✗"] { color: var(--red); }
+
+/* --------------------------------------------------------------------- */
+/* FULLSCREEN — página dupla espalhada                                    */
+/* --------------------------------------------------------------------- */
+html[data-skin="editorial"] .fs-backdrop {
+  background: rgba(30,26,20,0.5);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+}
+html[data-skin="editorial"] .fs-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: 5px double #6d6455;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+}
+html[data-skin="editorial"] .fs-name {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: .01em;
+}
+html[data-skin="editorial"] .fs-status-label { font-variant: small-caps; letter-spacing: .06em; }
+html[data-skin="editorial"] .fs-close {
+  background: var(--surface-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+}
+html[data-skin="editorial"] .fs-close:hover { background: var(--surface); border-color: var(--text-dim); color: var(--accent); }
+html[data-skin="editorial"] .fs-term-label { font-variant: small-caps; letter-spacing: .08em; color: var(--text-faint); }
+html[data-skin="editorial"] .fs-term-empty {
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  color: var(--text-faint);
+  font-style: italic;
+}
+html[data-skin="editorial"] .fs-trust-head { font-variant: small-caps; letter-spacing: .08em; }
+
+/* banner offline */
+html[data-skin="editorial"] .offline-banner {
+  background: var(--red);
+  color: var(--surface);
+  border-radius: 0;
+  font-variant: small-caps;
+  letter-spacing: .08em;
+}
+
+/* --------------------------------------------------------------------- */
+/* Movimento sóbrio — respeita reduce-motion                             */
+/* --------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  html[data-skin="editorial"] .agent { transition: none; }
+  html[data-skin="editorial"] .agent:hover { transform: none; }
+}

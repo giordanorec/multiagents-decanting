@@ -9,8 +9,37 @@
   var FILTER_KEY = "multiagente.filter";
   var SOUND_KEY = "multiagente.sound";
   var AVATAR_STYLE_KEY = "multiagente.avatarStyle";
+  var SKIN_KEY = "multiagente.skin";
   var THEMES = ["auto", "dark", "light"];
   var THEME_GLYPH = { auto: "🌓", dark: "🌙", light: "☀" };
+
+  // ---- skins (design systems) ----------------------------------------
+  // Each skin => themes/<slug>.css scoped under html[data-skin="<slug>"].
+  // 4 reference themes ship now; the other 16 are added later as files —
+  // the loader tolerates a missing file (link.onerror) without breaking.
+  var SKINS = [
+    { slug: "visionos",     label: "visionOS" },
+    { slug: "swiss",        label: "Swiss / Internacional" },
+    { slug: "brutalism",    label: "Brutalismo" },
+    { slug: "neobrutalism", label: "Neo-brutalismo" },
+    { slug: "glass",        label: "Glassmorphism" },
+    { slug: "neumorphism",  label: "Neumorfismo" },
+    { slug: "material",     label: "Material 3" },
+    { slug: "terminal",     label: "Terminal / TUI" },
+    { slug: "editorial",    label: "Editorial / Revista" },
+    { slug: "bauhaus",      label: "Bauhaus" },
+    { slug: "memphis",      label: "Memphis 80s" },
+    { slug: "cyberpunk",    label: "Cyberpunk / Synthwave" },
+    { slug: "clay",         label: "Claymorphism" },
+    { slug: "skeuomorphic", label: "Skeuomorfismo" },
+    { slug: "darkpro",      label: "Dark Pro (IDE)" },
+    { slug: "minimal",      label: "Minimalista / Notion" },
+    { slug: "win98",        label: "Retro Windows 98" },
+    { slug: "bloomberg",    label: "Denso / Bloomberg" },
+    { slug: "duolingo",     label: "Lúdico / Gamificado" },
+    { slug: "handdrawn",    label: "Desenhado à mão" },
+  ];
+  var DEFAULT_SKIN = "visionos";
   var FILTERS = ["all", "active", "no-sleeping"];
   var FILTER_LABEL = { all: "todos", active: "só working", "no-sleeping": "esconder sleeping" };
 
@@ -78,6 +107,50 @@
       localStorage.setItem(THEME_KEY, next);
       applyTheme(next);
     });
+  }
+
+  // ---- skins (design systems) ----------------------------------------
+  function skinValid(slug) {
+    for (var i = 0; i < SKINS.length; i++) if (SKINS[i].slug === slug) return true;
+    return false;
+  }
+  // lazy-inject the <link> for a skin exactly once; tolerate missing file.
+  function ensureSkinLink(slug) {
+    var id = "skin-css-" + slug;
+    if (document.getElementById(id)) return;
+    var link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.id = id;
+    link.href = "/themes/" + slug + ".css";
+    link.onerror = function () {
+      // theme file not present yet — base style.css keeps the UI usable.
+      // eslint-disable-next-line no-console
+      if (window.console) console.info("[skin] '" + slug + "' ainda sem CSS — usando base.");
+    };
+    document.head.appendChild(link);
+  }
+  function applySkin(slug) {
+    if (!skinValid(slug)) slug = DEFAULT_SKIN;
+    ensureSkinLink(slug);
+    document.documentElement.dataset.skin = slug;
+    localStorage.setItem(SKIN_KEY, slug);
+  }
+  function initSkins() {
+    var sel = document.getElementById("skin-select");
+    var saved = localStorage.getItem(SKIN_KEY);
+    if (!skinValid(saved)) saved = DEFAULT_SKIN;
+    if (sel) {
+      SKINS.forEach(function (s) {
+        var opt = document.createElement("option");
+        opt.value = s.slug;
+        opt.textContent = s.label;
+        sel.appendChild(opt);
+      });
+      sel.value = saved;
+      sel.addEventListener("change", function () { applySkin(sel.value); });
+    }
+    // ensure link + attribute (the inline head loader may have run already)
+    applySkin(saved);
   }
 
   // ---- controls (filtro + som) — injetados na topbar ------------------
@@ -254,6 +327,11 @@
     renderTeam(snap.agents || []);
     renderMetrics(snap.metrics || {});
     renderActivity(snap.activity || []);
+    // keep the fullscreen view in sync while it's open
+    if (fsOpenSlug) {
+      var fa = agentBySlug(fsOpenSlug);
+      if (fa) updateFullscreen(fa); else closeAgent();
+    }
   }
 
   // helper: index de fase por id (phases agora é lista de {id,label})
@@ -266,14 +344,13 @@
 
   function renderWorkflow(wf) {
     var hero = document.getElementById("hero");
-    var stepWrap = document.getElementById("stepper-wrap");
-    if (!hero || !stepWrap) return;
+    if (!hero) return;
 
     // degrade com elegância: sem workflow válido -> esconde tudo
     var label = wf && (wf.phase_label || wf.phase);
     if (!label) {
       hero.hidden = true;
-      stepWrap.hidden = true;
+      renderWorkflowMap(wf || {});   // esconde o mapa também
       return;
     }
     hero.hidden = false;
@@ -329,27 +406,344 @@
       next.hidden = true;
     }
 
-    // --- stepper (trilha de etapas) ---
-    var phases = wf.phases || [];
-    if (!phases.length) {
-      stepWrap.hidden = true;
+    // --- mapa do workflow (jornada educativa) ---
+    renderWorkflowMap(wf);
+  }
+
+  // ===================================================================
+  //  MAPA DO WORKFLOW — jornada educativa: nós + arestas + ramificações
+  //  + sub-loop de "Construindo" + painel explicador (hover/click/teclado)
+  // ===================================================================
+  var wfState = {
+    sig: null,        // assinatura do estado; evita rebuild (preserva hover)
+    phases: [],       // guide.phases atual
+    curIdx: -1,       // índice da fase atual
+    curId: null,      // id da fase atual
+    pinnedId: null,   // nó fixado por clique (persiste entre snapshots)
+    hoverId: null,    // nó em hover/foco (transiente, preview)
+    wired: false,     // Escape/unpin já ligados?
+  };
+
+  // "ainda há itens → próximo item" -> "próximo item" (rótulo curto na aresta)
+  function wfShorten(when) {
+    if (!when) return "";
+    var i = when.indexOf("→");
+    if (i !== -1) return when.slice(i + 1).trim();
+    return when.trim();
+  }
+
+  function subIndex(list, id) {
+    for (var i = 0; i < list.length; i++) if (list[i].id === id) return i;
+    // "aprovacao_humano" não está no subloop de 5 — trate como o portão "Conferindo"
+    if (id === "aprovacao_humano") {
+      for (var j = 0; j < list.length; j++) if (list[j].id === "validando") return j;
+    }
+    return -1;
+  }
+
+  function renderWorkflowMap(wf) {
+    var wrap = document.getElementById("wfmap-wrap");
+    if (!wrap) return;
+    if (!wfState.wired) initWorkflowMap();
+
+    var guide = wf && wf.guide;
+    var phases = guide && guide.phases;
+    // degrade com elegância: sem guia -> esconde o mapa inteiro
+    if (!phases || !phases.length) {
+      wrap.hidden = true;
       return;
     }
-    stepWrap.hidden = false;
-    var ol = document.getElementById("stepper");
-    ol.innerHTML = "";
+    wrap.hidden = false;
+
     var curIdx = phaseIndex(phases, wf.phase);
-    phases.forEach(function (p, i) {
-      var cls = "step";
-      if (curIdx !== -1) {
-        if (i < curIdx) cls += " is-done";
-        else if (i === curIdx) cls += " is-current";
+    var sig = [
+      wf.phase, wf.subphase, wf.phase_doing || "",
+      phases.map(function (p) { return p.id; }).join(","),
+    ].join("|");
+
+    // sempre atualiza refs (barato) — o explicador depende delas
+    wfState.phases = phases;
+    wfState.curIdx = curIdx;
+    wfState.curId = wf.phase;
+    if (wfState.pinnedId && phaseIndex(phases, wfState.pinnedId) === -1) {
+      wfState.pinnedId = null;
+    }
+
+    // só reconstrói o DOM quando o estado muda (preserva hover/interação)
+    if (sig !== wfState.sig) {
+      wfState.sig = sig;
+      buildMap(wf, phases, curIdx);
+      buildSubloop(wf, (guide.subloop || []));
+    }
+    updateExplainer();
+  }
+
+  function initWorkflowMap() {
+    wfState.wired = true;
+    var wrap = document.getElementById("wfmap-wrap");
+    if (!wrap) return;
+    // Escape solta o nó fixado
+    wrap.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && wfState.pinnedId) {
+        e.preventDefault();
+        wfState.pinnedId = null;
+        reflectPin();
+        updateExplainer();
       }
-      var li = el("li", cls);
-      li.appendChild(el("span", "step-dot"));
-      li.appendChild(el("span", "step-label", p.label || p.id || ""));
-      ol.appendChild(li);
     });
+  }
+
+  function buildMap(wf, phases, curIdx) {
+    var map = document.getElementById("wfmap");
+    if (!map) return;
+    map.innerHTML = "";
+    var lastIdx = phases.length - 1;
+    phases.forEach(function (p, i) {
+      map.appendChild(buildNode(wf, p, i, curIdx));
+      if (i < lastIdx) {
+        var nextId = phases[i + 1].id;
+        var when = "";
+        (p.goes_to || []).forEach(function (g) { if (g.to === nextId) when = g.when; });
+        map.appendChild(buildEdge(wfShorten(when), i, curIdx));
+      }
+    });
+
+    // trilho de retorno do ciclo (último nó volta a uma fase anterior)
+    var ret = document.getElementById("wfreturn");
+    if (ret) {
+      ret.innerHTML = "";
+      var last = phases[lastIdx];
+      var retWhen = null, retTo = null;
+      (last.goes_to || []).forEach(function (g) {
+        var ti = phaseIndex(phases, g.to);
+        if (ti !== -1 && ti < lastIdx) { retWhen = g.when; retTo = phases[ti].label; }
+      });
+      if (retWhen) {
+        ret.hidden = false;
+        ret.classList.toggle("is-active", curIdx === lastIdx);
+        var arrow = el("span", "wfreturn-arrow", "⟲");
+        arrow.setAttribute("aria-hidden", "true");
+        ret.appendChild(arrow);
+        var lbl = el("span", "wfreturn-label");
+        lbl.appendChild(el("b", null, retWhen));
+        if (retTo) lbl.appendChild(document.createTextNode(" — recomeça em “" + retTo + "”"));
+        ret.appendChild(lbl);
+      } else {
+        ret.hidden = true;
+      }
+    }
+  }
+
+  function nodeState(i, curIdx) {
+    if (curIdx === -1) return "future";
+    if (i < curIdx) return "done";
+    if (i === curIdx) return "current";
+    return "future";
+  }
+
+  function buildNode(wf, p, i, curIdx) {
+    var state = nodeState(i, curIdx);
+    var node = el("div", "wfnode is-" + state);
+    node.setAttribute("role", "listitem");
+    node.dataset.id = p.id;
+    if (wfState.pinnedId === p.id) node.classList.add("is-selected");
+
+    var btn = el("button", "wfnode-btn");
+    btn.type = "button";
+    btn.setAttribute("aria-controls", "wf-explainer");
+    btn.setAttribute("aria-expanded", wfState.pinnedId === p.id ? "true" : "false");
+    btn.setAttribute("aria-label",
+      (p.label || p.id) + (i === curIdx ? " — você está aqui." : ".") + " Ver detalhes desta fase.");
+
+    var badge = el("span", "wfnode-badge");
+    badge.setAttribute("aria-hidden", "true");
+    var ic = el("span", "wfnode-icon", p.icon || "•");
+    badge.appendChild(ic);
+    if (state === "done") badge.appendChild(el("span", "wfnode-check", "✓"));
+    btn.appendChild(badge);
+
+    btn.appendChild(el("span", "wfnode-label", p.label || p.id));
+    node.appendChild(btn);
+
+    if (i === curIdx) {
+      var here = el("span", "wfnode-here");
+      here.appendChild(el("span", "wfnode-here-dot"));
+      here.appendChild(document.createTextNode("você está aqui"));
+      node.appendChild(here);
+      var doing = wf.phase_doing || p.doing;
+      if (doing) node.appendChild(el("span", "wfnode-doing", doing));
+    }
+
+    var branches = buildBranches(p, i, phases_of(), curIdx);
+    if (branches) node.appendChild(branches);
+
+    wireNode(btn, p.id);
+    return node;
+  }
+
+  function phases_of() { return wfState.phases; }
+
+  // ramificações que NÃO são a aresta linear pra frente nem o trilho de retorno
+  function buildBranches(p, i, phases, curIdx) {
+    var isLast = i === phases.length - 1;
+    var nextId = !isLast ? phases[i + 1].id : null;
+    var items = [];
+    (p.goes_to || []).forEach(function (g) {
+      if (g.to === nextId) return;               // aresta linear -> vira label da aresta
+      var ti = phaseIndex(phases, g.to);
+      if (isLast && ti !== -1 && ti < i) return; // volta do último -> trilho de retorno
+      var arrow = (ti === i) ? "↻" : (ti !== -1 && ti < i ? "↩" : "↳");
+      items.push({ arrow: arrow, txt: wfShorten(g.when) });
+    });
+    if (!items.length) return null;
+    var box = el("div", "wfnode-branches");
+    box.setAttribute("aria-hidden", "true"); // conteúdo repetido no explicador
+    items.forEach(function (it) {
+      var b = el("span", "wfnode-branch");
+      b.appendChild(el("span", "wfbr-arrow", it.arrow));
+      b.appendChild(document.createTextNode(" " + it.txt));
+      box.appendChild(b);
+    });
+    return box;
+  }
+
+  function buildEdge(label, i, curIdx) {
+    var state = nodeState(i, curIdx); // aresta i liga nó i -> i+1; herda o estado do nó i
+    var e = el("div", "wfedge is-" + state);
+    e.setAttribute("aria-hidden", "true");
+    var line = el("div", "wfedge-line");
+    e.appendChild(line);
+    if (label) e.appendChild(el("span", "wfedge-label", label));
+    return e;
+  }
+
+  function wireNode(btn, id) {
+    btn.addEventListener("mouseenter", function () { wfState.hoverId = id; updateExplainer(); });
+    btn.addEventListener("mouseleave", function () {
+      if (wfState.hoverId === id) wfState.hoverId = null;
+      updateExplainer();
+    });
+    btn.addEventListener("focus", function () { wfState.hoverId = id; updateExplainer(); });
+    btn.addEventListener("blur", function () {
+      if (wfState.hoverId === id) wfState.hoverId = null;
+      updateExplainer();
+    });
+    btn.addEventListener("click", function () {
+      wfState.pinnedId = (wfState.pinnedId === id) ? null : id;
+      reflectPin();
+      updateExplainer();
+    });
+  }
+
+  function reflectPin() {
+    var map = document.getElementById("wfmap");
+    if (!map) return;
+    Array.prototype.forEach.call(map.querySelectorAll(".wfnode"), function (n) {
+      var sel = n.dataset.id === wfState.pinnedId;
+      n.classList.toggle("is-selected", sel);
+      var b = n.querySelector(".wfnode-btn");
+      if (b) b.setAttribute("aria-expanded", sel ? "true" : "false");
+    });
+  }
+
+  function updateExplainer() {
+    var box = document.getElementById("wf-explainer");
+    if (!box) return;
+    var phases = wfState.phases;
+    var showId = wfState.hoverId || wfState.pinnedId || wfState.curId;
+    var idx = phaseIndex(phases, showId);
+    if (idx === -1) { box.hidden = true; box.innerHTML = ""; return; }
+    box.hidden = false;
+    var p = phases[idx];
+    var isCur = showId === wfState.curId;
+    var pinned = wfState.pinnedId === showId;
+    box.innerHTML = "";
+
+    var head = el("div", "wfx-head");
+    var ic = el("span", "wfx-icon", p.icon || "•");
+    ic.setAttribute("aria-hidden", "true");
+    head.appendChild(ic);
+    head.appendChild(el("span", "wfx-title", p.label || p.id));
+    if (isCur) {
+      head.appendChild(el("span", "wfx-tag wfx-tag--here", "você está aqui"));
+    } else {
+      var pos = (wfState.curIdx !== -1 && idx < wfState.curIdx) ? "já passou" : "ainda vem";
+      head.appendChild(el("span", "wfx-tag wfx-tag--muted", pos));
+    }
+    if (pinned) head.appendChild(el("span", "wfx-pin", "📌 fixado — Esc solta"));
+    box.appendChild(head);
+
+    if (p.detail) box.appendChild(el("p", "wfx-detail", p.detail));
+
+    if (p.advance) {
+      var adv = el("div", "wfx-row wfx-advance");
+      adv.appendChild(el("b", "wfx-k", "O que faz avançar: "));
+      adv.appendChild(document.createTextNode(p.advance));
+      box.appendChild(adv);
+    }
+
+    if (p.goes_to && p.goes_to.length) {
+      var g = el("div", "wfx-row wfx-goes");
+      g.appendChild(el("b", "wfx-k", "Pra onde pode ir:"));
+      var ul = el("ul", "wfx-list");
+      p.goes_to.forEach(function (go) {
+        var toIdx = phaseIndex(phases, go.to);
+        var toLabel = toIdx !== -1 ? phases[toIdx].label : go.to;
+        var li = el("li");
+        li.appendChild(el("span", "wfx-when", go.when));
+        li.appendChild(el("span", "wfx-to", "→ " + toLabel));
+        ul.appendChild(li);
+      });
+      g.appendChild(ul);
+      box.appendChild(g);
+    }
+  }
+
+  function buildSubloop(wf, subloop) {
+    var box = document.getElementById("wfsub");
+    if (!box) return;
+    if (wf.phase !== "LOOP_FEATURES" || !subloop.length) {
+      box.hidden = true; box.innerHTML = "";
+      return;
+    }
+    box.hidden = false;
+    box.innerHTML = "";
+
+    var head = el("div", "wfsub-head");
+    var hIc = el("span", "wfsub-head-ic", "🔁");
+    hIc.setAttribute("aria-hidden", "true");
+    head.appendChild(hIc);
+    head.appendChild(document.createTextNode("Dentro de "));
+    head.appendChild(el("b", null, "Construindo"));
+    head.appendChild(document.createTextNode(", cada item passa por:"));
+    box.appendChild(head);
+
+    var track = el("div", "wfsub-track");
+    var curSubIdx = subIndex(subloop, wf.subphase);
+    subloop.forEach(function (s, i) {
+      var cls = "wfsub-step";
+      if (curSubIdx !== -1) {
+        if (i < curSubIdx) cls += " is-done";
+        else if (i === curSubIdx) cls += " is-current";
+        else cls += " is-future";
+      }
+      var step = el("div", cls);
+      if (s.detail) step.title = s.detail;
+      var ic = el("span", "wfsub-icon", s.icon || "•");
+      ic.setAttribute("aria-hidden", "true");
+      step.appendChild(ic);
+      step.appendChild(el("span", "wfsub-label", s.label || s.id));
+      track.appendChild(step);
+      if (i < subloop.length - 1) {
+        var ar = el("span", "wfsub-arrow", "→");
+        ar.setAttribute("aria-hidden", "true");
+        track.appendChild(ar);
+      }
+    });
+    var loop = el("span", "wfsub-loop", "↺ repete por item");
+    loop.setAttribute("aria-hidden", "true");
+    track.appendChild(loop);
+    box.appendChild(track);
   }
 
   function renderTitle(project) {
@@ -415,6 +809,24 @@
       card.style.setProperty("--agent-color", c);
       card.dataset.slug = a.agente;
       card.setAttribute("draggable", "true");
+      card.setAttribute("tabindex", "0");
+      card.setAttribute("role", "button");
+      card.setAttribute("aria-label", "abrir " + a.agente + " em tela cheia");
+
+      var justDragged = false;   // supress the click that follows a drag
+
+      // click / keyboard -> abre a visão em tela cheia do agente
+      card.addEventListener("click", function (e) {
+        if (justDragged) return;
+        if (e.target && e.target.closest && e.target.closest(".agent-pin")) return;
+        openAgent(a.agente, card);
+      });
+      card.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          openAgent(a.agente, card);
+        }
+      });
 
       // drag-drop reorder
       card.addEventListener("dragstart", function (e) {
@@ -423,6 +835,7 @@
       });
       card.addEventListener("dragend", function () {
         card.classList.remove("dragging"); saveOrderFromDOM(root);
+        justDragged = true; setTimeout(function () { justDragged = false; }, 80);
       });
       card.addEventListener("dragover", function (e) {
         e.preventDefault();
@@ -445,6 +858,10 @@
         if (lastSnapshot) renderTeam(lastSnapshot.agents || []);
       });
       card.appendChild(pin);
+
+      var openHint = el("span", "agent-open-hint", "⤢ abrir");
+      openHint.setAttribute("aria-hidden", "true");
+      card.appendChild(openHint);
 
       if (status === "sleeping") card.appendChild(el("span", "zzz", "z z z"));
 
@@ -603,6 +1020,183 @@
     seenActivity = nextSeen;
   }
 
+  // ---- fullscreen agent view (modal / tela cheia) --------------------
+  var fsOpenSlug = null;
+  var fsLastFocused = null;
+  var fsEl = null;
+
+  function clamp01(n) { return Math.max(0, Math.min(100, n)); }
+
+  function agentBySlug(slug) {
+    if (!lastSnapshot) return null;
+    var list = lastSnapshot.agents || [];
+    for (var i = 0; i < list.length; i++) if (list[i].agente === slug) return list[i];
+    return null;
+  }
+
+  function renderFsTerminal(holder, stream) {
+    var old = holder.firstChild;
+    var nearBottom = true;
+    if (old && old.scrollHeight) {
+      nearBottom = (old.scrollHeight - old.scrollTop - old.clientHeight) < 28;
+    }
+    holder.innerHTML = "";
+    if (Array.isArray(stream) && stream.length) {
+      var term = buildTerminal(stream);
+      term.classList.add("fs-term");
+      holder.appendChild(term);
+      if (nearBottom) requestAnimationFrame(function () { term.scrollTop = term.scrollHeight; });
+    } else {
+      holder.appendChild(el("div", "fs-term-empty", "sem stream ainda — o agente não emitiu linhas."));
+    }
+  }
+
+  function buildFullscreenBody(a) {
+    var frag = document.createDocumentFragment();
+    var status = STATUS[a.status] ? a.status : "idle";
+    var meta = STATUS[status];
+
+    var closeBtn = el("button", "fs-close", "✕");
+    closeBtn.type = "button";
+    closeBtn.setAttribute("aria-label", "fechar tela cheia");
+    closeBtn.addEventListener("click", closeAgent);
+    frag.appendChild(closeBtn);
+
+    var head = el("div", "fs-head");
+    var avatar = el("div", "fs-avatar");
+    avatar.setAttribute("aria-hidden", "true");
+    var avInner = el("div", "fs-avatar-inner");
+    avatar.appendChild(avInner);
+    loadAvatar(a.agente, avatarStyle).then(function (svg) { avInner.innerHTML = svg || defaultAvatar(); });
+    head.appendChild(avatar);
+
+    var metaBox = el("div", "fs-meta");
+    var name = el("h2", "fs-name", a.agente);
+    name.id = "fs-name";
+    metaBox.appendChild(name);
+
+    var st = el("div", "fs-status");
+    st.appendChild(el("span", "glyph", meta.glyph));
+    st.appendChild(el("span", "fs-status-label", meta.label));
+    metaBox.appendChild(st);
+
+    var trust = (typeof a.trust === "number") ? a.trust : 50;
+    var tw = el("div", "fs-trust");
+    var thead = el("div", "fs-trust-head");
+    thead.appendChild(el("span", null, "confiança"));
+    thead.appendChild(el("b", "fs-trust-val", String(trust)));
+    tw.appendChild(thead);
+    var bar = el("div", "trust-bar");
+    var fill = el("div", "trust-bar-fill");
+    fill.style.width = clamp01(trust) + "%";
+    bar.appendChild(fill);
+    tw.appendChild(bar);
+    metaBox.appendChild(tw);
+    head.appendChild(metaBox);
+    frag.appendChild(head);
+
+    frag.appendChild(el("div", "fs-bubble", a.bubble || a.note || "—"));
+
+    var wrap = el("div", "fs-term-wrap");
+    var label = el("div", "fs-term-label");
+    label.appendChild(el("span", null, "stream ao vivo"));
+    label.appendChild(el("span", "live-dot"));
+    wrap.appendChild(label);
+    var holder = el("div", "fs-term-holder");
+    wrap.appendChild(holder);
+    renderFsTerminal(holder, a.stream);
+    frag.appendChild(wrap);
+
+    return frag;
+  }
+
+  function updateFullscreen(a) {
+    if (!fsEl) return;
+    var status = STATUS[a.status] ? a.status : "idle";
+    var meta = STATUS[status];
+    var panel = fsEl.querySelector(".fs-panel");
+    if (panel) panel.style.setProperty("--agent-color", colorFor(a.agente));
+    var glyph = fsEl.querySelector(".fs-status .glyph");
+    if (glyph) glyph.textContent = meta.glyph;
+    var slabel = fsEl.querySelector(".fs-status-label");
+    if (slabel) slabel.textContent = meta.label;
+    var trust = (typeof a.trust === "number") ? a.trust : 50;
+    var tval = fsEl.querySelector(".fs-trust-val");
+    if (tval) tval.textContent = String(trust);
+    var fill = fsEl.querySelector(".fs-trust .trust-bar-fill");
+    if (fill) fill.style.width = clamp01(trust) + "%";
+    var bubble = fsEl.querySelector(".fs-bubble");
+    if (bubble) bubble.textContent = a.bubble || a.note || "—";
+    var holder = fsEl.querySelector(".fs-term-holder");
+    if (holder) renderFsTerminal(holder, a.stream);
+  }
+
+  function onFsKeydown(e) {
+    if (e.key === "Escape") { e.preventDefault(); closeAgent(); return; }
+    if (e.key === "Tab" && fsEl) {
+      var nodes = fsEl.querySelectorAll('button, [href], select, input, [tabindex]:not([tabindex="-1"])');
+      var f = Array.prototype.filter.call(nodes, function (n) { return n.offsetParent !== null; });
+      if (!f.length) return;
+      var first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  }
+
+  function openAgent(slug, originEl) {
+    var a = agentBySlug(slug);
+    if (!a) return;
+    if (fsEl) closeAgent();
+    fsOpenSlug = slug;
+    fsLastFocused = document.activeElement;
+
+    var overlay = el("div", "fullscreen-agent");
+    overlay.id = "fullscreen-agent";
+    overlay.setAttribute("role", "dialog");
+    overlay.setAttribute("aria-modal", "true");
+    overlay.setAttribute("aria-labelledby", "fs-name");
+
+    if (originEl && originEl.getBoundingClientRect) {
+      var r = originEl.getBoundingClientRect();
+      var ox = ((r.left + r.width / 2) / (window.innerWidth || 1)) * 100;
+      var oy = ((r.top + r.height / 2) / (window.innerHeight || 1)) * 100;
+      overlay.style.setProperty("--fs-origin-x", ox.toFixed(1) + "%");
+      overlay.style.setProperty("--fs-origin-y", oy.toFixed(1) + "%");
+    }
+
+    var backdrop = el("div", "fs-backdrop");
+    backdrop.addEventListener("click", closeAgent);
+    overlay.appendChild(backdrop);
+
+    var panel = el("div", "fs-panel");
+    panel.style.setProperty("--agent-color", colorFor(slug));
+    panel.appendChild(buildFullscreenBody(a));
+    overlay.appendChild(panel);
+
+    overlay.addEventListener("keydown", onFsKeydown);
+    document.body.appendChild(overlay);
+    document.body.style.overflow = "hidden";
+    fsEl = overlay;
+
+    var closeBtn = overlay.querySelector(".fs-close");
+    if (closeBtn) closeBtn.focus();
+  }
+
+  function closeAgent() {
+    if (!fsEl) return;
+    var overlay = fsEl;
+    fsEl = null;
+    fsOpenSlug = null;
+    overlay.removeEventListener("keydown", onFsKeydown);
+    overlay.classList.add("is-closing");
+    var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var done = function () { if (overlay.parentNode) overlay.parentNode.removeChild(overlay); };
+    if (reduce) done(); else setTimeout(done, 190);
+    document.body.style.overflow = "";
+    if (fsLastFocused && fsLastFocused.focus) { try { fsLastFocused.focus(); } catch (e) {} }
+    fsLastFocused = null;
+  }
+
   // ---- service worker -------------------------------------------------
   function registerSW() {
     if ("serviceWorker" in navigator) {
@@ -613,6 +1207,7 @@
   // ---- boot -----------------------------------------------------------
   function boot() {
     initTheme();
+    initSkins();
     initControls();
     registerSW();
     // hook de dev/teste: permite injetar um snapshot manualmente sem WS

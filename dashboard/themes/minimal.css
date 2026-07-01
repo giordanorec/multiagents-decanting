@@ -1,0 +1,500 @@
+/* =========================================================================
+   Minimal / Notion — muito branco, cinzas sutis, filetes finos
+   Sans discreta, cantos suaves, quase sem sombra, calmo e clean. Nada grita:
+   hierarquia por peso de fonte e espaço em branco, não por cor. Acento
+   quase-preto com um toque de azul frio; semânticos dessaturados.
+   Escopo: html[data-skin="minimal"]
+   ========================================================================= */
+
+html[data-skin="minimal"] {
+  --bg: #ffffff;
+  --bg-soft: #f7f7f5;          /* off-white "papel" do Notion */
+  --surface: #ffffff;
+  --surface-2: #f6f6f4;
+  --border: #e9e9e6;           /* filete finíssimo, cinza-quente */
+  --text: #2f2f2c;             /* quase-preto, não #000 */
+  --text-dim: #6b6b66;
+  --text-faint: #9b9b95;
+  --accent: #37352f;           /* tinta Notion (near-black) como destaque */
+  --accent-2: #4a72c4;         /* azul frio discreto p/ picos pontuais */
+  --gold: #b8893f;
+  --orange: #c07b3a;
+  --red: #c1544b;
+  --green: #4f9a63;
+  --grey: #a8a8a2;
+  --radius: 6px;
+  --radius-lg: 10px;
+  --shadow: 0 1px 2px rgba(15, 15, 15, 0.06), 0 4px 14px rgba(15, 15, 15, 0.06);
+  --shadow-soft: 0 1px 0 rgba(15, 15, 15, 0.04);
+  --gap: 14px;
+  --font-sans: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "SFMono-Regular", "JetBrains Mono", Menlo, Consolas, monospace;
+}
+
+html[data-skin="minimal"] body {
+  background: var(--bg);
+  background-image: none;
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* -------- chrome / topbar: filete inferior, zero peso visual -------- */
+html[data-skin="minimal"] .topbar {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: saturate(120%) blur(8px);
+  -webkit-backdrop-filter: saturate(120%) blur(8px);
+  border-bottom: 1px solid var(--border);
+  box-shadow: none;
+}
+html[data-skin="minimal"] .brand h1 {
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+html[data-skin="minimal"] .brand-dot {
+  color: var(--text-faint);
+}
+
+html[data-skin="minimal"] .conn,
+html[data-skin="minimal"] .team-count {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-dim);
+  font-weight: 500;
+  box-shadow: none;
+}
+html[data-skin="minimal"] .conn-dot { box-shadow: none; }
+html[data-skin="minimal"] .conn--online .conn-dot { background: var(--green); }
+html[data-skin="minimal"] .conn--connecting .conn-dot { background: var(--gold); }
+html[data-skin="minimal"] .conn--offline .conn-dot { background: var(--red); }
+
+html[data-skin="minimal"] .icon-btn,
+html[data-skin="minimal"] .ctrl-btn,
+html[data-skin="minimal"] .skin-select {
+  background: var(--surface);
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: none;
+  transition: background .15s ease, color .15s ease, border-color .15s ease;
+}
+html[data-skin="minimal"] .icon-btn:hover,
+html[data-skin="minimal"] .ctrl-btn:hover,
+html[data-skin="minimal"] .skin-select:hover {
+  background: var(--surface-2);
+  color: var(--text);
+  border-color: #dcdcd8;
+}
+html[data-skin="minimal"] .skin-picker,
+html[data-skin="minimal"] .skin-select { font-weight: 500; }
+
+html[data-skin="minimal"] .section-title {
+  color: var(--text-dim);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+html[data-skin="minimal"] .live-dot { background: var(--green); box-shadow: none; }
+
+/* -------- hero: bloco de papel, borda fina, título sereno -------- */
+html[data-skin="minimal"] .hero {
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: none;
+}
+html[data-skin="minimal"] .hero-glow { display: none; }
+html[data-skin="minimal"] .hero-eyebrow {
+  color: var(--text-faint);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+html[data-skin="minimal"] .hero-title {
+  background: none;
+  -webkit-background-clip: initial;
+  background-clip: initial;
+  color: var(--text);
+  -webkit-text-fill-color: var(--text);
+  font-weight: 650;
+  letter-spacing: -0.02em;
+}
+html[data-skin="minimal"] .hero-doing { color: var(--text-dim); }
+html[data-skin="minimal"] .hero-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: none;
+}
+html[data-skin="minimal"] .hi-badge {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  border-radius: var(--radius);
+}
+html[data-skin="minimal"] .hi-slug { color: var(--text); font-weight: 600; }
+html[data-skin="minimal"] .hi-sub { color: var(--text-faint); }
+html[data-skin="minimal"] .hero-flags .flag,
+html[data-skin="minimal"] .flag {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text-dim);
+  font-weight: 500;
+}
+html[data-skin="minimal"] .flag--warn { color: var(--orange); border-color: color-mix(in srgb, var(--orange) 30%, var(--border)); }
+html[data-skin="minimal"] .flag--bypass { color: var(--red); border-color: color-mix(in srgb, var(--red) 30%, var(--border)); }
+html[data-skin="minimal"] .hero-next { color: var(--text-faint); }
+
+/* =========================================================================
+   Mapa do workflow — limpo, filetes finos, estados por peso e tinta discreta
+   ========================================================================= */
+html[data-skin="minimal"] .wfmap-wrap {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: none;
+}
+html[data-skin="minimal"] .wfmap-hint {
+  color: var(--text-faint);
+  font-weight: 500;
+}
+
+/* nós */
+html[data-skin="minimal"] .wfnode-badge {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  color: var(--text-dim);
+  box-shadow: none;
+}
+html[data-skin="minimal"] .wfnode.is-future .wfnode-badge { color: var(--text-faint); }
+html[data-skin="minimal"] .wfnode.is-done .wfnode-badge {
+  background: var(--surface);
+  border-color: color-mix(in srgb, var(--green) 45%, var(--border));
+  color: var(--green);
+}
+html[data-skin="minimal"] .wfnode-check {
+  background: var(--green);
+  color: #fff;
+  border: 2px solid var(--surface);
+  border-radius: 50%;
+}
+html[data-skin="minimal"] .wfnode.is-current .wfnode-badge {
+  background: var(--surface);
+  border-color: var(--accent);
+  color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 12%, transparent);
+}
+html[data-skin="minimal"] .wfnode.is-selected .wfnode-badge {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-2) 22%, transparent);
+  border-color: var(--accent-2);
+}
+html[data-skin="minimal"] .wfnode-label {
+  color: var(--text-dim);
+  font-weight: 500;
+}
+html[data-skin="minimal"] .wfnode.is-current .wfnode-label { color: var(--text); font-weight: 600; }
+html[data-skin="minimal"] .wfnode.is-future .wfnode-label { color: var(--text-faint); }
+html[data-skin="minimal"] .wfnode-here,
+html[data-skin="minimal"] .wfx-tag--here {
+  background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--border));
+  border-radius: 999px;
+  color: var(--text);
+  font-weight: 500;
+}
+html[data-skin="minimal"] .wfnode-here-dot { background: var(--accent); box-shadow: none; }
+html[data-skin="minimal"] .wfnode-doing { color: var(--text-faint); }
+html[data-skin="minimal"] .wfnode-branch {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-dim);
+}
+html[data-skin="minimal"] .wfbr-arrow { color: var(--text-faint); }
+
+/* arestas: linha fina cinza; feita/atual ganham tinta sóbria */
+html[data-skin="minimal"] .wfedge-line { background: var(--border); }
+html[data-skin="minimal"] .wfedge-line::after { border-left-color: var(--border); }
+html[data-skin="minimal"] .wfedge.is-done .wfedge-line { background: color-mix(in srgb, var(--green) 55%, var(--border)); }
+html[data-skin="minimal"] .wfedge.is-done .wfedge-line::after { border-left-color: color-mix(in srgb, var(--green) 55%, var(--border)); }
+html[data-skin="minimal"] .wfedge.is-current .wfedge-line { background: var(--accent); box-shadow: none; }
+html[data-skin="minimal"] .wfedge.is-current .wfedge-line::after { border-left-color: var(--accent); }
+html[data-skin="minimal"] .wfedge-label {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-faint);
+  font-weight: 500;
+}
+
+/* trilho de retorno do ciclo */
+html[data-skin="minimal"] .wfreturn {
+  background: var(--surface-2);
+  border: 1px dashed color-mix(in srgb, var(--accent-2) 40%, var(--border));
+  border-radius: var(--radius);
+  color: var(--text-dim);
+}
+html[data-skin="minimal"] .wfreturn.is-active {
+  border-color: var(--accent-2);
+  background: color-mix(in srgb, var(--accent-2) 8%, var(--surface));
+}
+html[data-skin="minimal"] .wfreturn-arrow { color: var(--accent-2); }
+
+/* sub-loop "Construindo" */
+html[data-skin="minimal"] .wfsub {
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: none;
+}
+html[data-skin="minimal"] .wfsub-head-ic { color: var(--text-faint); }
+html[data-skin="minimal"] .wfsub-step {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-dim);
+}
+html[data-skin="minimal"] .wfsub-step.is-done { color: var(--green); border-color: color-mix(in srgb, var(--green) 35%, var(--border)); }
+html[data-skin="minimal"] .wfsub-step.is-current {
+  color: var(--text);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 10%, transparent);
+}
+html[data-skin="minimal"] .wfsub-step.is-future { color: var(--text-faint); }
+html[data-skin="minimal"] .wfsub-arrow,
+html[data-skin="minimal"] .wfsub-loop { color: var(--text-faint); }
+
+/* painel explicador */
+html[data-skin="minimal"] .wf-explainer {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: none;
+}
+html[data-skin="minimal"] .wfx-icon { color: var(--text-dim); }
+html[data-skin="minimal"] .wfx-title { color: var(--text); font-weight: 600; }
+html[data-skin="minimal"] .wfx-tag {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text-dim);
+  font-weight: 500;
+}
+html[data-skin="minimal"] .wfx-tag--muted { color: var(--text-faint); }
+html[data-skin="minimal"] .wfx-pin { color: var(--text-faint); }
+html[data-skin="minimal"] .wfx-row { border-top: 1px solid var(--border); }
+html[data-skin="minimal"] .wfx-k { color: var(--text-faint); font-weight: 600; }
+html[data-skin="minimal"] .wfx-when {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-dim);
+}
+html[data-skin="minimal"] .wfx-to,
+html[data-skin="minimal"] .wfx-advance,
+html[data-skin="minimal"] .wfx-goes { color: var(--text-dim); }
+
+/* =========================================================================
+   Cartão de agente — o coração. Papel branco, filete, hover discretíssimo.
+   ========================================================================= */
+html[data-skin="minimal"] .agent {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  transition: border-color .15s ease, box-shadow .15s ease, transform .15s ease;
+}
+html[data-skin="minimal"] .agent::before {
+  height: 2px;
+  background: color-mix(in srgb, var(--agent-color) 55%, transparent);
+  opacity: .8;
+}
+html[data-skin="minimal"] .agent:hover {
+  transform: none;
+  border-color: #dcdcd8;
+  box-shadow: var(--shadow);
+}
+html[data-skin="minimal"] .agent--working {
+  border-color: color-mix(in srgb, var(--agent-color) 40%, var(--border));
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--agent-color) 22%, transparent);
+}
+html[data-skin="minimal"] .agent--decanting {
+  border-color: color-mix(in srgb, var(--gold) 35%, var(--border));
+}
+html[data-skin="minimal"] .agent--human_driving {
+  border-color: color-mix(in srgb, var(--orange) 35%, var(--border));
+}
+html[data-skin="minimal"] .agent--error,
+html[data-skin="minimal"] .agent--needs_recovery {
+  border-color: color-mix(in srgb, var(--red) 38%, var(--border));
+}
+html[data-skin="minimal"] .agent--sleeping { opacity: .72; }
+html[data-skin="minimal"] .agent--pinned {
+  border-color: color-mix(in srgb, var(--accent) 30%, var(--border));
+}
+html[data-skin="minimal"] .agent.dragging { box-shadow: var(--shadow); opacity: .9; }
+
+html[data-skin="minimal"] .agent-avatar::before,
+html[data-skin="minimal"] .fs-avatar::before {
+  border-width: 2px;
+  box-shadow: none;
+}
+html[data-skin="minimal"] .agent-name {
+  color: var(--text);
+  font-weight: 600;
+  letter-spacing: -0.005em;
+}
+html[data-skin="minimal"] .agent-status,
+html[data-skin="minimal"] .fs-status {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text-dim);
+  font-weight: 500;
+}
+html[data-skin="minimal"] .agent-bubble,
+html[data-skin="minimal"] .fs-bubble {
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-dim);
+}
+html[data-skin="minimal"] .agent-pin { color: var(--text-faint); }
+html[data-skin="minimal"] .agent-open-hint { color: var(--text-faint); }
+html[data-skin="minimal"] .zzz { color: var(--text-faint); }
+
+/* -------- mini-terminal: bloco de código claro (não invertido) -------- */
+html[data-skin="minimal"] .agent-term,
+html[data-skin="minimal"] .fs-term {
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-dim);
+  font-family: var(--font-mono);
+}
+html[data-skin="minimal"] .term-ts { color: var(--text-faint); }
+html[data-skin="minimal"] .term-tx { color: var(--text-dim); }
+html[data-skin="minimal"] .term-add { color: var(--text-faint); }
+/* cores por tipo — dessaturadas, legíveis sobre fundo claro */
+html[data-skin="minimal"] .term--read   { color: #3f6fb0; }
+html[data-skin="minimal"] .term--write  { color: var(--green); }
+html[data-skin="minimal"] .term--edit   { color: var(--gold); }
+html[data-skin="minimal"] .term--bash   { color: #7a5bb0; }
+html[data-skin="minimal"] .term--grep   { color: #2f8f8f; }
+html[data-skin="minimal"] .term--web    { color: #2f8f8f; }
+html[data-skin="minimal"] .term--agent  { color: #7a5bb0; }
+html[data-skin="minimal"] .term--think  { color: var(--text-faint); font-style: italic; }
+html[data-skin="minimal"] .term--decant { color: var(--gold); }
+html[data-skin="minimal"] .term--ok     { color: var(--green); }
+html[data-skin="minimal"] .term--error  { color: var(--red); }
+html[data-skin="minimal"] .term--start  { color: var(--accent-2); }
+html[data-skin="minimal"] .term--say    { color: var(--text); }
+html[data-skin="minimal"] .term--dim    { color: var(--text-faint); }
+html[data-skin="minimal"] .term--tool   { color: var(--text-dim); }
+
+/* -------- barra de confiança + barras de métrica -------- */
+html[data-skin="minimal"] .agent-trust-head,
+html[data-skin="minimal"] .fs-trust-head { color: var(--text-faint); }
+html[data-skin="minimal"] .trust-bar,
+html[data-skin="minimal"] .bar {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+}
+html[data-skin="minimal"] .trust-bar-fill {
+  background: color-mix(in srgb, var(--agent-color) 65%, var(--text-faint));
+  border-radius: 999px;
+  box-shadow: none;
+}
+html[data-skin="minimal"] .bar-fill {
+  background: var(--accent);
+  border-radius: 999px;
+}
+html[data-skin="minimal"] .bar-fill--cost { background: var(--gold); }
+html[data-skin="minimal"] .bar-fill.is-warn { background: var(--orange); }
+html[data-skin="minimal"] .bar-fill.is-danger { background: var(--red); }
+
+/* -------- métricas: cartões-papel, número em peso, não em cor -------- */
+html[data-skin="minimal"] .metric {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: none;
+}
+html[data-skin="minimal"] .metric-label { color: var(--text-faint); font-weight: 500; }
+html[data-skin="minimal"] .metric-value,
+html[data-skin="minimal"] .metric-value--big {
+  color: var(--text);
+  font-weight: 650;
+  letter-spacing: -0.02em;
+}
+html[data-skin="minimal"] .metric-sub { color: var(--text-faint); }
+
+/* -------- atividade: lista discreta, divisores finos -------- */
+html[data-skin="minimal"] .activity-list {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: none;
+}
+html[data-skin="minimal"] .activity-list li { border-bottom: 1px solid var(--border); }
+html[data-skin="minimal"] .activity-list li:last-child { border-bottom: none; }
+html[data-skin="minimal"] .activity-empty { color: var(--text-faint); }
+html[data-skin="minimal"] .act-ts { color: var(--text-faint); font-family: var(--font-mono); }
+html[data-skin="minimal"] .act-text { color: var(--text-dim); }
+html[data-skin="minimal"] .act-new { background: color-mix(in srgb, var(--accent) 5%, transparent); }
+html[data-skin="minimal"] .act-icon[data-i="▶"] { color: var(--accent-2); }
+html[data-skin="minimal"] .act-icon[data-i="◆"] { color: var(--gold); }
+html[data-skin="minimal"] .act-icon[data-i="✓"] { color: var(--green); }
+html[data-skin="minimal"] .act-icon[data-i="✗"] { color: var(--red); }
+
+/* =========================================================================
+   Fullscreen — folha branca centrada, backdrop leitoso, sombra suave
+   ========================================================================= */
+html[data-skin="minimal"] .fs-backdrop {
+  background: rgba(30, 30, 28, 0.28);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+html[data-skin="minimal"] .fs-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 12px 48px rgba(15, 15, 15, 0.16);
+}
+html[data-skin="minimal"] .fs-close {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  color: var(--text-dim);
+}
+html[data-skin="minimal"] .fs-close:hover { background: #ededea; color: var(--text); }
+html[data-skin="minimal"] .fs-name { color: var(--text); font-weight: 650; letter-spacing: -0.01em; }
+html[data-skin="minimal"] .fs-trust-head,
+html[data-skin="minimal"] .fs-trust-val { color: var(--text-faint); }
+html[data-skin="minimal"] .fs-term-label { color: var(--text-faint); font-weight: 500; }
+html[data-skin="minimal"] .fs-term-empty {
+  background: var(--bg-soft);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  color: var(--text-faint);
+}
+
+/* -------- banner offline -------- */
+html[data-skin="minimal"] .offline-banner {
+  background: var(--red);
+  color: #fff;
+  border-radius: var(--radius);
+  box-shadow: none;
+}
+
+/* micro-animações já são sutis; honra a preferência de redução */
+@media (prefers-reduced-motion: reduce) {
+  html[data-skin="minimal"] .agent { transition: none; }
+  html[data-skin="minimal"] .icon-btn,
+  html[data-skin="minimal"] .ctrl-btn,
+  html[data-skin="minimal"] .skin-select { transition: none; }
+}

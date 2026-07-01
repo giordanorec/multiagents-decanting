@@ -70,6 +70,101 @@ def human_label(phase: str) -> str:
 
 def human_doing(phase: str) -> str:
     return PHASE_HUMAN.get(phase, ("", ""))[1]
+
+
+# Guia DIDÁTICO do workflow — alimenta o "mapa do workflow" no dashboard.
+# Para cada fase: ícone, o-que-acontece, o-que-faz-avançar, e pra-onde-pode-ir
+# (ramificações com a CONDIÇÃO anotada). Tudo em linguagem de gente.
+PHASE_GUIDE = {
+    "BOOTSTRAP": {
+        "icon": "🌱",
+        "detail": "Arrumando a casa: criando a estrutura do projeto pra tudo começar organizado.",
+        "advance": "assim que o preparo termina, partimos pra entender sua ideia.",
+        "goes_to": [{"to": "DISCOVERY", "when": "preparo pronto"}],
+    },
+    "DISCOVERY": {
+        "icon": "💡",
+        "detail": "Conversamos pra descobrir o que você quer de verdade: o problema, "
+                  "para quem é e o que seria sucesso. Nada de código ainda.",
+        "advance": "quando a ideia está clara e você confirma, seguimos.",
+        "goes_to": [{"to": "ESPEC_V1", "when": "ideia entendida"}],
+    },
+    "ESPEC_V1": {
+        "icon": "📝",
+        "detail": "Transformamos a ideia numa lista clara de coisas a construir "
+                  "(o que vem primeiro, o que pode esperar).",
+        "advance": "com a lista combinada, montamos o time.",
+        "goes_to": [{"to": "SETUP_TIME", "when": "lista pronta"}],
+    },
+    "SETUP_TIME": {
+        "icon": "🧑‍🤝‍🧑",
+        "detail": "Escolhemos quais assistentes vão trabalhar — e conversamos sobre "
+                  "custo e velocidade (mais assistentes/paralelo = mais rápido).",
+        "advance": "com o time montado, começamos a construir.",
+        "goes_to": [{"to": "LOOP_FEATURES", "when": "time pronto"}],
+    },
+    "LOOP_FEATURES": {
+        "icon": "🔨",
+        "detail": "O coração do projeto: cada item da lista vira realidade, um a um. "
+                  "Você acompanha ao vivo, opina e libera. Ao terminar um, já começa o próximo.",
+        "advance": "quando todos os itens estão prontos, vamos testar e validar.",
+        "goes_to": [
+            {"to": "LOOP_FEATURES", "when": "ainda há itens → próximo item"},
+            {"to": "PRE_RELEASE", "when": "lista concluída"},
+        ],
+    },
+    "PRE_RELEASE": {
+        "icon": "🧪",
+        "detail": "Conferimos e testamos tudo o que foi feito, pra garantir que "
+                  "funciona de verdade antes de valer.",
+        "advance": "passando nos testes, vai pro ar.",
+        "goes_to": [
+            {"to": "PILOTO", "when": "tudo validado"},
+            {"to": "LOOP_FEATURES", "when": "achamos algo pra ajustar → volta a construir"},
+        ],
+    },
+    "PILOTO": {
+        "icon": "🚀",
+        "detail": "Está no ar, em uso real. Ideias novas viram novos itens e "
+                  "reiniciam o ciclo.",
+        "advance": "uma ideia nova recomeça o ciclo.",
+        "goes_to": [{"to": "DISCOVERY", "when": "nova ideia"}],
+    },
+}
+
+# Guia do sub-loop de cada item (dentro de "Construindo").
+SUBPHASE_GUIDE = [
+    {"id": "spec_pendente", "label": "Descrevendo", "icon": "✍️",
+     "detail": "O Arquiteto descreve o próximo item a construir."},
+    {"id": "spec_validada", "label": "Você aprova", "icon": "👍",
+     "detail": "Se o item é arriscado (difícil de desfazer), você confere e aprova. "
+               "Itens simples seguem sozinhos."},
+    {"id": "executando", "label": "Construindo", "icon": "⚙️",
+     "detail": "Um assistente constrói o item enquanto você acompanha ao vivo."},
+    {"id": "validando", "label": "Conferindo", "icon": "🔎",
+     "detail": "O Arquiteto confere se ficou como combinado."},
+    {"id": "concluida", "label": "Entregue", "icon": "✅",
+     "detail": "Item entregue. Vai pro próximo — ou de volta a construir se algo faltou."},
+]
+
+
+def phase_guide() -> dict:
+    """Fases (nome humano) + guia didático, prontas pro mapa do dashboard."""
+    out = []
+    for p in PHASES:
+        g = PHASE_GUIDE.get(p, {})
+        out.append({
+            "id": p,
+            "label": PHASE_HUMAN.get(p, (p, ""))[0],
+            "doing": PHASE_HUMAN.get(p, ("", ""))[1],
+            "icon": g.get("icon", "•"),
+            "detail": g.get("detail", ""),
+            "advance": g.get("advance", ""),
+            "goes_to": g.get("goes_to", []),
+        })
+    return {"phases": out, "subloop": SUBPHASE_GUIDE}
+
+
 NEXT_SUBPHASE = {
     "spec_pendente": "spec_validada", "spec_validada": "executando",
     "executando": "validando", "validando": "aprovacao_humano",

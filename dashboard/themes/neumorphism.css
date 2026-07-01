@@ -1,0 +1,575 @@
+/* =========================================================================
+   Neumorphism — soft UI, relevo extrudado, monocromático cinza-claro
+   Uma única superfície contínua. Nada "flutua" com borda: os elementos
+   parecem esculpidos do mesmo material — pressionados (côncavos) ou
+   salientes (convexos) — via sombra dupla (luz no topo-esquerda, sombra
+   no fundo-direita). Baixo contraste, cantos muito arredondados, sutil.
+   Escopo: html[data-skin="neumorphism"]
+   ========================================================================= */
+
+html[data-skin="neumorphism"] {
+  /* base monocromática — tudo deriva de um único cinza-azulado claro */
+  --bg: #e4e9f0;
+  --bg-soft: #dde3ec;
+  --surface: #e4e9f0;
+  --surface-2: #eef2f8;
+  --border: rgba(163, 177, 198, 0.35);
+  --text: #5b6577;
+  --text-dim: #8793a7;
+  --text-faint: #a9b3c4;
+  --accent: #6d7f9e;          /* azul-ardósia dessaturado */
+  --accent-2: #8a9bbb;
+  --gold: #b9995e;
+  --orange: #c79161;
+  --red: #c07d84;
+  --green: #7fa389;
+  --grey: #a1abbd;
+  --radius: 20px;
+  --radius-lg: 30px;
+  /* sombra dupla = a assinatura do neumorfismo (relevo saliente) */
+  --shadow: 8px 8px 18px rgba(163, 177, 198, 0.55), -8px -8px 18px rgba(255, 255, 255, 0.85);
+  --shadow-soft: 5px 5px 12px rgba(163, 177, 198, 0.45), -5px -5px 12px rgba(255, 255, 255, 0.80);
+  --gap: 20px;
+  --font-sans: "Nunito", "Quicksand", -apple-system, "Segoe UI", system-ui, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "Cascadia Code", "DejaVu Sans Mono", Menlo, monospace;
+}
+
+/* atalhos internos de relevo — usados em várias regras abaixo */
+html[data-skin="neumorphism"] {
+  --nm-out: 8px 8px 18px rgba(163, 177, 198, 0.55), -8px -8px 18px rgba(255, 255, 255, 0.85);
+  --nm-out-sm: 5px 5px 12px rgba(163, 177, 198, 0.45), -5px -5px 12px rgba(255, 255, 255, 0.80);
+  --nm-in: inset 5px 5px 11px rgba(163, 177, 198, 0.55), inset -5px -5px 11px rgba(255, 255, 255, 0.85);
+  --nm-in-sm: inset 3px 3px 7px rgba(163, 177, 198, 0.50), inset -3px -3px 7px rgba(255, 255, 255, 0.85);
+}
+
+html[data-skin="neumorphism"] body {
+  background: var(--bg);
+  background-image: none;
+  color: var(--text);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+/* ---------- topbar / chrome: barra do mesmo material, quase invisível --- */
+html[data-skin="neumorphism"] .topbar {
+  background: var(--bg);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-bottom: none;
+  box-shadow: 0 6px 16px rgba(163, 177, 198, 0.28);
+}
+html[data-skin="neumorphism"] .brand h1 {
+  color: var(--text);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+html[data-skin="neumorphism"] .brand-dot {
+  color: var(--accent);
+  filter: drop-shadow(2px 2px 3px rgba(163, 177, 198, 0.6));
+}
+
+/* pílulas salientes clicáveis; ao ativar/hover, afundam (côncavas) */
+html[data-skin="neumorphism"] .icon-btn,
+html[data-skin="neumorphism"] .ctrl-btn,
+html[data-skin="neumorphism"] .skin-select,
+html[data-skin="neumorphism"] .conn,
+html[data-skin="neumorphism"] .team-count {
+  background: var(--bg);
+  color: var(--text-dim);
+  border: none;
+  border-radius: 14px;
+  box-shadow: var(--nm-out-sm);
+  transition: box-shadow 0.22s ease, color 0.22s ease;
+}
+html[data-skin="neumorphism"] .icon-btn:hover,
+html[data-skin="neumorphism"] .ctrl-btn:hover,
+html[data-skin="neumorphism"] .skin-select:hover {
+  box-shadow: var(--nm-in-sm);
+  color: var(--accent);
+}
+html[data-skin="neumorphism"] .icon-btn:active,
+html[data-skin="neumorphism"] .ctrl-btn:active {
+  box-shadow: var(--nm-in);
+}
+html[data-skin="neumorphism"] .skin-picker { border-radius: 14px; }
+
+/* conexão: ponto colorido embutido num poço */
+html[data-skin="neumorphism"] .conn-dot {
+  box-shadow: 0 0 0 3px var(--bg), inset 1px 1px 2px rgba(0, 0, 0, 0.15);
+}
+html[data-skin="neumorphism"] .conn--online .conn-dot { background: var(--green); }
+html[data-skin="neumorphism"] .conn--connecting .conn-dot { background: var(--gold); }
+html[data-skin="neumorphism"] .conn--offline .conn-dot { background: var(--red); }
+
+html[data-skin="neumorphism"] .section-title {
+  color: var(--text);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+html[data-skin="neumorphism"] .live-dot {
+  background: var(--red);
+  box-shadow: 0 0 0 3px var(--bg), 3px 3px 6px rgba(163, 177, 198, 0.5);
+}
+
+/* ---------- HERO: grande placa saliente, cantos generosos ---------------- */
+html[data-skin="neumorphism"] .hero {
+  background: var(--bg);
+  border: none;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--nm-out);
+}
+html[data-skin="neumorphism"] .hero-glow {
+  opacity: 0.35;
+  filter: blur(60px) saturate(60%);
+  mix-blend-mode: normal;
+}
+html[data-skin="neumorphism"] .hero-eyebrow {
+  color: var(--accent);
+  font-weight: 800;
+  letter-spacing: 0.16em;
+}
+html[data-skin="neumorphism"] .hero-title {
+  background: none;
+  -webkit-text-fill-color: var(--text);
+  color: var(--text);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.8);
+}
+html[data-skin="neumorphism"] .hero-doing { color: var(--text-dim); }
+
+/* itens do aside: pequenos poços embutidos */
+html[data-skin="neumorphism"] .hero-item {
+  background: var(--bg);
+  border: none;
+  border-radius: 16px;
+  box-shadow: var(--nm-in-sm);
+}
+html[data-skin="neumorphism"] .hi-badge {
+  background: var(--bg);
+  color: var(--accent);
+  border-radius: 12px;
+  box-shadow: var(--nm-out-sm);
+}
+html[data-skin="neumorphism"] .hi-slug { color: var(--text); }
+html[data-skin="neumorphism"] .hi-sub { color: var(--text-faint); }
+
+/* flags: chips salientes suaves */
+html[data-skin="neumorphism"] .flag {
+  background: var(--bg);
+  border: none;
+  border-radius: 999px;
+  box-shadow: var(--nm-out-sm);
+  color: var(--text-dim);
+}
+html[data-skin="neumorphism"] .flag--warn { color: var(--orange); }
+html[data-skin="neumorphism"] .flag--bypass { color: var(--red); }
+html[data-skin="neumorphism"] .hero-next { color: var(--text-faint); }
+
+/* ---------- MAPA DO WORKFLOW: nós esculpidos no mesmo material ----------- */
+html[data-skin="neumorphism"] .wfmap-wrap {
+  background: var(--bg);
+  border: none;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--nm-out);
+}
+html[data-skin="neumorphism"] .wfmap-hint { color: var(--text-faint); }
+
+/* nó: crachá circular saliente; futuro=neutro, atual=afundado com halo,
+   feito=leve tom verde */
+html[data-skin="neumorphism"] .wfnode-badge {
+  background: var(--bg);
+  border: none;
+  border-radius: 50%;
+  box-shadow: var(--nm-out-sm);
+  color: var(--text-dim);
+  transition: box-shadow 0.25s ease, color 0.25s ease;
+}
+html[data-skin="neumorphism"] .wfnode.is-future .wfnode-badge {
+  color: var(--text-faint);
+  box-shadow: var(--nm-in-sm);
+}
+html[data-skin="neumorphism"] .wfnode.is-current .wfnode-badge {
+  color: var(--accent);
+  box-shadow: var(--nm-in),
+              0 0 0 6px rgba(109, 127, 158, 0.10);
+  animation: nm-breathe 3.4s ease-in-out infinite;
+}
+html[data-skin="neumorphism"] .wfnode.is-done .wfnode-badge {
+  color: var(--green);
+  box-shadow: var(--nm-out-sm);
+}
+html[data-skin="neumorphism"] .wfnode.is-selected .wfnode-badge {
+  box-shadow: var(--nm-out-sm), 0 0 0 4px rgba(109, 127, 158, 0.18);
+}
+html[data-skin="neumorphism"] .wfnode-check {
+  background: var(--green);
+  color: var(--surface-2);
+  border: 3px solid var(--bg);
+  border-radius: 50%;
+  box-shadow: 2px 2px 5px rgba(163, 177, 198, 0.5);
+}
+html[data-skin="neumorphism"] .wfnode-label { color: var(--text-dim); font-weight: 700; }
+html[data-skin="neumorphism"] .wfnode.is-current .wfnode-label { color: var(--text); }
+
+/* "você está aqui" e tags: pílula afundada suave */
+html[data-skin="neumorphism"] .wfnode-here,
+html[data-skin="neumorphism"] .wfx-tag--here {
+  background: var(--bg);
+  border: none;
+  border-radius: 999px;
+  box-shadow: var(--nm-in-sm);
+  color: var(--accent);
+}
+html[data-skin="neumorphism"] .wfnode-here-dot { background: var(--accent); }
+html[data-skin="neumorphism"] .wfnode-doing { color: var(--text-faint); }
+
+/* ramificações */
+html[data-skin="neumorphism"] .wfnode-branch {
+  background: var(--bg);
+  border: none;
+  border-radius: 12px;
+  box-shadow: var(--nm-out-sm);
+  color: var(--text-dim);
+}
+html[data-skin="neumorphism"] .wfbr-arrow { color: var(--text-faint); }
+
+/* arestas: sulcos rasos no material */
+html[data-skin="neumorphism"] .wfedge-line {
+  background: transparent;
+  box-shadow: inset 0 1px 2px rgba(163, 177, 198, 0.6),
+              inset 0 -1px 1px rgba(255, 255, 255, 0.8);
+  border-radius: 2px;
+}
+html[data-skin="neumorphism"] .wfedge-line::after { border-left-color: var(--text-faint); }
+html[data-skin="neumorphism"] .wfedge.is-done .wfedge-line {
+  background: color-mix(in srgb, var(--green) 55%, transparent);
+  box-shadow: none;
+}
+html[data-skin="neumorphism"] .wfedge.is-done .wfedge-line::after { border-left-color: var(--green); }
+html[data-skin="neumorphism"] .wfedge.is-current .wfedge-line {
+  background: color-mix(in srgb, var(--accent) 60%, transparent);
+  box-shadow: none;
+}
+html[data-skin="neumorphism"] .wfedge.is-current .wfedge-line::after { border-left-color: var(--accent); }
+html[data-skin="neumorphism"] .wfedge-label {
+  background: var(--bg);
+  border: none;
+  border-radius: 999px;
+  box-shadow: var(--nm-out-sm);
+  color: var(--text-dim);
+}
+
+/* trilho de retorno do ciclo */
+html[data-skin="neumorphism"] .wfreturn {
+  background: var(--bg);
+  border: none;
+  border-radius: 16px;
+  box-shadow: var(--nm-in-sm);
+  color: var(--text-dim);
+}
+html[data-skin="neumorphism"] .wfreturn.is-active { color: var(--accent); }
+html[data-skin="neumorphism"] .wfreturn-arrow { color: var(--accent-2); }
+
+/* sub-loop "Construindo" */
+html[data-skin="neumorphism"] .wfsub {
+  background: var(--bg);
+  border: none;
+  border-radius: 18px;
+  box-shadow: var(--nm-in-sm);
+}
+html[data-skin="neumorphism"] .wfsub-head { color: var(--text); font-weight: 800; }
+html[data-skin="neumorphism"] .wfsub-head-ic { color: var(--accent); }
+html[data-skin="neumorphism"] .wfsub-step {
+  background: var(--bg);
+  border: none;
+  border-radius: 12px;
+  box-shadow: var(--nm-out-sm);
+  color: var(--text-dim);
+}
+html[data-skin="neumorphism"] .wfsub-step.is-done { color: var(--green); }
+html[data-skin="neumorphism"] .wfsub-step.is-current {
+  color: var(--accent);
+  box-shadow: var(--nm-in-sm);
+}
+html[data-skin="neumorphism"] .wfsub-step.is-future { color: var(--text-faint); }
+html[data-skin="neumorphism"] .wfsub-arrow,
+html[data-skin="neumorphism"] .wfsub-loop { color: var(--text-faint); }
+
+/* painel explicador */
+html[data-skin="neumorphism"] .wf-explainer {
+  background: var(--bg);
+  border: none;
+  border-radius: 20px;
+  box-shadow: var(--nm-out-sm);
+}
+html[data-skin="neumorphism"] .wfx-icon {
+  background: var(--bg);
+  color: var(--accent);
+  border-radius: 12px;
+  box-shadow: var(--nm-out-sm);
+}
+html[data-skin="neumorphism"] .wfx-title { color: var(--text); font-weight: 800; }
+html[data-skin="neumorphism"] .wfx-tag {
+  background: var(--bg);
+  border: none;
+  border-radius: 999px;
+  box-shadow: var(--nm-out-sm);
+  color: var(--text-dim);
+}
+html[data-skin="neumorphism"] .wfx-tag--muted { color: var(--text-faint); box-shadow: var(--nm-in-sm); }
+html[data-skin="neumorphism"] .wfx-pin { color: var(--text-faint); }
+html[data-skin="neumorphism"] .wfx-row {
+  background: var(--bg);
+  border: none;
+  border-radius: 14px;
+  box-shadow: var(--nm-in-sm);
+}
+html[data-skin="neumorphism"] .wfx-k { color: var(--text); font-weight: 700; }
+html[data-skin="neumorphism"] .wfx-when { color: var(--text-dim); }
+html[data-skin="neumorphism"] .wfx-to,
+html[data-skin="neumorphism"] .wfx-advance { color: var(--accent); }
+html[data-skin="neumorphism"] .wfx-goes { color: var(--green); }
+
+/* ---------- CARD DE AGENTE: o objeto saliente por excelência ------------- */
+html[data-skin="neumorphism"] .agent {
+  background: var(--bg);
+  border: none;
+  border-radius: var(--radius);
+  box-shadow: var(--nm-out);
+  transition: box-shadow 0.28s ease, transform 0.28s ease;
+}
+/* troca a barra chapada de topo por um sulco embutido colorido bem sutil */
+html[data-skin="neumorphism"] .agent::before {
+  height: 4px;
+  left: 18px;
+  right: 18px;
+  top: 10px;
+  width: auto;
+  border-radius: 999px;
+  background: var(--agent-color);
+  opacity: 0.55;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.4);
+}
+html[data-skin="neumorphism"] .agent:hover {
+  transform: translateY(-2px);
+  box-shadow: 10px 10px 22px rgba(163, 177, 198, 0.6), -10px -10px 22px rgba(255, 255, 255, 0.9);
+}
+html[data-skin="neumorphism"] .agent--working {
+  box-shadow: var(--nm-out),
+              0 0 0 2px color-mix(in srgb, var(--agent-color) 22%, transparent);
+}
+html[data-skin="neumorphism"] .agent--pinned {
+  box-shadow: var(--nm-out),
+              0 0 0 2px color-mix(in srgb, var(--accent) 28%, transparent);
+}
+html[data-skin="neumorphism"] .agent--idle,
+html[data-skin="neumorphism"] .agent--sleeping { box-shadow: var(--nm-out-sm); opacity: 0.94; }
+html[data-skin="neumorphism"] .agent--error,
+html[data-skin="neumorphism"] .agent--needs_recovery {
+  box-shadow: var(--nm-out), 0 0 0 2px color-mix(in srgb, var(--red) 30%, transparent);
+}
+html[data-skin="neumorphism"] .agent--decanting {
+  box-shadow: var(--nm-out), 0 0 0 2px color-mix(in srgb, var(--gold) 30%, transparent);
+}
+html[data-skin="neumorphism"] .agent--human_driving {
+  box-shadow: var(--nm-out), 0 0 0 2px color-mix(in srgb, var(--orange) 32%, transparent);
+}
+html[data-skin="neumorphism"] .agent.dragging {
+  box-shadow: 14px 14px 30px rgba(163, 177, 198, 0.7), -14px -14px 30px rgba(255, 255, 255, 0.95);
+}
+
+/* avatar: disco côncavo, anel embutido no material */
+html[data-skin="neumorphism"] .agent-avatar,
+html[data-skin="neumorphism"] .fs-avatar {
+  background: var(--bg);
+  border-radius: 50%;
+  box-shadow: var(--nm-out-sm);
+}
+html[data-skin="neumorphism"] .agent-avatar::before,
+html[data-skin="neumorphism"] .fs-avatar::before {
+  border-width: 3px;
+  border-color: color-mix(in srgb, var(--agent-color) 60%, var(--bg));
+  box-shadow: none;
+}
+html[data-skin="neumorphism"] .agent-avatar-inner,
+html[data-skin="neumorphism"] .fs-avatar-inner { color: var(--text); }
+
+html[data-skin="neumorphism"] .agent-name { color: var(--text); font-weight: 800; }
+html[data-skin="neumorphism"] .agent-status,
+html[data-skin="neumorphism"] .fs-status {
+  background: var(--bg);
+  border: none;
+  border-radius: 999px;
+  box-shadow: var(--nm-in-sm);
+  color: var(--text-dim);
+}
+html[data-skin="neumorphism"] .agent-status .glyph,
+html[data-skin="neumorphism"] .fs-status .glyph { color: var(--accent); }
+html[data-skin="neumorphism"] .agent-bubble,
+html[data-skin="neumorphism"] .fs-bubble {
+  background: var(--bg);
+  border: none;
+  border-radius: 16px;
+  box-shadow: var(--nm-in-sm);
+  color: var(--text-dim);
+}
+html[data-skin="neumorphism"] .agent-pin { color: var(--accent); }
+html[data-skin="neumorphism"] .agent-open-hint { color: var(--text-faint); }
+html[data-skin="neumorphism"] .zzz { color: var(--text-faint); }
+html[data-skin="neumorphism"] .team-empty {
+  background: var(--bg);
+  border: none;
+  border-radius: var(--radius);
+  box-shadow: var(--nm-in-sm);
+  color: var(--text-faint);
+}
+
+/* ---------- MINI-TERMINAL: poço fundo, texto de baixo contraste --------- */
+html[data-skin="neumorphism"] .agent-term,
+html[data-skin="neumorphism"] .fs-term {
+  background: var(--bg);
+  border: none;
+  border-radius: 16px;
+  box-shadow: var(--nm-in);
+  color: var(--text-dim);
+}
+html[data-skin="neumorphism"] .term-ts { color: var(--text-faint); }
+html[data-skin="neumorphism"] .term-add { color: var(--green); }
+/* cores por tipo — sempre dessaturadas, coerentes com o baixo contraste */
+html[data-skin="neumorphism"] .term--read { color: #7d8dab; }
+html[data-skin="neumorphism"] .term--write,
+html[data-skin="neumorphism"] .term--ok { color: var(--green); }
+html[data-skin="neumorphism"] .term--edit { color: var(--gold); }
+html[data-skin="neumorphism"] .term--bash { color: var(--accent); }
+html[data-skin="neumorphism"] .term--grep { color: #8f86ab; }
+html[data-skin="neumorphism"] .term--web { color: #6fa0a6; }
+html[data-skin="neumorphism"] .term--agent { color: var(--accent-2); }
+html[data-skin="neumorphism"] .term--think,
+html[data-skin="neumorphism"] .term--dim { color: var(--text-faint); }
+html[data-skin="neumorphism"] .term--decant { color: var(--gold); }
+html[data-skin="neumorphism"] .term--error { color: var(--red); }
+html[data-skin="neumorphism"] .term--start { color: var(--accent); }
+html[data-skin="neumorphism"] .term--say { color: var(--text); }
+
+/* ---------- BARRAS: sulco embutido com preenchimento saliente ----------- */
+html[data-skin="neumorphism"] .trust-bar,
+html[data-skin="neumorphism"] .bar {
+  background: var(--bg);
+  border: none;
+  border-radius: 999px;
+  box-shadow: var(--nm-in-sm);
+}
+html[data-skin="neumorphism"] .agent-trust-head,
+html[data-skin="neumorphism"] .fs-trust-head { color: var(--text-faint); }
+html[data-skin="neumorphism"] .trust-bar-fill {
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--accent-2), var(--accent));
+  box-shadow: 1px 1px 3px rgba(163, 177, 198, 0.6);
+}
+html[data-skin="neumorphism"] .bar-fill {
+  border-radius: 999px;
+  background: var(--accent);
+}
+html[data-skin="neumorphism"] .bar-fill--cost { background: var(--gold); }
+html[data-skin="neumorphism"] .bar-fill.is-warn { background: var(--orange); }
+html[data-skin="neumorphism"] .bar-fill.is-danger { background: var(--red); }
+
+/* ---------- MÉTRICAS: telhas salientes -------------------------------- */
+html[data-skin="neumorphism"] .metric {
+  background: var(--bg);
+  border: none;
+  border-radius: 18px;
+  box-shadow: var(--nm-out-sm);
+}
+html[data-skin="neumorphism"] .metric-label { color: var(--text-faint); }
+html[data-skin="neumorphism"] .metric-value,
+html[data-skin="neumorphism"] .metric-value--big { color: var(--text); font-weight: 800; }
+html[data-skin="neumorphism"] .metric-sub { color: var(--text-dim); }
+
+/* ---------- ATIVIDADE: poço com linhas discretas ---------------------- */
+html[data-skin="neumorphism"] .activity-list {
+  background: var(--bg);
+  border: none;
+  border-radius: 20px;
+  box-shadow: var(--nm-in-sm);
+}
+html[data-skin="neumorphism"] .activity-list li { border-bottom: 1px solid var(--border); }
+html[data-skin="neumorphism"] .activity-empty { color: var(--text-faint); }
+html[data-skin="neumorphism"] .act-ts { color: var(--text-faint); }
+html[data-skin="neumorphism"] .act-text { color: var(--text-dim); }
+html[data-skin="neumorphism"] .act-icon {
+  background: var(--bg);
+  border-radius: 8px;
+  box-shadow: var(--nm-out-sm);
+}
+html[data-skin="neumorphism"] .act-icon[data-i="▶"] { color: var(--accent); }
+html[data-skin="neumorphism"] .act-icon[data-i="◆"] { color: var(--gold); }
+html[data-skin="neumorphism"] .act-icon[data-i="✓"] { color: var(--green); }
+html[data-skin="neumorphism"] .act-icon[data-i="✗"] { color: var(--red); }
+html[data-skin="neumorphism"] .act-new { color: var(--accent); }
+
+/* ---------- FULLSCREEN: placa grande, backdrop leitoso ---------------- */
+html[data-skin="neumorphism"] .fs-backdrop {
+  background: rgba(228, 233, 240, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+html[data-skin="neumorphism"] .fs-panel {
+  background: var(--bg);
+  border: none;
+  border-radius: var(--radius-lg);
+  box-shadow: 16px 16px 36px rgba(163, 177, 198, 0.55), -16px -16px 36px rgba(255, 255, 255, 0.9);
+}
+html[data-skin="neumorphism"] .fs-panel::before {
+  height: 4px;
+  left: 26px;
+  right: 26px;
+  top: 12px;
+  width: auto;
+  border-radius: 999px;
+  opacity: 0.55;
+}
+html[data-skin="neumorphism"] .fs-close {
+  background: var(--bg);
+  color: var(--text-dim);
+  border: none;
+  border-radius: 50%;
+  box-shadow: var(--nm-out-sm);
+}
+html[data-skin="neumorphism"] .fs-close:hover { box-shadow: var(--nm-in-sm); color: var(--accent); }
+html[data-skin="neumorphism"] .fs-name { color: var(--text); font-weight: 800; }
+html[data-skin="neumorphism"] .fs-status-label { color: var(--text-dim); }
+html[data-skin="neumorphism"] .fs-trust-val { color: var(--accent); font-weight: 800; }
+html[data-skin="neumorphism"] .fs-term-label { color: var(--text-faint); }
+html[data-skin="neumorphism"] .fs-term-empty {
+  background: var(--bg);
+  border: none;
+  border-radius: 16px;
+  box-shadow: var(--nm-in-sm);
+  color: var(--text-faint);
+}
+
+/* ---------- offline banner -------------------------------------------- */
+html[data-skin="neumorphism"] .offline-banner {
+  background: var(--red);
+  color: #fff;
+  border-radius: 14px;
+  box-shadow: 6px 6px 14px rgba(163, 177, 198, 0.5), -6px -6px 14px rgba(255, 255, 255, 0.7);
+}
+
+/* ---------- micro-animação própria: respiração sutil do nó atual ------ */
+@keyframes nm-breathe {
+  0%, 100% {
+    box-shadow: var(--nm-in), 0 0 0 6px rgba(109, 127, 158, 0.08);
+  }
+  50% {
+    box-shadow: var(--nm-in), 0 0 0 10px rgba(109, 127, 158, 0.14);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-skin="neumorphism"] .wfnode.is-current .wfnode-badge { animation: none; }
+  html[data-skin="neumorphism"] .agent { transition: none; }
+  html[data-skin="neumorphism"] .agent:hover { transform: none; }
+}

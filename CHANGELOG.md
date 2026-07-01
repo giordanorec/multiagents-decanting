@@ -2,6 +2,24 @@
 
 Formato: [Keep a Changelog](https://keepachangelog.com/). Versionamento semântico.
 
+## [1.7.0] — 2026-07-01 (mapa de workflow + 20 skins + fullscreen + atividade do Arquiteto)
+
+### Adicionado
+- **Mapa do Workflow educativo** no topo do painel: 7 fases em ciclo com nome/ícone
+  didáticos, "você está aqui" pulsante, setas com a CONDIÇÃO de cada caminho e as
+  bifurcações, sub-loop de "Construindo" expandido, e painel que explica cada fase
+  (o que é, o que faz avançar, pra onde pode ir). Backend: `workflow.phase_guide()`.
+- **20 design systems (skins) num dropdown** — visionOS, Suíço, Brutalismo, Neo-brutal,
+  Glass, Neumorfismo, Material 3, Terminal, Editorial, Bauhaus, Memphis, Cyberpunk,
+  Clay, Skeuomórfico, Dark IDE, Minimal, Win98, Bloomberg, Duolingo, Desenhado à mão.
+  1 arquivo CSS por skin, contrato de tema documentado.
+- **Card do agente clicável → tela cheia** (stream completo, Esc/fundo fecham, foco).
+- **Atividade do próprio Arquiteto visível**: a sessão principal é atribuída ao
+  `arquiteto` (post-otel-emit) e ele "acende a pensar" ao receber um pedido
+  (UserPromptSubmit).
+
+### Mudado
+- Stream por agente e feed com detalhe legível por tool (Read/Edit/Bash…).
 ## [1.6.0] — 2026-07-01 (stream por agente + avatares humanizados + uso, não $)
 
 ### Adicionado

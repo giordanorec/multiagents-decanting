@@ -1,0 +1,221 @@
+/* =========================================================================
+   Neo-brutalismo
+   Bordas pretas grossas, sombras sólidas deslocadas (sem blur), cores vivas
+   e chapadas, cantos levemente arredondados mas "pesados", tipografia forte.
+   Interações "clicáveis": ao passar/apertar, o objeto afunda na sombra.
+   Escopo: html[data-skin="neobrutalism"]
+   ========================================================================= */
+
+html[data-skin="neobrutalism"] {
+  --bg: #ffe66d;              /* amarelo vivo de fundo */
+  --bg-soft: #ffd23f;
+  --surface: #ffffff;
+  --surface-2: #fff7e0;
+  --border: #000000;
+  --text: #000000;
+  --text-dim: #2b2b2b;
+  --text-faint: #5a5a5a;
+  --accent: #ff2e63;          /* rosa choque */
+  --accent-2: #2d5bff;        /* azul elétrico */
+  --gold: #ffb000;
+  --orange: #ff6b00;
+  --red: #ff2e2e;
+  --green: #00c853;
+  --grey: #7a7a7a;
+  --radius: 8px;
+  --radius-lg: 12px;
+  --shadow: 8px 8px 0 #000;
+  --shadow-soft: 5px 5px 0 #000;
+  --gap: 18px;
+  --font-sans: "Arial Black", "Archivo Black", Arial, Helvetica, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "Courier New", monospace;
+}
+
+html[data-skin="neobrutalism"] body {
+  background: var(--bg);
+  background-image:
+    radial-gradient(circle, rgba(0,0,0,0.10) 1.4px, transparent 1.4px);
+  background-size: 22px 22px;
+  background-attachment: fixed;
+}
+
+/* topbar chapada com filete preto grosso */
+html[data-skin="neobrutalism"] .topbar {
+  background: var(--accent);
+  backdrop-filter: none;
+  border-bottom: 4px solid #000;
+}
+html[data-skin="neobrutalism"] .brand h1 { color: #000; text-transform: uppercase; letter-spacing: -.01em; }
+html[data-skin="neobrutalism"] .brand-dot { color: #000; }
+
+/* controles = botões brutalistas com sombra sólida */
+html[data-skin="neobrutalism"] .icon-btn,
+html[data-skin="neobrutalism"] .ctrl-btn,
+html[data-skin="neobrutalism"] .skin-select,
+html[data-skin="neobrutalism"] .conn,
+html[data-skin="neobrutalism"] .team-count {
+  background: #fff;
+  color: #000;
+  border: 3px solid #000;
+  border-radius: 6px;
+  box-shadow: 3px 3px 0 #000;
+  font-weight: 800;
+}
+html[data-skin="neobrutalism"] .icon-btn:hover,
+html[data-skin="neobrutalism"] .ctrl-btn:hover,
+html[data-skin="neobrutalism"] .skin-select:hover {
+  background: var(--gold);
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 #000;
+}
+html[data-skin="neobrutalism"] .icon-btn:active,
+html[data-skin="neobrutalism"] .ctrl-btn:active {
+  transform: translate(3px, 3px);
+  box-shadow: 0 0 0 #000;
+}
+
+html[data-skin="neobrutalism"] .section-title { color: #000; letter-spacing: .06em; }
+html[data-skin="neobrutalism"] .section-title span:first-child {
+  background: #000; color: var(--gold);
+  padding: 2px 10px; border-radius: 4px;
+}
+
+/* HERO: bloco branco com borda e sombra duras */
+html[data-skin="neobrutalism"] .hero {
+  background: #fff;
+  border: 4px solid #000;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+}
+html[data-skin="neobrutalism"] .hero-glow { display: none; }
+html[data-skin="neobrutalism"] .hero-eyebrow {
+  color: #000; background: var(--accent-2);
+  padding: 3px 10px; border: 2px solid #000; border-radius: 4px;
+  letter-spacing: .1em;
+}
+html[data-skin="neobrutalism"] .hero-title {
+  background: none; color: #000;
+  -webkit-text-fill-color: #000;
+  text-transform: uppercase; font-weight: 900; letter-spacing: -.02em;
+}
+html[data-skin="neobrutalism"] .hero-item { background: var(--gold); border: 3px solid #000; box-shadow: 3px 3px 0 #000; }
+html[data-skin="neobrutalism"] .hi-badge { background: #000; color: var(--gold); border-radius: 4px; }
+html[data-skin="neobrutalism"] .flag { border: 2px solid #000; border-radius: 4px; box-shadow: 2px 2px 0 #000; font-weight: 800; }
+html[data-skin="neobrutalism"] .flag--warn { background: var(--gold); color: #000; }
+html[data-skin="neobrutalism"] .flag--bypass { background: var(--red); color: #fff; }
+
+/* mapa do workflow: nós quadradões, bordas grossas, sombra dura */
+html[data-skin="neobrutalism"] .wfmap-wrap { border: 3px solid #000; box-shadow: 6px 6px 0 #000; background: var(--surface); }
+html[data-skin="neobrutalism"] .wfmap-hint { text-transform: uppercase; font-weight: 800; letter-spacing: .04em; color: #000; background: var(--gold); border: 2px solid #000; padding: 1px 6px; }
+html[data-skin="neobrutalism"] .wfnode-badge { border: 3px solid #000; background: #fff; border-radius: 8px; }
+html[data-skin="neobrutalism"] .wfnode.is-done .wfnode-badge { background: var(--green); box-shadow: 3px 3px 0 #000; }
+html[data-skin="neobrutalism"] .wfnode-check { border: 2px solid #000; border-radius: 4px; color: #000; }
+html[data-skin="neobrutalism"] .wfnode.is-current .wfnode-badge { background: var(--accent); box-shadow: 4px 4px 0 #000; animation: none; }
+html[data-skin="neobrutalism"] .wfnode.is-future .wfnode-badge { opacity: 1; background: var(--surface-2); border-style: dashed; }
+html[data-skin="neobrutalism"] .wfnode.is-selected .wfnode-badge { box-shadow: 0 0 0 3px var(--accent-2), 4px 4px 0 #000; }
+html[data-skin="neobrutalism"] .wfnode-label { font-weight: 800; }
+html[data-skin="neobrutalism"] .wfnode-here,
+html[data-skin="neobrutalism"] .wfx-tag--here { background: var(--accent); color: #000; border: 2px solid #000; box-shadow: 2px 2px 0 #000; border-radius: 4px; }
+html[data-skin="neobrutalism"] .wfedge-line { height: 3px; background: #000; }
+html[data-skin="neobrutalism"] .wfedge-line::after { border-left-color: #000; border-width: 6px 0 6px 9px; }
+html[data-skin="neobrutalism"] .wfedge.is-current .wfedge-line { background: var(--accent); animation: none; }
+html[data-skin="neobrutalism"] .wfedge.is-current .wfedge-line::after { border-left-color: var(--accent); }
+html[data-skin="neobrutalism"] .wfedge-label,
+html[data-skin="neobrutalism"] .wfnode-branch,
+html[data-skin="neobrutalism"] .wfsub-step { border: 2px solid #000; border-radius: 4px; font-weight: 700; }
+html[data-skin="neobrutalism"] .wfsub { border: 3px solid #000; border-left: 6px solid var(--accent); box-shadow: 4px 4px 0 #000; }
+html[data-skin="neobrutalism"] .wfsub-step.is-current { background: var(--accent); color: #000; box-shadow: 3px 3px 0 #000; }
+html[data-skin="neobrutalism"] .wfsub-step.is-done { background: var(--green); }
+html[data-skin="neobrutalism"] .wf-explainer { border: 3px solid #000; box-shadow: 5px 5px 0 #000; background: var(--surface); }
+html[data-skin="neobrutalism"] .wfx-tag--muted, html[data-skin="neobrutalism"] .wfx-when { border: 2px solid #000; border-radius: 4px; }
+html[data-skin="neobrutalism"] .wfreturn { border: 3px dashed #000; border-radius: 6px; background: color-mix(in srgb, var(--accent-2) 22%, #fff); color: #000; }
+html[data-skin="neobrutalism"] .wfreturn-arrow { color: #000; }
+html[data-skin="neobrutalism"] .wfreturn-label b { color: #000; }
+
+/* CARTÕES: o show do brutalismo */
+html[data-skin="neobrutalism"] .agent {
+  background: #fff;
+  border: 3px solid #000;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+  transition: transform .12s, box-shadow .12s;
+}
+html[data-skin="neobrutalism"] .agent::before { height: 8px; background: var(--agent-color); border-bottom: 3px solid #000; }
+html[data-skin="neobrutalism"] .agent:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 8px 8px 0 #000;
+}
+html[data-skin="neobrutalism"] .agent--working {
+  box-shadow: 8px 8px 0 var(--agent-color), 8px 8px 0 3px #000;
+}
+html[data-skin="neobrutalism"] .agent--pinned { box-shadow: var(--shadow-soft), 0 0 0 3px var(--gold) inset; }
+html[data-skin="neobrutalism"] .agent-avatar::before,
+html[data-skin="neobrutalism"] .fs-avatar::before { border: 3px solid #000; }
+html[data-skin="neobrutalism"] .agent-name { text-transform: uppercase; font-weight: 900; }
+html[data-skin="neobrutalism"] .agent-status,
+html[data-skin="neobrutalism"] .fs-status {
+  background: var(--gold);
+  color: #000;
+  border: 2px solid #000;
+  border-radius: 4px;
+  font-weight: 800;
+}
+html[data-skin="neobrutalism"] .agent-bubble,
+html[data-skin="neobrutalism"] .fs-bubble {
+  background: var(--surface-2);
+  border: 2px solid #000;
+  border-radius: 6px;
+  color: #000;
+}
+
+/* terminal: bloco preto com borda dura, texto verde-limão */
+html[data-skin="neobrutalism"] .agent-term {
+  background: #0a0a0a;
+  border: 3px solid #000;
+  border-radius: 6px;
+  color: #d6ff2e;
+}
+html[data-skin="neobrutalism"] .term--read { color: #2d9bff; }
+html[data-skin="neobrutalism"] .term--ok, html[data-skin="neobrutalism"] .term--write { color: #00e676; }
+html[data-skin="neobrutalism"] .term--error { color: #ff5a5a; }
+
+/* barras: retângulos com borda preta */
+html[data-skin="neobrutalism"] .trust-bar, html[data-skin="neobrutalism"] .bar {
+  border: 2px solid #000; border-radius: 4px; background: #fff; height: 12px;
+}
+html[data-skin="neobrutalism"] .trust-bar-fill { background: var(--agent-color); border-radius: 0; box-shadow: none; }
+html[data-skin="neobrutalism"] .bar-fill { background: var(--accent); border-radius: 0; }
+html[data-skin="neobrutalism"] .bar-fill--cost { background: var(--gold); }
+
+/* métricas + atividade */
+html[data-skin="neobrutalism"] .metric {
+  background: #fff; border: 3px solid #000; border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="neobrutalism"] .metric-value--big { color: var(--accent); font-weight: 900; }
+html[data-skin="neobrutalism"] .activity-list {
+  background: #fff; border: 3px solid #000; border-radius: var(--radius);
+  box-shadow: var(--shadow-soft); font-family: var(--font-mono);
+}
+html[data-skin="neobrutalism"] .activity-list li { border-bottom: 2px solid #000; color: #000; }
+html[data-skin="neobrutalism"] .live-dot { background: var(--red); border: 2px solid #000; }
+
+/* fullscreen */
+html[data-skin="neobrutalism"] .fs-backdrop { background: rgba(255,46,99,0.35); backdrop-filter: none; }
+html[data-skin="neobrutalism"] .fs-panel {
+  background: #fff;
+  border: 4px solid #000;
+  border-radius: var(--radius-lg);
+  box-shadow: 12px 12px 0 #000;
+}
+html[data-skin="neobrutalism"] .fs-panel::before { height: 10px; border-bottom: 3px solid #000; }
+html[data-skin="neobrutalism"] .fs-name { text-transform: uppercase; font-weight: 900; }
+html[data-skin="neobrutalism"] .fs-close {
+  background: var(--red); color: #fff; border: 3px solid #000; border-radius: 6px;
+  box-shadow: 3px 3px 0 #000; font-weight: 900;
+}
+html[data-skin="neobrutalism"] .fs-close:active { transform: translate(3px,3px); box-shadow: none; }
+
+html[data-skin="neobrutalism"] .offline-banner {
+  background: var(--red); color: #fff; border: 3px solid #000; border-radius: 6px; box-shadow: var(--shadow-soft);
+}

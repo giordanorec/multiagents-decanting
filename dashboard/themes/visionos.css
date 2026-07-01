@@ -1,0 +1,215 @@
+/* =========================================================================
+   visionOS — vidro, profundidade, vibrancy (Apple Vision Pro)
+   Superfícies translúcidas flutuando sobre um fundo espacial escuro,
+   bordas de luz, blur pesado, cantos muito arredondados, brilho iridescente.
+   Escopo: html[data-skin="visionos"]
+   ========================================================================= */
+
+html[data-skin="visionos"] {
+  --bg: #05060c;
+  --bg-soft: rgba(255, 255, 255, 0.04);
+  --surface: rgba(255, 255, 255, 0.07);
+  --surface-2: rgba(255, 255, 255, 0.11);
+  --border: rgba(255, 255, 255, 0.14);
+  --text: #f5f6ff;
+  --text-dim: rgba(235, 238, 255, 0.72);
+  --text-faint: rgba(220, 226, 255, 0.42);
+  --accent: #0a84ff;
+  --accent-2: #64d2ff;
+  --gold: #ffd60a;
+  --orange: #ff9f0a;
+  --red: #ff453a;
+  --green: #30d158;
+  --grey: #8e8e9f;
+  --radius: 22px;
+  --radius-lg: 32px;
+  --shadow: 0 24px 70px rgba(0, 0, 0, 0.55), 0 2px 0 rgba(255,255,255,0.10) inset;
+  --shadow-soft: 0 12px 40px rgba(0, 0, 0, 0.40), 0 1px 0 rgba(255,255,255,0.08) inset;
+  --gap: 16px;
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "SF Mono", ui-monospace, "JetBrains Mono", Menlo, monospace;
+}
+
+/* fundo espacial com nebulosas suaves */
+html[data-skin="visionos"] body {
+  background:
+    radial-gradient(1200px 700px at 78% -8%, rgba(100, 210, 255, 0.16), transparent 60%),
+    radial-gradient(1000px 700px at -8% 10%, rgba(120, 90, 255, 0.16), transparent 60%),
+    radial-gradient(900px 900px at 50% 120%, rgba(10, 132, 255, 0.12), transparent 60%),
+    #05060c;
+  background-attachment: fixed;
+}
+
+/* --- vidro genérico: painéis flutuantes com highlight de borda --- */
+html[data-skin="visionos"] .topbar {
+  background: rgba(18, 20, 32, 0.55);
+  backdrop-filter: saturate(180%) blur(28px);
+  -webkit-backdrop-filter: saturate(180%) blur(28px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.10);
+}
+html[data-skin="visionos"] .agent,
+html[data-skin="visionos"] .metric,
+html[data-skin="visionos"] .activity-list,
+html[data-skin="visionos"] .hero,
+html[data-skin="visionos"] .fs-panel {
+  background: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.045));
+  backdrop-filter: saturate(180%) blur(26px);
+  -webkit-backdrop-filter: saturate(180%) blur(26px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: var(--shadow-soft);
+}
+
+html[data-skin="visionos"] .agent {
+  border-radius: var(--radius);
+  transition: transform .3s cubic-bezier(.2,.8,.2,1), box-shadow .3s;
+}
+html[data-skin="visionos"] .agent::before {
+  height: 0;                    /* troca a barra chapada por um brilho de topo */
+}
+html[data-skin="visionos"] .agent::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(120% 60% at 50% -10%, rgba(255,255,255,0.22), transparent 60%);
+  pointer-events: none;
+  opacity: .8;
+}
+html[data-skin="visionos"] .agent:hover {
+  transform: translateY(-4px) scale(1.015);
+  box-shadow: var(--shadow), 0 0 0 1px color-mix(in srgb, var(--agent-color) 55%, transparent);
+}
+html[data-skin="visionos"] .agent--working {
+  box-shadow: var(--shadow-soft),
+    0 0 0 1px color-mix(in srgb, var(--agent-color) 60%, transparent),
+    0 0 42px color-mix(in srgb, var(--agent-color) 34%, transparent);
+}
+
+/* avatar: bolha de vidro com anel luminoso */
+html[data-skin="visionos"] .agent-avatar::before,
+html[data-skin="visionos"] .fs-avatar::before {
+  border-width: 2px;
+  box-shadow: 0 0 22px color-mix(in srgb, var(--agent-color) 45%, transparent);
+}
+
+/* pílulas / status: vidro fosco arredondado total */
+html[data-skin="visionos"] .agent-status,
+html[data-skin="visionos"] .conn,
+html[data-skin="visionos"] .team-count,
+html[data-skin="visionos"] .fs-status {
+  background: rgba(255, 255, 255, 0.10);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+html[data-skin="visionos"] .icon-btn,
+html[data-skin="visionos"] .ctrl-btn,
+html[data-skin="visionos"] .skin-select {
+  background: rgba(255, 255, 255, 0.10);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 14px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: var(--text);
+}
+html[data-skin="visionos"] .icon-btn:hover,
+html[data-skin="visionos"] .ctrl-btn:hover,
+html[data-skin="visionos"] .skin-select:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+/* hero: vidro com título luminoso */
+html[data-skin="visionos"] .hero {
+  border-radius: var(--radius-lg);
+}
+html[data-skin="visionos"] .hero-title {
+  background: linear-gradient(90deg, #ffffff, #9fd6ff 60%, #b9a8ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  letter-spacing: -.02em;
+}
+html[data-skin="visionos"] .agent-bubble,
+html[data-skin="visionos"] .fs-bubble {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+}
+
+/* mini-terminal: poço de vidro escuro (contrasta com o painel claro) */
+html[data-skin="visionos"] .agent-term {
+  background: rgba(2, 4, 12, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 16px;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+html[data-skin="visionos"] .fs-term { background: rgba(2, 4, 12, 0.82); }
+
+/* barras arredondadas com brilho */
+html[data-skin="visionos"] .trust-bar,
+html[data-skin="visionos"] .bar { background: rgba(255,255,255,0.10); }
+html[data-skin="visionos"] .trust-bar-fill {
+  box-shadow: 0 0 14px color-mix(in srgb, var(--agent-color) 55%, transparent);
+}
+
+/* mapa do workflow: placas de vidro luminosas */
+html[data-skin="visionos"] .wfmap-wrap {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.14);
+  backdrop-filter: saturate(160%) blur(20px);
+  -webkit-backdrop-filter: saturate(160%) blur(20px);
+}
+html[data-skin="visionos"] .wfnode-badge {
+  background: rgba(255,255,255,0.10);
+  border-color: rgba(255,255,255,0.24);
+  backdrop-filter: blur(8px);
+}
+html[data-skin="visionos"] .wfnode.is-current .wfnode-badge {
+  box-shadow: 0 0 0 6px rgba(10,132,255,0.20), 0 0 24px rgba(10,132,255,0.55);
+}
+html[data-skin="visionos"] .wfnode.is-done .wfnode-badge {
+  border-color: rgba(100,210,255,0.5);
+  box-shadow: 0 0 16px rgba(100,210,255,0.28);
+}
+html[data-skin="visionos"] .wfnode-here,
+html[data-skin="visionos"] .wfx-tag--here {
+  background: rgba(10,132,255,0.22);
+  border-color: rgba(100,210,255,0.5);
+}
+html[data-skin="visionos"] .wfedge-label,
+html[data-skin="visionos"] .wfsub-step,
+html[data-skin="visionos"] .wf-explainer,
+html[data-skin="visionos"] .wfsub {
+  background: rgba(255,255,255,0.07);
+  border-color: rgba(255,255,255,0.14);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+html[data-skin="visionos"] .wfreturn {
+  background: rgba(100,210,255,0.10);
+  border-color: rgba(100,210,255,0.4);
+  backdrop-filter: blur(10px);
+}
+
+/* fullscreen: placa de vidro maior, mais luz */
+html[data-skin="visionos"] .fs-backdrop {
+  background: rgba(3, 4, 10, 0.5);
+  backdrop-filter: saturate(160%) blur(20px);
+  -webkit-backdrop-filter: saturate(160%) blur(20px);
+}
+html[data-skin="visionos"] .fs-panel {
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow), 0 0 60px color-mix(in srgb, var(--agent-color) 26%, transparent);
+}
+html[data-skin="visionos"] .fs-close {
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 50%;
+  backdrop-filter: blur(10px);
+}
+
+html[data-skin="visionos"] .offline-banner {
+  background: rgba(255, 69, 58, 0.85);
+  backdrop-filter: blur(10px);
+}

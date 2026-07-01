@@ -1,0 +1,532 @@
+/* =========================================================================
+   Memphis — anos 80 em festa: pastel + neon em choque, contorno preto grosso,
+   sombras chapadas (offset sólido, zero blur), bolinhas, zigue-zagues,
+   squiggles e confete geométrico. Caos lúdico, tipografia gorda, cantos
+   irregulares, tudo levemente torto de propósito.
+   Escopo: html[data-skin="memphis"]
+   ========================================================================= */
+
+html[data-skin="memphis"] {
+  --bg: #fdf3e7;              /* creme quente */
+  --bg-soft: #ffe8d6;
+  --surface: #fffdf7;         /* papel off-white */
+  --surface-2: #ffe9f4;       /* rosa bebê */
+  --border: #16130f;          /* preto tinta */
+  --text: #16130f;
+  --text-dim: #5a4a55;
+  --text-faint: #9a8aa0;
+  --accent: #ff2e88;          /* magenta choque */
+  --accent-2: #17c3e6;        /* ciano piscina */
+  --gold: #ffb300;            /* amarelo confete */
+  --orange: #ff7a2f;
+  --red: #ff3b3b;
+  --green: #22c98a;           /* menta */
+  --grey: #b8aec0;
+  --radius: 4px;
+  --radius-lg: 8px;
+  --shadow: 5px 5px 0 #16130f;
+  --shadow-soft: 3px 3px 0 #16130f;
+  --gap: 18px;
+  --font-sans: "Futura", "Avenir Next", "Century Gothic", "Trebuchet MS", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "Courier New", "Courier", ui-monospace, monospace;
+}
+
+/* fundo: confete Memphis — bolinhas, zigue-zague e squiggle sobre creme */
+html[data-skin="memphis"] body {
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(circle at 12% 18%, var(--accent) 0 6px, transparent 7px),
+    radial-gradient(circle at 82% 12%, var(--accent-2) 0 7px, transparent 8px),
+    radial-gradient(circle at 68% 78%, var(--gold) 0 5px, transparent 6px),
+    radial-gradient(circle at 28% 84%, var(--green) 0 6px, transparent 7px),
+    radial-gradient(var(--grey) 1.4px, transparent 1.5px);
+  background-size: 340px 300px, 420px 380px, 300px 320px, 380px 340px, 26px 26px;
+  background-attachment: fixed;
+}
+
+/* faixa de zigue-zague fixa no topo, colada sob a topbar */
+html[data-skin="memphis"] body::before {
+  content: "";
+  position: fixed;
+  left: 0; right: 0; top: 0;
+  height: 8px;
+  z-index: 80;
+  pointer-events: none;
+  background:
+    linear-gradient(135deg, var(--accent) 25%, transparent 25%) -12px 0/24px 24px,
+    linear-gradient(225deg, var(--accent-2) 25%, transparent 25%) -12px 0/24px 24px,
+    var(--gold);
+}
+
+/* ---- CHROME / TOPBAR ---- */
+html[data-skin="memphis"] .topbar {
+  background: var(--gold);
+  backdrop-filter: none;
+  border-bottom: 4px solid var(--border);
+  box-shadow: 0 5px 0 rgba(22,19,15,.15);
+}
+html[data-skin="memphis"] .brand h1 {
+  font-weight: 900;
+  letter-spacing: -.01em;
+  text-transform: uppercase;
+  color: var(--border);
+  text-shadow: 2px 2px 0 var(--accent);
+}
+html[data-skin="memphis"] .brand-dot {
+  color: var(--accent-2);
+  animation: memphis-wobble 3s ease-in-out infinite;
+}
+
+html[data-skin="memphis"] .icon-btn,
+html[data-skin="memphis"] .ctrl-btn,
+html[data-skin="memphis"] .skin-select,
+html[data-skin="memphis"] .conn,
+html[data-skin="memphis"] .team-count {
+  background: var(--surface);
+  color: var(--border);
+  border: 3px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+  font-weight: 800;
+}
+html[data-skin="memphis"] .skin-select { text-transform: uppercase; letter-spacing: .04em; }
+html[data-skin="memphis"] .icon-btn:hover,
+html[data-skin="memphis"] .ctrl-btn:hover,
+html[data-skin="memphis"] .skin-select:hover {
+  background: var(--accent);
+  color: #fff;
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--border);
+}
+html[data-skin="memphis"] .conn-dot { box-shadow: 0 0 0 3px var(--surface), 0 0 0 5px var(--border); }
+html[data-skin="memphis"] .conn--online .conn-dot { background: var(--green); }
+html[data-skin="memphis"] .conn--offline .conn-dot { background: var(--red); }
+
+html[data-skin="memphis"] .section-title {
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  color: var(--border);
+}
+html[data-skin="memphis"] .section-title span:first-child::after {
+  content: " ✿";
+  color: var(--accent);
+}
+html[data-skin="memphis"] .live-dot { background: var(--red); box-shadow: 0 0 0 3px var(--surface), 0 0 0 5px var(--border); border-radius: 50%; }
+
+/* ---- HERO ---- */
+html[data-skin="memphis"] .hero {
+  background: var(--surface-2);
+  border: 4px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+html[data-skin="memphis"] .hero-glow {
+  background: none;
+  opacity: 1;
+  inset: auto -40px -40px auto;
+  width: 200px; height: 200px;
+  border-radius: 50%;
+  background-image:
+    radial-gradient(circle, transparent 40%, var(--accent-2) 41% 48%, transparent 49%),
+    radial-gradient(circle, var(--gold) 24%, transparent 25%);
+}
+html[data-skin="memphis"] .hero-eyebrow {
+  color: var(--accent);
+  font-weight: 900;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+html[data-skin="memphis"] .hero-title {
+  background: none;
+  -webkit-text-fill-color: var(--border);
+  color: var(--border);
+  font-weight: 900;
+  letter-spacing: -.02em;
+  text-shadow: 3px 3px 0 var(--gold), 6px 6px 0 var(--accent-2);
+}
+html[data-skin="memphis"] .hero-doing { color: var(--text-dim); font-weight: 700; }
+html[data-skin="memphis"] .hero-item {
+  background: var(--surface);
+  border: 3px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="memphis"] .hi-badge {
+  background: var(--accent);
+  color: #fff;
+  border: 2px solid var(--border);
+  border-radius: 50%;
+  font-weight: 900;
+}
+html[data-skin="memphis"] .hi-slug { font-weight: 800; }
+html[data-skin="memphis"] .flag {
+  border: 2px solid var(--border);
+  border-radius: 999px;
+  background: var(--gold);
+  color: var(--border);
+  font-weight: 800;
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="memphis"] .flag--warn { background: var(--orange); }
+html[data-skin="memphis"] .flag--bypass { background: var(--red); color: #fff; }
+html[data-skin="memphis"] .hero-next { color: var(--accent-2); font-weight: 800; }
+
+/* ---- MAPA DO WORKFLOW ---- */
+html[data-skin="memphis"] .wfmap-wrap {
+  background: var(--surface);
+  border: 4px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+}
+html[data-skin="memphis"] .wfmap-hint {
+  background: var(--gold);
+  border: 2px solid var(--border);
+  border-radius: 999px;
+  padding: 2px 10px;
+  font-weight: 800;
+  color: var(--border);
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+
+/* nós: emblemas confete com contorno grosso e sombra chapada */
+html[data-skin="memphis"] .wfnode-badge {
+  background: var(--surface-2);
+  border: 3px solid var(--border);
+  border-radius: 50%;
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="memphis"] .wfnode-label { font-weight: 800; text-transform: uppercase; letter-spacing: .02em; }
+html[data-skin="memphis"] .wfnode.is-done .wfnode-badge {
+  background: var(--green);
+  color: #fff;
+}
+html[data-skin="memphis"] .wfnode-check {
+  background: var(--green);
+  color: #fff;
+  border: 2px solid var(--border);
+  border-radius: 50%;
+}
+html[data-skin="memphis"] .wfnode.is-current .wfnode-badge {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 4px 4px 0 var(--border), 0 0 0 4px var(--gold);
+  animation: memphis-bounce 1.6s ease-in-out infinite;
+}
+html[data-skin="memphis"] .wfnode.is-future .wfnode-badge { background: var(--surface); opacity: .7; }
+html[data-skin="memphis"] .wfnode.is-selected .wfnode-badge {
+  box-shadow: 4px 4px 0 var(--border), 0 0 0 4px var(--accent-2);
+}
+html[data-skin="memphis"] .wfnode-here {
+  background: var(--accent);
+  color: #fff;
+  border: 2px solid var(--border);
+  border-radius: 999px;
+  font-weight: 800;
+}
+html[data-skin="memphis"] .wfnode-here-dot { background: #fff; }
+html[data-skin="memphis"] .wfnode-branch {
+  background: var(--surface-2);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 2px 2px 0 var(--border);
+  font-weight: 700;
+}
+html[data-skin="memphis"] .wfbr-arrow { color: var(--accent-2); }
+
+/* arestas: linha tracejada colorida com seta gorda */
+html[data-skin="memphis"] .wfedge-line { background: var(--border); height: 3px; }
+html[data-skin="memphis"] .wfedge-line::after { border-left-color: var(--border); }
+html[data-skin="memphis"] .wfedge.is-done .wfedge-line { background: var(--green); }
+html[data-skin="memphis"] .wfedge.is-done .wfedge-line::after { border-left-color: var(--green); }
+html[data-skin="memphis"] .wfedge.is-current .wfedge-line {
+  background: repeating-linear-gradient(90deg, var(--accent) 0 8px, var(--gold) 8px 16px);
+}
+html[data-skin="memphis"] .wfedge.is-current .wfedge-line::after { border-left-color: var(--accent); }
+html[data-skin="memphis"] .wfedge-label {
+  background: var(--gold);
+  border: 2px solid var(--border);
+  border-radius: 999px;
+  box-shadow: 2px 2px 0 var(--border);
+  font-weight: 800;
+  color: var(--border);
+}
+
+/* trilho de retorno */
+html[data-skin="memphis"] .wfreturn {
+  background: var(--surface-2);
+  border: 2px dashed var(--border);
+  border-radius: var(--radius);
+  font-weight: 700;
+}
+html[data-skin="memphis"] .wfreturn.is-active {
+  background: var(--accent-2);
+  color: #fff;
+  border-style: solid;
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="memphis"] .wfreturn-arrow { color: var(--accent); }
+
+/* sub-loop Construindo */
+html[data-skin="memphis"] .wfsub {
+  background: var(--surface-2);
+  border: 3px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="memphis"] .wfsub-head-ic {
+  background: var(--accent-2);
+  color: #fff;
+  border: 2px solid var(--border);
+  border-radius: 50%;
+}
+html[data-skin="memphis"] .wfsub-step {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 2px 2px 0 var(--border);
+  font-weight: 700;
+}
+html[data-skin="memphis"] .wfsub-step.is-done { background: var(--green); color: #fff; }
+html[data-skin="memphis"] .wfsub-step.is-current {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 3px 3px 0 var(--border), 0 0 0 3px var(--gold);
+}
+html[data-skin="memphis"] .wfsub-arrow, html[data-skin="memphis"] .wfsub-loop { color: var(--accent); }
+
+/* explicador */
+html[data-skin="memphis"] .wf-explainer {
+  background: var(--surface);
+  border: 3px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="memphis"] .wfx-icon {
+  background: var(--gold);
+  color: var(--border);
+  border: 2px solid var(--border);
+  border-radius: 50%;
+}
+html[data-skin="memphis"] .wfx-title { font-weight: 900; text-transform: uppercase; }
+html[data-skin="memphis"] .wfx-tag {
+  background: var(--surface-2);
+  border: 2px solid var(--border);
+  border-radius: 999px;
+  font-weight: 800;
+  color: var(--border);
+}
+html[data-skin="memphis"] .wfx-tag--here { background: var(--accent); color: #fff; }
+html[data-skin="memphis"] .wfx-tag--muted { background: var(--surface); color: var(--text-dim); }
+html[data-skin="memphis"] .wfx-when {
+  background: var(--gold);
+  border: 2px solid var(--border);
+  border-radius: 999px;
+  font-weight: 800;
+  color: var(--border);
+}
+html[data-skin="memphis"] .wfx-to, html[data-skin="memphis"] .wfx-goes { color: var(--accent); font-weight: 800; }
+html[data-skin="memphis"] .wfx-k { color: var(--text-dim); font-weight: 700; }
+
+/* ---- CARTÃO DE AGENTE ---- */
+html[data-skin="memphis"] .agent {
+  background: var(--surface);
+  border: 4px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+html[data-skin="memphis"] .agent::before {
+  height: 8px;
+  background: var(--agent-color);
+  border-bottom: 3px solid var(--border);
+}
+html[data-skin="memphis"] .agent:nth-child(even) { transform: rotate(-.6deg); }
+html[data-skin="memphis"] .agent:nth-child(3n) { transform: rotate(.7deg); }
+html[data-skin="memphis"] .agent:hover {
+  transform: rotate(0) translate(-2px, -2px);
+  box-shadow: 8px 8px 0 var(--border);
+}
+html[data-skin="memphis"] .agent--working {
+  box-shadow: var(--shadow), 0 0 0 4px color-mix(in srgb, var(--agent-color) 60%, transparent);
+}
+html[data-skin="memphis"] .agent--human_driving { box-shadow: var(--shadow), 0 0 0 4px var(--orange); }
+html[data-skin="memphis"] .agent--error, html[data-skin="memphis"] .agent--needs_recovery { box-shadow: var(--shadow), 0 0 0 4px var(--red); }
+html[data-skin="memphis"] .agent--decanting { box-shadow: var(--shadow), 0 0 0 4px var(--gold); }
+html[data-skin="memphis"] .agent--sleeping { opacity: .78; }
+html[data-skin="memphis"] .agent.dragging { transform: rotate(-2deg) scale(1.03); box-shadow: 10px 10px 0 var(--border); }
+
+html[data-skin="memphis"] .agent-avatar::before,
+html[data-skin="memphis"] .fs-avatar::before {
+  border-width: 3px;
+  border-color: var(--border);
+}
+html[data-skin="memphis"] .agent-avatar-inner,
+html[data-skin="memphis"] .fs-avatar-inner { border-radius: 50%; }
+html[data-skin="memphis"] .agent-name { font-weight: 900; text-transform: uppercase; letter-spacing: .02em; }
+html[data-skin="memphis"] .agent-status,
+html[data-skin="memphis"] .fs-status {
+  background: var(--surface-2);
+  border: 2px solid var(--border);
+  border-radius: 999px;
+  box-shadow: 2px 2px 0 var(--border);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .03em;
+  color: var(--border);
+}
+html[data-skin="memphis"] .agent-bubble,
+html[data-skin="memphis"] .fs-bubble {
+  background: var(--gold);
+  border: 2px solid var(--border);
+  border-radius: var(--radius) var(--radius) var(--radius) 0;
+  box-shadow: 2px 2px 0 var(--border);
+  color: var(--border);
+  font-weight: 600;
+}
+html[data-skin="memphis"] .agent-pin { color: var(--accent); }
+html[data-skin="memphis"] .agent-open-hint { color: var(--accent-2); font-weight: 800; }
+html[data-skin="memphis"] .zzz { color: var(--accent); }
+
+/* ---- MINI-TERMINAL ---- */
+html[data-skin="memphis"] .agent-term {
+  background: #1c1830;
+  border: 3px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: inset 3px 3px 0 rgba(0,0,0,.25);
+  color: #f4ecff;
+}
+html[data-skin="memphis"] .term-ts { color: #b39ddb; }
+html[data-skin="memphis"] .term--read { color: var(--accent-2); }
+html[data-skin="memphis"] .term--write, html[data-skin="memphis"] .term--ok { color: var(--green); }
+html[data-skin="memphis"] .term--edit { color: var(--gold); }
+html[data-skin="memphis"] .term--bash { color: #ff9de2; }
+html[data-skin="memphis"] .term--grep { color: #8be9fd; }
+html[data-skin="memphis"] .term--web { color: var(--accent-2); }
+html[data-skin="memphis"] .term--agent, html[data-skin="memphis"] .term--think { color: #c9a7ff; }
+html[data-skin="memphis"] .term--decant { color: var(--gold); }
+html[data-skin="memphis"] .term--error { color: #ff6b6b; }
+html[data-skin="memphis"] .term--start, html[data-skin="memphis"] .term--say { color: var(--accent); }
+html[data-skin="memphis"] .term--dim { color: #7a7093; }
+html[data-skin="memphis"] .term-add { color: var(--green); }
+
+/* ---- BARRAS ---- */
+html[data-skin="memphis"] .trust-bar,
+html[data-skin="memphis"] .bar {
+  background: var(--surface-2);
+  border: 2px solid var(--border);
+  border-radius: 999px;
+  overflow: hidden;
+}
+html[data-skin="memphis"] .trust-bar-fill {
+  background: repeating-linear-gradient(45deg, var(--green) 0 8px, color-mix(in srgb, var(--green) 70%, #fff) 8px 16px);
+}
+html[data-skin="memphis"] .bar-fill {
+  background: repeating-linear-gradient(45deg, var(--accent-2) 0 8px, color-mix(in srgb, var(--accent-2) 70%, #fff) 8px 16px);
+}
+html[data-skin="memphis"] .bar-fill--cost {
+  background: repeating-linear-gradient(45deg, var(--gold) 0 8px, color-mix(in srgb, var(--gold) 70%, #fff) 8px 16px);
+}
+html[data-skin="memphis"] .bar-fill.is-warn { background: repeating-linear-gradient(45deg, var(--orange) 0 8px, #ffc08a 8px 16px); }
+html[data-skin="memphis"] .bar-fill.is-danger { background: repeating-linear-gradient(45deg, var(--red) 0 8px, #ff9a9a 8px 16px); }
+
+/* ---- MÉTRICAS ---- */
+html[data-skin="memphis"] .metric {
+  background: var(--surface);
+  border: 4px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="memphis"] .metric:nth-child(2n) { background: var(--surface-2); }
+html[data-skin="memphis"] .metric-label { font-weight: 800; text-transform: uppercase; letter-spacing: .04em; color: var(--text-dim); }
+html[data-skin="memphis"] .metric-value,
+html[data-skin="memphis"] .metric-value--big { font-weight: 900; color: var(--border); }
+html[data-skin="memphis"] .metric-value--big { text-shadow: 2px 2px 0 var(--accent-2); }
+
+/* ---- ATIVIDADE ---- */
+html[data-skin="memphis"] .activity-list {
+  background: var(--surface);
+  border: 4px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="memphis"] .activity-list li { border-bottom: 2px dotted var(--border); }
+html[data-skin="memphis"] .act-ts { color: var(--text-faint); font-weight: 700; }
+html[data-skin="memphis"] .act-text { color: var(--text); }
+html[data-skin="memphis"] .act-new { animation: memphis-pop .5s ease; }
+html[data-skin="memphis"] .act-icon[data-i="▶"] { color: var(--accent-2); }
+html[data-skin="memphis"] .act-icon[data-i="◆"] { color: var(--gold); }
+html[data-skin="memphis"] .act-icon[data-i="✓"] { color: var(--green); }
+html[data-skin="memphis"] .act-icon[data-i="✗"] { color: var(--red); }
+html[data-skin="memphis"] .activity-empty, html[data-skin="memphis"] .team-empty { color: var(--text-faint); font-weight: 700; }
+
+/* ---- FULLSCREEN ---- */
+html[data-skin="memphis"] .fs-backdrop {
+  background: rgba(22,19,15,.55);
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(255,46,136,.25) 0 8px, transparent 9px),
+    radial-gradient(circle at 78% 66%, rgba(23,195,230,.25) 0 8px, transparent 9px);
+  background-size: 120px 120px, 140px 140px;
+}
+html[data-skin="memphis"] .fs-panel {
+  background: var(--surface);
+  border: 5px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: 10px 10px 0 var(--border);
+}
+html[data-skin="memphis"] .fs-panel::before { height: 10px; border-bottom: 3px solid var(--border); }
+html[data-skin="memphis"] .fs-close {
+  background: var(--accent);
+  color: #fff;
+  border: 3px solid var(--border);
+  border-radius: 50%;
+  box-shadow: var(--shadow-soft);
+  font-weight: 900;
+}
+html[data-skin="memphis"] .fs-close:hover { background: var(--red); transform: rotate(90deg); }
+html[data-skin="memphis"] .fs-name { font-weight: 900; text-transform: uppercase; }
+html[data-skin="memphis"] .fs-term {
+  background: #1c1830;
+  border: 3px solid var(--border);
+  border-radius: var(--radius);
+  color: #f4ecff;
+}
+html[data-skin="memphis"] .fs-term-label { font-weight: 900; text-transform: uppercase; letter-spacing: .06em; color: var(--accent); }
+html[data-skin="memphis"] .fs-term-empty { border: 3px dashed var(--border); border-radius: var(--radius); color: var(--text-faint); }
+html[data-skin="memphis"] .fs-trust-val { font-weight: 900; color: var(--green); }
+
+/* ---- OFFLINE ---- */
+html[data-skin="memphis"] .offline-banner {
+  background: var(--red);
+  color: #fff;
+  border: 3px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+/* ---- ANIMAÇÕES PRÓPRIAS ---- */
+@keyframes memphis-wobble {
+  0%, 100% { transform: rotate(0); }
+  25% { transform: rotate(14deg); }
+  75% { transform: rotate(-14deg); }
+}
+@keyframes memphis-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+@keyframes memphis-pop {
+  0% { transform: scale(.85); }
+  60% { transform: scale(1.06); }
+  100% { transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-skin="memphis"] .brand-dot,
+  html[data-skin="memphis"] .wfnode.is-current .wfnode-badge,
+  html[data-skin="memphis"] .act-new,
+  html[data-skin="memphis"] .fs-close:hover { animation: none; transition: none; }
+}

@@ -1,0 +1,567 @@
+/* =========================================================================
+   Dark Pro — IDE / editor de código (estilo VSCode "Dark+")
+   Carvão escuro em camadas, acentos de cor de sintaxe (azul keyword, teal
+   type, verde comentário, âmbar string, magenta), monoespaçado em tudo,
+   denso, cantos quase retos, filetes de 1px, guias de indentação sutis.
+   Cada card parece um painel/aba do editor; o mini-terminal é o painel
+   integrado. Sem brilho gratuito — só profundidade discreta.
+   Escopo: html[data-skin="darkpro"]
+   ========================================================================= */
+
+html[data-skin="darkpro"] {
+  --bg: #1e1e1e;            /* editor background */
+  --bg-soft: #181818;       /* activity bar / trilhos */
+  --surface: #252526;       /* side bar / painel */
+  --surface-2: #2d2d30;     /* input / pílula */
+  --border: #3c3c40;        /* divisores */
+  --text: #d4d4d4;          /* foreground */
+  --text-dim: #9b9b9b;
+  --text-faint: #6a6a70;
+
+  --accent: #569cd6;        /* keyword blue */
+  --accent-2: #c586c0;      /* keyword purple */
+  --gold: #dcdcaa;          /* function yellow */
+  --orange: #ce9178;        /* string orange */
+  --red: #f44747;           /* error red */
+  --green: #6a9955;         /* comment green */
+  --grey: #808080;
+
+  /* teal de "type" reutilizado localmente */
+  --dp-teal: #4ec9b0;
+  --dp-line: #2a2a2b;       /* linha de guia sutil */
+  --dp-tabbar: #2d2d2d;     /* fundo de barra de abas */
+  --dp-editor: #1e1e1e;
+
+  --radius: 4px;
+  --radius-lg: 6px;
+  --shadow: 0 8px 24px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(0, 0, 0, 0.4);
+  --shadow-soft: 0 1px 0 rgba(255, 255, 255, 0.02), 0 2px 8px rgba(0, 0, 0, 0.35);
+  --gap: 10px;
+
+  /* mono em TUDO — é um editor de código */
+  --font-sans: "JetBrains Mono", "Cascadia Code", "SF Mono", "DejaVu Sans Mono", Menlo, Consolas, ui-monospace, monospace;
+  --font-mono: "JetBrains Mono", "Cascadia Code", "SF Mono", "DejaVu Sans Mono", Menlo, Consolas, ui-monospace, monospace;
+}
+
+/* fundo do editor: leve gradiente + guias de indentação verticais discretas */
+html[data-skin="darkpro"] body {
+  background:
+    linear-gradient(90deg, transparent 0, transparent calc(1.5ch - 1px), var(--dp-line) 1.5ch, transparent calc(1.5ch + 1px)),
+    var(--bg);
+  background-size: 100% 100%, 0 0;
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* -------- TOPBAR: title bar + activity bar do editor -------- */
+html[data-skin="darkpro"] .topbar {
+  background: #323233;
+  border-bottom: 1px solid #1b1b1b;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.03) inset;
+  backdrop-filter: none;
+}
+html[data-skin="darkpro"] .brand h1 {
+  font-weight: 500;
+  letter-spacing: .01em;
+  color: #cccccc;
+}
+html[data-skin="darkpro"] .brand h1::before {
+  content: "\2039/\203A ";
+  color: var(--accent);
+  font-weight: 700;
+}
+html[data-skin="darkpro"] .brand-dot { color: var(--gold); }
+
+html[data-skin="darkpro"] .icon-btn,
+html[data-skin="darkpro"] .ctrl-btn,
+html[data-skin="darkpro"] .skin-select,
+html[data-skin="darkpro"] .conn,
+html[data-skin="darkpro"] .team-count {
+  background: #3a3a3d;
+  color: var(--text);
+  border: 1px solid #4a4a4f;
+  border-radius: var(--radius);
+  font-size: .82em;
+}
+html[data-skin="darkpro"] .icon-btn:hover,
+html[data-skin="darkpro"] .ctrl-btn:hover,
+html[data-skin="darkpro"] .skin-select:hover {
+  background: #45454a;
+  border-color: var(--accent);
+  color: #fff;
+}
+/* dropdown de skins — como um seletor de "color theme" do editor */
+html[data-skin="darkpro"] .skin-picker { position: relative; }
+html[data-skin="darkpro"] .skin-select {
+  padding-left: 1.6em;
+  appearance: none;
+}
+html[data-skin="darkpro"] .skin-picker::before {
+  content: "\2699";
+  position: absolute;
+  left: .55em;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--gold);
+  pointer-events: none;
+  z-index: 1;
+  font-size: .95em;
+}
+
+html[data-skin="darkpro"] .conn-dot { border-radius: 2px; }
+html[data-skin="darkpro"] .conn--online .conn-dot { box-shadow: 0 0 6px var(--green); }
+html[data-skin="darkpro"] .conn--connecting .conn-dot { box-shadow: 0 0 6px var(--gold); }
+html[data-skin="darkpro"] .conn--offline .conn-dot { box-shadow: 0 0 6px var(--red); }
+
+html[data-skin="darkpro"] .section-title {
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  font-size: .72em;
+  font-weight: 600;
+}
+html[data-skin="darkpro"] .section-title span:first-child::before {
+  content: "\25BE ";           /* triângulo de "seção expandida" do explorer */
+  color: var(--text-faint);
+}
+html[data-skin="darkpro"] .live-dot { border-radius: 2px; box-shadow: 0 0 8px var(--red); }
+
+/* -------- HERO: aba de arquivo aberta + barra de status -------- */
+html[data-skin="darkpro"] .hero {
+  background:
+    linear-gradient(180deg, #252526 0, #252526 34px, var(--dp-editor) 34px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  position: relative;
+  overflow: hidden;
+}
+/* "aba" ativa no topo do hero */
+html[data-skin="darkpro"] .hero::before {
+  content: "workflow.state \00B7 mad";
+  position: absolute;
+  top: 0; left: 0;
+  height: 33px;
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  font-size: .72em;
+  color: var(--text-dim);
+  background: var(--dp-editor);
+  border-right: 1px solid var(--border);
+  border-top: 2px solid var(--accent);
+  z-index: 2;
+}
+html[data-skin="darkpro"] .hero-glow {
+  opacity: .35;
+  filter: blur(60px);
+  mix-blend-mode: screen;
+}
+html[data-skin="darkpro"] .hero-eyebrow {
+  color: var(--green);
+  letter-spacing: .04em;
+  text-transform: none;
+}
+html[data-skin="darkpro"] .hero-eyebrow::before { content: "// "; color: var(--text-faint); }
+html[data-skin="darkpro"] .hero-title {
+  background: none;
+  -webkit-text-fill-color: var(--accent);
+  color: var(--accent);
+  font-weight: 600;
+  letter-spacing: -.005em;
+}
+html[data-skin="darkpro"] .hero-doing { color: var(--text-dim); }
+html[data-skin="darkpro"] .hero-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+html[data-skin="darkpro"] .hi-badge {
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
+  color: var(--accent);
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+  border-radius: var(--radius);
+}
+html[data-skin="darkpro"] .hi-slug { color: var(--gold); }
+html[data-skin="darkpro"] .flag {
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  font-size: .78em;
+}
+html[data-skin="darkpro"] .flag--warn { border-color: var(--orange); color: var(--orange); }
+html[data-skin="darkpro"] .flag--bypass { border-color: var(--red); color: var(--red); }
+html[data-skin="darkpro"] .hero-next { color: var(--text-faint); }
+
+/* =========================================================================
+   MAPA DO WORKFLOW — como um diagrama de estados dentro do editor.
+   Nós = "breakpoints"/símbolos; arestas com a condição anotada como comentário.
+   ========================================================================= */
+html[data-skin="darkpro"] .wfmap-wrap {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="darkpro"] .wfmap-hint {
+  color: var(--text-faint);
+  font-size: .74em;
+}
+html[data-skin="darkpro"] .wfmap-hint::before { content: "\21B3 "; color: var(--accent); }
+
+/* nós */
+html[data-skin="darkpro"] .wfnode-badge {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-dim);
+  transition: box-shadow .2s, border-color .2s;
+}
+html[data-skin="darkpro"] .wfnode.is-future .wfnode-badge {
+  opacity: .6;
+  border-style: dashed;
+}
+html[data-skin="darkpro"] .wfnode.is-done .wfnode-badge {
+  border-color: color-mix(in srgb, var(--green) 60%, var(--border));
+  color: var(--green);
+  background: color-mix(in srgb, var(--green) 12%, var(--surface-2));
+}
+html[data-skin="darkpro"] .wfnode-check {
+  border-radius: 2px;
+  background: var(--green);
+  color: #14210d;
+  border-color: var(--surface);
+}
+html[data-skin="darkpro"] .wfnode.is-current .wfnode-badge {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 16%, var(--surface-2));
+  box-shadow: 0 0 0 1px var(--accent), 0 0 16px color-mix(in srgb, var(--accent) 45%, transparent);
+}
+html[data-skin="darkpro"] .wfnode.is-selected .wfnode-badge {
+  box-shadow: 0 0 0 2px var(--gold), 0 0 14px color-mix(in srgb, var(--gold) 40%, transparent);
+  border-color: var(--gold);
+}
+html[data-skin="darkpro"] .wfnode-label {
+  color: var(--text-dim);
+  letter-spacing: .01em;
+}
+html[data-skin="darkpro"] .wfnode.is-current .wfnode-label { color: var(--text); }
+html[data-skin="darkpro"] .wfnode-here,
+html[data-skin="darkpro"] .wfx-tag--here {
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 50%, transparent);
+  border-radius: var(--radius);
+  color: var(--accent);
+}
+html[data-skin="darkpro"] .wfnode-here-dot { box-shadow: 0 0 8px var(--accent); }
+html[data-skin="darkpro"] .wfnode-doing { color: var(--text-faint); }
+html[data-skin="darkpro"] .wfnode-branch {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-dim);
+  font-size: .76em;
+}
+html[data-skin="darkpro"] .wfbr-arrow { color: var(--accent-2); }
+
+/* arestas — linha fina, condição como chip de comentário */
+html[data-skin="darkpro"] .wfedge-line { background: var(--border); }
+html[data-skin="darkpro"] .wfedge-line::after { border-left-color: var(--border); }
+html[data-skin="darkpro"] .wfedge.is-done .wfedge-line { background: color-mix(in srgb, var(--green) 60%, var(--border)); }
+html[data-skin="darkpro"] .wfedge.is-done .wfedge-line::after { border-left-color: color-mix(in srgb, var(--green) 60%, var(--border)); }
+html[data-skin="darkpro"] .wfedge.is-current .wfedge-line {
+  background: var(--accent);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--accent) 55%, transparent);
+}
+html[data-skin="darkpro"] .wfedge.is-current .wfedge-line::after { border-left-color: var(--accent); }
+html[data-skin="darkpro"] .wfedge-label {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--green);
+  font-size: .72em;
+}
+html[data-skin="darkpro"] .wfedge-label::before { content: "if "; color: var(--accent-2); }
+
+/* trilho de retorno do ciclo */
+html[data-skin="darkpro"] .wfreturn {
+  background: color-mix(in srgb, var(--accent-2) 10%, transparent);
+  border: 1px dashed color-mix(in srgb, var(--accent-2) 55%, transparent);
+  border-radius: var(--radius);
+  color: var(--accent-2);
+}
+html[data-skin="darkpro"] .wfreturn.is-active {
+  box-shadow: 0 0 14px color-mix(in srgb, var(--accent-2) 35%, transparent);
+}
+html[data-skin="darkpro"] .wfreturn-arrow { color: var(--accent-2); }
+
+/* sub-loop "Construindo" — bloco de código aninhado com barra à esquerda */
+html[data-skin="darkpro"] .wfsub {
+  background: var(--dp-editor);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--gold);
+  border-radius: var(--radius);
+}
+html[data-skin="darkpro"] .wfsub-head-ic { color: var(--gold); }
+html[data-skin="darkpro"] .wfsub-step {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-dim);
+}
+html[data-skin="darkpro"] .wfsub-step.is-done {
+  border-color: color-mix(in srgb, var(--green) 50%, var(--border));
+  color: var(--green);
+}
+html[data-skin="darkpro"] .wfsub-step.is-current {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 14%, var(--surface-2));
+  box-shadow: 0 0 10px color-mix(in srgb, var(--accent) 35%, transparent);
+}
+html[data-skin="darkpro"] .wfsub-arrow,
+html[data-skin="darkpro"] .wfsub-loop { color: var(--accent-2); }
+
+/* painel explicador — como o "hover tooltip" de símbolo do editor */
+html[data-skin="darkpro"] .wf-explainer {
+  background: var(--dp-editor);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+html[data-skin="darkpro"] .wfx-icon { color: var(--accent); }
+html[data-skin="darkpro"] .wfx-title { color: var(--gold); font-weight: 600; }
+html[data-skin="darkpro"] .wfx-tag {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-dim);
+  font-size: .72em;
+}
+html[data-skin="darkpro"] .wfx-tag--muted { color: var(--text-faint); }
+html[data-skin="darkpro"] .wfx-pin { color: var(--gold); }
+html[data-skin="darkpro"] .wfx-k { color: var(--dp-teal); }
+html[data-skin="darkpro"] .wfx-when { color: var(--green); }
+html[data-skin="darkpro"] .wfx-when::before { content: "// "; color: var(--text-faint); }
+html[data-skin="darkpro"] .wfx-to { color: var(--accent); }
+html[data-skin="darkpro"] .wfx-advance .wfx-k { color: var(--accent-2); }
+
+/* =========================================================================
+   CARDS DE AGENTE — cada um é um painel/aba do editor
+   ========================================================================= */
+html[data-skin="darkpro"] .team-empty,
+html[data-skin="darkpro"] .team { }
+
+html[data-skin="darkpro"] .agent {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
+  transition: border-color .18s, box-shadow .18s, transform .18s;
+}
+/* barra de "aba" colorida no topo (cor do agente) */
+html[data-skin="darkpro"] .agent::before {
+  height: 2px;
+  background: var(--agent-color);
+  opacity: .9;
+}
+html[data-skin="darkpro"] .agent:hover {
+  transform: none;
+  border-color: color-mix(in srgb, var(--agent-color) 55%, var(--border));
+  box-shadow: var(--shadow-soft), 0 0 0 1px color-mix(in srgb, var(--agent-color) 40%, transparent);
+}
+html[data-skin="darkpro"] .agent--working {
+  border-color: color-mix(in srgb, var(--agent-color) 55%, var(--border));
+  box-shadow: var(--shadow-soft),
+    0 0 0 1px color-mix(in srgb, var(--agent-color) 45%, transparent),
+    0 0 26px color-mix(in srgb, var(--agent-color) 22%, transparent);
+}
+html[data-skin="darkpro"] .agent--error {
+  border-color: color-mix(in srgb, var(--red) 60%, var(--border));
+}
+html[data-skin="darkpro"] .agent--needs_recovery {
+  border-color: color-mix(in srgb, var(--orange) 60%, var(--border));
+}
+html[data-skin="darkpro"] .agent--decanting {
+  border-color: color-mix(in srgb, var(--gold) 55%, var(--border));
+}
+html[data-skin="darkpro"] .agent--human_driving {
+  border-color: color-mix(in srgb, var(--orange) 60%, var(--border));
+}
+html[data-skin="darkpro"] .agent--sleeping { opacity: .78; }
+html[data-skin="darkpro"] .agent--pinned {
+  box-shadow: var(--shadow-soft), 0 0 0 1px var(--gold);
+}
+
+html[data-skin="darkpro"] .agent-avatar { border-radius: var(--radius); }
+html[data-skin="darkpro"] .agent-avatar-inner { border-radius: 3px; }
+html[data-skin="darkpro"] .agent-avatar::before,
+html[data-skin="darkpro"] .fs-avatar::before {
+  border-radius: var(--radius);
+  border-width: 1.5px;
+}
+html[data-skin="darkpro"] .agent-name {
+  color: var(--text);
+  font-weight: 600;
+  letter-spacing: .01em;
+}
+html[data-skin="darkpro"] .agent-name::before {
+  content: "\25CF ";
+  color: var(--agent-color);
+  font-size: .78em;
+}
+html[data-skin="darkpro"] .agent-status,
+html[data-skin="darkpro"] .fs-status {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-dim);
+  text-transform: lowercase;
+  letter-spacing: .02em;
+  font-size: .78em;
+}
+html[data-skin="darkpro"] .agent-bubble,
+html[data-skin="darkpro"] .fs-bubble {
+  background: var(--dp-editor);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-dim);
+}
+html[data-skin="darkpro"] .agent-bubble::before { content: "\203A "; color: var(--dp-teal); }
+html[data-skin="darkpro"] .agent-pin { color: var(--gold); }
+html[data-skin="darkpro"] .agent-open-hint { color: var(--text-faint); font-size: .74em; }
+html[data-skin="darkpro"] .zzz { color: var(--text-faint); }
+
+/* -------- MINI-TERMINAL: painel integrado do editor -------- */
+html[data-skin="darkpro"] .agent-term,
+html[data-skin="darkpro"] .fs-term {
+  background: #1a1a1a;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.5) inset;
+}
+html[data-skin="darkpro"] .term-ts { color: var(--text-faint); }
+html[data-skin="darkpro"] .term-add { color: var(--green); }
+/* cores por tipo de linha = paleta de sintaxe do editor */
+html[data-skin="darkpro"] .term--read   { color: var(--accent); }
+html[data-skin="darkpro"] .term--write  { color: var(--green); }
+html[data-skin="darkpro"] .term--edit   { color: var(--gold); }
+html[data-skin="darkpro"] .term--bash   { color: var(--accent-2); }
+html[data-skin="darkpro"] .term--grep   { color: var(--dp-teal); }
+html[data-skin="darkpro"] .term--web    { color: #7cb7ff; }
+html[data-skin="darkpro"] .term--agent  { color: var(--accent-2); }
+html[data-skin="darkpro"] .term--think  { color: var(--text-faint); font-style: italic; }
+html[data-skin="darkpro"] .term--decant { color: var(--gold); }
+html[data-skin="darkpro"] .term--ok     { color: var(--green); }
+html[data-skin="darkpro"] .term--error  { color: var(--red); }
+html[data-skin="darkpro"] .term--start  { color: var(--dp-teal); }
+html[data-skin="darkpro"] .term--say    { color: var(--text); }
+html[data-skin="darkpro"] .term--dim    { color: var(--text-faint); }
+html[data-skin="darkpro"] .term--tool   { color: var(--orange); }
+
+/* -------- BARRA DE CONFIANÇA -------- */
+html[data-skin="darkpro"] .agent-trust-head,
+html[data-skin="darkpro"] .fs-trust-head { color: var(--text-faint); font-size: .74em; }
+html[data-skin="darkpro"] .trust-bar,
+html[data-skin="darkpro"] .bar {
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+}
+html[data-skin="darkpro"] .trust-bar-fill {
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--dp-teal), var(--accent));
+}
+
+/* -------- MÉTRICAS -------- */
+html[data-skin="darkpro"] .metric {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="darkpro"] .metric-label { color: var(--text-faint); text-transform: uppercase; letter-spacing: .08em; font-size: .7em; }
+html[data-skin="darkpro"] .metric-value,
+html[data-skin="darkpro"] .metric-value--big { color: var(--text); font-variant-numeric: tabular-nums; }
+html[data-skin="darkpro"] .metric-value--big { color: var(--accent); }
+html[data-skin="darkpro"] .metric-sub { color: var(--text-faint); }
+html[data-skin="darkpro"] .bar-fill { border-radius: 2px; background: var(--dp-teal); }
+html[data-skin="darkpro"] .bar-fill--cost { background: var(--gold); }
+html[data-skin="darkpro"] .bar-fill.is-warn { background: var(--orange); }
+html[data-skin="darkpro"] .bar-fill.is-danger { background: var(--red); }
+
+/* -------- ATIVIDADE: painel de "output"/log do editor -------- */
+html[data-skin="darkpro"] .activity-list {
+  background: #1a1a1a;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+html[data-skin="darkpro"] .activity-list li {
+  border-bottom: 1px solid var(--dp-line);
+}
+html[data-skin="darkpro"] .activity-empty { color: var(--text-faint); }
+html[data-skin="darkpro"] .act-ts { color: var(--text-faint); font-variant-numeric: tabular-nums; }
+html[data-skin="darkpro"] .act-text { color: var(--text-dim); }
+html[data-skin="darkpro"] .act-new { animation: dp-actflash 1.2s ease-out; }
+html[data-skin="darkpro"] .act-icon[data-i="\25B6"] { color: var(--accent); }
+html[data-skin="darkpro"] .act-icon[data-i="\25C6"] { color: var(--gold); }
+html[data-skin="darkpro"] .act-icon[data-i="\2713"] { color: var(--green); }
+html[data-skin="darkpro"] .act-icon[data-i="\2717"] { color: var(--red); }
+
+/* =========================================================================
+   FULLSCREEN — o painel "Zen mode"/editor maximizado
+   ========================================================================= */
+html[data-skin="darkpro"] .fs-backdrop {
+  background: rgba(12, 12, 12, 0.72);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+}
+html[data-skin="darkpro"] .fs-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow), 0 0 0 1px color-mix(in srgb, var(--agent-color) 30%, transparent);
+}
+html[data-skin="darkpro"] .fs-panel::before { height: 2px; background: var(--agent-color); }
+html[data-skin="darkpro"] .fs-head { border-bottom: 1px solid var(--border); }
+html[data-skin="darkpro"] .fs-avatar { border-radius: var(--radius); }
+html[data-skin="darkpro"] .fs-name { color: var(--text); font-weight: 600; }
+html[data-skin="darkpro"] .fs-name::before { content: "\25CF "; color: var(--agent-color); font-size: .8em; }
+html[data-skin="darkpro"] .fs-trust-val { color: var(--dp-teal); font-variant-numeric: tabular-nums; }
+html[data-skin="darkpro"] .fs-close {
+  background: var(--surface-2);
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+html[data-skin="darkpro"] .fs-close:hover { background: #3a3a3d; color: var(--red); border-color: var(--red); }
+html[data-skin="darkpro"] .fs-term-label { color: var(--text-faint); text-transform: uppercase; letter-spacing: .08em; font-size: .72em; }
+html[data-skin="darkpro"] .fs-term-label::before { content: "\2318 "; color: var(--gold); }
+html[data-skin="darkpro"] .fs-term-empty {
+  background: #1a1a1a;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  color: var(--text-faint);
+}
+
+/* -------- banner offline -------- */
+html[data-skin="darkpro"] .offline-banner {
+  background: var(--red);
+  color: #180404;
+  border-radius: 0;
+  font-weight: 600;
+}
+
+/* -------- animação própria (respeitando reduced-motion) -------- */
+@keyframes dp-actflash {
+  0%   { background: color-mix(in srgb, var(--accent) 22%, transparent); }
+  100% { background: transparent; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-skin="darkpro"] .agent,
+  html[data-skin="darkpro"] .wfnode-badge { transition: none; }
+  html[data-skin="darkpro"] .act-new { animation: none; }
+}

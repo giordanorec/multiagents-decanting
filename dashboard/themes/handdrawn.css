@@ -1,0 +1,608 @@
+/* =========================================================================
+   Hand-drawn / Sketchbook — papel off-white, tinta e giz de cera
+   Estética orgânica de caderno: fundo de papel quente com textura, tipografia
+   manuscrita (stack cursive de sistema), bordas onduladas/rústicas com o
+   truque de border-radius assimétrico, sombras "de rabisco" deslocadas,
+   micro-rotações que dão o ar de coisa feita à mão. Sem retas perfeitas.
+   Escopo: html[data-skin="handdrawn"]
+   ========================================================================= */
+
+html[data-skin="handdrawn"] {
+  --bg: #f4ecd8;              /* papel envelhecido, quente */
+  --bg-soft: #ece0c4;         /* papel recuado / trilhos */
+  --surface: #fbf6e9;         /* folha de caderno clara */
+  --surface-2: #f2e7cf;       /* fichinha colada, pílula */
+  --border: #3a3226;          /* tinta marrom-escura */
+  --text: #2e2820;            /* grafite/tinta */
+  --text-dim: #6a5f4a;        /* lápis desbotado */
+  --text-faint: #9c8f72;      /* rascunho leve */
+  --accent: #c8462d;          /* giz de cera vermelho-telha */
+  --accent-2: #2f7d8c;        /* verde-azulado de caneta */
+  --gold: #d9973b;            /* âmbar de aquarela */
+  --orange: #e07a2e;          /* laranja de lápis de cor */
+  --red: #c0392b;             /* vermelho de correção */
+  --green: #5a8a3c;           /* verde-folha */
+  --grey: #9c8f72;            /* cinza-pergaminho */
+  --radius: 14px;
+  --radius-lg: 20px;
+  /* sombra "esboçada": deslocada, sem blur, como traço duplo de caneta */
+  --shadow: 3px 4px 0 rgba(58, 50, 38, 0.28), 0 1px 0 rgba(58, 50, 38, 0.5);
+  --shadow-soft: 2px 3px 0 rgba(58, 50, 38, 0.20);
+  --gap: 16px;
+  /* pilha manuscrita 100% web-safe / system */
+  --font-sans: "Comic Sans MS", "Comic Neue", "Segoe Print", "Bradley Hand",
+    "Chalkboard SE", "Marker Felt", "Comic Sans", cursive;
+  --font-mono: "Comic Sans MS", "Comic Neue", "Bradley Hand", "Chalkboard SE",
+    ui-monospace, cursive;
+}
+
+/* ---- papel: base off-white + fibras/linhas sutis de caderno ------------- */
+html[data-skin="handdrawn"] body {
+  background-color: #f4ecd8;
+  background-image:
+    /* manchas de aquarela quentes nos cantos */
+    radial-gradient(900px 620px at 88% -6%, rgba(216, 151, 59, 0.14), transparent 60%),
+    radial-gradient(820px 620px at -8% 8%, rgba(47, 125, 140, 0.10), transparent 60%),
+    /* pontinhos de papel granulado */
+    radial-gradient(rgba(58, 50, 38, 0.05) 1px, transparent 1.4px),
+    /* fibras diagonais bem leves */
+    repeating-linear-gradient(28deg, rgba(58, 50, 38, 0.018) 0 2px, transparent 2px 9px);
+  background-size: auto, auto, 22px 22px, auto;
+  background-attachment: fixed;
+  color: var(--text);
+}
+
+/* leve textura de papel por cima de tudo, sem bloquear clique */
+html[data-skin="handdrawn"] body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 92;
+  opacity: 0.5;
+  background:
+    radial-gradient(rgba(58, 50, 38, 0.035) 1px, transparent 1.3px) 0 0 / 4px 4px,
+    radial-gradient(1200px 1200px at 50% 50%, transparent 70%, rgba(120, 96, 54, 0.10) 100%);
+  mix-blend-mode: multiply;
+}
+
+/* helper visual: a "caixa desenhada" — cantos irregulares tipo mão */
+/* usado várias vezes abaixo via border-radius direto                  */
+
+/* ---- topbar: fita de caderno com linha rabiscada embaixo --------------- */
+html[data-skin="handdrawn"] .topbar {
+  background: rgba(251, 246, 233, 0.86);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  border-bottom: 2.5px solid var(--border);
+  border-image: none;
+  box-shadow: 0 3px 0 rgba(58, 50, 38, 0.10);
+}
+html[data-skin="handdrawn"] .brand h1 {
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  transform: rotate(-1.2deg);
+  color: var(--text);
+}
+html[data-skin="handdrawn"] .brand-dot {
+  color: var(--accent);
+  transform: rotate(8deg) scale(1.15);
+  display: inline-block;
+}
+
+/* botões: fichinhas com canto ondulado e sombra deslocada */
+html[data-skin="handdrawn"] .icon-btn,
+html[data-skin="handdrawn"] .ctrl-btn,
+html[data-skin="handdrawn"] .skin-select,
+html[data-skin="handdrawn"] .conn,
+html[data-skin="handdrawn"] .team-count {
+  background: var(--surface);
+  color: var(--text);
+  border: 2px solid var(--border);
+  border-radius: 220px 18px 210px 20px / 20px 200px 22px 220px;
+  box-shadow: var(--shadow-soft);
+  font-family: var(--font-sans);
+}
+html[data-skin="handdrawn"] .icon-btn:hover,
+html[data-skin="handdrawn"] .ctrl-btn:hover,
+html[data-skin="handdrawn"] .skin-select:hover {
+  background: #fff8ea;
+  transform: rotate(-1deg) translateY(-1px);
+}
+html[data-skin="handdrawn"] .skin-picker { transform: rotate(0.6deg); }
+
+html[data-skin="handdrawn"] .conn-dot { box-shadow: 0 0 0 3px rgba(58, 50, 38, 0.10); }
+html[data-skin="handdrawn"] .conn--online .conn-dot { background: var(--green); }
+html[data-skin="handdrawn"] .conn--connecting .conn-dot { background: var(--gold); }
+html[data-skin="handdrawn"] .conn--offline .conn-dot { background: var(--red); }
+
+/* ---- títulos de seção: sublinhado rabiscado ---------------------------- */
+html[data-skin="handdrawn"] .section-title {
+  color: var(--text);
+  font-weight: 700;
+  transform: rotate(-0.6deg);
+}
+html[data-skin="handdrawn"] .section-title span:first-child {
+  position: relative;
+  padding-bottom: 3px;
+  background-image: repeating-linear-gradient(
+    -1deg, var(--accent) 0 6px, transparent 6px 11px);
+  background-size: 100% 3px;
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+}
+html[data-skin="handdrawn"] .live-dot {
+  background: var(--accent);
+  box-shadow: 0 0 0 3px rgba(200, 70, 45, 0.18);
+}
+
+/* ---- HERO: página arrancada do caderno, presa com fita crepe ----------- */
+html[data-skin="handdrawn"] .hero {
+  background: var(--surface);
+  border: 2.5px solid var(--border);
+  border-radius: 255px 14px 250px 16px / 16px 240px 18px 255px;
+  box-shadow: var(--shadow);
+  transform: rotate(-0.5deg);
+}
+html[data-skin="handdrawn"] .hero-glow {
+  background: radial-gradient(60% 60% at 30% 10%, rgba(216, 151, 59, 0.20), transparent 70%);
+  filter: blur(20px);
+  opacity: 0.8;
+}
+/* fita crepe no topo do hero */
+html[data-skin="handdrawn"] .hero::before {
+  content: "";
+  position: absolute;
+  top: -12px;
+  left: 46%;
+  width: 92px;
+  height: 26px;
+  background: rgba(216, 191, 120, 0.55);
+  border: 1px dashed rgba(58, 50, 38, 0.30);
+  transform: rotate(-4deg);
+  box-shadow: 0 2px 5px rgba(58, 50, 38, 0.14);
+  z-index: 3;
+}
+html[data-skin="handdrawn"] .hero-eyebrow {
+  color: var(--accent);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  transform: rotate(-1deg);
+}
+html[data-skin="handdrawn"] .hero-eyebrow::before { content: "✎ "; }
+html[data-skin="handdrawn"] .hero-title {
+  background: none;
+  -webkit-text-fill-color: currentColor;
+  color: var(--text);
+  font-weight: 700;
+  letter-spacing: 0;
+  transform: rotate(-0.8deg);
+  text-shadow: 1.5px 1.5px 0 rgba(200, 70, 45, 0.18);
+}
+html[data-skin="handdrawn"] .hero-item {
+  background: var(--surface-2);
+  border: 2px solid var(--border);
+  border-radius: 200px 16px 190px 18px / 18px 180px 20px 200px;
+  transform: rotate(0.5deg);
+}
+html[data-skin="handdrawn"] .hero-item:nth-child(even) { transform: rotate(-0.7deg); }
+html[data-skin="handdrawn"] .hi-badge {
+  background: var(--accent);
+  color: #fff8ea;
+  border: 2px solid var(--border);
+  border-radius: 60% 40% 55% 45% / 50% 55% 45% 50%;
+  transform: rotate(-3deg);
+}
+html[data-skin="handdrawn"] .flag {
+  border: 2px solid var(--border);
+  border-radius: 140px 10px 130px 12px / 12px 130px 14px 140px;
+  background: var(--surface);
+  transform: rotate(-1deg);
+}
+html[data-skin="handdrawn"] .flag--warn { color: var(--orange); }
+html[data-skin="handdrawn"] .flag--bypass { color: var(--red); }
+html[data-skin="handdrawn"] .hero-next { color: var(--text-dim); font-style: italic; }
+
+/* ========================================================================
+   MAPA DO WORKFLOW — diagrama de caderno: círculos tortos, setas à mão
+   ======================================================================== */
+html[data-skin="handdrawn"] .wfmap-wrap {
+  background: var(--surface);
+  border: 2.5px solid var(--border);
+  border-radius: 255px 15px 250px 16px / 16px 245px 18px 255px;
+  box-shadow: var(--shadow);
+}
+html[data-skin="handdrawn"] .wfmap-hint {
+  color: var(--accent-2);
+  font-style: italic;
+  transform: rotate(-0.6deg);
+}
+
+/* nós: bolhas tortas desenhadas */
+html[data-skin="handdrawn"] .wfnode-badge {
+  background: var(--surface-2);
+  border: 2.5px solid var(--border);
+  border-radius: 62% 38% 55% 45% / 48% 55% 45% 52%;
+  box-shadow: var(--shadow-soft);
+  transform: rotate(-2deg);
+}
+html[data-skin="handdrawn"] .wfnode:nth-child(odd) .wfnode-badge { transform: rotate(2.5deg); }
+html[data-skin="handdrawn"] .wfnode.is-done .wfnode-badge {
+  border-color: var(--green);
+  background: #eef3df;
+}
+html[data-skin="handdrawn"] .wfnode-check {
+  background: var(--green);
+  color: #fff8ea;
+  border: 2px solid var(--border);
+  border-radius: 55% 45% 50% 50% / 50% 55% 45% 50%;
+}
+html[data-skin="handdrawn"] .wfnode.is-current .wfnode-badge {
+  border-color: var(--accent);
+  background: #fdeee6;
+  box-shadow: 0 0 0 4px rgba(200, 70, 45, 0.18), var(--shadow-soft);
+}
+html[data-skin="handdrawn"] .wfnode.is-selected .wfnode-badge {
+  box-shadow: 0 0 0 3px var(--accent), var(--shadow);
+}
+html[data-skin="handdrawn"] .wfnode.is-future .wfnode-badge {
+  border-style: dashed;
+  opacity: 0.8;
+}
+html[data-skin="handdrawn"] .wfnode-label {
+  color: var(--text);
+  font-weight: 700;
+  transform: rotate(-0.8deg);
+}
+html[data-skin="handdrawn"] .wfnode.is-current .wfnode-label::before { content: "→ "; color: var(--accent); }
+html[data-skin="handdrawn"] .wfnode-here,
+html[data-skin="handdrawn"] .wfx-tag--here {
+  background: rgba(216, 151, 59, 0.22);
+  border: 2px solid var(--gold);
+  border-radius: 130px 10px 120px 12px / 12px 120px 14px 130px;
+  color: var(--text);
+  transform: rotate(-1.2deg);
+}
+html[data-skin="handdrawn"] .wfnode-here-dot { background: var(--accent); }
+html[data-skin="handdrawn"] .wfnode-doing { color: var(--text-dim); font-style: italic; }
+
+html[data-skin="handdrawn"] .wfnode-branch {
+  background: var(--surface-2);
+  border: 2px solid var(--border);
+  border-radius: 120px 9px 110px 11px / 11px 110px 13px 120px;
+  transform: rotate(0.6deg);
+}
+html[data-skin="handdrawn"] .wfbr-arrow { color: var(--accent-2); }
+
+/* arestas: linha de caneta com leve ondulação e seta à mão */
+html[data-skin="handdrawn"] .wfedge-line {
+  background: var(--border);
+  height: 2.5px;
+  border-radius: 3px;
+}
+html[data-skin="handdrawn"] .wfedge-line::after { border-left-color: var(--border); }
+html[data-skin="handdrawn"] .wfedge.is-done .wfedge-line { background: var(--green); }
+html[data-skin="handdrawn"] .wfedge.is-done .wfedge-line::after { border-left-color: var(--green); }
+html[data-skin="handdrawn"] .wfedge.is-current .wfedge-line {
+  background: var(--accent);
+  box-shadow: 0 1px 0 rgba(200, 70, 45, 0.30);
+}
+html[data-skin="handdrawn"] .wfedge.is-current .wfedge-line::after { border-left-color: var(--accent); }
+html[data-skin="handdrawn"] .wfedge-label {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: 120px 8px 110px 10px / 10px 110px 12px 120px;
+  color: var(--text-dim);
+  font-style: italic;
+  transform: rotate(-1.5deg);
+  box-shadow: var(--shadow-soft);
+}
+
+/* trilho de retorno: seta pontilhada de rascunho */
+html[data-skin="handdrawn"] .wfreturn {
+  background: rgba(47, 125, 140, 0.10);
+  border: 2px dashed var(--accent-2);
+  border-radius: 200px 14px 190px 16px / 16px 180px 18px 200px;
+  color: var(--accent-2);
+  transform: rotate(-0.4deg);
+}
+html[data-skin="handdrawn"] .wfreturn-arrow,
+html[data-skin="handdrawn"] .wfsub-loop,
+html[data-skin="handdrawn"] .wfx-to { color: var(--accent-2); }
+
+/* sub-loop "Construindo": caixinha grampeada de lado */
+html[data-skin="handdrawn"] .wfsub {
+  background: var(--surface);
+  border: 2.5px solid var(--border);
+  border-left: 5px solid var(--accent);
+  border-radius: 200px 14px 190px 16px / 16px 180px 18px 200px;
+  box-shadow: var(--shadow-soft);
+  transform: rotate(0.4deg);
+}
+html[data-skin="handdrawn"] .wfsub-head-ic { color: var(--accent); }
+html[data-skin="handdrawn"] .wfsub-step {
+  background: var(--surface-2);
+  border: 2px solid var(--border);
+  border-radius: 60% 40% 55% 45% / 50% 55% 45% 50%;
+  box-shadow: var(--shadow-soft);
+  transform: rotate(-1.5deg);
+}
+html[data-skin="handdrawn"] .wfsub-step:nth-child(even) { transform: rotate(1.8deg); }
+html[data-skin="handdrawn"] .wfsub-step.is-done { border-color: var(--green); background: #eef3df; }
+html[data-skin="handdrawn"] .wfsub-step.is-current {
+  border-color: var(--accent);
+  background: #fdeee6;
+  box-shadow: 0 0 0 3px rgba(200, 70, 45, 0.16), var(--shadow-soft);
+}
+html[data-skin="handdrawn"] .wfsub-label { color: var(--text); font-weight: 700; }
+html[data-skin="handdrawn"] .wfsub-arrow { color: var(--text-faint); }
+
+/* painel explicador: ficha de anotação */
+html[data-skin="handdrawn"] .wf-explainer {
+  background: var(--surface);
+  border: 2.5px solid var(--border);
+  border-radius: 220px 15px 210px 17px / 17px 200px 19px 220px;
+  box-shadow: var(--shadow-soft);
+  transform: rotate(-0.3deg);
+}
+html[data-skin="handdrawn"] .wfx-icon { color: var(--accent); }
+html[data-skin="handdrawn"] .wfx-title { color: var(--text); font-weight: 700; }
+html[data-skin="handdrawn"] .wfx-tag {
+  background: var(--surface-2);
+  border: 2px solid var(--border);
+  border-radius: 110px 8px 100px 10px / 10px 100px 12px 110px;
+  transform: rotate(-1deg);
+}
+html[data-skin="handdrawn"] .wfx-tag--muted { opacity: 0.7; border-style: dashed; }
+html[data-skin="handdrawn"] .wfx-pin { color: var(--gold); }
+html[data-skin="handdrawn"] .wfx-when,
+html[data-skin="handdrawn"] .wfx-k {
+  background: var(--surface-2);
+  border: 1.5px solid var(--border);
+  border-radius: 90px 7px 85px 9px / 9px 85px 11px 90px;
+  color: var(--text-dim);
+  font-style: italic;
+}
+html[data-skin="handdrawn"] .wfx-advance { color: var(--green); }
+html[data-skin="handdrawn"] .wfx-goes { color: var(--accent-2); }
+
+/* ========================================================================
+   CARTÕES DE AGENTE — cada um uma folhinha torta, sombra de rabisco
+   ======================================================================== */
+html[data-skin="handdrawn"] .agent {
+  background: var(--surface);
+  border: 2.5px solid var(--border);
+  border-radius: 255px 16px 250px 18px / 18px 245px 20px 255px;
+  box-shadow: var(--shadow);
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+html[data-skin="handdrawn"] .team > .agent:nth-child(3n) { transform: rotate(-0.9deg); }
+html[data-skin="handdrawn"] .team > .agent:nth-child(3n+1) { transform: rotate(0.7deg); }
+html[data-skin="handdrawn"] .team > .agent:nth-child(3n+2) { transform: rotate(-0.4deg); }
+html[data-skin="handdrawn"] .agent::before {
+  height: 4px;
+  background: var(--agent-color);
+  border-radius: 4px 4px 0 0;
+  opacity: 0.85;
+}
+html[data-skin="handdrawn"] .agent:hover {
+  transform: rotate(0deg) translateY(-3px) scale(1.01);
+  box-shadow: 5px 6px 0 rgba(58, 50, 38, 0.26), 0 0 0 2px color-mix(in srgb, var(--agent-color) 55%, transparent);
+}
+html[data-skin="handdrawn"] .agent--working {
+  box-shadow: var(--shadow), 0 0 0 2px color-mix(in srgb, var(--agent-color) 55%, transparent);
+}
+html[data-skin="handdrawn"] .agent--error {
+  border-color: var(--red);
+  box-shadow: 3px 4px 0 rgba(192, 57, 43, 0.28);
+}
+html[data-skin="handdrawn"] .agent--decanting { border-color: var(--gold); }
+html[data-skin="handdrawn"] .agent--human_driving { border-color: var(--orange); }
+html[data-skin="handdrawn"] .agent--sleeping { opacity: 0.82; }
+html[data-skin="handdrawn"] .agent--pinned {
+  box-shadow: var(--shadow), 0 0 0 2px var(--gold);
+}
+
+/* avatar: círculo torto com anel desenhado */
+html[data-skin="handdrawn"] .agent-avatar,
+html[data-skin="handdrawn"] .fs-avatar {
+  border-radius: 58% 42% 52% 48% / 50% 55% 45% 50%;
+}
+html[data-skin="handdrawn"] .agent-avatar::before,
+html[data-skin="handdrawn"] .fs-avatar::before {
+  border-width: 2.5px;
+  border-radius: 58% 42% 52% 48% / 50% 55% 45% 50%;
+}
+html[data-skin="handdrawn"] .agent-avatar-inner,
+html[data-skin="handdrawn"] .fs-avatar-inner {
+  border-radius: 56% 44% 50% 50% / 52% 50% 50% 48%;
+}
+html[data-skin="handdrawn"] .agent-name {
+  color: var(--text);
+  font-weight: 700;
+  transform: rotate(-0.6deg);
+}
+html[data-skin="handdrawn"] .agent-status,
+html[data-skin="handdrawn"] .fs-status {
+  background: var(--surface-2);
+  border: 2px solid var(--border);
+  border-radius: 120px 9px 110px 11px / 11px 110px 13px 120px;
+  color: var(--text-dim);
+  transform: rotate(-0.8deg);
+}
+html[data-skin="handdrawn"] .agent-bubble,
+html[data-skin="handdrawn"] .fs-bubble {
+  background: #fffcf3;
+  border: 2px solid var(--border);
+  border-radius: 20px 20px 20px 4px;   /* balão de fala à mão */
+  color: var(--text-dim);
+  font-style: italic;
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="handdrawn"] .agent-pin { color: var(--gold); }
+html[data-skin="handdrawn"] .agent-open-hint { color: var(--text-faint); font-style: italic; }
+html[data-skin="handdrawn"] .zzz { color: var(--text-faint); }
+
+/* ---- mini-terminal: fita de esboço colada dentro da folha -------------- */
+html[data-skin="handdrawn"] .agent-term,
+html[data-skin="handdrawn"] .fs-term {
+  background: #fffdf6;
+  border: 2px dashed var(--border);
+  border-radius: 12px 14px 12px 14px / 14px 12px 14px 12px;
+  color: var(--text);
+  font-family: var(--font-mono);
+  /* linhas de caderno bem sutis atrás do texto */
+  background-image: repeating-linear-gradient(
+    var(--surface) 0 26px, rgba(58, 50, 38, 0.06) 26px 27px);
+}
+html[data-skin="handdrawn"] .term-ts { color: var(--text-faint); }
+html[data-skin="handdrawn"] .term--read { color: var(--accent-2); }
+html[data-skin="handdrawn"] .term--write { color: var(--green); }
+html[data-skin="handdrawn"] .term--edit { color: var(--gold); }
+html[data-skin="handdrawn"] .term--bash { color: #8a5a9c; }
+html[data-skin="handdrawn"] .term--grep { color: var(--accent-2); }
+html[data-skin="handdrawn"] .term--web { color: var(--accent-2); }
+html[data-skin="handdrawn"] .term--agent { color: var(--orange); }
+html[data-skin="handdrawn"] .term--think { color: var(--text-faint); font-style: italic; }
+html[data-skin="handdrawn"] .term--decant { color: var(--gold); }
+html[data-skin="handdrawn"] .term--ok { color: var(--green); }
+html[data-skin="handdrawn"] .term--error { color: var(--red); }
+html[data-skin="handdrawn"] .term--say { color: var(--text); }
+html[data-skin="handdrawn"] .term--dim { color: var(--text-faint); }
+html[data-skin="handdrawn"] .term-add { color: var(--green); }
+
+/* ---- barra de confiança + métricas: réguas de giz ---------------------- */
+html[data-skin="handdrawn"] .agent-trust-head,
+html[data-skin="handdrawn"] .fs-trust-head { color: var(--text-dim); font-style: italic; }
+html[data-skin="handdrawn"] .trust-bar,
+html[data-skin="handdrawn"] .bar {
+  background: var(--bg-soft);
+  border: 2px solid var(--border);
+  border-radius: 40px;
+  overflow: hidden;
+}
+html[data-skin="handdrawn"] .trust-bar-fill {
+  background: var(--green);
+  border-radius: 40px;
+  /* hachura de giz sobre o preenchimento */
+  background-image: repeating-linear-gradient(
+    45deg, rgba(255,255,255,0.22) 0 4px, transparent 4px 8px);
+}
+html[data-skin="handdrawn"] .bar-fill { background: var(--accent-2); border-radius: 40px; }
+html[data-skin="handdrawn"] .bar-fill--cost { background: var(--gold); }
+html[data-skin="handdrawn"] .bar-fill.is-warn { background: var(--orange); }
+html[data-skin="handdrawn"] .bar-fill.is-danger { background: var(--red); }
+
+html[data-skin="handdrawn"] .metric {
+  background: var(--surface);
+  border: 2.5px solid var(--border);
+  border-radius: 200px 15px 190px 17px / 17px 185px 19px 200px;
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="handdrawn"] .metrics-grid > .metric:nth-child(even) { transform: rotate(-0.7deg); }
+html[data-skin="handdrawn"] .metrics-grid > .metric:nth-child(odd) { transform: rotate(0.6deg); }
+html[data-skin="handdrawn"] .metric-label { color: var(--text-dim); font-style: italic; }
+html[data-skin="handdrawn"] .metric-value,
+html[data-skin="handdrawn"] .metric-value--big {
+  color: var(--text);
+  font-weight: 700;
+}
+html[data-skin="handdrawn"] .metric-value--big { color: var(--accent); }
+html[data-skin="handdrawn"] .metric-sub { color: var(--text-faint); }
+
+/* ---- feed de atividade: lista de recados à mão ------------------------- */
+html[data-skin="handdrawn"] .activity-list {
+  background: var(--surface);
+  border: 2.5px solid var(--border);
+  border-radius: 220px 15px 210px 17px / 17px 200px 19px 220px;
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="handdrawn"] .activity-list li {
+  border-bottom: 1.5px dashed rgba(58, 50, 38, 0.28);
+}
+html[data-skin="handdrawn"] .activity-empty { color: var(--text-faint); font-style: italic; }
+html[data-skin="handdrawn"] .act-ts { color: var(--text-faint); }
+html[data-skin="handdrawn"] .act-text { color: var(--text-dim); }
+html[data-skin="handdrawn"] .act-new { animation: hd-jot 0.5s ease; }
+html[data-skin="handdrawn"] .act-icon[data-i="▶"] { color: var(--accent-2); }
+html[data-skin="handdrawn"] .act-icon[data-i="◆"] { color: var(--gold); }
+html[data-skin="handdrawn"] .act-icon[data-i="✓"] { color: var(--green); }
+html[data-skin="handdrawn"] .act-icon[data-i="✗"] { color: var(--red); }
+html[data-skin="handdrawn"] .team-empty,
+html[data-skin="handdrawn"] .fs-term-empty {
+  border: 2px dashed var(--border);
+  border-radius: 14px;
+  color: var(--text-faint);
+  font-style: italic;
+}
+
+/* ========================================================================
+   FULLSCREEN — a folha ampliada sobre a mesa
+   ======================================================================== */
+html[data-skin="handdrawn"] .fs-backdrop {
+  background: rgba(58, 50, 38, 0.34);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+html[data-skin="handdrawn"] .fs-panel {
+  background: var(--surface);
+  border: 3px solid var(--border);
+  border-radius: 255px 18px 250px 20px / 20px 245px 22px 255px;
+  box-shadow: 6px 8px 0 rgba(58, 50, 38, 0.30);
+  transform: rotate(-0.4deg);
+}
+html[data-skin="handdrawn"] .fs-panel::before {
+  height: 4px;
+  border-radius: 4px 4px 0 0;
+}
+html[data-skin="handdrawn"] .fs-name {
+  color: var(--text);
+  font-weight: 700;
+  transform: rotate(-0.5deg);
+}
+html[data-skin="handdrawn"] .fs-close {
+  background: var(--surface-2);
+  color: var(--text);
+  border: 2px solid var(--border);
+  border-radius: 55% 45% 52% 48% / 50% 55% 45% 50%;
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="handdrawn"] .fs-close:hover {
+  background: #fff8ea;
+  transform: rotate(-6deg) scale(1.05);
+}
+html[data-skin="handdrawn"] .fs-term-label { color: var(--accent); font-weight: 700; font-style: italic; }
+html[data-skin="handdrawn"] .fs-trust-val { color: var(--text); font-weight: 700; }
+
+/* ---- banner offline: aviso rasgado ------------------------------------- */
+html[data-skin="handdrawn"] .offline-banner {
+  background: var(--red);
+  color: #fff8ea;
+  border: 2px solid var(--border);
+  border-radius: 160px 12px 150px 14px / 14px 150px 16px 160px;
+  font-style: italic;
+  transform: rotate(-0.5deg);
+  box-shadow: var(--shadow);
+}
+
+/* ---- micro-animações orgânicas ----------------------------------------- */
+@keyframes hd-jot {
+  0% { transform: translateX(-4px) rotate(-1deg); opacity: 0; }
+  100% { transform: translateX(0) rotate(0); opacity: 1; }
+}
+/* balanço leve tipo folha presa, só no card em trabalho */
+@keyframes hd-sway {
+  0%, 100% { transform: rotate(-0.5deg); }
+  50% { transform: rotate(0.5deg); }
+}
+html[data-skin="handdrawn"] .agent--working { animation: hd-sway 4.5s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-skin="handdrawn"] .agent--working { animation: none; }
+  html[data-skin="handdrawn"] .act-new { animation: none; }
+  html[data-skin="handdrawn"] .icon-btn:hover,
+  html[data-skin="handdrawn"] .ctrl-btn:hover,
+  html[data-skin="handdrawn"] .skin-select:hover,
+  html[data-skin="handdrawn"] .agent:hover,
+  html[data-skin="handdrawn"] .fs-close:hover { transform: none; }
+}
