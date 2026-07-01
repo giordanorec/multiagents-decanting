@@ -2,6 +2,17 @@
 
 Formato: [Keep a Changelog](https://keepachangelog.com/). Versionamento semântico.
 
+## [1.3.5] — 2026-06-30 (o Arquiteto conduz; o usuário só conversa)
+
+### Mudado
+- **O usuário não roda comandos de processo.** Nada de `/mad-phase approve-spec` ou
+  "qual a próxima fase". O Arquiteto CONDUZ: faz as perguntas, apresenta o que precisa
+  de decisão como **artefato pra olhar** (arquivo/wireframe, não muro de texto),
+  aceita feedback (texto/anotação/áudio via `mad.py voice`), ajusta, e quando o
+  usuário concorda em linguagem natural, **ele mesmo** roda a mecânica (approve-spec
+  etc.) por baixo. Os `/mad-phase-*` viram atalho opcional para avançado.
+- Regra cravada no arquiteto, na skill e na injeção do SessionStart.
+
 ## [1.3.4] — 2026-06-30
 
 ### Mudado

@@ -79,19 +79,30 @@ aprovada pelo humano.** Antes disso, o hook bloqueia.
 spec_pendente → spec_validada → executando → validando → [aprovacao_humano] → concluida
 ```
 
+> **VOCÊ conduz cada passo — o usuário só conversa.** Ele nunca digita
+> `/mad-phase-*`. Onde abaixo diz "rode X", quem roda é **você** (via Bash:
+> `python scripts/mad_phase.py X`), depois de apresentar e perguntar em linguagem
+> natural. Onde precisa de decisão dele, **mostre o artefato** e pergunte; quando ele
+> concordar, **você** registra a aprovação.
+
 1. **spec_pendente** — escreva `specs/feature-NNN-<slug>.md` (objetivo, inputs,
-   outputs, critérios, blast_radius, especialista). Rode `/mad-phase next` → valida
+   outputs, critérios, blast_radius, especialista). Rode `mad_phase.py next` → valida
    o formato → `spec_validada`.
-2. **spec_validada** — você NÃO pode chamar Agent ainda. Mostre a spec e peça ao
-   humano: `/mad-phase approve-spec F-NNN`.
+2. **spec_validada** — não pode chamar Agent ainda. **Apresente a spec ao usuário
+   para ele OLHAR** (o arquivo, ou um resumo visual/wireframe — não um muro de texto)
+   e pergunte em linguagem natural: *"É isso que você quer? Posso mandar construir?"*.
+   Aceite feedback (texto, anotação, áudio via `mad.py voice`) e ajuste se preciso.
+   **Quando ele concordar, VOCÊ roda** `mad_phase.py approve-spec F-NNN` por ele.
 3. **executando** — agora o hook libera `Agent(subagent_type=mad:<especialista>)`
-   (só o da spec!). O prompt deve referenciar a spec e exigir decanting.
-4. **validando** (automático após o especialista decantar) — marque cada critério
-   em `reports/feature-NNN/arquiteto-merge.md` como `[x]`/`[ ]` com nota.
-5. **bifurcação** via `/mad-phase next`:
-   - todos `[x]` + reversível → `concluida` (trust +5, DECISOES, backlog).
-   - todos `[x]` + irreversível → `aprovacao_humano` → peça `/mad-phase approve-merge F-NNN`.
-   - algum `[ ]` → `/mad-phase rework F-NNN --note "..."` (volta a executando).
+   (só o da spec!). O prompt referencia a spec e exige decanting. O usuário
+   **acompanha** (dashboard) e pode te interpelar.
+4. **validando** (automático após o especialista decantar) — marque cada critério em
+   `reports/feature-NNN/arquiteto-merge.md`. Apresente o resultado ao usuário.
+5. **bifurcação** (você roda `mad_phase.py next`):
+   - todos `[x]` + reversível → concluída.
+   - todos `[x]` + algo difícil de desfazer → mostre o resultado, pergunte *"posso
+     colocar isso pra valer?"*, e ao concordar VOCÊ roda `mad_phase.py approve-merge F-NNN`.
+   - algum `[ ]` → VOCÊ roda `mad_phase.py rework F-NNN --note "..."`.
 6. **concluida** — a próxima feature do backlog vira ativa automaticamente.
 
 ## Os comandos (única forma legítima de avançar)

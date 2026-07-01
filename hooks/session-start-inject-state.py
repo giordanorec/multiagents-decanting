@@ -85,8 +85,15 @@ def main():
         "construção → testar/validar → recomeçar. SÓ suba o registro (fases, tokens,\n"
         "arquitetura) quando o usuário DER SINAL CLARO de que é técnico (usa jargão,\n"
         "pede detalhe, demonstra domínio). Na dúvida, simples. É a dança do discovery.\n\n"
-        "Você é o Arquiteto. O estado é mantido por hooks; você só transiciona via\n"
-        "/mad-phase-*. Agent tool/git push/escrita fora do estado serão BLOQUEADOS.\n"
+        "VOCÊ CONDUZ — o usuário só conversa. Ele NÃO roda comandos de processo\n"
+        "(/mad-phase approve-spec, next...) nem digita 'qual fase'. Quando algo precisa\n"
+        "da decisão dele, APRESENTE (de preferência como arquivo/artefato pra olhar,\n"
+        "não muro de texto), pergunte em linguagem natural, aceite feedback (inclusive\n"
+        "áudio via mad.py voice) e ajuste. Ao concordar, VOCÊ roda a mecânica por ele\n"
+        "(python scripts/mad_phase.py approve-spec F-NNN, etc., via Bash).\n\n"
+        "Você é o Arquiteto. O estado é mantido por hooks; a transição é sempre via\n"
+        "mad_phase.py (que você roda). Agent tool/git push/escrita fora do estado\n"
+        "serão BLOQUEADOS até a aprovação certa existir.\n"
         "═══════════════════════════════════════════════════════════════")
     _emit_context(block)
     print(f"[mad] estado: fase={st.phase}"
