@@ -229,15 +229,70 @@ def _sanitize(v):
     return v
 
 
+def _last_log_hash(root: Path) -> str:
+    f = root / LOG_FILE
+    if not f.is_file():
+        return "genesis"
+    last = ""
+    try:
+        for line in u.read_text(f).splitlines():
+            if line.strip():
+                last = line
+    except Exception:
+        return "genesis"
+    if not last:
+        return "genesis"
+    try:
+        return json.loads(last).get("hash", "genesis")
+    except Exception:
+        return "genesis"
+
+
 def log_event(root: Path, event_type: str, **fields) -> dict:
+    import hashlib
     ev = {
         "id": uuid.uuid4().hex,
         "ts": u.iso_now(),
         "event": event_type,
         **{k: _sanitize(val) for k, val in fields.items()},
     }
+    # cadeia de hash: cada evento amarra o hash do anterior -> log tamper-evident
+    ev["prev"] = _last_log_hash(root)
+    ev["hash"] = hashlib.sha256(
+        json.dumps(ev, ensure_ascii=False, sort_keys=True).encode()).hexdigest()[:16]
     u.append_text(root / LOG_FILE, json.dumps(ev, ensure_ascii=False) + "\n")
     return ev
+
+
+def verify_log_chain(root: Path) -> tuple[bool, str]:
+    """Verifica a integridade da cadeia de hash do audit log."""
+    import hashlib
+    f = root / LOG_FILE
+    if not f.is_file():
+        return True, "sem log ainda"
+    prev = "genesis"
+    n = 0
+    for i, line in enumerate(u.read_text(f).splitlines(), 1):
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            ev = json.loads(line)
+        except json.JSONDecodeError:
+            return False, f"linha {i} ilegível"
+        if "hash" not in ev:  # eventos legados (pré-encadeamento) — tolera
+            prev = ev.get("hash", prev)
+            continue
+        if ev.get("prev") != prev:
+            return False, f"cadeia quebrada na linha {i} (evento {ev.get('event')})"
+        h = ev.pop("hash")
+        calc = hashlib.sha256(
+            json.dumps(ev, ensure_ascii=False, sort_keys=True).encode()).hexdigest()[:16]
+        if calc != h:
+            return False, f"hash adulterado na linha {i} (evento {ev.get('event')})"
+        prev = h
+        n += 1
+    return True, f"{n} eventos íntegros"
 
 
 # ---------------------------------------------------------------------------

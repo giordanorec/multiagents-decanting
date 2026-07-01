@@ -387,3 +387,19 @@ def test_log_sanitizes_secret(tmp_project):
     text = u.read_text(tmp_project / "logs" / "workflow.jsonl")
     assert "SECRETVALUE12345" not in text
     assert "REDACTED" in text
+
+
+def test_audit_log_hash_chain(tmp_project):
+    wf.log_event(tmp_project, "a", x=1)
+    wf.log_event(tmp_project, "b", y=2)
+    ok, msg = wf.verify_log_chain(tmp_project)
+    assert ok, msg
+    # adultera uma linha -> cadeia quebra
+    logf = tmp_project / "logs" / "workflow.jsonl"
+    import json as _j
+    lines = logf.read_text().splitlines()
+    ev = _j.loads(lines[0]); ev["x"] = 999
+    lines[0] = _j.dumps(ev, ensure_ascii=False)
+    logf.write_text("\n".join(lines) + "\n")
+    ok, _ = wf.verify_log_chain(tmp_project)
+    assert not ok

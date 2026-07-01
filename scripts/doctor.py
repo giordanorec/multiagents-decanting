@@ -177,6 +177,13 @@ def run(root: Path | None = None, as_json: bool = False) -> int:
                         "e sincronize spec/docs antes de fechar (Art. 1).")
     elif newest_code and newest_doc:
         rep.ok(items, "docs tão recentes quanto o código (frescor ok)")
+    # integridade do audit log (cadeia de hash tamper-evident)
+    try:
+        import workflow as _wf  # irmão do doctor no dir scripts/ (já no path)
+        okc, msgc = _wf.verify_log_chain(root)
+        (rep.ok if okc else rep.fail)(items, f"audit log: {msgc}")
+    except Exception:
+        pass
 
     agents = _agents(root)
     if not agents:

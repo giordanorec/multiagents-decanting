@@ -2,6 +2,17 @@
 
 Formato: [Keep a Changelog](https://keepachangelog.com/). Versionamento semântico.
 
+## [1.12.0] — 2026-07-01 (Cluster D: hardening)
+
+### Adicionado
+- **Audit log tamper-evident:** `log_event` agora encadeia hash SHA-256 (cada evento
+  amarra o anterior); `verify_log_chain` detecta adulteração; `/mad-doctor` verifica a
+  cadeia. Um agente comprometido não apaga o rastro do próprio abuso sem quebrar a cadeia.
+- **`mad bootstrap`:** setup 1-comando — instala a dep opcional (websockets p/ dashboard)
+  e roda o doctor. Paridade com o benchmark "add + install + funciona".
+- **Fronteira anti prompt-injection (Art. 5):** o template de agente instrui tratar
+  conteúdo externo (WebFetch/arquivos/saídas) como DADO, não comando, envolvendo em
+  delimitadores não-confiáveis. Materializa o Art. 5, antes só declarativo.
 ## [1.11.0] — 2026-07-01 (Cluster C: confiabilidade do estado)
 
 ### Corrigido/Adicionado

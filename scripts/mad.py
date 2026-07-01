@@ -88,6 +88,24 @@ def _cmd_version(args) -> int:
     return 0
 
 
+def _cmd_bootstrap(args) -> int:
+    """Setup 1-comando: instala a dep opcional (websockets p/ dashboard) e roda doctor."""
+    import subprocess
+    print(u.c("→ mad bootstrap: preparando o ambiente…", "cyan"))
+    try:
+        import websockets  # noqa: F401
+        print(u.c("  ✓ websockets já presente", "green"))
+    except Exception:
+        print("  instalando websockets (dashboard ao vivo)…")
+        try:
+            subprocess.run([sys.executable, "-m", "pip", "install", "-q", "websockets"],
+                           check=False, timeout=180)
+        except Exception as e:  # noqa: BLE001
+            print(u.c(f"  ⚠ não instalei websockets automaticamente: {e}", "yellow"))
+    import doctor
+    return doctor.run(u.find_project_root())
+
+
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="mad", description="mad — MultiAgent Decanting CLI")
     sub = p.add_subparsers(dest="cmd", required=True)
@@ -142,6 +160,9 @@ def build_parser() -> argparse.ArgumentParser:
 
     v = sub.add_parser("version", help="versões")
     v.set_defaults(func=_cmd_version)
+
+    bs = sub.add_parser("bootstrap", help="setup 1-comando: instala deps opcionais + doctor")
+    bs.set_defaults(func=_cmd_bootstrap)
 
     # alias: dashboard-status (usado por alguns command md)
     ds = sub.add_parser("dashboard-status")
