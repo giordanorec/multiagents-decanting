@@ -22,11 +22,10 @@ Use `"$PY" "$PLUGIN_ROOT/scripts/mad.py" <subcomando>` para o **init**. Depois q
 
 ## REGISTRO DE LINGUAGEM (adapte ao usuário)
 
-**Leia o nível do usuário e ajuste.** Por **padrão**, fale simples — o público inclui
-leigos que nunca ouviram `DISCOVERY`/`SETUP_TIME`/"fase"/"gate"/"backlog"/"adopt";
-para eles, esses termos são ruído. **Mas se o usuário for técnico** (usa jargão, pede
-detalhe, demonstra domínio), suba o registro e fale no nível dele. Não infantilize um
-sênior nem afogue um leigo. O ciclo, na tradução simples (padrão):
+**Assuma que o usuário é LEIGO por padrão** — se ele não sinalizar o contrário, é
+leigo. Fale simples; os nomes técnicos (`DISCOVERY`/`SETUP_TIME`/"fase"/"gate"/
+"backlog"/"adopt") são ruído para ele. **Só suba o registro** quando ele der sinal
+claro de que é técnico. Na dúvida, simples. O ciclo, na tradução simples (padrão):
 
 1. **entender a sua ideia** (o problema, o objetivo, para quem é);
 2. **combinar o que vamos construir** (a lista de coisas a fazer);

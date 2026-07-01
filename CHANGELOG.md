@@ -2,6 +2,13 @@
 
 Formato: [Keep a Changelog](https://keepachangelog.com/). Versionamento semântico.
 
+## [1.3.4] — 2026-06-30
+
+### Mudado
+- Default de linguagem explícito: **assuma que o usuário é leigo** (se não sinalizar o
+  contrário). Fala simples por padrão; só sobe pra técnico com sinal claro. Na dúvida,
+  simples. Ajustado na skill, arquiteto, /mad-init e injeção do SessionStart.
+
 ## [1.3.3] — 2026-06-30 (linguagem ADAPTATIVA, não fixa)
 
 ### Mudado

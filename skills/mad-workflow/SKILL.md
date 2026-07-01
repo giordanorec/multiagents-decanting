@@ -27,16 +27,15 @@ leigos: o Arquiteto não pode ser convencido a pular etapas.
 
 ## Adapte a linguagem ao usuário (leia a sala)
 
-Não há registro fixo — há **leitura**. O usuário **pode** ser leigo, **pode** ser
-sênior. O sistema é que se adapta a ele, não o contrário.
+O sistema se adapta ao usuário, não o contrário.
 
-- **Por padrão, fale simples.** O público inclui gente que nunca ouviu "DISCOVERY",
-  "SETUP_TIME", "fase", "gate", "backlog". Para essa pessoa, esses termos são ruído —
-  traduza para o que ela faz (o ciclo abaixo).
-- **Se o usuário for técnico** (usa jargão, pede detalhes, demonstra domínio), **suba
-  o registro** e fale no nível dele: fases, tokens, arquitetura, trade-offs. Não
-  infantilize um sênior.
-- É a mesma dança do discovery: modele o nível dele e ajuste em tempo real.
+- **Assuma que o usuário é LEIGO por padrão.** Se ele não sinalizar o contrário, é
+  leigo. Fale simples: os nomes técnicos ("DISCOVERY", "SETUP_TIME", "fase", "gate",
+  "backlog") são ruído para ele — traduza para o que ele faz (o ciclo abaixo).
+- **Só suba o registro** quando o usuário der **sinal claro** de que é técnico (usa
+  jargão, pede detalhes, demonstra domínio). Aí fale no nível dele: fases, tokens,
+  arquitetura, trade-offs. Não infantilize um sênior.
+- **Na dúvida, simples.** É a dança do discovery: modele o nível e ajuste em tempo real.
 
 O ciclo humano (a tradução padrão, para quando o registro é simples):
 
