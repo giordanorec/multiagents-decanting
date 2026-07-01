@@ -115,9 +115,10 @@ PHASE_GUIDE = {
     },
     "PRE_RELEASE": {
         "icon": "🧪",
-        "detail": "Conferimos e testamos tudo o que foi feito, pra garantir que "
-                  "funciona de verdade antes de valer.",
-        "advance": "passando nos testes, vai pro ar.",
+        "detail": "Conferimos e testamos tudo o que foi feito, e auditamos a coerência "
+                  "(a documentação bate com o sistema? — /mad-audit), pra garantir que "
+                  "funciona de verdade e está bem documentado antes de valer.",
+        "advance": "passando nos testes e na auditoria de coerência, vai pro ar.",
         "goes_to": [
             {"to": "PILOTO", "when": "tudo validado"},
             {"to": "LOOP_FEATURES", "when": "achamos algo pra ajustar → volta a construir"},

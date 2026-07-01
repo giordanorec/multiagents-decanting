@@ -2,6 +2,22 @@
 
 Formato: [Keep a Changelog](https://keepachangelog.com/). Versionamento semântico.
 
+## [1.8.1] — 2026-07-01 (constituição composta + coerência contínua)
+
+### Mudado
+- **Constituição reescrita e composta com critério**: um artigo só entra se for
+  ENFORÇADO (hook impede) ou VERIFICÁVEL (auditável) — regra sem dente não é
+  constituição, é desejo. 10 artigos, cada um declara COMO é garantido (fonte única
+  da verdade, rastreabilidade, processo, verificar antes de pronto, autoridade humana,
+  blast radius, decanting, segredos, transparência, escopo explícito) + cláusulas
+  condicionais (LGPD, compliance, regras de domínio).
+
+### Adicionado
+- **/mad-audit** — auditoria de COERÊNCIA: um revisor (docs-writer/qa) lê spec+docs+
+  código e aponta divergências reais; o Arquiteto corrige no mesmo ciclo. Recomendada
+  antes do pré-release.
+- **/mad-doctor**: check de FRESCOR — avisa quando o código está mais novo que a doc
+  (>1h), sinal de que a sincronia ficou pra trás.
 ## [1.8.0] — 2026-07-01 (Constituição + sincronia doc↔código garantida)
 
 ### Adicionado

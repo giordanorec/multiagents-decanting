@@ -23,6 +23,22 @@ STALE_DAYS = 7
 LESSONS_WORD_LIMIT = 10_000
 
 
+def _newest_mtime(root: Path, dirs: list[str], exts: tuple) -> float:
+    """Maior mtime entre arquivos com as extensões dadas, nos dirs indicados."""
+    newest = 0.0
+    for d in dirs:
+        base = root / d
+        if not base.is_dir():
+            continue
+        for f in base.rglob("*"):
+            if f.is_file() and f.suffix.lower() in exts:
+                try:
+                    newest = max(newest, f.stat().st_mtime)
+                except OSError:
+                    pass
+    return newest
+
+
 class Report:
     def __init__(self):
         self.sections: list[tuple[str, list[tuple[str, str]]]] = []
@@ -150,6 +166,17 @@ def run(root: Path | None = None, as_json: bool = False) -> int:
                         f"desatualizados): {', '.join(unsynced)}")
     else:
         rep.ok(items, f"todas as {len(concl)} features concluídas têm docs-sync (Art. 1 ok)")
+    # frescor: código mais novo que a doc?  (heurística por mtime)
+    newest_code = _newest_mtime(root, ["src", "lib", "app", "server", "backend",
+                                       "frontend", "packages"],
+                                (".py", ".js", ".ts", ".tsx", ".jsx", ".go",
+                                 ".rs", ".java", ".rb", ".php", ".css", ".sql"))
+    newest_doc = _newest_mtime(root, ["docs", "specs"], (".md",))
+    if newest_code and newest_doc and newest_code > newest_doc + 3600:
+        rep.warn(items, "código mudou DEPOIS da última doc (>1h) — rode /mad-audit "
+                        "e sincronize spec/docs antes de fechar (Art. 1).")
+    elif newest_code and newest_doc:
+        rep.ok(items, "docs tão recentes quanto o código (frescor ok)")
 
     agents = _agents(root)
     if not agents:
