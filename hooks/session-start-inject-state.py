@@ -50,34 +50,42 @@ def main():
         return
 
     allowed, blocked = st.allowed_summary()
+    try:
+        human_label = wf.human_label(st.phase)
+        human_doing = wf.human_doing(st.phase)
+    except Exception:
+        human_label, human_doing = st.phase, ""
     f = st.feature or {}
     feat_block = ""
     if st.phase == "LOOP_FEATURES" and f:
         ap = f.get("approvals", {})
         feat_block = (
-            f"\nFEATURE CORRENTE: {f.get('id')} — {f.get('slug')}\n"
-            f"SUB-FASE: {st.subphase}\n"
-            f"ESPECIALISTA: {f.get('agent_assigned') or '(não atribuído)'}\n"
-            f"BLAST RADIUS: {f.get('blast_radius')}\n"
-            f"SPEC APROVADA PELO HUMANO: {'sim' if ap.get('spec_approved_by_human') else 'não'}\n"
-            f"MERGE APROVADO PELO HUMANO: "
-            f"{'n.a. (reversível)' if f.get('blast_radius') in ('reversivel_baixo','reversivel_medio') else ('sim' if ap.get('merge_approved_by_human') else 'não')}\n")
+            f"\nITEM ATUAL: {f.get('id')} — {f.get('slug')}\n"
+            f"SITUAÇÃO (técnica): {st.subphase}\n"
+            f"ASSISTENTE: {f.get('agent_assigned') or '(não definido)'}\n"
+            f"APROVAÇÃO DA DESCRIÇÃO PELO HUMANO: {'sim' if ap.get('spec_approved_by_human') else 'não'}\n")
     warnings = st.data.get("warnings") or []
     block = (
         "═══════════════════════════════════════════════════════════════\n"
-        "  ESTADO DO WORKFLOW MAD (injetado automaticamente, INALTERÁVEL)\n"
+        "  ESTADO DO WORKFLOW MAD (injetado por hook, INALTERÁVEL)\n"
         "═══════════════════════════════════════════════════════════════\n\n"
         f"PROJETO: {st.data.get('project_name')}\n"
-        f"FASE ATUAL: {st.phase}\n"
+        f"AGORA ESTAMOS: {human_label} — {human_doing}\n"
+        f"(nome técnico interno, NÃO fale com o usuário: {st.phase})\n"
         f"{feat_block}\n"
         f"PRÓXIMO PASSO OBRIGATÓRIO:\n  {st.next_action()}\n\n"
         f"AÇÕES PERMITIDAS AGORA:\n  - " + "\n  - ".join(allowed) + "\n\n"
-        f"AÇÕES BLOQUEADAS NESTE ESTADO (o hook vai IMPEDIR):\n  - " + "\n  - ".join(blocked) + "\n\n"
-        + (("WARNINGS PERSISTENTES:\n  - " + "\n  - ".join(warnings) + "\n\n") if warnings else "")
+        f"AÇÕES BLOQUEADAS (o hook vai IMPEDIR):\n  - " + "\n  - ".join(blocked) + "\n\n"
+        + (("AVISOS:\n  - " + "\n  - ".join(warnings) + "\n\n") if warnings else "")
         + "═══════════════════════════════════════════════════════════════\n"
-        "Você é o Arquiteto. Este estado é mantido por hooks; você NÃO o muda\n"
-        "direto — apenas via /mad-phase-*. Agent tool, git push e escrita fora\n"
-        "do estado serão BLOQUEADOS por hook PreToolUse. Pule fases = impossível.\n"
+        "REGRA DE LINGUAGEM (inegociável): o usuário é LEIGO. NUNCA fale com ele os\n"
+        "nomes técnicos (DISCOVERY, ESPEC_V1, SETUP_TIME, LOOP_FEATURES, PRE_RELEASE,\n"
+        "PILOTO, 'fase', 'sub-fase', 'adopt', 'gate'). Traduza SEMPRE para o que ele\n"
+        "de fato faz: entender a ideia → definir o que construir → montar o time (e o\n"
+        "custo) → acompanhar a construção → testar/validar → recomeçar. Fale como\n"
+        "gente.\n\n"
+        "Você é o Arquiteto. O estado é mantido por hooks; você só transiciona via\n"
+        "/mad-phase-*. Agent tool/git push/escrita fora do estado serão BLOQUEADOS.\n"
         "═══════════════════════════════════════════════════════════════")
     _emit_context(block)
     print(f"[mad] estado: fase={st.phase}"

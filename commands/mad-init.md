@@ -20,23 +20,68 @@ PY=python3; command -v python3 >/dev/null 2>&1 || PY=python
 
 Use `"$PY" "$PLUGIN_ROOT/scripts/mad.py" <subcomando>` para o **init**. Depois que o init rodar, o projeto passa a ter seu próprio `scripts/`, e os demais comandos podem usar `"$PY" scripts/mad.py <subcomando>` (ou continuar usando `$PLUGIN_ROOT` — ambos funcionam).
 
-## Passo 0 — CASCATA DE DETECÇÃO (SEMPRE primeiro)
+## REGRA DE LINGUAGEM (inegociável)
 
-`/mad-init` é idempotente e inteligente: ele **detecta** se deve retomar, migrar, adotar ou criar do zero. Você NUNCA reinicia um trabalho já começado. Rode:
+O usuário é **leigo**. Ao falar com ele, **NUNCA** use os nomes técnicos internos
+(`DISCOVERY`, `ESPEC_V1`, `SETUP_TIME`, `LOOP_FEATURES`, `PRE_RELEASE`, `PILOTO`,
+"fase", "sub-fase", "adopt", "gate", "backlog", "state machine"). Fale do que ele de
+fato faz. O ciclo, em linguagem de gente:
+
+1. **entender a sua ideia** (o problema, o objetivo, para quem é);
+2. **combinar o que vamos construir** (a lista de coisas a fazer);
+3. **montar o time de assistentes** — e conversar sobre o **custo** (quantos
+   assistentes, em paralelo ou não; mais assistentes = mais rápido, porém consome
+   mais);
+4. **construir, item por item** — você acompanha, opina e libera cada passo;
+5. **testar e validar** o que foi feito;
+6. voltar à ideia para o próximo ciclo.
+
+Por baixo há um motor que impede pular etapas — mas isso é problema do plugin, não do
+usuário. Ele só precisa entender o que está acontecendo, em português simples.
+
+## Passo 0 — Continuar de onde você parou (SEMPRE primeiro)
+
+`/mad-init` é inteligente: ele detecta se você já começou e **continua daí** — você
+nunca reinicia trabalho. Rode (uso interno; não mostre o comando ao usuário):
 
 ```bash
 "$PY" "$PLUGIN_ROOT/scripts/mad_init.py" detect
 ```
 
-Isso imprime um JSON com `"action"`. Ramifique conforme o valor:
+Isso imprime um JSON com `"action"` e, quando houver, `phase`/`inferred_phase`
+(nomes técnicos — **traduza** com a tabela: DISCOVERY="entender sua ideia",
+ESPEC_V1="combinar o que construir", SETUP_TIME="montar o time",
+LOOP_FEATURES="construir os itens", PRE_RELEASE="testar e validar", PILOTO="no ar").
 
-- **`"resume"`** — já há `.mad/workflow_state.json`. Mostre `project`/`phase`/`subphase`/`next` ao usuário e pergunte: *"Projeto '<project>' está em <phase>. Continuar daqui? [S/n]"*. Se sim: **não recrie nada** — diga o próximo passo (`next`) e sugira `/mad-phase status`. Se não: ofereça `/mad-phase rollback` ou `/mad-reset` (com cautela). **Fim.**
-- **`"migrate"`** — projeto v1.2 (sem state machine). Rode `"$PY" "$PLUGIN_ROOT/scripts/migrate_v1_3.py"` (ele faz backup, infere a fase e instala os hooks). Reporte a fase e mande abrir sessão nova. **Fim.**
-- **`"adopt"`** — há trabalho prévio (docs_projeto/, _spec/, discovery já feita). Mostre ao usuário o que foi detectado (`docs_files`, `suspect_dirs`, `inferred_phase`, `confidence`). Se `confidence >= 0.7`, pergunte *"Adotar em fase <inferred_phase>? [S/n]"*; se `< 0.7`, **pergunte explicitamente qual fase** (liste BOOTSTRAP/DISCOVERY/ESPEC_V1/SETUP_TIME/LOOP_FEATURES). Depois rode `"$PY" "$PLUGIN_ROOT/scripts/mad_init.py" adopt --phase <FASE>`. A adoção **detecta o backlog** (`docs/BACKLOG_V1.md`, `docs_projeto/tecnico/06_backlog_v1.md`, etc.), **habilita automaticamente os especialistas** que ele menciona (sem exigir `/mad-enable` manual), e **avança a fase** conforme o que já está pronto — podendo ir direto pra LOOP_FEATURES com a primeira feature ativa. Reporte o que foi habilitado + a feature ativa, e mande abrir sessão nova. **Fim.**
-- **`"repair"`** — state corrompido. Não recrie; oriente `/mad-doctor`. **Fim.**
-- **`"new"`** — projeto genuinamente vazio. Siga o fluxo de criação abaixo (Discovery do zero).
+Ramifique:
 
-**Só continue para o Pré-check e o Discovery abaixo se `action == "new"`** (ou se o usuário passou `--force-new`, que exige confirmação dupla digitando "EU ENTENDO" e loga um aviso).
+- **`"resume"`** — você já começou. Diga em linguagem humana onde estamos (traduza a
+  `phase`) e pergunte *"Vi que a gente já começou — estamos [X]. Continuo daqui?"*.
+  Se sim: **não recrie nada**; diga o próximo passo (do `next`) e siga. Se não:
+  ofereça voltar um passo. **Fim.**
+- **`"migrate"`** — projeto de uma versão anterior do mad. Diga *"Vou atualizar a
+  organização do projeto — nada do seu trabalho se perde"* e rode
+  `"$PY" "$PLUGIN_ROOT/scripts/migrate_v1_3.py"`. Diga onde ficou (traduzido) e peça
+  pra abrir uma sessão nova. **Fim.**
+- **`"adopt"`** — você já trabalhou nisso antes (achei anotações/documentos). Diga o
+  que achou em linguagem simples ("vi que você já pensou bastante na ideia e tem
+  documentos"). Se `confidence >= 0.7`, proponha continuar de onde parece que parou
+  (traduza `inferred_phase`) e confirme. Se `< 0.7`, **pergunte SEM jargão**:
+  *"Onde você sente que está?
+  (a) ainda pensando na ideia; (b) já sei o que quero, falta detalhar a lista;
+  (c) já tenho a lista, falta montar o time; (d) já estou construindo."* Mapeie:
+  a→DISCOVERY, b→ESPEC_V1, c→SETUP_TIME, d→LOOP_FEATURES. Rode
+  `"$PY" "$PLUGIN_ROOT/scripts/mad_init.py" adopt --phase <FASE_MAPEADA>`. A adoção
+  já **monta o time sozinha** a partir da sua lista de tarefas (se houver) e te deixa
+  pronto para começar. Reporte em linguagem humana (quem entrou no time, qual o
+  primeiro item) e peça pra abrir sessão nova. **Fim.**
+- **`"repair"`** — algo ficou inconsistente. Não recrie; diga *"deu um probleminha na
+  organização; rode /mad-doctor que ele conserta"*. **Fim.**
+- **`"new"`** — projeto do zero. Siga o fluxo abaixo, começando por **entender a sua
+  ideia**.
+
+**Só continue para o Pré-check e o Discovery se `action == "new"`** (ou `--force-new`,
+que exige o usuário digitar "EU ENTENDO").
 
 ## Pré-check
 

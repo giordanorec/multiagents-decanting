@@ -35,6 +35,41 @@ NEXT_PHASE = {
 }
 SUBPHASES = ["spec_pendente", "spec_validada", "executando",
              "validando", "aprovacao_humano", "concluida"]
+
+# --- CAMADA HUMANA: o usuário é leigo. NUNCA mostre os nomes técnicos acima.
+# (rótulo curto, o-que-estamos-fazendo em linguagem de gente)
+PHASE_HUMAN = {
+    "BOOTSTRAP":     ("Preparando", "preparando o terreno do projeto"),
+    "DISCOVERY":     ("Entendendo sua ideia", "esclarecer o que você quer: o problema, o objetivo e para quem é"),
+    "ESPEC_V1":      ("Definindo o que construir", "transformar a ideia numa lista clara de coisas a fazer"),
+    "SETUP_TIME":    ("Montando o time", "escolher quais assistentes vão trabalhar — e conversar sobre o custo disso"),
+    "LOOP_FEATURES": ("Construindo", "construir item por item: você acompanha, opina e libera cada passo"),
+    "PRE_RELEASE":   ("Testando e validando", "testar e validar tudo antes de considerar pronto"),
+    "PILOTO":        ("No ar", "está em uso; ideias novas reiniciam o ciclo"),
+}
+SUBPHASE_HUMAN = {
+    "spec_pendente":    "descrevendo o próximo item a construir",
+    "spec_validada":    "esperando você aprovar a descrição do item",
+    "executando":       "um assistente está construindo o item",
+    "validando":        "conferindo se ficou como você queria",
+    "aprovacao_humano": "esperando você aprovar (é algo difícil de desfazer)",
+    "concluida":        "item entregue; partindo pro próximo",
+}
+# pergunta ao usuário SEM jargão (para adoção incerta). Mapeia p/ fase interna.
+HUMAN_WHERE_OPTIONS = [
+    ("a", "Ainda estou pensando na ideia / no problema.", "DISCOVERY"),
+    ("b", "Já sei o que quero; falta detalhar a lista de tarefas.", "ESPEC_V1"),
+    ("c", "Já tenho a lista de tarefas; falta montar o time.", "SETUP_TIME"),
+    ("d", "Já estou construindo as coisas.", "LOOP_FEATURES"),
+]
+
+
+def human_label(phase: str) -> str:
+    return PHASE_HUMAN.get(phase, (phase, ""))[0]
+
+
+def human_doing(phase: str) -> str:
+    return PHASE_HUMAN.get(phase, ("", ""))[1]
 NEXT_SUBPHASE = {
     "spec_pendente": "spec_validada", "spec_validada": "executando",
     "executando": "validando", "validando": "aprovacao_humano",

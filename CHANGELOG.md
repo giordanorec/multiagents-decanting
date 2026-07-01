@@ -2,6 +2,18 @@
 
 Formato: [Keep a Changelog](https://keepachangelog.com/). Versionamento semântico.
 
+## [1.3.2] — 2026-06-30 (linguagem humana, zero jargão)
+
+### Mudado
+- **Camada de linguagem para leigos.** O usuário nunca mais vê os nomes técnicos das
+  fases (DISCOVERY/ESPEC_V1/SETUP_TIME/LOOP_FEATURES/…). Tudo é traduzido para o que
+  ele faz: entender a ideia → combinar o que construir → montar o time (com discussão
+  de custo/tokens) → acompanhar a construção → testar/validar → recomeçar.
+- `/mad-init`, `/mad-phase status`, a injeção do SessionStart, a skill mad-workflow e
+  o arquiteto ganham **regra inegociável de "fale como gente"**. A cascata de adoção
+  pergunta "onde você sente que está?" (a/b/c/d) em vez de pedir o nome da fase.
+- Mapa fase→humano em `workflow.py` (PHASE_HUMAN/SUBPHASE_HUMAN).
+
 ## [1.3.1] — 2026-06-30
 
 ### Adicionado

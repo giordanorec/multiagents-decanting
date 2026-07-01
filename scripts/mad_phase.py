@@ -37,18 +37,16 @@ def _load(root):
 
 # ---------------------------------------------------------------------------
 def cmd_status(root, st, args) -> int:
-    print(u.c(f"\n  MAD WORKFLOW — {st.data.get('project_name')}", "bold", "cyan"))
-    print(f"  Fase atual: {u.c(st.phase, 'bold')} (desde {st.data.get('phase_entered_at','?')[:16]})")
+    print(u.c(f"\n  {st.data.get('project_name')}", "bold", "cyan"))
+    print(u.c(f"  Agora: {wf.human_label(st.phase)}", "bold") +
+          f" — {wf.human_doing(st.phase)}")
+    print(u.c(f"  (etapa técnica: {st.phase})", "dim"))
     f = st.feature
     if f:
-        ap = f.get("approvals", {})
-        print(u.c("\n  Feature corrente", "bold"))
-        print(f"    {f['id']} — {f.get('slug','')}  ·  sub-fase: {u.c(st.subphase,'bold')}")
-        print(f"    especialista: {f.get('agent_assigned') or '(não atribuído)'}  ·  "
-              f"blast: {f.get('blast_radius')}")
-        print(f"    spec aprovada: {'✓' if ap.get('spec_approved_by_human') else '✗'}  ·  "
-              f"merge aprovado: {'✓' if ap.get('merge_approved_by_human') else ('n.a.' if f.get('blast_radius') in wf.BLAST_REVERSIBLE else '✗')}")
-    print(u.c("\n  Próximo passo obrigatório:", "bold"))
+        print(u.c("\n  Item atual", "bold"))
+        print(f"    {f['id']} — {f.get('slug','')}  ·  {wf.SUBPHASE_HUMAN.get(st.subphase, st.subphase)}")
+        print(f"    assistente: {f.get('agent_assigned') or '(a definir)'}")
+    print(u.c("\n  Próximo passo:", "bold"))
     print(f"    → {st.next_action()}")
     allowed, blocked = st.allowed_summary()
     print(u.c("\n  Permitido:", "green"))

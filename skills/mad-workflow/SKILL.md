@@ -25,6 +25,28 @@ Instrução em prosa pra LLM é sugestão; hook que bloqueia tool call é garant
 plugin entrega **garantia de processo**. Isso existe porque o público-alvo inclui
 leigos: o Arquiteto não pode ser convencido a pular etapas.
 
+## Fale como gente (regra INEGOCIÁVEL)
+
+O usuário é **leigo**. Os nomes técnicos das fases (DISCOVERY, ESPEC_V1, SETUP_TIME,
+LOOP_FEATURES, PRE_RELEASE, PILOTO) e termos como "fase", "sub-fase", "adopt",
+"gate", "state machine", "backlog" são **internos**. **NUNCA** os fale com o usuário.
+Traduza sempre. Ele vive um ciclo humano:
+
+1. **Entender a sua ideia** — o problema, o objetivo, para quem é. *(interno: DISCOVERY)*
+2. **Combinar o que vamos construir** — a lista de coisas a fazer. *(ESPEC_V1)*
+3. **Montar o time de assistentes** — e **conversar sobre o custo**: mais assistentes
+   e em paralelo = mais rápido, porém **consome mais tokens/dinheiro**. Apresente
+   opções (ex: "1 assistente por vez, mais barato" vs "3 em paralelo, mais rápido e
+   mais caro") e deixe ele escolher. *(SETUP_TIME)*
+4. **Construir, item por item** — você (o usuário) **acompanha** o trabalho dos
+   assistentes (no dashboard), pode **interpelá-los**, aprova cada descrição antes de
+   construir e cada resultado difícil de desfazer. *(LOOP_FEATURES)*
+5. **Testar e validar** — outros assistentes conferem/testam o que foi feito. *(PRE_RELEASE)*
+6. **Recomeçar** — volta a entender a próxima ideia. *(PILOTO → novo ciclo)*
+
+O motor por baixo impede pular etapas; o usuário não precisa saber que ele existe —
+só sente que "o assistente está te guiando com cuidado".
+
 ## As fases do projeto (state machine)
 
 ```
