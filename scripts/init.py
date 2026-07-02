@@ -38,7 +38,7 @@ COPY_SCRIPTS = ["mad.py", "init.py", "doctor.py", "inspect_agent.py",
                 "dashboard_server.py", "resilience.py", "notify.py",
                 "a2a.py", "voice.py", "workflow.py", "mad_phase.py",
                 "mad_init.py", "migrate_v1_3.py", "verify.py", "mcp_server.py",
-                "_utils.py"]
+                "otel_store.py", "_utils.py"]
 
 
 def _subst(text: str, mapping: dict) -> str:

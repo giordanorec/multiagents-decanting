@@ -2,6 +2,21 @@
 
 Formato: [Keep a Changelog](https://keepachangelog.com/). Versionamento semântico.
 
+## [1.21.0] — 2026-07-01 (paralelo é PADRÃO + observabilidade completa)
+
+### Mudado
+- **Motor DAG (paralelo) agora é o PADRÃO** (`[workflow].engine="dag"`). Features
+  independentes rodam juntas sem ninguém configurar nada. Declare `Depende:`/`Toca:`
+  no backlog pra habilitar o paralelismo (paths disjuntos = rodam juntas). O modo
+  `sequential` continua disponível como opção. Seguro: sem `Toca:`, roda uma por vez.
+
+### Adicionado
+- **Observabilidade completa (SQLite local + OpenTelemetry padrão):** `otel_store.py`
+  indexa os spans em `logs/otel.db` (sqlite3 stdlib, ZERO instalação) — consultas
+  rápidas de trace causal (por feature) e percentis por tool/agente. `mad trace
+  [--stats|--trace <id>]`. Export **OTLP-JSON padrão** (resourceSpans, traceId/spanId
+  hex, atributos GenAI semconv) — plugável em Grafana/Langfuse/Datadog. Telemetria no
+  snapshot do painel (base do waterfall).
 ## [1.20.0] — 2026-07-01 (personagens de pelúcia como avatares)
 
 ### Adicionado

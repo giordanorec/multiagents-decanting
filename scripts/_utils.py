@@ -281,17 +281,57 @@ def emit_span(name: str, attributes: dict | None = None, root: Path | None = Non
     return span
 
 
-def _try_otlp_export(endpoint: str, span: dict) -> None:  # pragma: no cover
-    """Export best-effort via urllib (stdlib). Falha em silêncio."""
-    import urllib.request
+_OTLP_ATTR_MAP = {  # nomes internos -> OpenTelemetry GenAI semconv
+    "agent.name": "gen_ai.agent.name", "tool.name": "gen_ai.tool.name",
+    "tool.outcome": "gen_ai.tool.outcome",
+}
 
+
+def _otlp_value(v):
+    if isinstance(v, bool):
+        return {"boolValue": v}
+    if isinstance(v, int):
+        return {"intValue": str(v)}
+    if isinstance(v, float):
+        return {"doubleValue": v}
+    return {"stringValue": str(v)}
+
+
+def _to_otlp(span: dict) -> dict:
+    """Converte um span interno no envelope OTLP-JSON padrão (resourceSpans)."""
+    import hashlib
+    from datetime import datetime
+    tid = span.get("trace_id") or "session"
+    trace_hex = hashlib.md5(str(tid).encode()).hexdigest()  # 32 hex
+    sid = span.get("span_id") or hashlib.md5(json.dumps(span).encode()).hexdigest()[:16]
+    span_hex = (str(sid) + "0" * 16)[:16]
     try:
-        data = json.dumps(span).encode("utf-8")
+        start_ns = int(datetime.fromisoformat(span["timestamp"]).timestamp() * 1e9)
+    except Exception:
+        start_ns = 0
+    dur = span.get("duration_ms") or 0
+    attrs = []
+    for k, v in (span.get("attributes") or {}).items():
+        attrs.append({"key": _OTLP_ATTR_MAP.get(k, k), "value": _otlp_value(v)})
+    return {"resourceSpans": [{
+        "resource": {"attributes": [
+            {"key": "service.name", "value": {"stringValue": "mad"}}]},
+        "scopeSpans": [{"scope": {"name": "mad"}, "spans": [{
+            "traceId": trace_hex, "spanId": span_hex, "name": span.get("name", ""),
+            "startTimeUnixNano": str(start_ns),
+            "endTimeUnixNano": str(int(start_ns + dur * 1e6)),
+            "attributes": attrs,
+        }]}]}]}
+
+
+def _try_otlp_export(endpoint: str, span: dict) -> None:  # pragma: no cover
+    """Export best-effort no padrão OTLP-JSON via urllib (stdlib). Falha em silêncio."""
+    import urllib.request
+    try:
+        data = json.dumps(_to_otlp(span)).encode("utf-8")
         req = urllib.request.Request(
-            endpoint.rstrip("/") + "/v1/traces",
-            data=data,
-            headers={"Content-Type": "application/json"},
-        )
+            endpoint.rstrip("/") + "/v1/traces", data=data,
+            headers={"Content-Type": "application/json"})
         urllib.request.urlopen(req, timeout=2)
     except Exception:
         pass

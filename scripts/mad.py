@@ -200,6 +200,10 @@ def build_parser() -> argparse.ArgumentParser:
     ex = sub.add_parser("export", help="gera AGENTS.md (portabilidade cross-tool)")
     ex.set_defaults(func=_cmd_export)
 
+    tr = sub.add_parser("trace", help="telemetria: árvore causal de um trace / percentis (SQLite)")
+    tr.add_argument("--trace", default=None); tr.add_argument("--stats", action="store_true")
+    tr.set_defaults(func=lambda a: __import__("otel_store").cli(a))
+
     # alias: dashboard-status (usado por alguns command md)
     ds = sub.add_parser("dashboard-status")
     ds.set_defaults(func=lambda a: _cmd_dashboard(argparse.Namespace(

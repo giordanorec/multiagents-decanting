@@ -638,7 +638,7 @@ class WorkflowState:
     @property
     def engine(self) -> str:
         return str(u.load_config(self.root).get("workflow", {})
-                   .get("engine", "sequential")).lower()
+                   .get("engine", "dag")).lower()
 
     @property
     def max_parallel(self) -> int:
@@ -768,7 +768,7 @@ class WorkflowState:
         nexts = {
             "BOOTSTRAP": "Rode /mad-init para criar a estrutura.",
             "DISCOVERY": "Conduza a discovery: preencha docs/00_OBJETIVO.md e registre ≥3 decisões em docs/DECISOES.md. Depois /mad-phase next.",
-            "ESPEC_V1": "Escreva docs/BACKLOG_V1.md com features F-001..F-NNN (objetivo + critério de aceite cada). Depois /mad-phase next.",
+            "ESPEC_V1": "Escreva docs/BACKLOG_V1.md com features F-001..F-NNN (objetivo + critério cada). Para o motor paralelo (padrão) trabalhar várias ao mesmo tempo, declare por feature: 'Depende: F-00X' (dependências) e 'Toca: paths/' (arquivos que mexe — features com paths disjuntos rodam JUNTAS). Depois /mad-phase next.",
             "SETUP_TIME": "Habilite ≥1 especialista com /mad-enable <role>. Depois /mad-phase next.",
             "PRE_RELEASE": "Rode o backtesting e gere reports/backtesting/v1.md. Depois /mad-phase next-phase.",
             "PILOTO": "Projeto em piloto. Novas features reentram em LOOP_FEATURES.",

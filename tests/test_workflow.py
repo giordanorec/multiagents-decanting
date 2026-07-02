@@ -11,7 +11,9 @@ PLUGIN_ROOT = Path(__file__).resolve().parent.parent
 
 
 def _advance_to_loop(root):
-    """Leva um projeto recém-init (DISCOVERY) até LOOP com F-001 ativa."""
+    """Leva um projeto recém-init até LOOP com F-001 ativa (motor sequential)."""
+    p = root / "multiagents-decanting.toml"
+    u.write_text(p, u.read_text(p).replace('engine = "dag"', 'engine = "sequential"'))
     u.write_text(root / "docs" / "00_OBJETIVO.md", "x" * 250)
     u.append_text(root / "docs" / "DECISOES.md",
                   "\n## 2026-06-30 — a\n## 2026-06-30 — b\n## 2026-06-30 — c\n")

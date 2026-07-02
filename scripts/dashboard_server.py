@@ -143,7 +143,17 @@ def snapshot(root: Path) -> dict:
             "features_completed": completed,
         },
         "activity": _recent_activity(spans),
+        "telemetry": _telemetry(root),
     }
+
+
+def _telemetry(root: Path) -> dict:
+    """Percentis por tool + trace mais recente (via SQLite), pro waterfall."""
+    try:
+        import otel_store as ost
+        return {"tools": ost.percentiles(root), "trace": ost.trace(root)}
+    except Exception:
+        return {"tools": [], "trace": {"trace_id": None, "spans": []}}
 
 
 def _workflow_summary(root: Path) -> dict:
