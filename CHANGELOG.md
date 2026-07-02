@@ -2,6 +2,16 @@
 
 Formato: [Keep a Changelog](https://keepachangelog.com/). Versionamento semântico.
 
+## [1.20.0] — 2026-07-01 (personagens de pelúcia como avatares)
+
+### Adicionado
+- **Avatares de personagem (🧸 pelúcia):** 3º estilo de avatar no dashboard — os 11
+  papéis do mad como personagens de pelúcia gerados (arquiteto coruja, pipeline lontra,
+  dba coruja-de-dados, security texugo-escudo, qa joaninha, etc.), em
+  `dashboard/assets/avatars-char/`. Toggle cicla 🧸 pelúcia → 🙂 personagens → ⬡ ícones
+  (default pelúcia), com fallback gracioso. Gerados no Gemini web (sem API paga),
+  recortados com fundo transparente.
+- **docs/DESIGN.md** atualizado: seção do motor DAG marcada como IMPLEMENTADA (v1.17).
 ## [1.19.0] — 2026-07-01 (hardening final)
 
 ### Mudado/Adicionado

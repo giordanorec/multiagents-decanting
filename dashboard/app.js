@@ -44,7 +44,7 @@
   var FILTER_LABEL = { all: "todos", active: "só working", "no-sleeping": "esconder sleeping" };
 
   var colors = {};          // agent -> hex color (from colors.json)
-  var avatarCache = { human: {}, icon: {} };  // style -> {agent -> svg markup}
+  var avatarCache = { char: {}, human: {}, icon: {} };  // style -> {agent -> markup}
   var ws = null;
   var reconnectDelay = 1000;
   var reconnectTimer = null;
@@ -56,8 +56,9 @@
   var filterMode = localStorage.getItem(FILTER_KEY) || "all";
   if (FILTERS.indexOf(filterMode) === -1) filterMode = "all";
   var soundOn = localStorage.getItem(SOUND_KEY) === "1";
+  var AVATAR_STYLES = ["char", "human", "icon"];
   var avatarStyle = localStorage.getItem(AVATAR_STYLE_KEY);
-  if (avatarStyle !== "icon" && avatarStyle !== "human") avatarStyle = "human"; // default: personagens
+  if (AVATAR_STYLES.indexOf(avatarStyle) === -1) avatarStyle = "char"; // default: personagens de pelúcia
   var dragSlug = null;
 
   // stream kinds válidos (espelham o contrato do server / _stream_pretty do v0.2)
@@ -184,7 +185,8 @@
     avatarBtn.title = "estilo dos avatares";
     avatarBtn.setAttribute("aria-label", "alternar estilo dos avatares");
     avatarBtn.addEventListener("click", function () {
-      avatarStyle = (avatarStyle === "human") ? "icon" : "human";
+      var i = AVATAR_STYLES.indexOf(avatarStyle);
+      avatarStyle = AVATAR_STYLES[(i + 1) % AVATAR_STYLES.length];
       localStorage.setItem(AVATAR_STYLE_KEY, avatarStyle);
       avatarBtn.textContent = avatarLabel();
       if (lastSnapshot) renderTeam(lastSnapshot.agents || []);
@@ -196,7 +198,9 @@
   }
 
   function avatarLabel() {
-    return avatarStyle === "human" ? "🙂 personagens" : "⬡ ícones";
+    if (avatarStyle === "char") return "🧸 pelúcia";
+    if (avatarStyle === "human") return "🙂 personagens";
+    return "⬡ ícones";
   }
 
   // ---- sound (WebAudio, sem assets) -----------------------------------
@@ -244,28 +248,44 @@
       .then(function (j) { colors = j || {}; })
       .catch(function () { colors = {}; });
   }
+  // cadeia de fallback: char (PNG pelúcia) -> human (SVG mascote) -> icon (SVG frio)
+  var AVATAR_FALLBACK = { char: "human", human: "icon", icon: null };
+
   function loadAvatar(agent, style) {
-    style = (style === "icon") ? "icon" : "human";
+    if (AVATAR_STYLES.indexOf(style) === -1) style = "char";
     var cache = avatarCache[style] || (avatarCache[style] = {});
     if (cache[agent] !== undefined) return Promise.resolve(cache[agent]);
+
     var name = AVATARS.indexOf(agent) !== -1 ? agent : null;
     if (!name) { cache[agent] = null; return Promise.resolve(null); }
+
+    var next = AVATAR_FALLBACK[style];
+    function fallback() {
+      if (!next) { cache[agent] = null; return Promise.resolve(null); }
+      return loadAvatar(agent, next).then(function (m) { cache[agent] = m; return m; });
+    }
+
+    if (style === "char") {
+      // PNG (fundo transparente) -> markup <img>. HEAD confirma existência.
+      var src = "/assets/avatars-char/" + name + ".png";
+      return fetch(src, { method: "HEAD" })
+        .then(function (r) {
+          if (!r.ok) return fallback();
+          var markup = '<img class="avatar-img" src="' + src + '" alt="" draggable="false">';
+          cache[agent] = markup; return markup;
+        })
+        .catch(fallback);
+    }
+
+    // human / icon -> SVG inline
     var dir = style === "human" ? "/assets/avatars-human/" : "/assets/avatars/";
     return fetch(dir + name + ".svg")
       .then(function (r) { return r.ok ? r.text() : null; })
       .then(function (svg) {
-        // sem SVG humano -> cai no ícone frio
-        if (svg == null && style === "human") {
-          return loadAvatar(agent, "icon").then(function (ic) { cache[agent] = ic; return ic; });
-        }
+        if (svg == null) return fallback();
         cache[agent] = svg; return svg;
       })
-      .catch(function () {
-        if (style === "human") {
-          return loadAvatar(agent, "icon").then(function (ic) { cache[agent] = ic; return ic; });
-        }
-        cache[agent] = null; return null;
-      });
+      .catch(fallback);
   }
   function colorFor(agent) { return colors[agent] || "var(--accent)"; }
 

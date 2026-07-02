@@ -399,12 +399,20 @@ do Claude Code (custo/tokens reais) é big bet pendente (ROADMAP_SOTA big-bet #3
 
 ---
 
-## 9. Motor DAG (em construção)
+## 9. Motor DAG (IMPLEMENTADO — v1.17, opt-in)
 
-Hoje o motor é **sequencial-escalar**: um único `active_feature`, backlog linear sem
-dependências, e o gate em `executando` **amarra** a feature a um único
-`agent_assigned` — ou seja, a enforcement *ativamente impede* o orchestrator-worker
-paralelo que o próprio Arquiteto prega. O ADR-001 documenta a evolução.
+> **Atualização pós-1.15:** o motor DAG foi **implementado** em v1.16–v1.17 (esta
+> seção descreve o ponto de partida 1.15). Com `[workflow].engine="dag"`, features
+> independentes (deps satisfeitas + paths disjuntos via `Toca:`) rodam **em paralelo**
+> (`active_features[]`, `decide_tool` libera N especialistas concorrentes,
+> `mad_phase next <F-NNN>` por-feature, fechar feature ativa dependentes). Default
+> segue `sequential` até validação em campo. Ver ADR-001 (status IMPLEMENTADO) e
+> CHANGELOG v1.15–1.17 para o estado atual.
+
+No ponto de partida (1.15) o motor era **sequencial-escalar**: um único
+`active_feature`, backlog linear sem dependências, e o gate em `executando` **amarrava**
+a feature a um único `agent_assigned` — a enforcement *ativamente impedia* o
+orchestrator-worker paralelo que o próprio Arquiteto prega. O ADR-001 documenta a evolução.
 
 **Fundação já entregue (v1.15).** `parse_backlog` (`workflow.py:814`) extrai
 `depende:/deps:` por feature (com a correção de não criar "feature fantasma" a partir
