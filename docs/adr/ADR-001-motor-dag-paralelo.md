@@ -1,6 +1,6 @@
 # ADR-001 — Motor DAG + execução paralela de features
 
-Status: **proposto** (design; implementação em investida dedicada)
+Status: **IMPLEMENTADO** (v1.17.0, opt-in `engine="dag"`; default segue `sequential` até validação em campo)
 Data: 2026-07-01
 Autor: Arquiteto (mad)
 
