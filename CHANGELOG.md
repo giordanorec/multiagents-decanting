@@ -2,6 +2,18 @@
 
 Formato: [Keep a Changelog](https://keepachangelog.com/). Versionamento semântico.
 
+## [1.17.0] — 2026-07-01 (motor DAG completo — execução paralela, opt-in)
+
+### Adicionado
+- **Execução PARALELA de features (engine="dag"):** o 4º big bet, completo. Com
+  `[workflow].engine="dag"`, features independentes (deps satisfeitas + paths
+  disjuntos) rodam ao mesmo tempo, governadas pela máquina de estados. `active_features[]`
+  (fronteira paralela), `decide_tool` libera vários especialistas concorrentes,
+  `mad_phase next <F-NNN>`/approve/close operam por-feature, e fechar uma feature
+  ativa as dependentes prontas. Teto `max_parallel_features`. Conflito resolvido por
+  DAG + disjunção de paths + write-scope (ADR-001).
+- **Default segue `sequential`** (estável); vira `dag` por default após validação em
+  campo. Zero instalação nova; sequential 100% inalterado (código dag é aditivo).
 ## [1.16.0] — 2026-07-01 (motor DAG — fronteira paralela anti-conflito)
 
 ### Adicionado

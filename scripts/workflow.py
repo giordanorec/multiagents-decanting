@@ -540,6 +540,7 @@ def initial_state(project_name: str) -> dict:
         "phase_entered_at": u.iso_now(),
         "phase_transitions": [],
         "active_feature": None,
+        "active_features": [],   # engine="dag": features rodando em paralelo
         "backlog_features": [],
         "team_enabled": [],
         "last_hook_event": None,
@@ -633,6 +634,44 @@ class WorkflowState:
         f = self.feature
         return f.get("subphase") if f else None
 
+    # ---- motor: sequential (default) | dag (paralelo) ----
+    @property
+    def engine(self) -> str:
+        return str(u.load_config(self.root).get("workflow", {})
+                   .get("engine", "sequential")).lower()
+
+    @property
+    def max_parallel(self) -> int:
+        return int(u.load_config(self.root).get("workflow", {})
+                   .get("max_parallel_features", 3) or 3)
+
+    def active_list(self) -> list:
+        """Features ativas: em dag, a lista paralela; em sequential, a única (compat)."""
+        if self.engine == "dag":
+            return self.data.get("active_features", []) or []
+        f = self.feature
+        return [f] if f else []
+
+    def feature_by_id(self, fid: str) -> dict | None:
+        fid = fid if fid.startswith("F-") else "F-" + fid.zfill(3)
+        for f in self.active_list():
+            if f.get("id") == fid:
+                return f
+        return None
+
+    def _new_substate(self, f: dict) -> dict:
+        return {
+            "id": f["id"], "slug": f.get("slug", ""),
+            "subphase": "spec_pendente", "subphase_entered_at": u.iso_now(),
+            "spec_path": None, "report_path": None,
+            "agent_assigned": f.get("agent", "") or f.get("agent_assigned", ""),
+            "blast_radius": f.get("blast_radius", "reversivel_baixo"),
+            "touches": f.get("touches", []),
+            "approvals": {"spec_approved_by_human": False, "spec_approved_at": None,
+                          "merge_approved_by_human": False, "merge_approved_at": None},
+            "subphase_transitions": [],
+        }
+
     # ---- decisão de tool (usada pelo hook PreToolUse) ----
     def decide_tool(self, tool_name: str, tool_input: dict) -> tuple[bool, str, str]:
         """Retorna (allow, reason, suggestion). Fail-closed em dúvida controlada."""
@@ -667,6 +706,8 @@ class WorkflowState:
             return (True, "", "")
 
         # LOOP_FEATURES — depende da sub-fase
+        if self.engine == "dag":
+            return self._dag_decide(tool_name, tool_input)
         sp = self.subphase
         assigned = (self.feature or {}).get("agent_assigned", "")
         if tool_name in agent_tools:
@@ -695,6 +736,31 @@ class WorkflowState:
             nnn = (self.feature or {}).get("id", "NNN")
             return (False, "Aguardando aprovação humana de merge.",
                     f"Rode /mad-phase approve-merge {nnn}.")
+        return (True, "", "")
+
+    def _dag_decide(self, tool_name: str, tool_input: dict) -> tuple[bool, str, str]:
+        """Enforcement paralelo: libera o especialista de QUALQUER feature ativa em
+        'executando'; bloqueia despacho quando nenhuma está pronta pra construir."""
+        active = self.active_list()
+        if tool_name in ("Agent", "Task"):
+            if not active:
+                return (False, "Nenhuma feature ativa no loop.",
+                        "Rode /mad-phase next para ativar a fronteira.")
+            execing = [f for f in active if f.get("subphase") == "executando"]
+            if not execing:
+                pend = ", ".join(f["id"] for f in active
+                                 if f.get("subphase") in ("spec_pendente", "spec_validada"))
+                return (False, "Nenhuma feature em construção ainda.",
+                        f"Escreva/aprove a spec das ativas ({pend}) — /mad-phase next <F-NNN>.")
+            role = (tool_input or {}).get("subagent_type", "").replace("mad:", "")
+            if not role:
+                return (True, "", "")  # sem tipo declarado — o Arquiteto sabe qual feature
+            if any(f.get("agent_assigned", "") == role for f in execing):
+                return (True, "", "")
+            alvos = ", ".join(f"{f['id']}→{f.get('agent_assigned')}" for f in execing)
+            return (False, f"Nenhuma feature em construção atribuída a '{role}'.",
+                    f"Em construção agora: {alvos}.")
+        # escritas: o escopo por-feature é do hook write-scope; aqui libera.
         return (True, "", "")
 
     def next_action(self) -> str:
@@ -781,7 +847,30 @@ class WorkflowState:
                                                      "to": target, "by": by})
         return True, target
 
+    def _dag_refresh(self):
+        """engine=dag: ativa a fronteira paralela (deps ok + paths disjuntos, também
+        contra as já ativas) até max_parallel. active_feature espelha a 1ª (compat UI)."""
+        backlog = self.data.get("backlog_features", [])
+        active = self.data.setdefault("active_features", [])
+        active_touches = [a.get("touches", []) for a in active]
+        for f in parallel_frontier(backlog, self.max_parallel):
+            if len(active) >= self.max_parallel:
+                break
+            if any(a["id"] == f["id"] for a in active):
+                continue
+            if any(_touches_overlap(f.get("touches", []), t) for t in active_touches):
+                continue
+            active.append(self._new_substate(f))
+            active_touches.append(f.get("touches", []))
+            for bf in backlog:
+                if bf["id"] == f["id"]:
+                    bf["status"] = "em_andamento"
+        self.data["active_feature"] = active[0] if active else None
+
     def _activate_next_from_backlog(self):
+        if self.engine == "dag":
+            self._dag_refresh()
+            return
         for f in self.data.get("backlog_features", []):
             if f.get("status") == "pendente":
                 self.data["active_feature"] = {
@@ -797,8 +886,9 @@ class WorkflowState:
                 f["status"] = "em_andamento"
                 return
 
-    def set_subphase(self, target: str, by: str):
-        f = self.data.get("active_feature")
+    def set_subphase(self, target: str, by: str, fid: str | None = None):
+        # em dag, opera na feature indicada (ou na 1ª ativa); mantém active_feature em sincronia
+        f = self.feature_by_id(fid) if (fid and self.engine == "dag") else self.data.get("active_feature")
         if not f:
             return
         f["subphase_transitions"].append({
@@ -806,6 +896,8 @@ class WorkflowState:
         })
         f["subphase"] = target
         f["subphase_entered_at"] = u.iso_now()
+        if self.engine == "dag":  # active_feature reflete a feature recém-operada (compat UI)
+            self.data["active_feature"] = f
         self.save()
         log_event(self.root, "transition_subphase", feature=f["id"],
                   **{"from": f["subphase_transitions"][-1]["from"], "to": target, "by": by})

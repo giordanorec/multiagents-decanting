@@ -474,3 +474,64 @@ def test_backlog_parses_touches(tmp_project):
                  "### F-001 — api\n- Toca: src/api/, tests/api/\n")
     f = wf.parse_backlog(tmp_project)[0]
     assert f["touches"] == ["src/api/", "tests/api/"]
+
+
+def _to_loop_dag(root):
+    """engine=dag + backlog com 2 independentes disjuntas + 1 dependente -> LOOP."""
+    p = root / "multiagents-decanting.toml"
+    u.write_text(p, u.read_text(p).replace('engine = "sequential"', 'engine = "dag"'))
+    u.write_text(root / "docs" / "00_OBJETIVO.md", "x" * 250)
+    u.append_text(root / "docs" / "DECISOES.md",
+                  "\n## 2026-06-30 — a\n## 2026-06-30 — b\n## 2026-06-30 — c\n")
+    u.write_text(root / "docs" / "BACKLOG_V1.md",
+                 "### F-001 — base\n- Toca: src/a/\n"
+                 "### F-002 — outra\n- Toca: src/b/\n"
+                 "### F-003 — depende\n- Toca: src/c/\n- Depende: F-001\n")
+    for _ in range(3):
+        st = wf.WorkflowState.load(root); st.advance_phase()
+    return wf.WorkflowState.load(root)
+
+
+def test_dag_parallel_frontier_active(tmp_project):
+    st = _to_loop_dag(tmp_project)
+    assert st.engine == "dag"
+    ids = sorted(f["id"] for f in st.active_list())
+    # F-001 e F-002 independentes+disjuntas rodam juntas; F-003 espera F-001
+    assert ids == ["F-001", "F-002"]
+
+
+def test_dag_decide_allows_parallel_specialists(tmp_project):
+    st = _to_loop_dag(tmp_project)
+    # coloca as duas ativas em 'executando' com especialistas distintos
+    for f, ag in zip(st.active_list(), ["pipeline-dev", "frontend-dev"]):
+        f["agent_assigned"] = ag; f["subphase"] = "executando"
+    st.save()
+    st = wf.WorkflowState.load(tmp_project)
+    assert st.decide_tool("Agent", {"subagent_type": "mad:pipeline-dev"})[0]
+    assert st.decide_tool("Agent", {"subagent_type": "mad:frontend-dev"})[0]  # PARALELO
+    assert not st.decide_tool("Agent", {"subagent_type": "mad:qa-tester"})[0]  # não ativa
+
+
+def test_dag_close_activates_dependent(tmp_project):
+    st = _to_loop_dag(tmp_project)  # ativas: F-001, F-002 (F-003 espera F-001)
+    # prepara F-001 pra fechar: spec + validando + artefatos dos gates
+    f1 = st.feature_by_id("F-001"); f1["agent_assigned"] = "pipeline-dev"
+    f1["subphase"] = "validando"; st.save()
+    u.write_text(tmp_project / "specs" / "feature-001-base.md",
+                 "objetivo:x\ncritério de aceite:y\nblast_radius:reversivel_baixo\nespecialista:pipeline-dev\n")
+    d = tmp_project / "reports" / "feature-001"
+    u.write_text(d / "arquiteto-merge.md", "# merge\n- [x] c1 — ok\n")
+    u.write_text(d / "qa-tester.md", "rev\nVEREDITO: aprovar\n")
+    u.write_text(d / "docs-sync.md", "# s\n## Spec as-built\nok sem divergencia do plano.\n"
+                 "## Docs vivos\nnenhum doc vivo afetado nesta feature.\n"
+                 "## Decisão\nbase criada conforme arquitetura combinada aqui.\n")
+    mp = str(tmp_project / "scripts" / "mad_phase.py")
+    r = subprocess.run([sys.executable, mp, "next", "F-001"], cwd=str(tmp_project),
+                       capture_output=True, text=True)
+    assert r.returncode == 0, r.stdout + r.stderr
+    st2 = wf.WorkflowState.load(tmp_project)
+    ativos = sorted(a["id"] for a in st2.active_list())
+    # F-001 saiu (concluída), F-003 entrou (dep satisfeita); F-002 segue ativa
+    assert "F-001" not in ativos and "F-002" in ativos and "F-003" in ativos
+    assert any(b["id"] == "F-001" and b["status"] == "concluida"
+               for b in st2.data["backlog_features"])

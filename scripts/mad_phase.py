@@ -27,6 +27,17 @@ def _norm(nnn: str) -> str:
     return nnn
 
 
+def _focus_feature(st, nnn: str) -> dict:
+    """Em dag, resolve e FOCA a feature-alvo (active_feature = ela) pra a lógica
+    single-feature abaixo operar sobre a correta. Em sequential, a única ativa."""
+    if st.engine == "dag":
+        f = st.feature_by_id(nnn)
+        if f:
+            st.data["active_feature"] = f
+        return f or {}
+    return st.feature or {}
+
+
 def _load(root):
     try:
         return wf.WorkflowState.load(root)
@@ -82,17 +93,31 @@ def cmd_next(root, st, args) -> int:
         print(f"  Próximo: {st.next_action()}")
         return 0
 
-    sp = st.subphase
-    f = st.feature or {}
-    nnn = f.get("id")
-    if f is None or not nnn:
-        st._activate_next_from_backlog()
-        st.save()
-        if st.feature:
-            print(u.c(f"✓ feature ativada: {st.feature['id']} (spec_pendente)", "green"))
-            return 0
-        print(u.c("○ backlog vazio ou tudo concluído. Talvez /mad-phase next-phase.", "dim"))
-        return 1
+    # DAG: opera na feature indicada (ou a 1ª ativa não-concluída) da fronteira paralela.
+    if st.engine == "dag":
+        active = [a for a in st.active_list() if a.get("subphase") != "concluida"]
+        want = _norm(getattr(args, "feature", None)) if getattr(args, "feature", None) else None
+        f = st.feature_by_id(want) if want else (active[0] if active else None)
+        if f is None:
+            st._activate_next_from_backlog(); st.save()
+            act = [a["id"] for a in st.active_list()]
+            print(u.c(f"✓ fronteira ativada: {', '.join(act) or '(nada)'}", "green") if act
+                  else u.c("○ backlog concluído. Talvez /mad-phase next-phase.", "dim"))
+            return 0 if act else 1
+        st.data["active_feature"] = f  # foca a feature-alvo (compat com a lógica abaixo)
+        sp, nnn = f.get("subphase"), f.get("id")
+    else:
+        sp = st.subphase
+        f = st.feature or {}
+        nnn = f.get("id")
+        if f is None or not nnn:
+            st._activate_next_from_backlog()
+            st.save()
+            if st.feature:
+                print(u.c(f"✓ feature ativada: {st.feature['id']} (spec_pendente)", "green"))
+                return 0
+            print(u.c("○ backlog vazio ou tudo concluído. Talvez /mad-phase next-phase.", "dim"))
+            return 1
 
     if sp == "spec_pendente":
         ok, msg = wf.gate_spec_written(root, nnn)
@@ -170,7 +195,7 @@ def cmd_next_phase(root, st, args) -> int:
 
 def cmd_approve_spec(root, st, args) -> int:
     nnn = _norm(args.feature)
-    f = st.feature or {}
+    f = _focus_feature(st, nnn)
     if f.get("id") != nnn or st.subphase != "spec_validada":
         print(u.c(f"✗ {nnn} não está em spec_validada (está: {st.subphase}).", "yellow"))
         return 1
@@ -185,7 +210,7 @@ def cmd_approve_spec(root, st, args) -> int:
 
 def cmd_approve_merge(root, st, args) -> int:
     nnn = _norm(args.feature)
-    f = st.feature or {}
+    f = _focus_feature(st, nnn)
     if f.get("id") != nnn or st.subphase != "aprovacao_humano":
         print(u.c(f"✗ {nnn} não está em aprovacao_humano (está: {st.subphase}).", "yellow"))
         return 1
@@ -293,7 +318,20 @@ def _close_feature(root, st, nnn, args) -> int:
         if feat["id"] == nnn:
             feat["status"] = "concluida"
             feat["concluded_at"] = u.iso_now()
-    st.set_subphase("concluida", by="human")
+    st.set_subphase("concluida", by="human", fid=nnn)
+    if st.engine == "dag":
+        # remove a concluída da fronteira e ativa novas features prontas
+        st.data["active_features"] = [a for a in st.data.get("active_features", [])
+                                      if a.get("id") != nnn]
+        st.data["active_feature"] = None
+        st._dag_refresh()
+        st.save()
+        act = [a["id"] for a in st.active_list()]
+        print(u.c(f"✓ {nnn} CONCLUÍDA. Fronteira agora: {', '.join(act) or '(vazia)'}.",
+                  "green", "bold"))
+        if not act:
+            print("  Backlog concluído. Talvez /mad-phase next-phase (PRE_RELEASE).")
+        return 0
     st.data["active_feature"] = None
     st._activate_next_from_backlog()
     st.save()
@@ -310,7 +348,8 @@ def build_parser():
     p = argparse.ArgumentParser(prog="mad-phase")
     sub = p.add_subparsers(dest="cmd", required=True)
     sub.add_parser("status").set_defaults(func=cmd_status)
-    sub.add_parser("next").set_defaults(func=cmd_next)
+    npx = sub.add_parser("next"); npx.add_argument("feature", nargs="?", default=None)
+    npx.set_defaults(func=cmd_next)
     sub.add_parser("next-phase").set_defaults(func=cmd_next_phase)
     for name, fn in [("approve-spec", cmd_approve_spec), ("approve-merge", cmd_approve_merge),
                      ("activate", cmd_activate)]:
