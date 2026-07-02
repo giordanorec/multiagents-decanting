@@ -2,6 +2,15 @@
 
 Formato: [Keep a Changelog](https://keepachangelog.com/). Versionamento semântico.
 
+## [1.23.0] — 2026-07-02 (14 design systems de MARCAS famosas)
+
+### Adicionado
+- **14 skins de marcas famosas** no dropdown do painel, com os tokens reais de cada
+  design system: **Apple** (HIG), **Airbnb** (DLS), **Spotify** (Encore), **Nike**,
+  **Netflix**, **IBM** (Carbon), **Microsoft** (Fluent), **Shopify** (Polaris),
+  **Stripe**, **Linear**, **Discord**, **Uber** (Base), **Atlassian**, **Twitch**.
+  Somam-se aos 20 paradigmas → **34 skins**. O mesmo dashboard "veste" a marca
+  (cor/tipografia/cantos), reconhecível de relance.
 ## [1.22.0] — 2026-07-01 (observabilidade: waterfall no painel)
 
 ### Adicionado

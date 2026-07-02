@@ -1,0 +1,561 @@
+/* =========================================================================
+   NIKE — Just Do It. Branco/preto de alto contraste, tipografia BOLD em
+   caixa-alta condensada (Helvetica Neue Condensed / Arial Narrow vibe),
+   acento laranja-vermelho #FA5400 + volt #E6FB04, cantos 0-2px, sombras
+   duras deslocadas (offset), atlético, ousado, dinâmico.
+   Escopo: html[data-skin="nike"]
+   ========================================================================= */
+
+html[data-skin="nike"] {
+  --bg: #ffffff;
+  --bg-soft: #f2f2f2;
+  --surface: #ffffff;
+  --surface-2: #f4f4f4;
+  --border: #111111;
+  --text: #111111;
+  --text-dim: #565656;
+  --text-faint: #8d8d8d;
+  --accent: #fa5400;          /* Nike total orange */
+  --accent-2: #111111;
+  --gold: #e6fb04;            /* Volt — vira "destaque de energia" */
+  --orange: #fa5400;
+  --red: #e5261f;
+  --green: #17a24a;
+  --grey: #8d8d8d;
+  --radius: 2px;
+  --radius-lg: 3px;
+  --shadow: 6px 6px 0 #111111;
+  --shadow-soft: 3px 3px 0 #111111;
+  --gap: 14px;
+  --font-sans: "Helvetica Neue", "Arial Narrow", "Franklin Gothic Medium", Arial, sans-serif;
+  --font-mono: "Roboto Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+
+/* fundo branco chapado, com uma faixa volt diagonal sutil no canto */
+html[data-skin="nike"] body {
+  background: #ffffff;
+  background-image:
+    linear-gradient(135deg, transparent 0 96%, var(--accent) 96% 97%, transparent 97%),
+    linear-gradient(135deg, transparent 0 92%, #111111 92% 92.6%, transparent 92.6%);
+  background-attachment: fixed;
+  color: var(--text);
+}
+
+/* ------------------------------------------------------------------ chrome */
+html[data-skin="nike"] .topbar {
+  background: #ffffff;
+  backdrop-filter: none;
+  border-bottom: 3px solid #111111;
+}
+html[data-skin="nike"] .brand h1 {
+  text-transform: uppercase;
+  font-weight: 800;
+  letter-spacing: .01em;
+  font-stretch: condensed;
+  font-style: italic;
+}
+html[data-skin="nike"] .brand-dot {
+  color: var(--accent);
+  transform: skewX(-14deg);
+}
+
+html[data-skin="nike"] .conn,
+html[data-skin="nike"] .team-count {
+  background: #111111;
+  color: #ffffff;
+  border: none;
+  border-radius: 0;
+  text-transform: uppercase;
+  font-weight: 800;
+  letter-spacing: .08em;
+  font-size: 11px;
+}
+html[data-skin="nike"] .conn--online .conn-dot { background: var(--gold); box-shadow: none; }
+html[data-skin="nike"] .conn--offline .conn-dot { background: var(--red); }
+
+html[data-skin="nike"] .icon-btn,
+html[data-skin="nike"] .ctrl-btn,
+html[data-skin="nike"] .skin-select {
+  background: #ffffff;
+  color: #111111;
+  border: 2px solid #111111;
+  border-radius: 2px;
+  text-transform: uppercase;
+  font-weight: 800;
+  letter-spacing: .04em;
+  transition: transform .12s ease, background .12s, color .12s;
+}
+html[data-skin="nike"] .icon-btn:hover,
+html[data-skin="nike"] .ctrl-btn:hover,
+html[data-skin="nike"] .skin-select:hover {
+  background: var(--accent);
+  color: #ffffff;
+  transform: translate(-1px,-1px);
+}
+
+html[data-skin="nike"] .section-title {
+  text-transform: uppercase;
+  font-weight: 800;
+  letter-spacing: .04em;
+  font-stretch: condensed;
+  font-style: italic;
+}
+html[data-skin="nike"] .section-title span:first-child::before {
+  content: "";
+  display: inline-block;
+  width: 14px; height: 3px;
+  margin-right: 8px;
+  vertical-align: middle;
+  background: var(--accent);
+  transform: skewX(-20deg);
+}
+html[data-skin="nike"] .live-dot { border-radius: 0; background: var(--red); box-shadow: none; }
+
+/* -------------------------------------------------------------------- hero */
+html[data-skin="nike"] .hero {
+  background: #111111;
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+html[data-skin="nike"] .hero-glow {
+  background: radial-gradient(60% 120% at 88% -10%, rgba(250,84,0,.55), transparent 60%);
+  opacity: 1;
+}
+html[data-skin="nike"] .hero-eyebrow {
+  color: var(--gold);
+  text-transform: uppercase;
+  font-weight: 800;
+  letter-spacing: .22em;
+}
+html[data-skin="nike"] .hero-title {
+  background: none;
+  -webkit-text-fill-color: #ffffff;
+  color: #ffffff;
+  text-transform: uppercase;
+  font-weight: 800;
+  font-stretch: condensed;
+  font-style: italic;
+  letter-spacing: -.01em;
+  line-height: .95;
+}
+html[data-skin="nike"] .hero-doing { color: rgba(255,255,255,.82); }
+html[data-skin="nike"] .hero-item {
+  background: #1c1c1c;
+  border: 1px solid #2c2c2c;
+  border-radius: 2px;
+}
+html[data-skin="nike"] .hi-badge {
+  background: var(--accent);
+  color: #ffffff;
+  border-radius: 2px;
+  font-weight: 800;
+}
+html[data-skin="nike"] .hi-slug { color: var(--gold); }
+html[data-skin="nike"] .hi-sub { color: rgba(255,255,255,.6); }
+html[data-skin="nike"] .hero-next { color: rgba(255,255,255,.7); }
+html[data-skin="nike"] .flag {
+  border-radius: 2px;
+  border: 2px solid currentColor;
+  background: transparent;
+  text-transform: uppercase;
+  font-weight: 800;
+  letter-spacing: .06em;
+}
+html[data-skin="nike"] .flag--warn { color: var(--gold); }
+html[data-skin="nike"] .flag--bypass { color: var(--accent); }
+
+/* ------------------------------------------------------- mapa do workflow */
+html[data-skin="nike"] .wfmap-wrap {
+  background: #ffffff;
+  border: 2px solid #111111;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="nike"] .wfmap-hint {
+  text-transform: uppercase;
+  font-weight: 800;
+  letter-spacing: .08em;
+  color: var(--accent);
+}
+html[data-skin="nike"] .wfnode-badge {
+  border-radius: 2px;
+  background: #ffffff;
+  border: 2px solid #111111;
+  transition: transform .12s ease;
+}
+html[data-skin="nike"] .wfnode.is-done .wfnode-badge {
+  background: #111111;
+  border-color: #111111;
+  color: #ffffff;
+}
+html[data-skin="nike"] .wfnode-check {
+  border-radius: 0;
+  background: var(--gold);
+  color: #111111;
+  border: 2px solid #111111;
+}
+html[data-skin="nike"] .wfnode.is-current .wfnode-badge {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #ffffff;
+  box-shadow: 0 0 0 4px rgba(250,84,0,.22);
+  animation: nike-pulse 1.4s ease-in-out infinite;
+}
+html[data-skin="nike"] .wfnode.is-selected .wfnode-badge {
+  box-shadow: 0 0 0 3px #111111, 4px 4px 0 var(--accent);
+}
+html[data-skin="nike"] .wfnode-label {
+  text-transform: uppercase;
+  font-weight: 800;
+  letter-spacing: .03em;
+}
+html[data-skin="nike"] .wfnode-here,
+html[data-skin="nike"] .wfx-tag--here {
+  border-radius: 2px;
+  background: var(--accent);
+  color: #ffffff;
+  border: none;
+  text-transform: uppercase;
+  font-weight: 800;
+}
+html[data-skin="nike"] .wfnode-here-dot { background: var(--gold); }
+html[data-skin="nike"] .wfnode-branch,
+html[data-skin="nike"] .wfbr-arrow { color: var(--text-dim); }
+
+html[data-skin="nike"] .wfedge-line,
+html[data-skin="nike"] .wfedge-line::after { background: #cfcfcf; }
+html[data-skin="nike"] .wfedge-line::after { border-left-color: #cfcfcf; }
+html[data-skin="nike"] .wfedge.is-done .wfedge-line { background: #111111; }
+html[data-skin="nike"] .wfedge.is-done .wfedge-line::after { border-left-color: #111111; }
+html[data-skin="nike"] .wfedge.is-current .wfedge-line { background: var(--accent); box-shadow: 0 0 8px rgba(250,84,0,.4); }
+html[data-skin="nike"] .wfedge.is-current .wfedge-line::after { border-left-color: var(--accent); }
+html[data-skin="nike"] .wfedge-label {
+  background: #f4f4f4;
+  border: 1px solid #111111;
+  border-radius: 2px;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: .03em;
+  color: #111111;
+}
+
+html[data-skin="nike"] .wfreturn {
+  border-radius: 2px;
+  border: 2px dashed var(--accent);
+  background: rgba(250,84,0,.08);
+}
+html[data-skin="nike"] .wfreturn-arrow,
+html[data-skin="nike"] .wfsub-loop,
+html[data-skin="nike"] .wfx-to { color: var(--accent); }
+html[data-skin="nike"] .wfreturn-label {
+  text-transform: uppercase;
+  font-weight: 800;
+  letter-spacing: .05em;
+}
+
+html[data-skin="nike"] .wfsub {
+  border-radius: 2px;
+  border: 2px solid #111111;
+  border-left: 5px solid var(--accent);
+  background: #ffffff;
+}
+html[data-skin="nike"] .wfsub-head,
+html[data-skin="nike"] .wfx-title {
+  text-transform: uppercase;
+  font-weight: 800;
+  letter-spacing: .03em;
+}
+html[data-skin="nike"] .wfsub-step {
+  border-radius: 2px;
+  border: 1px solid #111111;
+  background: #ffffff;
+}
+html[data-skin="nike"] .wfsub-step.is-current {
+  background: var(--accent);
+  color: #ffffff;
+  border-color: var(--accent);
+}
+html[data-skin="nike"] .wfsub-step.is-done { background: #111111; color: #ffffff; }
+html[data-skin="nike"] .wfsub-icon,
+html[data-skin="nike"] .wfsub-label { font-weight: 700; }
+
+html[data-skin="nike"] .wf-explainer {
+  border-radius: 2px;
+  border: 2px solid #111111;
+  background: #f4f4f4;
+}
+html[data-skin="nike"] .wfx-tag--muted {
+  border-radius: 2px;
+  background: #e2e2e2;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  font-weight: 700;
+}
+html[data-skin="nike"] .wfx-when {
+  border-radius: 2px;
+  background: #ffffff;
+  border: 1px solid #111111;
+  font-family: var(--font-mono);
+}
+html[data-skin="nike"] .wfx-k { color: var(--accent); font-weight: 800; }
+
+/* ------------------------------------------------------- card de agente */
+html[data-skin="nike"] .agent {
+  background: #ffffff;
+  border: 2px solid #111111;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+  transition: transform .14s ease, box-shadow .14s ease;
+}
+html[data-skin="nike"] .agent::before {
+  height: 5px;
+  background: var(--agent-color);
+}
+html[data-skin="nike"] .agent:hover {
+  transform: translate(-2px,-2px);
+  box-shadow: var(--shadow);
+}
+html[data-skin="nike"] .agent--working {
+  border-color: var(--agent-color);
+  box-shadow: var(--shadow-soft), 0 0 0 3px color-mix(in srgb, var(--agent-color) 30%, transparent);
+}
+html[data-skin="nike"] .agent--human_driving { border-color: var(--gold); }
+html[data-skin="nike"] .agent--error,
+html[data-skin="nike"] .agent--needs_recovery { border-color: var(--red); }
+html[data-skin="nike"] .agent--pinned { box-shadow: var(--shadow); }
+html[data-skin="nike"] .agent--sleeping { opacity: .68; }
+
+html[data-skin="nike"] .agent-avatar::before,
+html[data-skin="nike"] .fs-avatar::before {
+  border-radius: 2px;
+  border-width: 2px;
+}
+html[data-skin="nike"] .agent-avatar-inner,
+html[data-skin="nike"] .fs-avatar-inner { border-radius: 2px; }
+
+html[data-skin="nike"] .agent-name {
+  text-transform: uppercase;
+  font-weight: 800;
+  letter-spacing: .04em;
+  font-stretch: condensed;
+}
+html[data-skin="nike"] .agent-status,
+html[data-skin="nike"] .fs-status {
+  background: #111111;
+  color: #ffffff;
+  border: none;
+  border-radius: 2px;
+  text-transform: uppercase;
+  font-weight: 800;
+  letter-spacing: .06em;
+}
+html[data-skin="nike"] .agent-bubble,
+html[data-skin="nike"] .fs-bubble {
+  background: #f4f4f4;
+  border: 1px solid #111111;
+  border-left: 4px solid var(--accent);
+  border-radius: 2px;
+  color: var(--text);
+}
+html[data-skin="nike"] .agent-pin { color: var(--accent); }
+html[data-skin="nike"] .agent-open-hint {
+  text-transform: uppercase;
+  font-weight: 800;
+  letter-spacing: .05em;
+  color: var(--accent);
+}
+html[data-skin="nike"] .team-empty,
+html[data-skin="nike"] .activity-empty {
+  border: 2px dashed #111111;
+  border-radius: 2px;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--text-dim);
+}
+
+/* ------------------------------------------- mini-terminal / stream */
+html[data-skin="nike"] .agent-term,
+html[data-skin="nike"] .fs-term {
+  background: #0c0c0c;
+  border: 2px solid #111111;
+  border-radius: 2px;
+  color: #f2f2f2;
+}
+html[data-skin="nike"] .term-ts { color: #6f6f6f; }
+html[data-skin="nike"] .term--read { color: #4aa8ff; }
+html[data-skin="nike"] .term--write,
+html[data-skin="nike"] .term--ok { color: var(--gold); }
+html[data-skin="nike"] .term--edit { color: #ffb454; }
+html[data-skin="nike"] .term--bash { color: #d78bff; }
+html[data-skin="nike"] .term--grep { color: #5ad1c8; }
+html[data-skin="nike"] .term--web,
+html[data-skin="nike"] .term--agent { color: #7db9ff; }
+html[data-skin="nike"] .term--think,
+html[data-skin="nike"] .term--dim { color: #8d8d8d; }
+html[data-skin="nike"] .term--decant { color: var(--accent); }
+html[data-skin="nike"] .term--say,
+html[data-skin="nike"] .term--start { color: #f2f2f2; }
+html[data-skin="nike"] .term--error { color: #ff5b52; }
+html[data-skin="nike"] .term-add { color: var(--gold); }
+
+/* ----------------------------------------------------- barra de confiança */
+html[data-skin="nike"] .agent-trust-head,
+html[data-skin="nike"] .fs-trust-head {
+  text-transform: uppercase;
+  font-weight: 800;
+  letter-spacing: .05em;
+}
+html[data-skin="nike"] .trust-bar,
+html[data-skin="nike"] .bar {
+  border-radius: 0;
+  background: #e2e2e2;
+  border: 1px solid #111111;
+}
+html[data-skin="nike"] .trust-bar-fill { border-radius: 0; background: var(--accent); box-shadow: none; }
+html[data-skin="nike"] .bar-fill { border-radius: 0; background: #111111; }
+html[data-skin="nike"] .bar-fill--cost { background: var(--accent); }
+html[data-skin="nike"] .bar-fill.is-warn { background: var(--gold); }
+html[data-skin="nike"] .bar-fill.is-danger { background: var(--red); }
+
+/* -------------------------------------------------------------- métricas */
+html[data-skin="nike"] .metric {
+  background: #ffffff;
+  border: 2px solid #111111;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="nike"] .metric-label {
+  text-transform: uppercase;
+  font-weight: 800;
+  letter-spacing: .08em;
+  color: var(--text-dim);
+}
+html[data-skin="nike"] .metric-value,
+html[data-skin="nike"] .metric-value--big {
+  font-weight: 800;
+  font-stretch: condensed;
+  letter-spacing: -.01em;
+}
+html[data-skin="nike"] .metric-value--big { color: var(--accent); }
+html[data-skin="nike"] .metric-sub { color: var(--text-faint); }
+
+/* --------------------------------------------------------- atividade feed */
+html[data-skin="nike"] .activity-list {
+  background: #ffffff;
+  border: 2px solid #111111;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="nike"] .activity-list li { border-bottom: 1px solid #e2e2e2; }
+html[data-skin="nike"] .act-new { animation: nike-flash .6s ease; }
+html[data-skin="nike"] .act-ts { color: var(--text-faint); font-family: var(--font-mono); }
+html[data-skin="nike"] .act-text { color: var(--text); }
+html[data-skin="nike"] .act-icon[data-i="▶"] { color: var(--accent); }
+html[data-skin="nike"] .act-icon[data-i="◆"] { color: #111111; }
+html[data-skin="nike"] .act-icon[data-i="✓"] { color: var(--green); }
+html[data-skin="nike"] .act-icon[data-i="✗"] { color: var(--red); }
+
+/* ------------------------------------------------ features paralelas (DAG) */
+html[data-skin="nike"] .parallel {
+  border: 2px solid #111111;
+  border-radius: var(--radius-lg);
+  background: #f4f4f4;
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="nike"] .parallel-title {
+  text-transform: uppercase;
+  font-weight: 800;
+  letter-spacing: .04em;
+  font-stretch: condensed;
+}
+html[data-skin="nike"] .parallel-hint {
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: .06em;
+  color: var(--accent);
+}
+html[data-skin="nike"] .pfeat {
+  background: #ffffff;
+  border: 2px solid #111111;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="nike"] .pfeat-name {
+  text-transform: uppercase;
+  font-weight: 800;
+  letter-spacing: .03em;
+}
+html[data-skin="nike"] .pfeat-dot { border-radius: 0; background: var(--agent-color); }
+html[data-skin="nike"] .pfeat-slug { color: var(--accent); }
+html[data-skin="nike"] .pfeat-agent-name { color: var(--text-dim); text-transform: uppercase; font-weight: 700; }
+
+/* -------------------------------------------------------------- fullscreen */
+html[data-skin="nike"] .fs-backdrop {
+  background: rgba(17,17,17,.6);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+html[data-skin="nike"] .fs-panel {
+  background: #ffffff;
+  border: 3px solid #111111;
+  border-radius: var(--radius-lg);
+  box-shadow: 12px 12px 0 var(--accent), 0 0 0 3px #111111;
+}
+html[data-skin="nike"] .fs-panel::before { height: 6px; background: var(--agent-color); }
+html[data-skin="nike"] .fs-close {
+  background: #111111;
+  color: #ffffff;
+  border: 2px solid #111111;
+  border-radius: 2px;
+  font-weight: 800;
+  transition: background .12s, color .12s;
+}
+html[data-skin="nike"] .fs-close:hover { background: var(--accent); border-color: var(--accent); }
+html[data-skin="nike"] .fs-name {
+  text-transform: uppercase;
+  font-weight: 800;
+  letter-spacing: .04em;
+  font-stretch: condensed;
+}
+html[data-skin="nike"] .fs-status-label { text-transform: uppercase; font-weight: 800; }
+html[data-skin="nike"] .fs-trust-val { font-weight: 800; color: var(--accent); }
+html[data-skin="nike"] .fs-term-label {
+  text-transform: uppercase;
+  font-weight: 800;
+  letter-spacing: .06em;
+  color: var(--accent);
+}
+html[data-skin="nike"] .fs-term-empty {
+  border: 2px dashed #111111;
+  border-radius: 2px;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--text-dim);
+}
+
+/* ------------------------------------------------------------------ outros */
+html[data-skin="nike"] .offline-banner {
+  background: var(--accent);
+  color: #ffffff;
+  border-radius: 0;
+  text-transform: uppercase;
+  font-weight: 800;
+  letter-spacing: .06em;
+}
+
+/* --------------------------------------------------------------- animações */
+@keyframes nike-pulse {
+  0%, 100% { box-shadow: 0 0 0 4px rgba(250,84,0,.22); }
+  50%      { box-shadow: 0 0 0 8px rgba(250,84,0,.10); }
+}
+@keyframes nike-flash {
+  0%   { background: rgba(250,84,0,.18); }
+  100% { background: transparent; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-skin="nike"] .wfnode.is-current .wfnode-badge { animation: none; }
+  html[data-skin="nike"] .act-new { animation: none; }
+}

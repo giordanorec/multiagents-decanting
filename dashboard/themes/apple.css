@@ -1,0 +1,507 @@
+/* =========================================================================
+   Apple — Human Interface Guidelines
+   Fundo branco puro, superfícies cinza claro (#f2f2f7 systemGray6), azul de
+   sistema (#007AFF), tipografia -apple-system / SF Pro, cantos 10–14px,
+   sombras muito sutis, muito respiro. Limpo, leve, precioso.
+   Escopo: html[data-skin="apple"]
+   ========================================================================= */
+
+html[data-skin="apple"] {
+  /* superfícies do iOS/macOS: branco + escala de cinzas de sistema */
+  --bg: #ffffff;                 /* fundo branco puro */
+  --bg-soft: #f2f2f7;            /* systemGray6 */
+  --surface: #ffffff;           /* cards brancos flutuando */
+  --surface-2: #f2f2f7;         /* systemGray6 — pílulas, inputs, bubbles */
+  --border: #e5e5ea;            /* systemGray5 — separadores hairline */
+  --text: #1c1c1e;             /* label (quase preto, nunca #000) */
+  --text-dim: #3c3c43;         /* secondaryLabel base */
+  --text-faint: #8e8e93;       /* systemGray — tertiary/labels */
+  --accent: #007aff;           /* systemBlue */
+  --accent-2: #5ac8fa;         /* systemBlue claro / cyan */
+  --gold: #ff9f0a;             /* systemOrange (custo/decantando) */
+  --orange: #ff9500;           /* systemOrange (aviso/humano) */
+  --red: #ff3b30;              /* systemRed */
+  --green: #34c759;            /* systemGreen */
+  --grey: #8e8e93;             /* systemGray */
+  --radius: 12px;              /* continuous corner iOS card */
+  --radius-lg: 20px;           /* modal / hero grande */
+  --shadow: 0 8px 30px rgba(0, 0, 0, 0.10), 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-soft: 0 1px 3px rgba(0, 0, 0, 0.06), 0 0 0 0.5px rgba(0, 0, 0, 0.04);
+  --gap: 16px;
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "SF Mono", ui-monospace, "Menlo", "JetBrains Mono", Consolas, monospace;
+}
+
+/* Fundo branco de app, com um leve halo azul de sistema no topo. */
+html[data-skin="apple"] body {
+  background:
+    radial-gradient(1100px 500px at 50% -14%, rgba(0, 122, 255, 0.05), transparent 62%),
+    #ffffff;
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  letter-spacing: -0.01em;
+}
+
+/* --------------------------------------------------------------------- */
+/* Topbar — barra translúcida estilo iOS/macOS (materials/vibrancy)      */
+/* --------------------------------------------------------------------- */
+html[data-skin="apple"] .topbar {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 0.5px solid var(--border);
+}
+html[data-skin="apple"] .brand h1 {
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+html[data-skin="apple"] .brand-dot { color: var(--accent); }
+
+html[data-skin="apple"] .conn,
+html[data-skin="apple"] .team-count {
+  background: var(--surface-2);
+  border: 0.5px solid var(--border);
+  border-radius: 980px;          /* pill total, marca registrada iOS */
+  color: var(--text-dim);
+  font-weight: 500;
+}
+html[data-skin="apple"] .conn--online .conn-dot { color: var(--green); }
+html[data-skin="apple"] .conn--connecting .conn-dot { color: var(--orange); }
+html[data-skin="apple"] .conn--offline .conn-dot { color: var(--red); }
+
+html[data-skin="apple"] .icon-btn,
+html[data-skin="apple"] .ctrl-btn,
+html[data-skin="apple"] .skin-select {
+  background: var(--surface-2);
+  border: 0.5px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  font-weight: 500;
+  transition: background .18s ease, transform .12s ease;
+}
+html[data-skin="apple"] .icon-btn:hover,
+html[data-skin="apple"] .ctrl-btn:hover,
+html[data-skin="apple"] .skin-select:hover {
+  background: #e8e8ed;
+}
+html[data-skin="apple"] .icon-btn:active,
+html[data-skin="apple"] .ctrl-btn:active { transform: scale(0.96); }
+html[data-skin="apple"] .skin-select { color: var(--accent); }
+
+/* --------------------------------------------------------------------- */
+/* Seções — títulos claros, muito respiro                                 */
+/* --------------------------------------------------------------------- */
+html[data-skin="apple"] .section-title {
+  color: var(--text);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+html[data-skin="apple"] .live-dot { background: var(--red); box-shadow: 0 0 0 4px rgba(255, 59, 48, 0.14); }
+
+/* --------------------------------------------------------------------- */
+/* Hero — grande cartão branco arredondado                                */
+/* --------------------------------------------------------------------- */
+html[data-skin="apple"] .hero {
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="apple"] .hero-glow {
+  background: radial-gradient(600px 260px at 20% 0%, rgba(0, 122, 255, 0.10), transparent 70%);
+  opacity: 1;
+}
+html[data-skin="apple"] .hero-eyebrow {
+  color: var(--accent);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+html[data-skin="apple"] .hero-title {
+  color: var(--text);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  background: none;
+  -webkit-text-fill-color: var(--text);
+}
+html[data-skin="apple"] .hero-doing { color: var(--text-dim); }
+html[data-skin="apple"] .hero-item {
+  background: var(--surface-2);
+  border: 0.5px solid var(--border);
+  border-radius: 12px;
+}
+html[data-skin="apple"] .hi-badge {
+  background: var(--accent);
+  color: #fff;
+  border-radius: 8px;
+  font-weight: 600;
+}
+html[data-skin="apple"] .hi-slug { color: var(--text-faint); }
+html[data-skin="apple"] .flag {
+  background: var(--surface-2);
+  border: 0.5px solid var(--border);
+  border-radius: 980px;
+  color: var(--text-dim);
+  font-weight: 500;
+}
+html[data-skin="apple"] .flag--warn { color: var(--orange); border-color: color-mix(in srgb, var(--orange) 40%, var(--border)); background: color-mix(in srgb, var(--orange) 10%, #fff); }
+html[data-skin="apple"] .flag--bypass { color: var(--red); border-color: color-mix(in srgb, var(--red) 40%, var(--border)); background: color-mix(in srgb, var(--red) 10%, #fff); }
+html[data-skin="apple"] .hero-next { color: var(--text-faint); }
+
+/* --------------------------------------------------------------------- */
+/* Mapa do workflow — cartão branco, nós com badge redondo, azul sistema  */
+/* --------------------------------------------------------------------- */
+html[data-skin="apple"] .wfmap-wrap {
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="apple"] .wfmap-hint { color: var(--text-faint); }
+
+html[data-skin="apple"] .wfnode-badge {
+  background: var(--surface-2);
+  border: 0.5px solid var(--border);
+  border-radius: 50%;
+  color: var(--text-dim);
+  box-shadow: none;
+}
+html[data-skin="apple"] .wfnode.is-current .wfnode-badge {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  box-shadow: 0 0 0 5px rgba(0, 122, 255, 0.16);
+}
+html[data-skin="apple"] .wfnode.is-done .wfnode-badge {
+  background: color-mix(in srgb, var(--green) 14%, #fff);
+  border-color: color-mix(in srgb, var(--green) 45%, var(--border));
+  color: var(--green);
+}
+html[data-skin="apple"] .wfnode-check {
+  background: var(--green);
+  color: #fff;
+  border: 2px solid #fff;
+  border-radius: 50%;
+}
+html[data-skin="apple"] .wfnode.is-selected .wfnode-badge {
+  box-shadow: 0 0 0 3px #fff, 0 0 0 4.5px var(--accent);
+}
+html[data-skin="apple"] .wfnode-label { color: var(--text); font-weight: 500; }
+html[data-skin="apple"] .wfnode.is-future .wfnode-label { color: var(--text-faint); }
+html[data-skin="apple"] .wfnode-here,
+html[data-skin="apple"] .wfx-tag--here {
+  background: color-mix(in srgb, var(--accent) 12%, #fff);
+  border: 0.5px solid color-mix(in srgb, var(--accent) 40%, var(--border));
+  border-radius: 980px;
+  color: var(--accent);
+  font-weight: 600;
+}
+html[data-skin="apple"] .wfnode-here-dot { background: var(--accent); }
+html[data-skin="apple"] .wfnode-doing { color: var(--text-dim); }
+html[data-skin="apple"] .wfnode-branch,
+html[data-skin="apple"] .wfbr-arrow { color: var(--text-faint); }
+
+/* arestas: linha hairline cinza, azul quando ativa/feita */
+html[data-skin="apple"] .wfedge-line { background: var(--border); }
+html[data-skin="apple"] .wfedge-line::after { border-left-color: var(--border); }
+html[data-skin="apple"] .wfedge.is-done .wfedge-line { background: color-mix(in srgb, var(--green) 55%, var(--border)); }
+html[data-skin="apple"] .wfedge.is-done .wfedge-line::after { border-left-color: color-mix(in srgb, var(--green) 55%, var(--border)); }
+html[data-skin="apple"] .wfedge.is-current .wfedge-line { background: var(--accent); }
+html[data-skin="apple"] .wfedge.is-current .wfedge-line::after { border-left-color: var(--accent); }
+html[data-skin="apple"] .wfedge-label {
+  background: var(--surface-2);
+  border: 0.5px solid var(--border);
+  border-radius: 980px;
+  color: var(--text-dim);
+}
+
+/* trilho de retorno + sub-loop + explainer */
+html[data-skin="apple"] .wfreturn {
+  background: color-mix(in srgb, var(--accent) 8%, #fff);
+  border: 0.5px solid color-mix(in srgb, var(--accent) 30%, var(--border));
+  border-radius: 12px;
+  color: var(--accent);
+}
+html[data-skin="apple"] .wfreturn-arrow,
+html[data-skin="apple"] .wfsub-loop,
+html[data-skin="apple"] .wfx-to,
+html[data-skin="apple"] .wfx-goes { color: var(--accent); }
+
+html[data-skin="apple"] .wfsub {
+  background: var(--surface-2);
+  border: 0.5px solid var(--border);
+  border-radius: 14px;
+}
+html[data-skin="apple"] .wfsub-head-ic { color: var(--accent); }
+html[data-skin="apple"] .wfsub-step {
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: 10px;
+  color: var(--text-dim);
+}
+html[data-skin="apple"] .wfsub-step.is-current {
+  background: color-mix(in srgb, var(--accent) 10%, #fff);
+  border-color: color-mix(in srgb, var(--accent) 40%, var(--border));
+  color: var(--accent);
+}
+html[data-skin="apple"] .wfsub-step.is-done .wfsub-icon { color: var(--green); }
+html[data-skin="apple"] .wfsub-arrow { color: var(--text-faint); }
+
+html[data-skin="apple"] .wf-explainer {
+  background: var(--surface-2);
+  border: 0.5px solid var(--border);
+  border-radius: 14px;
+}
+html[data-skin="apple"] .wfx-icon { color: var(--accent); }
+html[data-skin="apple"] .wfx-title { color: var(--text); font-weight: 600; }
+html[data-skin="apple"] .wfx-tag {
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: 980px;
+  color: var(--text-dim);
+}
+html[data-skin="apple"] .wfx-tag--muted { color: var(--text-faint); }
+html[data-skin="apple"] .wfx-pin { color: var(--text-faint); }
+html[data-skin="apple"] .wfx-k { color: var(--text-faint); }
+html[data-skin="apple"] .wfx-when,
+html[data-skin="apple"] .wfx-list {
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-dim);
+}
+
+/* --------------------------------------------------------------------- */
+/* Card de agente — o coração: cartão branco iOS, hairline, sombra sutil   */
+/* --------------------------------------------------------------------- */
+html[data-skin="apple"] .agent,
+html[data-skin="apple"] .metric,
+html[data-skin="apple"] .activity-list {
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="apple"] .agent {
+  transition: transform .22s cubic-bezier(.2,.7,.2,1), box-shadow .22s ease;
+}
+html[data-skin="apple"] .agent::before {
+  height: 3px;
+  background: var(--agent-color);
+  opacity: 0.9;
+  border-radius: 3px 3px 0 0;
+}
+html[data-skin="apple"] .agent:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+html[data-skin="apple"] .agent--working {
+  box-shadow: var(--shadow-soft),
+    0 0 0 1px color-mix(in srgb, var(--agent-color) 40%, transparent);
+}
+html[data-skin="apple"] .agent--decanting { box-shadow: var(--shadow-soft), 0 0 0 1px color-mix(in srgb, var(--gold) 40%, transparent); }
+html[data-skin="apple"] .agent--human_driving { box-shadow: var(--shadow-soft), 0 0 0 1px color-mix(in srgb, var(--orange) 45%, transparent); }
+html[data-skin="apple"] .agent--error,
+html[data-skin="apple"] .agent--needs_recovery { box-shadow: var(--shadow-soft), 0 0 0 1px color-mix(in srgb, var(--red) 45%, transparent); }
+html[data-skin="apple"] .agent--sleeping { opacity: 0.72; }
+html[data-skin="apple"] .agent--pinned { box-shadow: var(--shadow), 0 0 0 1px color-mix(in srgb, var(--accent) 30%, transparent); }
+
+html[data-skin="apple"] .agent-avatar::before,
+html[data-skin="apple"] .fs-avatar::before {
+  border-width: 2px;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--agent-color) 14%, transparent);
+}
+html[data-skin="apple"] .agent-name { color: var(--text); font-weight: 600; letter-spacing: -0.01em; }
+html[data-skin="apple"] .agent-status,
+html[data-skin="apple"] .fs-status {
+  background: var(--surface-2);
+  border: 0.5px solid var(--border);
+  border-radius: 980px;
+  color: var(--text-dim);
+  font-weight: 500;
+}
+html[data-skin="apple"] .agent-bubble,
+html[data-skin="apple"] .fs-bubble {
+  background: var(--surface-2);
+  border: 0.5px solid var(--border);
+  border-radius: 14px;
+  color: var(--text-dim);
+}
+html[data-skin="apple"] .agent-pin,
+html[data-skin="apple"] .agent-open-hint { color: var(--text-faint); }
+html[data-skin="apple"] .team-empty,
+html[data-skin="apple"] .activity-empty { color: var(--text-faint); }
+
+/* --------------------------------------------------------------------- */
+/* Mini-terminal — poço cinza claro, mono SF Mono                          */
+/* --------------------------------------------------------------------- */
+html[data-skin="apple"] .agent-term,
+html[data-skin="apple"] .fs-term {
+  background: var(--surface-2);
+  border: 0.5px solid var(--border);
+  border-radius: 10px;
+  color: var(--text-dim);
+  font-family: var(--font-mono);
+}
+html[data-skin="apple"] .term-ts { color: var(--text-faint); }
+html[data-skin="apple"] .term--read   { color: var(--accent); }
+html[data-skin="apple"] .term--write  { color: var(--green); }
+html[data-skin="apple"] .term--edit   { color: var(--gold); }
+html[data-skin="apple"] .term--bash   { color: #af52de; }   /* systemPurple */
+html[data-skin="apple"] .term--grep   { color: var(--accent-2); }
+html[data-skin="apple"] .term--web    { color: var(--accent-2); }
+html[data-skin="apple"] .term--agent  { color: #af52de; }
+html[data-skin="apple"] .term--think  { color: var(--text-faint); }
+html[data-skin="apple"] .term--decant { color: var(--gold); }
+html[data-skin="apple"] .term--ok     { color: var(--green); }
+html[data-skin="apple"] .term--error  { color: var(--red); }
+html[data-skin="apple"] .term--start  { color: var(--accent); }
+html[data-skin="apple"] .term--say    { color: var(--text); }
+html[data-skin="apple"] .term--dim    { color: var(--text-faint); }
+html[data-skin="apple"] .term-add     { color: var(--green); }
+
+/* --------------------------------------------------------------------- */
+/* Barra de confiança + barras de métrica                                  */
+/* --------------------------------------------------------------------- */
+html[data-skin="apple"] .agent-trust-head,
+html[data-skin="apple"] .fs-trust-head { color: var(--text-faint); }
+html[data-skin="apple"] .trust-bar,
+html[data-skin="apple"] .bar {
+  background: var(--surface-2);
+  border-radius: 980px;
+  overflow: hidden;
+}
+html[data-skin="apple"] .trust-bar-fill {
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  border-radius: 980px;
+}
+html[data-skin="apple"] .bar-fill {
+  background: var(--accent);
+  border-radius: 980px;
+}
+html[data-skin="apple"] .bar-fill--cost { background: var(--gold); }
+html[data-skin="apple"] .bar-fill.is-warn { background: var(--orange); }
+html[data-skin="apple"] .bar-fill.is-danger { background: var(--red); }
+
+/* --------------------------------------------------------------------- */
+/* Métricas                                                                */
+/* --------------------------------------------------------------------- */
+html[data-skin="apple"] .metric-head,
+html[data-skin="apple"] .metric-label { color: var(--text-faint); }
+html[data-skin="apple"] .metric-value { color: var(--text); font-weight: 600; }
+html[data-skin="apple"] .metric-value--big { color: var(--text); font-weight: 700; letter-spacing: -0.02em; }
+html[data-skin="apple"] .metric-sub { color: var(--text-faint); }
+
+/* --------------------------------------------------------------------- */
+/* Atividade (feed)                                                        */
+/* --------------------------------------------------------------------- */
+html[data-skin="apple"] .activity-list li { border-bottom: 0.5px solid var(--border); }
+html[data-skin="apple"] .act-ts { color: var(--text-faint); }
+html[data-skin="apple"] .act-text { color: var(--text-dim); }
+html[data-skin="apple"] .act-new { background: color-mix(in srgb, var(--accent) 7%, transparent); }
+html[data-skin="apple"] .act-icon[data-i="▶"] { color: var(--accent); }
+html[data-skin="apple"] .act-icon[data-i="◆"] { color: var(--gold); }
+html[data-skin="apple"] .act-icon[data-i="✓"] { color: var(--green); }
+html[data-skin="apple"] .act-icon[data-i="✗"] { color: var(--red); }
+
+/* --------------------------------------------------------------------- */
+/* Paralelo (motor DAG)                                                    */
+/* --------------------------------------------------------------------- */
+html[data-skin="apple"] .parallel-hint { color: var(--text-faint); }
+html[data-skin="apple"] .pfeat {
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="apple"] .pfeat-name { color: var(--text); font-weight: 600; }
+html[data-skin="apple"] .pfeat-slug { color: var(--text-faint); }
+html[data-skin="apple"] .pfeat-doing { color: var(--text-dim); }
+html[data-skin="apple"] .pfeat-agent-name { color: var(--text-faint); }
+
+/* --------------------------------------------------------------------- */
+/* Fullscreen — folha modal branca, cantos grandes, sombra rica            */
+/* --------------------------------------------------------------------- */
+html[data-skin="apple"] .fs-backdrop {
+  background: rgba(0, 0, 0, 0.28);
+  backdrop-filter: saturate(160%) blur(14px);
+  -webkit-backdrop-filter: saturate(160%) blur(14px);
+}
+html[data-skin="apple"] .fs-panel {
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.22), 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+html[data-skin="apple"] .fs-close {
+  background: var(--surface-2);
+  border: 0.5px solid var(--border);
+  border-radius: 50%;
+  color: var(--text-dim);
+  transition: background .18s ease;
+}
+html[data-skin="apple"] .fs-close:hover { background: #e8e8ed; color: var(--text); }
+html[data-skin="apple"] .fs-name { color: var(--text); font-weight: 600; }
+html[data-skin="apple"] .fs-trust-val { color: var(--accent); font-weight: 600; }
+html[data-skin="apple"] .fs-term-label { color: var(--text-faint); }
+html[data-skin="apple"] .fs-term-empty {
+  background: var(--surface-2);
+  border: 0.5px dashed var(--border);
+  border-radius: 10px;
+  color: var(--text-faint);
+}
+
+/* --------------------------------------------------------------------- */
+/* Banner offline                                                          */
+/* --------------------------------------------------------------------- */
+html[data-skin="apple"] .offline-banner {
+  background: var(--red);
+  color: #fff;
+  border-radius: 980px;
+  box-shadow: var(--shadow);
+  font-weight: 500;
+}
+
+/* --------------------------------------------------------------------- */
+/* Reação a claro/escuro: Apple faz Dark Mode "puro" (systemBackground)    */
+/* --------------------------------------------------------------------- */
+html[data-skin="apple"][data-theme="dark"] {
+  --bg: #000000;                 /* iOS dark: preto puro */
+  --bg-soft: #1c1c1e;            /* systemGray6 dark */
+  --surface: #1c1c1e;
+  --surface-2: #2c2c2e;          /* systemGray5 dark */
+  --border: #38383a;             /* separator dark */
+  --text: #ffffff;
+  --text-dim: #ebebf5;
+  --text-faint: #8e8e93;
+  --accent: #0a84ff;             /* systemBlue dark */
+  --accent-2: #64d2ff;
+  --gold: #ff9f0a;
+  --orange: #ff9f0a;
+  --red: #ff453a;
+  --green: #30d158;
+  --shadow: 0 10px 34px rgba(0, 0, 0, 0.6);
+  --shadow-soft: 0 1px 3px rgba(0, 0, 0, 0.5), 0 0 0 0.5px rgba(255, 255, 255, 0.04);
+}
+html[data-skin="apple"][data-theme="dark"] body {
+  background:
+    radial-gradient(1100px 500px at 50% -14%, rgba(10, 132, 255, 0.10), transparent 62%),
+    #000000;
+}
+html[data-skin="apple"][data-theme="dark"] .topbar {
+  background: rgba(28, 28, 30, 0.72);
+}
+html[data-skin="apple"][data-theme="dark"] .icon-btn:hover,
+html[data-skin="apple"][data-theme="dark"] .ctrl-btn:hover,
+html[data-skin="apple"][data-theme="dark"] .skin-select:hover,
+html[data-skin="apple"][data-theme="dark"] .fs-close:hover { background: #3a3a3c; }
+
+/* --------------------------------------------------------------------- */
+/* Movimento: springs suaves da Apple, desligadas em reduced-motion        */
+/* --------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  html[data-skin="apple"] .agent { transition: none; }
+  html[data-skin="apple"] .agent:hover { transform: none; }
+}

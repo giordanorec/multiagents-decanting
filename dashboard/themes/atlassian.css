@@ -1,0 +1,530 @@
+/* =========================================================================
+   Atlassian Design System — corporativo, limpo, organizado
+   Azul de marca (#0052CC), superfícies neutras frias (#F4F5F7 / #FFFFFF),
+   texto ink (#172B4D), cantos de 3px, sombras de elevação sutis (rgba 9,30,66),
+   tipografia Charlie/Inter → fallback de sistema. Jira/Confluence vibe.
+   Escopo: html[data-skin="atlassian"]
+   ========================================================================= */
+
+html[data-skin="atlassian"] {
+  /* superfícies — paleta neutra fria da Atlassian (N0..N800) */
+  --bg: #F4F5F7;             /* N20 — fundo geral da app */
+  --bg-soft: #EBECF0;        /* N30 — trilhos / recuos */
+  --surface: #FFFFFF;        /* N0  — cards e painéis */
+  --surface-2: #F4F5F7;      /* N20 — pílulas, inputs, bubbles */
+  --border: #DFE1E6;         /* N40 — filetes padrão */
+
+  /* texto — ink navy da Atlassian */
+  --text: #172B4D;           /* N800 */
+  --text-dim: #42526E;       /* N500 */
+  --text-faint: #6B778C;     /* N300 */
+
+  /* marca */
+  --accent: #0052CC;         /* B400 — azul primário Atlassian */
+  --accent-2: #6554C0;       /* P400 — roxo (gradientes/secundário) */
+
+  /* semânticos ADS */
+  --gold: #FFAB00;           /* Y400 — atenção / custo */
+  --orange: #FF8B00;         /* O400 — aviso / humano no controle */
+  --red: #DE350B;            /* R400 — erro / ao-vivo */
+  --green: #36B37E;          /* G400 — ok / online */
+  --grey: #97A0AF;           /* N100 — neutro / dormindo */
+
+  /* forma — cantos 3px marca registrada, sombras de elevação */
+  --radius: 3px;
+  --radius-lg: 6px;
+  --shadow: 0 8px 12px rgba(9, 30, 66, 0.15), 0 0 1px rgba(9, 30, 66, 0.31);
+  --shadow-soft: 0 1px 1px rgba(9, 30, 66, 0.25), 0 0 1px rgba(9, 30, 66, 0.31);
+  --gap: 12px;
+
+  /* tipografia — Charlie Sans é proprietária; cai pra Inter → system */
+  --font-sans: "Charlie Text", "Charlie Sans", Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "SFMono-Regular", "JetBrains Mono", ui-monospace, Consolas, Menlo, "Courier New", monospace;
+}
+
+html[data-skin="atlassian"] body {
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* ---------- Topbar / chrome ---------- */
+html[data-skin="atlassian"] .topbar {
+  background: #FFFFFF;
+  backdrop-filter: none;
+  border-bottom: 1px solid var(--border);
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="atlassian"] .brand h1 {
+  color: var(--text);
+  font-weight: 600;
+  letter-spacing: -0.005em;
+}
+html[data-skin="atlassian"] .brand-dot { color: var(--accent); }
+
+html[data-skin="atlassian"] .conn,
+html[data-skin="atlassian"] .team-count {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-dim);
+  font-weight: 500;
+}
+html[data-skin="atlassian"] .conn--online .conn-dot { background: var(--green); }
+html[data-skin="atlassian"] .conn--connecting .conn-dot { background: var(--gold); }
+html[data-skin="atlassian"] .conn--offline .conn-dot { background: var(--red); }
+
+html[data-skin="atlassian"] .icon-btn,
+html[data-skin="atlassian"] .ctrl-btn,
+html[data-skin="atlassian"] .skin-select {
+  background: transparent;
+  border: none;
+  border-radius: var(--radius);
+  color: var(--text-dim);
+  font-weight: 500;
+  transition: background .1s ease, color .1s ease;
+}
+html[data-skin="atlassian"] .skin-select {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+}
+html[data-skin="atlassian"] .icon-btn:hover,
+html[data-skin="atlassian"] .ctrl-btn:hover,
+html[data-skin="atlassian"] .skin-select:hover {
+  background: rgba(9, 30, 66, 0.06);
+  color: var(--text);
+}
+html[data-skin="atlassian"] .icon-btn:focus-visible,
+html[data-skin="atlassian"] .ctrl-btn:focus-visible,
+html[data-skin="atlassian"] .skin-select:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+/* ---------- Hero (etapa atual) ---------- */
+html[data-skin="atlassian"] .hero {
+  background: #FFFFFF;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="atlassian"] .hero-glow {
+  background: radial-gradient(600px 300px at 12% -20%, rgba(0, 82, 204, 0.10), transparent 60%);
+  opacity: 1;
+}
+html[data-skin="atlassian"] .hero-eyebrow {
+  color: var(--accent);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+html[data-skin="atlassian"] .hero-title {
+  background: none;
+  -webkit-text-fill-color: currentColor;
+  color: var(--text);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+html[data-skin="atlassian"] .hero-doing { color: var(--text-dim); }
+html[data-skin="atlassian"] .hero-item {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+html[data-skin="atlassian"] .hi-badge {
+  background: #DEEBFF;               /* B50 subtle */
+  color: var(--accent);
+  border-radius: var(--radius);
+  font-weight: 700;
+}
+html[data-skin="atlassian"] .hi-slug { color: var(--text); font-weight: 600; }
+html[data-skin="atlassian"] .hi-sub { color: var(--text-faint); }
+html[data-skin="atlassian"] .flag {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-dim);
+  font-weight: 500;
+}
+html[data-skin="atlassian"] .flag--warn {
+  background: #FFFAE6;              /* Y50 */
+  border-color: #FFE380;
+  color: #974F0C;                  /* Y500 text */
+}
+html[data-skin="atlassian"] .flag--bypass {
+  background: #FFEBE6;             /* R50 */
+  border-color: #FFBDAD;
+  color: var(--red);
+}
+html[data-skin="atlassian"] .hero-next { color: var(--text-faint); }
+
+/* ---------- Mapa do workflow ---------- */
+html[data-skin="atlassian"] .wfmap-wrap {
+  background: #FFFFFF;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="atlassian"] .wfmap-hint {
+  color: var(--text-faint);
+  font-weight: 500;
+}
+html[data-skin="atlassian"] .wfnode-badge {
+  background: var(--surface-2);
+  border: 2px solid var(--border);
+  border-radius: 50%;
+  color: var(--text-dim);
+}
+html[data-skin="atlassian"] .wfnode.is-done .wfnode-badge {
+  background: #E3FCEF;             /* G50 */
+  border-color: var(--green);
+  color: #006644;                 /* G500 */
+}
+html[data-skin="atlassian"] .wfnode-check {
+  background: var(--green);
+  color: #FFFFFF;
+  border-color: #FFFFFF;
+}
+html[data-skin="atlassian"] .wfnode.is-current .wfnode-badge {
+  background: #DEEBFF;            /* B50 */
+  border-color: var(--accent);
+  color: var(--accent);
+  box-shadow: 0 0 0 4px rgba(0, 82, 204, 0.16);
+}
+html[data-skin="atlassian"] .wfnode.is-selected .wfnode-badge {
+  box-shadow: 0 0 0 2px var(--accent), 0 0 0 5px rgba(0, 82, 204, 0.20);
+}
+html[data-skin="atlassian"] .wfnode-label { color: var(--text-dim); font-weight: 500; }
+html[data-skin="atlassian"] .wfnode.is-current .wfnode-label { color: var(--text); font-weight: 600; }
+html[data-skin="atlassian"] .wfnode-here,
+html[data-skin="atlassian"] .wfx-tag--here {
+  background: #DEEBFF;
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  color: var(--accent);
+  font-weight: 600;
+}
+html[data-skin="atlassian"] .wfnode-here-dot { background: var(--accent); }
+html[data-skin="atlassian"] .wfnode-doing { color: var(--text-faint); }
+html[data-skin="atlassian"] .wfnode-branch {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-dim);
+}
+html[data-skin="atlassian"] .wfbr-arrow { color: var(--accent); }
+
+html[data-skin="atlassian"] .wfedge-line,
+html[data-skin="atlassian"] .wfedge-line::after { background: var(--border); }
+html[data-skin="atlassian"] .wfedge-line::after { border-left-color: var(--border); }
+html[data-skin="atlassian"] .wfedge.is-done .wfedge-line { background: var(--green); }
+html[data-skin="atlassian"] .wfedge.is-done .wfedge-line::after { border-left-color: var(--green); }
+html[data-skin="atlassian"] .wfedge.is-current .wfedge-line { background: var(--accent); }
+html[data-skin="atlassian"] .wfedge.is-current .wfedge-line::after { border-left-color: var(--accent); }
+html[data-skin="atlassian"] .wfedge-label {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-faint);
+  font-weight: 500;
+}
+
+html[data-skin="atlassian"] .wfreturn {
+  background: #EAE6FF;            /* P50 */
+  border: 1px dashed var(--accent-2);
+  border-radius: var(--radius);
+  color: #403294;                /* P500 */
+}
+html[data-skin="atlassian"] .wfreturn.is-active {
+  border-style: solid;
+  box-shadow: 0 0 0 3px rgba(101, 84, 192, 0.16);
+}
+html[data-skin="atlassian"] .wfreturn-arrow,
+html[data-skin="atlassian"] .wfsub-loop,
+html[data-skin="atlassian"] .wfx-to { color: var(--accent-2); }
+
+html[data-skin="atlassian"] .wfsub {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius);
+}
+html[data-skin="atlassian"] .wfsub-head-ic { color: var(--accent); }
+html[data-skin="atlassian"] .wfsub-step {
+  background: #FFFFFF;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-dim);
+}
+html[data-skin="atlassian"] .wfsub-step.is-done {
+  border-color: var(--green);
+  color: #006644;
+}
+html[data-skin="atlassian"] .wfsub-step.is-current {
+  background: #DEEBFF;
+  border-color: var(--accent);
+  color: var(--accent);
+  font-weight: 600;
+}
+html[data-skin="atlassian"] .wfsub-arrow { color: var(--text-faint); }
+
+html[data-skin="atlassian"] .wf-explainer {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+html[data-skin="atlassian"] .wfx-icon { color: var(--accent); }
+html[data-skin="atlassian"] .wfx-title { color: var(--text); font-weight: 600; }
+html[data-skin="atlassian"] .wfx-tag {
+  background: #FFFFFF;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-faint);
+  font-weight: 500;
+}
+html[data-skin="atlassian"] .wfx-tag--muted { color: var(--text-faint); }
+html[data-skin="atlassian"] .wfx-pin { color: var(--accent); }
+html[data-skin="atlassian"] .wfx-k { color: var(--text-faint); }
+html[data-skin="atlassian"] .wfx-when {
+  background: #FFFFFF;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-dim);
+}
+html[data-skin="atlassian"] .wfx-advance { color: var(--green); }
+html[data-skin="atlassian"] .wfx-goes { color: var(--accent-2); }
+
+/* ---------- Layout / seções ---------- */
+html[data-skin="atlassian"] .section-title {
+  color: var(--text);
+  font-weight: 600;
+  letter-spacing: -0.005em;
+}
+html[data-skin="atlassian"] .live-dot { background: var(--red); }
+
+/* ---------- Paralelo (DAG) ---------- */
+html[data-skin="atlassian"] .parallel {
+  background: #FFFFFF;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="atlassian"] .parallel-title { color: var(--text); font-weight: 600; }
+html[data-skin="atlassian"] .parallel-hint { color: var(--text-faint); }
+html[data-skin="atlassian"] .pfeat {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--agent-color, var(--accent));
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="atlassian"] .pfeat-dot { background: var(--agent-color, var(--accent)); }
+html[data-skin="atlassian"] .pfeat-name { color: var(--text); font-weight: 600; }
+html[data-skin="atlassian"] .pfeat-slug { color: var(--text-faint); }
+html[data-skin="atlassian"] .pfeat-doing { color: var(--text-dim); }
+html[data-skin="atlassian"] .pfeat-agent-name { color: var(--text-faint); }
+
+/* ---------- Card de agente (coração) ---------- */
+html[data-skin="atlassian"] .team-empty { color: var(--text-faint); }
+html[data-skin="atlassian"] .agent {
+  background: #FFFFFF;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+  transition: box-shadow .15s ease, transform .15s ease, border-color .15s ease;
+}
+html[data-skin="atlassian"] .agent::before {
+  height: 3px;
+  background: var(--agent-color, var(--accent));
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+html[data-skin="atlassian"] .agent:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow);
+  border-color: #C1C7D0;
+}
+html[data-skin="atlassian"] .agent--working {
+  border-color: color-mix(in srgb, var(--agent-color) 55%, var(--border));
+  box-shadow: var(--shadow-soft), 0 0 0 1px color-mix(in srgb, var(--agent-color) 40%, transparent);
+}
+html[data-skin="atlassian"] .agent--human_driving {
+  border-color: var(--orange);
+  box-shadow: var(--shadow-soft), 0 0 0 1px rgba(255, 139, 0, 0.35);
+}
+html[data-skin="atlassian"] .agent--error,
+html[data-skin="atlassian"] .agent--needs_recovery {
+  border-color: var(--red);
+  box-shadow: var(--shadow-soft), 0 0 0 1px rgba(222, 53, 11, 0.30);
+}
+html[data-skin="atlassian"] .agent--decanting {
+  border-color: var(--gold);
+}
+html[data-skin="atlassian"] .agent--sleeping { opacity: .72; }
+html[data-skin="atlassian"] .agent--pinned {
+  border-color: var(--accent);
+  box-shadow: var(--shadow-soft), 0 0 0 1px rgba(0, 82, 204, 0.30);
+}
+html[data-skin="atlassian"] .agent.dragging {
+  box-shadow: var(--shadow);
+  opacity: .9;
+}
+
+html[data-skin="atlassian"] .agent-avatar-inner {
+  border-radius: 50%;
+  font-weight: 600;
+}
+html[data-skin="atlassian"] .agent-avatar::before,
+html[data-skin="atlassian"] .fs-avatar::before {
+  border-width: 2px;
+}
+html[data-skin="atlassian"] .agent-name { color: var(--text); font-weight: 600; }
+html[data-skin="atlassian"] .agent-status {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-dim);
+  font-weight: 500;
+}
+html[data-skin="atlassian"] .agent-pin { color: var(--accent); }
+html[data-skin="atlassian"] .agent-open-hint { color: var(--text-faint); }
+html[data-skin="atlassian"] .zzz { color: var(--grey); }
+html[data-skin="atlassian"] .agent-bubble {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-dim);
+}
+
+/* ---------- Mini-terminal / stream ---------- */
+html[data-skin="atlassian"] .agent-term {
+  background: #FAFBFC;             /* N10 — poço claro, corporativo */
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-dim);
+}
+html[data-skin="atlassian"] .term-ts { color: var(--text-faint); }
+html[data-skin="atlassian"] .term-add { color: var(--green); }
+html[data-skin="atlassian"] .term--read { color: #0747A6; }     /* B500 */
+html[data-skin="atlassian"] .term--write { color: #006644; }    /* G500 */
+html[data-skin="atlassian"] .term--edit { color: #974F0C; }     /* Y500 */
+html[data-skin="atlassian"] .term--bash { color: var(--accent-2); }
+html[data-skin="atlassian"] .term--grep { color: #008DA6; }     /* teal */
+html[data-skin="atlassian"] .term--web { color: var(--accent); }
+html[data-skin="atlassian"] .term--agent { color: var(--accent-2); }
+html[data-skin="atlassian"] .term--think { color: var(--text-faint); font-style: italic; }
+html[data-skin="atlassian"] .term--decant { color: #974F0C; }
+html[data-skin="atlassian"] .term--ok { color: #006644; }
+html[data-skin="atlassian"] .term--error { color: var(--red); }
+html[data-skin="atlassian"] .term--start { color: var(--accent); }
+html[data-skin="atlassian"] .term--say { color: var(--text); }
+html[data-skin="atlassian"] .term--dim { color: var(--text-faint); }
+html[data-skin="atlassian"] .term--tool { color: var(--accent); }
+
+/* ---------- Barra de confiança ---------- */
+html[data-skin="atlassian"] .agent-trust-head { color: var(--text-faint); }
+html[data-skin="atlassian"] .trust-bar {
+  background: var(--bg-soft);
+  border-radius: var(--radius);
+}
+html[data-skin="atlassian"] .trust-bar-fill {
+  background: var(--agent-color, var(--accent));
+  border-radius: var(--radius);
+}
+
+/* ---------- Métricas ---------- */
+html[data-skin="atlassian"] .metric {
+  background: #FFFFFF;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="atlassian"] .metric-label { color: var(--text-faint); font-weight: 500; }
+html[data-skin="atlassian"] .metric-value { color: var(--text); font-weight: 600; }
+html[data-skin="atlassian"] .metric-value--big { color: var(--accent); font-weight: 700; }
+html[data-skin="atlassian"] .metric-sub { color: var(--text-faint); }
+html[data-skin="atlassian"] .bar {
+  background: var(--bg-soft);
+  border-radius: var(--radius);
+}
+html[data-skin="atlassian"] .bar-fill {
+  background: var(--accent);
+  border-radius: var(--radius);
+}
+html[data-skin="atlassian"] .bar-fill--cost { background: var(--gold); }
+html[data-skin="atlassian"] .bar-fill.is-warn { background: var(--orange); }
+html[data-skin="atlassian"] .bar-fill.is-danger { background: var(--red); }
+
+/* ---------- Atividade (feed) ---------- */
+html[data-skin="atlassian"] .activity-list {
+  background: #FFFFFF;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="atlassian"] .activity-list li { border-bottom: 1px solid var(--border); }
+html[data-skin="atlassian"] .activity-empty { color: var(--text-faint); }
+html[data-skin="atlassian"] .act-ts { color: var(--text-faint); }
+html[data-skin="atlassian"] .act-text { color: var(--text-dim); }
+html[data-skin="atlassian"] .act-new { background: rgba(0, 82, 204, 0.06); }
+html[data-skin="atlassian"] .act-icon[data-i="▶"] { color: var(--accent); }
+html[data-skin="atlassian"] .act-icon[data-i="◆"] { color: var(--accent-2); }
+html[data-skin="atlassian"] .act-icon[data-i="✓"] { color: var(--green); }
+html[data-skin="atlassian"] .act-icon[data-i="✗"] { color: var(--red); }
+
+/* ---------- Fullscreen ---------- */
+html[data-skin="atlassian"] .fs-backdrop {
+  background: rgba(9, 30, 66, 0.54);      /* N800 alpha — overlay ADS */
+  backdrop-filter: none;
+}
+html[data-skin="atlassian"] .fs-panel {
+  background: #FFFFFF;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+}
+html[data-skin="atlassian"] .fs-close {
+  background: transparent;
+  border: none;
+  border-radius: var(--radius);
+  color: var(--text-dim);
+}
+html[data-skin="atlassian"] .fs-close:hover {
+  background: rgba(9, 30, 66, 0.08);
+  color: var(--text);
+}
+html[data-skin="atlassian"] .fs-name { color: var(--text); font-weight: 600; }
+html[data-skin="atlassian"] .fs-status {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-dim);
+}
+html[data-skin="atlassian"] .fs-trust-head { color: var(--text-faint); }
+html[data-skin="atlassian"] .fs-trust-val { color: var(--text); font-weight: 600; }
+html[data-skin="atlassian"] .fs-bubble {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-dim);
+}
+html[data-skin="atlassian"] .fs-term-label { color: var(--text-faint); font-weight: 500; }
+html[data-skin="atlassian"] .fs-term { background: #FAFBFC; }
+html[data-skin="atlassian"] .fs-term-empty {
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  color: var(--text-faint);
+}
+
+/* ---------- Outros ---------- */
+html[data-skin="atlassian"] .offline-banner {
+  background: var(--red);
+  color: #FFFFFF;
+  border-radius: 0;
+}
+
+/* Movimento reduzido: respeita preferência do usuário */
+@media (prefers-reduced-motion: reduce) {
+  html[data-skin="atlassian"] .agent { transition: none; }
+  html[data-skin="atlassian"] .agent:hover { transform: none; }
+}

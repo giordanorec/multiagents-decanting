@@ -1,0 +1,489 @@
+/* =========================================================================
+   Uber — Base design system: preto & branco de alto contraste
+   Tipografia bold (Uber Move → Helvetica Neue/Arial), minimalista, funcional.
+   Cantos 0–4px, superfícies chapadas, sombras quase inexistentes, filetes
+   pretos de 1–2px. Cores funcionais oficiais (blue #276EF1, green #05944F,
+   red #E11900, yellow #FFC043). Fundo branco, texto preto. Direto ao ponto.
+   Escopo: html[data-skin="uber"]
+   ========================================================================= */
+
+html[data-skin="uber"] {
+  --bg: #ffffff;
+  --bg-soft: #f6f6f6;          /* mono100 */
+  --surface: #ffffff;
+  --surface-2: #f6f6f6;        /* mono100 */
+  --border: #000000;           /* filete preto — assinatura Uber */
+  --text: #000000;             /* mono900 */
+  --text-dim: #545454;         /* mono700 */
+  --text-faint: #757575;       /* mono600 */
+  --accent: #000000;           /* preto é a cor de ação primária no app Uber */
+  --accent-2: #276ef1;         /* Uber brand blue (destaque secundário) */
+  --gold: #ffc043;             /* yellow400 — aviso/custo */
+  --orange: #ff8c1a;           /* orange — controle humano */
+  --red: #e11900;              /* red400 — erro/ao-vivo */
+  --green: #05944f;            /* green500 — ok/online */
+  --grey: #afafaf;             /* mono500 — dormindo/neutro */
+  --radius: 4px;
+  --radius-lg: 6px;
+  --shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
+  --shadow-soft: 0 1px 4px rgba(0, 0, 0, 0.08);
+  --gap: 12px;
+  --font-sans: "Uber Move", "Uber Move Text", "Helvetica Neue", Helvetica, Arial, "Segoe UI", system-ui, sans-serif;
+  --font-mono: "Uber Move Mono", ui-monospace, "SF Mono", "Roboto Mono", Menlo, Consolas, monospace;
+}
+
+html[data-skin="uber"] body {
+  background: var(--bg);
+  background-image: none;
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  letter-spacing: -0.01em;
+}
+
+/* --- CHROME / TOPBAR: barra branca, filete preto embaixo, tipografia forte --- */
+html[data-skin="uber"] .topbar {
+  background: #ffffff;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-bottom: 2px solid #000000;
+  box-shadow: none;
+}
+html[data-skin="uber"] .brand h1 {
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #000000;
+}
+html[data-skin="uber"] .brand-dot { color: #000000; }
+
+html[data-skin="uber"] .conn,
+html[data-skin="uber"] .team-count {
+  background: #f6f6f6;
+  border: 1px solid #000000;
+  border-radius: 4px;
+  color: #000000;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+html[data-skin="uber"] .conn--online .conn-dot { background: var(--green); box-shadow: none; }
+html[data-skin="uber"] .conn--connecting .conn-dot { background: var(--gold); }
+html[data-skin="uber"] .conn--offline .conn-dot { background: var(--red); }
+
+html[data-skin="uber"] .icon-btn,
+html[data-skin="uber"] .ctrl-btn,
+html[data-skin="uber"] .skin-select {
+  background: #ffffff;
+  color: #000000;
+  border: 1px solid #000000;
+  border-radius: 4px;
+  font-weight: 700;
+}
+html[data-skin="uber"] .icon-btn:hover,
+html[data-skin="uber"] .ctrl-btn:hover,
+html[data-skin="uber"] .skin-select:hover {
+  background: #000000;
+  color: #ffffff;
+}
+html[data-skin="uber"] .skin-select { font-weight: 600; }
+
+html[data-skin="uber"] .section-title {
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #000000;
+  text-transform: uppercase;
+}
+html[data-skin="uber"] .live-dot { background: var(--red); border-radius: 50%; box-shadow: none; }
+
+/* --- HERO: bloco chapado preto sobre branco, título gigante e bold --- */
+html[data-skin="uber"] .hero {
+  background: #000000;
+  border: 2px solid #000000;
+  border-radius: var(--radius-lg);
+  box-shadow: none;
+  color: #ffffff;
+}
+html[data-skin="uber"] .hero-glow { display: none; }
+html[data-skin="uber"] .hero-eyebrow {
+  color: #ffffff;
+  opacity: 0.7;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+html[data-skin="uber"] .hero-title {
+  background: none;
+  -webkit-text-fill-color: #ffffff;
+  color: #ffffff;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.02;
+}
+html[data-skin="uber"] .hero-doing { color: rgba(255, 255, 255, 0.82); }
+html[data-skin="uber"] .hero-next { color: rgba(255, 255, 255, 0.6); }
+
+html[data-skin="uber"] .hero-item {
+  background: #1a1a1a;
+  border: 1px solid #333333;
+  border-radius: 4px;
+}
+html[data-skin="uber"] .hi-badge {
+  background: #ffffff;
+  color: #000000;
+  border-radius: 4px;
+  font-weight: 800;
+}
+html[data-skin="uber"] .hi-text { color: #ffffff; }
+html[data-skin="uber"] .hi-slug { color: rgba(255, 255, 255, 0.55); }
+html[data-skin="uber"] .hi-sub { color: rgba(255, 255, 255, 0.7); }
+
+html[data-skin="uber"] .flag {
+  border-radius: 4px;
+  border: 1px solid currentColor;
+  background: transparent;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+html[data-skin="uber"] .flag--warn { color: var(--gold); }
+html[data-skin="uber"] .flag--bypass { color: var(--red); }
+
+/* --- MAPA DO WORKFLOW: nós quadrados, filete preto, atual em bloco preto --- */
+html[data-skin="uber"] .wfmap-wrap {
+  background: #ffffff;
+  border: 2px solid #000000;
+  border-radius: var(--radius-lg);
+  box-shadow: none;
+}
+html[data-skin="uber"] .wfmap-hint {
+  color: var(--text-faint);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+html[data-skin="uber"] .wfnode-badge {
+  background: #ffffff;
+  border: 2px solid #000000;
+  border-radius: 4px;
+  color: #000000;
+}
+html[data-skin="uber"] .wfnode-label {
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #000000;
+}
+html[data-skin="uber"] .wfnode.is-future .wfnode-badge {
+  border-color: var(--grey);
+  color: var(--grey);
+  background: #ffffff;
+}
+html[data-skin="uber"] .wfnode.is-future .wfnode-label { color: var(--text-faint); }
+html[data-skin="uber"] .wfnode.is-done .wfnode-badge {
+  background: #000000;
+  border-color: #000000;
+  color: #ffffff;
+}
+html[data-skin="uber"] .wfnode-check {
+  background: #000000;
+  color: #ffffff;
+  border: 2px solid #ffffff;
+  border-radius: 4px;
+}
+html[data-skin="uber"] .wfnode.is-current .wfnode-badge {
+  background: #000000;
+  border-color: #000000;
+  color: #ffffff;
+  box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.12);
+  animation: none;
+}
+html[data-skin="uber"] .wfnode.is-selected .wfnode-badge {
+  box-shadow: 0 0 0 3px var(--accent-2);
+}
+html[data-skin="uber"] .wfnode-here,
+html[data-skin="uber"] .wfx-tag--here {
+  background: #000000;
+  color: #ffffff;
+  border: 1px solid #000000;
+  border-radius: 4px;
+  font-weight: 700;
+}
+html[data-skin="uber"] .wfnode-here-dot { background: #ffffff; }
+
+html[data-skin="uber"] .wfedge-line,
+html[data-skin="uber"] .wfedge-line::after { background: var(--grey); }
+html[data-skin="uber"] .wfedge-line::after { border-left-color: var(--grey); }
+html[data-skin="uber"] .wfedge.is-done .wfedge-line { background: #000000; }
+html[data-skin="uber"] .wfedge.is-done .wfedge-line::after { border-left-color: #000000; }
+html[data-skin="uber"] .wfedge.is-current .wfedge-line {
+  background: #000000;
+  box-shadow: none;
+  animation: none;
+}
+html[data-skin="uber"] .wfedge.is-current .wfedge-line::after { border-left-color: #000000; }
+html[data-skin="uber"] .wfedge-label {
+  background: #f6f6f6;
+  border: 1px solid #000000;
+  border-radius: 4px;
+  color: #000000;
+  font-weight: 600;
+}
+
+html[data-skin="uber"] .wfnode-branch,
+html[data-skin="uber"] .wfsub-step,
+html[data-skin="uber"] .wf-explainer,
+html[data-skin="uber"] .wfsub {
+  background: #ffffff;
+  border: 1px solid #000000;
+  border-radius: 4px;
+}
+html[data-skin="uber"] .wfbr-arrow,
+html[data-skin="uber"] .wfsub-arrow { color: var(--text-faint); }
+
+html[data-skin="uber"] .wfreturn {
+  background: #f6f6f6;
+  border: 1px dashed #000000;
+  border-radius: 4px;
+  color: #000000;
+}
+html[data-skin="uber"] .wfreturn.is-active { background: #eeeeee; }
+html[data-skin="uber"] .wfreturn-arrow,
+html[data-skin="uber"] .wfsub-loop,
+html[data-skin="uber"] .wfx-to { color: var(--accent-2); }
+
+html[data-skin="uber"] .wfsub { border-left: 3px solid #000000; }
+html[data-skin="uber"] .wfsub-step.is-current {
+  background: #000000;
+  color: #ffffff;
+  border-color: #000000;
+}
+html[data-skin="uber"] .wfsub-step.is-current .wfsub-label,
+html[data-skin="uber"] .wfsub-step.is-current .wfsub-icon { color: #ffffff; }
+html[data-skin="uber"] .wfsub-step.is-done .wfsub-icon { color: var(--green); }
+
+html[data-skin="uber"] .wfx-title {
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+}
+html[data-skin="uber"] .wfx-tag--muted { color: var(--text-faint); }
+html[data-skin="uber"] .wfx-k { font-weight: 700; }
+html[data-skin="uber"] .wfx-when {
+  background: #f6f6f6;
+  border: 1px solid #000000;
+  border-radius: 4px;
+}
+
+/* --- PARALELO (DAG) --- */
+html[data-skin="uber"] .parallel { }
+html[data-skin="uber"] .parallel-title {
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+}
+html[data-skin="uber"] .parallel-hint { color: var(--text-faint); font-weight: 600; }
+html[data-skin="uber"] .pfeat {
+  background: #ffffff;
+  border: 2px solid #000000;
+  border-radius: var(--radius);
+  box-shadow: none;
+}
+html[data-skin="uber"] .pfeat-name { font-weight: 800; letter-spacing: -0.01em; }
+html[data-skin="uber"] .pfeat-dot { border-radius: 50%; background: var(--agent-color); }
+html[data-skin="uber"] .pfeat-slug { color: var(--text-faint); }
+html[data-skin="uber"] .pfeat-doing { color: var(--text-dim); }
+html[data-skin="uber"] .pfeat-agent-name { font-weight: 700; }
+
+/* --- CARD DE AGENTE: o coração — bloco branco, filete preto 2px, flat --- */
+html[data-skin="uber"] .agent {
+  background: #ffffff;
+  border: 2px solid #000000;
+  border-radius: var(--radius);
+  box-shadow: none;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+html[data-skin="uber"] .agent::before {
+  height: 4px;
+  background: var(--agent-color);
+  border-radius: 0;
+}
+html[data-skin="uber"] .agent:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+html[data-skin="uber"] .agent--working {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--agent-color) 40%, transparent);
+}
+html[data-skin="uber"] .agent--decanting { box-shadow: 0 0 0 3px color-mix(in srgb, var(--gold) 55%, transparent); }
+html[data-skin="uber"] .agent--human_driving { box-shadow: 0 0 0 3px color-mix(in srgb, var(--orange) 55%, transparent); }
+html[data-skin="uber"] .agent--error,
+html[data-skin="uber"] .agent--needs_recovery { box-shadow: 0 0 0 3px color-mix(in srgb, var(--red) 55%, transparent); }
+html[data-skin="uber"] .agent--sleeping { opacity: 0.7; }
+html[data-skin="uber"] .agent--pinned { border-color: var(--accent-2); }
+
+html[data-skin="uber"] .agent-avatar::before,
+html[data-skin="uber"] .fs-avatar::before {
+  border-width: 2px;
+  box-shadow: none;
+}
+html[data-skin="uber"] .agent-avatar-inner,
+html[data-skin="uber"] .fs-avatar-inner { border-radius: 4px; }
+
+html[data-skin="uber"] .agent-name {
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #000000;
+}
+html[data-skin="uber"] .agent-status,
+html[data-skin="uber"] .fs-status {
+  background: #f6f6f6;
+  border: 1px solid #000000;
+  border-radius: 4px;
+  color: #000000;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+html[data-skin="uber"] .agent-pin { color: var(--accent-2); }
+html[data-skin="uber"] .agent-open-hint { color: var(--text-faint); font-weight: 600; }
+
+html[data-skin="uber"] .agent-bubble,
+html[data-skin="uber"] .fs-bubble {
+  background: #f6f6f6;
+  border: 1px solid #e2e2e2;
+  border-radius: 4px;
+  color: var(--text-dim);
+}
+
+/* --- MINI-TERMINAL / STREAM: poço preto de alto contraste --- */
+html[data-skin="uber"] .agent-term,
+html[data-skin="uber"] .fs-term {
+  background: #000000;
+  border: 1px solid #000000;
+  border-radius: 4px;
+  color: #f6f6f6;
+}
+html[data-skin="uber"] .term-ts { color: #757575; }
+html[data-skin="uber"] .term--read { color: #82b4ff; }
+html[data-skin="uber"] .term--write,
+html[data-skin="uber"] .term--ok { color: #33d17a; }
+html[data-skin="uber"] .term--edit { color: var(--gold); }
+html[data-skin="uber"] .term--bash { color: #b892ff; }
+html[data-skin="uber"] .term--grep { color: #57d9d9; }
+html[data-skin="uber"] .term--web { color: #57d9d9; }
+html[data-skin="uber"] .term--agent { color: #b892ff; }
+html[data-skin="uber"] .term--think,
+html[data-skin="uber"] .term--dim { color: #afafaf; }
+html[data-skin="uber"] .term--decant { color: var(--gold); }
+html[data-skin="uber"] .term--error { color: #ff5c47; }
+html[data-skin="uber"] .term--start,
+html[data-skin="uber"] .term--say { color: #f6f6f6; }
+html[data-skin="uber"] .term-add { color: #33d17a; }
+
+/* --- BARRA DE CONFIANÇA + MÉTRICAS: barras quadradas chapadas --- */
+html[data-skin="uber"] .agent-trust-head,
+html[data-skin="uber"] .fs-trust-head { font-weight: 700; color: var(--text-dim); }
+html[data-skin="uber"] .trust-bar,
+html[data-skin="uber"] .bar {
+  background: #eeeeee;
+  border: 1px solid #000000;
+  border-radius: 2px;
+  overflow: hidden;
+}
+html[data-skin="uber"] .trust-bar-fill {
+  background: #000000;
+  border-radius: 0;
+  box-shadow: none;
+}
+html[data-skin="uber"] .bar-fill { background: #000000; border-radius: 0; }
+html[data-skin="uber"] .bar-fill--cost { background: var(--gold); }
+html[data-skin="uber"] .bar-fill.is-warn { background: var(--orange); }
+html[data-skin="uber"] .bar-fill.is-danger { background: var(--red); }
+
+html[data-skin="uber"] .metric {
+  background: #ffffff;
+  border: 2px solid #000000;
+  border-radius: var(--radius);
+  box-shadow: none;
+}
+html[data-skin="uber"] .metric-label {
+  color: var(--text-faint);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+html[data-skin="uber"] .metric-value,
+html[data-skin="uber"] .metric-value--big {
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #000000;
+}
+html[data-skin="uber"] .metric-sub { color: var(--text-dim); }
+
+/* --- ATIVIDADE (feed) --- */
+html[data-skin="uber"] .activity-list {
+  background: #ffffff;
+  border: 2px solid #000000;
+  border-radius: var(--radius);
+}
+html[data-skin="uber"] .activity-list li { border-bottom: 1px solid #eeeeee; }
+html[data-skin="uber"] .activity-empty { color: var(--text-faint); }
+html[data-skin="uber"] .act-ts { color: var(--text-faint); font-weight: 600; }
+html[data-skin="uber"] .act-text { color: var(--text); }
+html[data-skin="uber"] .act-icon[data-i="▶"] { color: var(--accent-2); }
+html[data-skin="uber"] .act-icon[data-i="◆"] { color: var(--gold); }
+html[data-skin="uber"] .act-icon[data-i="✓"] { color: var(--green); }
+html[data-skin="uber"] .act-icon[data-i="✗"] { color: var(--red); }
+
+/* --- FULLSCREEN: painel branco, filete preto grosso, sombra funcional --- */
+html[data-skin="uber"] .fs-backdrop {
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+html[data-skin="uber"] .fs-panel {
+  background: #ffffff;
+  border: 2px solid #000000;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.32);
+}
+html[data-skin="uber"] .fs-panel::before { height: 4px; }
+html[data-skin="uber"] .fs-name {
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #000000;
+}
+html[data-skin="uber"] .fs-status-label { font-weight: 700; }
+html[data-skin="uber"] .fs-trust-val { font-weight: 800; }
+html[data-skin="uber"] .fs-close {
+  background: #ffffff;
+  color: #000000;
+  border: 1px solid #000000;
+  border-radius: 4px;
+  font-weight: 700;
+}
+html[data-skin="uber"] .fs-close:hover { background: #000000; color: #ffffff; }
+html[data-skin="uber"] .fs-term-label {
+  color: #000000;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+html[data-skin="uber"] .fs-term-empty {
+  border: 1px dashed #000000;
+  border-radius: 4px;
+  color: var(--text-faint);
+}
+
+/* --- OUTROS --- */
+html[data-skin="uber"] .offline-banner {
+  background: var(--red);
+  color: #ffffff;
+  border-radius: 0;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-skin="uber"] .agent { transition: none; }
+  html[data-skin="uber"] .agent:hover { transform: none; }
+}

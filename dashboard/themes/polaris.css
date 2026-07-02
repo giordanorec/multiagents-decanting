@@ -1,0 +1,480 @@
+/* =========================================================================
+   Polaris — Shopify admin design system
+   Superfícies brancas sobre fundo cinza (#f6f6f7), verde de marca (#008060),
+   filetes finos (#e1e3e5), cantos de 8px, sombras sutis de elevação, Inter.
+   Claro, comercial, funcional, sóbrio. Um tema de LUZ (ignora data-theme).
+   Escopo: html[data-skin="polaris"]
+   ========================================================================= */
+
+html[data-skin="polaris"] {
+  --bg: #f6f6f7;              /* app background cinza claro */
+  --bg-soft: #ebebeb;         /* trilhos recuados / barras vazias */
+  --surface: #ffffff;         /* cards, painéis, banners */
+  --surface-2: #f1f2f3;       /* pílulas, inputs, bubbles */
+  --border: #e1e3e5;          /* filete padrão */
+  --text: #202223;            /* ink */
+  --text-dim: #6d7175;        /* subdued */
+  --text-faint: #8c9196;      /* labels terciários */
+  --accent: #008060;          /* verde de marca (action primary) */
+  --accent-2: #2c6ecb;        /* azul interativo (links/foco) */
+  --gold: #b98900;            /* warning / decantando / custo */
+  --orange: #c05717;          /* controle humano / aviso forte */
+  --red: #d72c0d;             /* critical / erro / ao-vivo */
+  --green: #007f5f;           /* sucesso / concluído / online */
+  --grey: #8c9196;            /* neutro / dormindo */
+  --radius: 8px;
+  --radius-lg: 12px;
+  --shadow: 0 4px 12px rgba(31, 33, 36, 0.16), 0 0 0 1px rgba(31, 33, 36, 0.05);
+  --shadow-soft: 0 1px 3px rgba(31, 33, 36, 0.10), 0 0 0 1px rgba(31, 33, 36, 0.04);
+  --gap: 16px;
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "SF Mono", ui-monospace, "JetBrains Mono", Menlo, Consolas, monospace;
+}
+
+/* paleta fixa clara — vence o toggle data-theme */
+html[data-skin="polaris"] body {
+  background: var(--bg);
+  background-image: none;
+  color: var(--text);
+}
+
+/* ---------- Topbar / chrome ---------- */
+html[data-skin="polaris"] .topbar {
+  background: var(--surface);
+  backdrop-filter: none;
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 1px 0 rgba(31, 33, 36, 0.04);
+}
+html[data-skin="polaris"] .brand h1 {
+  color: var(--text);
+  font-weight: 600;
+  letter-spacing: -.01em;
+}
+html[data-skin="polaris"] .brand-dot { color: var(--accent); }
+
+html[data-skin="polaris"] .conn,
+html[data-skin="polaris"] .team-count {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  color: var(--text-dim);
+}
+html[data-skin="polaris"] .conn--online .conn-dot { background: var(--green); }
+html[data-skin="polaris"] .conn--connecting .conn-dot { background: var(--gold); }
+html[data-skin="polaris"] .conn--offline .conn-dot { background: var(--red); }
+
+html[data-skin="polaris"] .icon-btn,
+html[data-skin="polaris"] .ctrl-btn,
+html[data-skin="polaris"] .skin-select {
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid #babec3;
+  border-radius: var(--radius);
+  box-shadow: 0 1px 0 rgba(31, 33, 36, 0.05);
+}
+html[data-skin="polaris"] .icon-btn:hover,
+html[data-skin="polaris"] .ctrl-btn:hover,
+html[data-skin="polaris"] .skin-select:hover {
+  background: #f6f6f7;
+  border-color: #8c9196;
+}
+html[data-skin="polaris"] .icon-btn:focus-visible,
+html[data-skin="polaris"] .ctrl-btn:focus-visible,
+html[data-skin="polaris"] .skin-select:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+/* ---------- Seções ---------- */
+html[data-skin="polaris"] .section-title {
+  color: var(--text);
+  font-weight: 600;
+  letter-spacing: -.005em;
+}
+html[data-skin="polaris"] .live-dot { background: var(--red); }
+
+/* ---------- Hero (etapa atual) ---------- */
+html[data-skin="polaris"] .hero {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="polaris"] .hero-glow {
+  background: radial-gradient(600px 240px at 12% -20%, rgba(0, 128, 96, 0.10), transparent 70%);
+  opacity: 1;
+}
+html[data-skin="polaris"] .hero-eyebrow {
+  color: var(--accent);
+  font-weight: 600;
+  letter-spacing: .06em;
+}
+html[data-skin="polaris"] .hero-title {
+  background: none;
+  -webkit-text-fill-color: var(--text);
+  color: var(--text);
+  font-weight: 650;
+  letter-spacing: -.02em;
+}
+html[data-skin="polaris"] .hero-doing { color: var(--text-dim); }
+html[data-skin="polaris"] .hero-item {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+html[data-skin="polaris"] .hi-badge {
+  background: #f1f8f5;
+  color: var(--accent);
+  border: 1px solid #a7d9c6;
+  border-radius: 6px;
+}
+html[data-skin="polaris"] .hi-slug { color: var(--text); font-weight: 600; }
+html[data-skin="polaris"] .hi-sub { color: var(--text-faint); }
+html[data-skin="polaris"] .flag {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  color: var(--text-dim);
+}
+html[data-skin="polaris"] .flag--warn {
+  background: #fff5ea;
+  border-color: #e1b878;
+  color: #916a00;
+}
+html[data-skin="polaris"] .flag--bypass {
+  background: #fef2f0;
+  border-color: #e0a99c;
+  color: var(--red);
+}
+html[data-skin="polaris"] .hero-next { color: var(--text-faint); }
+
+/* ---------- Mapa do workflow ---------- */
+html[data-skin="polaris"] .wfmap-wrap {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="polaris"] .wfmap-hint { color: var(--text-faint); }
+
+html[data-skin="polaris"] .wfnode-badge {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-dim);
+}
+html[data-skin="polaris"] .wfnode.is-current .wfnode-badge {
+  background: #f1f8f5;
+  border-color: var(--accent);
+  color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(0, 128, 96, 0.16);
+}
+html[data-skin="polaris"] .wfnode.is-done .wfnode-badge {
+  background: #f1f8f5;
+  border-color: #a7d9c6;
+  color: var(--green);
+}
+html[data-skin="polaris"] .wfnode.is-selected .wfnode-badge {
+  box-shadow: 0 0 0 2px var(--accent);
+}
+html[data-skin="polaris"] .wfnode-check {
+  background: var(--green);
+  color: #fff;
+  border: 2px solid var(--surface);
+  border-radius: 50%;
+}
+html[data-skin="polaris"] .wfnode-label { color: var(--text); font-weight: 500; }
+html[data-skin="polaris"] .wfnode.is-future .wfnode-label { color: var(--text-faint); }
+html[data-skin="polaris"] .wfnode-doing { color: var(--text-dim); }
+html[data-skin="polaris"] .wfnode-here,
+html[data-skin="polaris"] .wfx-tag--here {
+  background: #f1f8f5;
+  border: 1px solid #a7d9c6;
+  border-radius: 20px;
+  color: var(--accent);
+}
+html[data-skin="polaris"] .wfnode-here-dot { background: var(--accent); }
+html[data-skin="polaris"] .wfnode-branch,
+html[data-skin="polaris"] .wfbr-arrow { color: var(--text-faint); }
+
+html[data-skin="polaris"] .wfedge-line,
+html[data-skin="polaris"] .wfedge-line::after { background: var(--border); }
+html[data-skin="polaris"] .wfedge-line::after { border-left-color: var(--border); }
+html[data-skin="polaris"] .wfedge.is-done .wfedge-line { background: #a7d9c6; }
+html[data-skin="polaris"] .wfedge.is-done .wfedge-line::after { border-left-color: #a7d9c6; }
+html[data-skin="polaris"] .wfedge.is-current .wfedge-line { background: var(--accent); }
+html[data-skin="polaris"] .wfedge.is-current .wfedge-line::after { border-left-color: var(--accent); }
+html[data-skin="polaris"] .wfedge-label {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-dim);
+}
+
+html[data-skin="polaris"] .wfreturn {
+  background: #eef4fb;
+  border: 1px dashed #a9c4ea;
+  border-radius: var(--radius);
+  color: var(--accent-2);
+}
+html[data-skin="polaris"] .wfreturn.is-active {
+  border-style: solid;
+  border-color: var(--accent-2);
+}
+html[data-skin="polaris"] .wfreturn-arrow { color: var(--accent-2); }
+
+html[data-skin="polaris"] .wfsub {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius);
+}
+html[data-skin="polaris"] .wfsub-head-ic { color: var(--accent); }
+html[data-skin="polaris"] .wfsub-step {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-dim);
+}
+html[data-skin="polaris"] .wfsub-step.is-current {
+  background: #f1f8f5;
+  border-color: var(--accent);
+  color: var(--accent);
+}
+html[data-skin="polaris"] .wfsub-step.is-done {
+  border-color: #a7d9c6;
+  color: var(--green);
+}
+html[data-skin="polaris"] .wfsub-arrow,
+html[data-skin="polaris"] .wfsub-loop { color: var(--text-faint); }
+
+html[data-skin="polaris"] .wf-explainer {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+html[data-skin="polaris"] .wfx-icon { color: var(--accent); }
+html[data-skin="polaris"] .wfx-title { color: var(--text); font-weight: 600; }
+html[data-skin="polaris"] .wfx-tag {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  color: var(--text-dim);
+}
+html[data-skin="polaris"] .wfx-tag--muted { color: var(--text-faint); }
+html[data-skin="polaris"] .wfx-pin { color: var(--accent-2); }
+html[data-skin="polaris"] .wfx-k { color: var(--text-faint); }
+html[data-skin="polaris"] .wfx-when {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-dim);
+}
+html[data-skin="polaris"] .wfx-to,
+html[data-skin="polaris"] .wfx-goes { color: var(--accent); }
+
+/* ---------- Card de agente ---------- */
+html[data-skin="polaris"] .agent {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  transition: box-shadow .18s ease, transform .18s ease, border-color .18s ease;
+}
+html[data-skin="polaris"] .agent::before {
+  height: 3px;
+  background: var(--agent-color);
+  opacity: .9;
+}
+html[data-skin="polaris"] .agent:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+  border-color: #c9cccf;
+}
+html[data-skin="polaris"] .agent--working {
+  border-color: color-mix(in srgb, var(--agent-color) 55%, var(--border));
+  box-shadow: var(--shadow-soft), 0 0 0 2px color-mix(in srgb, var(--agent-color) 22%, transparent);
+}
+html[data-skin="polaris"] .agent--pinned {
+  border-color: var(--accent);
+  box-shadow: var(--shadow-soft), 0 0 0 2px rgba(0, 128, 96, 0.18);
+}
+html[data-skin="polaris"] .agent--error,
+html[data-skin="polaris"] .agent--needs_recovery {
+  border-color: #e0a99c;
+}
+html[data-skin="polaris"] .agent--sleeping { opacity: .72; }
+
+html[data-skin="polaris"] .agent-avatar-inner {
+  background: var(--surface-2);
+  color: var(--text);
+}
+html[data-skin="polaris"] .agent-name { color: var(--text); font-weight: 600; }
+html[data-skin="polaris"] .agent-status {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  color: var(--text-dim);
+}
+html[data-skin="polaris"] .agent-bubble {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-dim);
+}
+html[data-skin="polaris"] .agent-pin { color: var(--accent); }
+html[data-skin="polaris"] .agent-open-hint { color: var(--text-faint); }
+html[data-skin="polaris"] .zzz { color: var(--text-faint); }
+
+/* ---------- Mini-terminal / stream (superfície de código clara) ---------- */
+html[data-skin="polaris"] .agent-term,
+html[data-skin="polaris"] .fs-term {
+  background: #f6f6f7;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+}
+html[data-skin="polaris"] .term-ts { color: var(--text-faint); }
+html[data-skin="polaris"] .term--read   { color: var(--accent-2); }
+html[data-skin="polaris"] .term--write  { color: var(--green); }
+html[data-skin="polaris"] .term--edit   { color: #9c6f00; }
+html[data-skin="polaris"] .term--bash   { color: #8a3ffc; }
+html[data-skin="polaris"] .term--grep   { color: #0f8394; }
+html[data-skin="polaris"] .term--web    { color: var(--accent-2); }
+html[data-skin="polaris"] .term--agent  { color: var(--accent); }
+html[data-skin="polaris"] .term--think  { color: var(--text-dim); }
+html[data-skin="polaris"] .term--decant { color: var(--gold); }
+html[data-skin="polaris"] .term--ok     { color: var(--green); }
+html[data-skin="polaris"] .term--error  { color: var(--red); }
+html[data-skin="polaris"] .term--start  { color: var(--accent); }
+html[data-skin="polaris"] .term--say    { color: var(--text); }
+html[data-skin="polaris"] .term--dim,
+html[data-skin="polaris"] .term--tool   { color: var(--text-faint); }
+html[data-skin="polaris"] .term-add { color: var(--green); }
+
+/* ---------- Barra de confiança ---------- */
+html[data-skin="polaris"] .agent-trust-head { color: var(--text-dim); }
+html[data-skin="polaris"] .trust-bar {
+  background: var(--bg-soft);
+  border-radius: 20px;
+}
+html[data-skin="polaris"] .trust-bar-fill {
+  background: var(--accent);
+  border-radius: 20px;
+}
+
+/* ---------- Métricas ---------- */
+html[data-skin="polaris"] .metric {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="polaris"] .metric-label { color: var(--text-dim); }
+html[data-skin="polaris"] .metric-value,
+html[data-skin="polaris"] .metric-value--big { color: var(--text); }
+html[data-skin="polaris"] .metric-sub { color: var(--text-faint); }
+html[data-skin="polaris"] .bar {
+  background: var(--bg-soft);
+  border-radius: 20px;
+}
+html[data-skin="polaris"] .bar-fill {
+  background: var(--accent);
+  border-radius: 20px;
+}
+html[data-skin="polaris"] .bar-fill--cost { background: var(--gold); }
+html[data-skin="polaris"] .bar-fill.is-warn { background: var(--orange); }
+html[data-skin="polaris"] .bar-fill.is-danger { background: var(--red); }
+
+/* ---------- Atividade (feed) ---------- */
+html[data-skin="polaris"] .activity-list {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="polaris"] .activity-list li { border-bottom: 1px solid var(--border); }
+html[data-skin="polaris"] .activity-empty { color: var(--text-faint); }
+html[data-skin="polaris"] .act-ts { color: var(--text-faint); }
+html[data-skin="polaris"] .act-text { color: var(--text-dim); }
+html[data-skin="polaris"] .act-icon[data-i="▶"] { color: var(--accent); }
+html[data-skin="polaris"] .act-icon[data-i="◆"] { color: var(--gold); }
+html[data-skin="polaris"] .act-icon[data-i="✓"] { color: var(--green); }
+html[data-skin="polaris"] .act-icon[data-i="✗"] { color: var(--red); }
+
+/* ---------- Paralelo (motor DAG) ---------- */
+html[data-skin="polaris"] .parallel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="polaris"] .parallel-hint { color: var(--text-faint); }
+html[data-skin="polaris"] .pfeat {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+html[data-skin="polaris"] .pfeat-name { color: var(--text); font-weight: 600; }
+html[data-skin="polaris"] .pfeat-slug { color: var(--text-faint); }
+html[data-skin="polaris"] .pfeat-doing { color: var(--text-dim); }
+html[data-skin="polaris"] .pfeat-agent-name { color: var(--text-dim); }
+
+/* ---------- Fullscreen ---------- */
+html[data-skin="polaris"] .fs-backdrop {
+  background: rgba(31, 33, 36, 0.55);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+html[data-skin="polaris"] .fs-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+}
+html[data-skin="polaris"] .fs-close {
+  background: var(--surface);
+  color: var(--text-dim);
+  border: 1px solid #babec3;
+  border-radius: var(--radius);
+}
+html[data-skin="polaris"] .fs-close:hover { background: #f6f6f7; color: var(--text); }
+html[data-skin="polaris"] .fs-avatar-inner {
+  background: var(--surface-2);
+  color: var(--text);
+}
+html[data-skin="polaris"] .fs-name { color: var(--text); font-weight: 600; }
+html[data-skin="polaris"] .fs-status {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  color: var(--text-dim);
+}
+html[data-skin="polaris"] .fs-status-label { color: var(--text-dim); }
+html[data-skin="polaris"] .fs-trust-head { color: var(--text-dim); }
+html[data-skin="polaris"] .fs-trust-val { color: var(--text); }
+html[data-skin="polaris"] .fs-bubble {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-dim);
+}
+html[data-skin="polaris"] .fs-term-label { color: var(--text-dim); font-weight: 600; }
+html[data-skin="polaris"] .fs-term-empty {
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  color: var(--text-faint);
+}
+
+/* ---------- Banner offline ---------- */
+html[data-skin="polaris"] .offline-banner {
+  background: var(--red);
+  color: #fff;
+  border-radius: var(--radius);
+}
+
+/* ---------- Movimento reduzido ---------- */
+@media (prefers-reduced-motion: reduce) {
+  html[data-skin="polaris"] .agent { transition: none; }
+  html[data-skin="polaris"] .agent:hover { transform: none; }
+}

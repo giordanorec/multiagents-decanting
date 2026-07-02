@@ -1,0 +1,465 @@
+/* =========================================================================
+   Fluent 2 — Microsoft design language
+   Segoe UI, azul de marca #0078D4, superfícies claras com leve translucidez
+   (mica/acrylic), cantos 4-8px, profundidade sutil por sombras de elevação,
+   corporativo, limpo, denso. Neutros cinza-quente da Windows 11.
+   Escopo: html[data-skin="fluent"]
+   ========================================================================= */
+
+html[data-skin="fluent"] {
+  /* Neutros Fluent (Grey ramp) sobre um plano de fundo mica */
+  --bg: #f3f3f3;
+  --bg-soft: #ededed;
+  --surface: #ffffff;
+  --surface-2: #f5f5f5;
+  --border: #e1e1e1;
+  --text: #242424;          /* Grey14 — texto primário */
+  --text-dim: #616161;      /* Grey38 — secundário */
+  --text-faint: #949494;    /* Grey60 — terciário / labels */
+
+  --accent: #0078d4;        /* Communication blue (marca) */
+  --accent-2: #005a9e;      /* Brand shade 20 */
+  --gold: #c19c00;          /* Yellow-ish (avisos suaves) */
+  --orange: #ca5010;        /* Orange (Fluent) */
+  --red: #c50f1f;           /* Red (Fluent shared) */
+  --green: #107c10;         /* Green (Fluent shared) */
+  --grey: #8a8886;          /* Neutral (Fluent) */
+
+  --radius: 6px;            /* corner radius medium */
+  --radius-lg: 8px;         /* corner radius large */
+
+  /* Elevação Fluent: sombras difusas em duas camadas, sem cor forte */
+  --shadow: 0 3.2px 7.2px rgba(0,0,0,0.13), 0 0.6px 1.8px rgba(0,0,0,0.11);
+  --shadow-soft: 0 1.6px 3.6px rgba(0,0,0,0.10), 0 0.3px 0.9px rgba(0,0,0,0.07);
+
+  --gap: 12px;
+
+  --font-sans: "Segoe UI Variable", "Segoe UI", -apple-system, BlinkMacSystemFont, system-ui, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "Cascadia Code", "Cascadia Mono", "Consolas", ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+/* Fundo mica: gradiente cinza-quente sutil + leve tinta de marca no topo,
+   como o desktop translúcido por trás das janelas do Windows 11. */
+html[data-skin="fluent"] body {
+  background:
+    radial-gradient(1200px 600px at 82% -10%, rgba(0,120,212,0.10), transparent 60%),
+    radial-gradient(900px 600px at -6% 4%, rgba(0,120,212,0.06), transparent 55%),
+    linear-gradient(180deg, #f6f7f9 0%, #f0f0f0 100%);
+  background-attachment: fixed;
+  color: var(--text);
+}
+
+/* --- Topbar / chrome: barra acrylic clara --------------------------------- */
+html[data-skin="fluent"] .topbar {
+  background: rgba(255,255,255,0.72);
+  backdrop-filter: saturate(140%) blur(24px);
+  -webkit-backdrop-filter: saturate(140%) blur(24px);
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.6) inset;
+}
+html[data-skin="fluent"] .brand h1 {
+  color: var(--text);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+html[data-skin="fluent"] .brand-dot { color: var(--accent); }
+
+html[data-skin="fluent"] .icon-btn,
+html[data-skin="fluent"] .ctrl-btn,
+html[data-skin="fluent"] .skin-select {
+  background: rgba(255,255,255,0.9);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+  transition: background .12s ease, border-color .12s ease, box-shadow .12s ease;
+}
+html[data-skin="fluent"] .icon-btn:hover,
+html[data-skin="fluent"] .ctrl-btn:hover,
+html[data-skin="fluent"] .skin-select:hover {
+  background: #f5f5f5;
+  border-color: #d0d0d0;
+}
+html[data-skin="fluent"] .icon-btn:active,
+html[data-skin="fluent"] .ctrl-btn:active { background: #ededed; }
+/* foco acessível estilo Fluent (anel duplo) */
+html[data-skin="fluent"] .icon-btn:focus-visible,
+html[data-skin="fluent"] .ctrl-btn:focus-visible,
+html[data-skin="fluent"] .skin-select:focus-visible,
+html[data-skin="fluent"] .wfnode-btn:focus-visible,
+html[data-skin="fluent"] .agent:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* pílula de conexão */
+html[data-skin="fluent"] .conn,
+html[data-skin="fluent"] .team-count {
+  background: rgba(255,255,255,0.85);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text-dim);
+}
+html[data-skin="fluent"] .conn--online { color: var(--green); }
+html[data-skin="fluent"] .conn--connecting { color: var(--gold); }
+html[data-skin="fluent"] .conn--offline { color: var(--red); }
+html[data-skin="fluent"] .conn--online .conn-dot { background: var(--green); }
+html[data-skin="fluent"] .conn--connecting .conn-dot { background: var(--gold); }
+html[data-skin="fluent"] .conn--offline .conn-dot { background: var(--red); }
+
+/* --- Hero: card mica com faixa de marca --------------------------------- */
+html[data-skin="fluent"] .hero {
+  background: linear-gradient(180deg, rgba(255,255,255,0.94), rgba(250,250,250,0.88));
+  backdrop-filter: saturate(140%) blur(20px);
+  -webkit-backdrop-filter: saturate(140%) blur(20px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+html[data-skin="fluent"] .hero-glow {
+  background: radial-gradient(600px 220px at 88% 0%, rgba(0,120,212,0.16), transparent 70%);
+  opacity: 1;
+}
+html[data-skin="fluent"] .hero-eyebrow {
+  color: var(--accent);
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+html[data-skin="fluent"] .hero-title {
+  color: var(--text);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  -webkit-text-fill-color: var(--text);
+}
+html[data-skin="fluent"] .hero-doing { color: var(--text-dim); }
+html[data-skin="fluent"] .hero-item {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+html[data-skin="fluent"] .hi-badge {
+  background: var(--accent);
+  color: #fff;
+  border-radius: var(--radius);
+  font-weight: 600;
+}
+html[data-skin="fluent"] .hi-slug { color: var(--text); font-weight: 600; }
+html[data-skin="fluent"] .hi-sub { color: var(--text-faint); }
+html[data-skin="fluent"] .hero-next { color: var(--text-dim); }
+html[data-skin="fluent"] .flag {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text-dim);
+}
+html[data-skin="fluent"] .flag--warn { border-color: var(--orange); color: var(--orange); }
+html[data-skin="fluent"] .flag--bypass { border-color: var(--red); color: var(--red); }
+
+/* --- Seções --------------------------------------------------------------- */
+html[data-skin="fluent"] .section-title { color: var(--text); font-weight: 600; }
+html[data-skin="fluent"] .live-dot { background: var(--red); }
+
+/* --- Mapa do workflow: cartões limpos + conectores de marca --------------- */
+html[data-skin="fluent"] .wfmap-wrap {
+  background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(248,248,248,0.82));
+  backdrop-filter: saturate(130%) blur(16px);
+  -webkit-backdrop-filter: saturate(130%) blur(16px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="fluent"] .wfmap-hint { color: var(--text-faint); }
+
+html[data-skin="fluent"] .wfnode-badge {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  color: var(--text-dim);
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="fluent"] .wfnode.is-current .wfnode-badge {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 8%, #fff);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 18%, transparent);
+}
+html[data-skin="fluent"] .wfnode.is-done .wfnode-badge {
+  border-color: var(--green);
+  color: var(--green);
+  background: color-mix(in srgb, var(--green) 8%, #fff);
+}
+html[data-skin="fluent"] .wfnode-check {
+  background: var(--green);
+  color: #fff;
+  border: 2px solid #fff;
+  border-radius: 50%;
+}
+html[data-skin="fluent"] .wfnode.is-selected .wfnode-badge {
+  box-shadow: 0 0 0 2px var(--accent), 0 0 0 5px color-mix(in srgb, var(--accent) 20%, transparent);
+}
+html[data-skin="fluent"] .wfnode-label { color: var(--text); }
+html[data-skin="fluent"] .wfnode.is-future .wfnode-label { color: var(--text-faint); }
+html[data-skin="fluent"] .wfnode-doing { color: var(--text-dim); }
+html[data-skin="fluent"] .wfnode-here,
+html[data-skin="fluent"] .wfx-tag--here {
+  background: color-mix(in srgb, var(--accent) 12%, #fff);
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+  color: var(--accent-2);
+  border-radius: 999px;
+}
+html[data-skin="fluent"] .wfnode-here-dot { background: var(--accent); }
+html[data-skin="fluent"] .wfnode-branch,
+html[data-skin="fluent"] .wfbr-arrow { color: var(--text-faint); }
+
+html[data-skin="fluent"] .wfedge-line { background: var(--border); }
+html[data-skin="fluent"] .wfedge-line::after { border-left-color: var(--border); }
+html[data-skin="fluent"] .wfedge.is-done .wfedge-line { background: var(--green); }
+html[data-skin="fluent"] .wfedge.is-done .wfedge-line::after { border-left-color: var(--green); }
+html[data-skin="fluent"] .wfedge.is-current .wfedge-line { background: var(--accent); }
+html[data-skin="fluent"] .wfedge.is-current .wfedge-line::after { border-left-color: var(--accent); }
+html[data-skin="fluent"] .wfedge-label {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-dim);
+  box-shadow: var(--shadow-soft);
+}
+
+html[data-skin="fluent"] .wfreturn {
+  background: color-mix(in srgb, var(--accent) 8%, #fff);
+  border: 1px dashed color-mix(in srgb, var(--accent) 45%, transparent);
+  border-radius: var(--radius);
+  color: var(--accent-2);
+}
+html[data-skin="fluent"] .wfreturn.is-active {
+  border-style: solid;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 14%, transparent);
+}
+html[data-skin="fluent"] .wfreturn-arrow { color: var(--accent); }
+
+html[data-skin="fluent"] .wfsub {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius);
+}
+html[data-skin="fluent"] .wfsub-head-ic { color: var(--accent); }
+html[data-skin="fluent"] .wfsub-step {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-dim);
+}
+html[data-skin="fluent"] .wfsub-step.is-current {
+  border-color: var(--accent);
+  color: var(--accent-2);
+  background: color-mix(in srgb, var(--accent) 8%, #fff);
+}
+html[data-skin="fluent"] .wfsub-step.is-done { border-color: var(--green); color: var(--green); }
+html[data-skin="fluent"] .wfsub-arrow,
+html[data-skin="fluent"] .wfsub-loop { color: var(--text-faint); }
+
+html[data-skin="fluent"] .wf-explainer {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="fluent"] .wfx-icon { color: var(--accent); }
+html[data-skin="fluent"] .wfx-title { color: var(--text); font-weight: 600; }
+html[data-skin="fluent"] .wfx-tag {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text-dim);
+}
+html[data-skin="fluent"] .wfx-tag--muted { color: var(--text-faint); }
+html[data-skin="fluent"] .wfx-pin { color: var(--accent); }
+html[data-skin="fluent"] .wfx-k { color: var(--text-faint); }
+html[data-skin="fluent"] .wfx-when {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-dim);
+}
+html[data-skin="fluent"] .wfx-to,
+html[data-skin="fluent"] .wfx-goes { color: var(--accent); }
+
+/* --- Card de agente: cartão branco elevado, faixa de cor do agente ------- */
+html[data-skin="fluent"] .agent {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  transition: transform .15s cubic-bezier(.33,0,.1,1), box-shadow .15s ease, border-color .15s ease;
+}
+html[data-skin="fluent"] .agent::before {
+  height: 3px;
+  background: var(--agent-color);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+html[data-skin="fluent"] .agent:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+  border-color: #d0d0d0;
+}
+html[data-skin="fluent"] .agent--working {
+  box-shadow: var(--shadow),
+    0 0 0 1px color-mix(in srgb, var(--agent-color) 55%, transparent);
+}
+html[data-skin="fluent"] .agent--human_driving { border-color: var(--orange); }
+html[data-skin="fluent"] .agent--error,
+html[data-skin="fluent"] .agent--needs_recovery { border-color: var(--red); }
+html[data-skin="fluent"] .agent--decanting { border-color: var(--gold); }
+html[data-skin="fluent"] .agent--pinned {
+  box-shadow: var(--shadow), 0 0 0 2px color-mix(in srgb, var(--accent) 40%, transparent);
+}
+html[data-skin="fluent"] .agent--sleeping { opacity: .72; }
+html[data-skin="fluent"] .agent.dragging { box-shadow: var(--shadow); }
+
+html[data-skin="fluent"] .agent-avatar::before {
+  border-width: 2px;
+}
+html[data-skin="fluent"] .agent-name { color: var(--text); font-weight: 600; }
+html[data-skin="fluent"] .agent-status,
+html[data-skin="fluent"] .fs-status {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text-dim);
+}
+html[data-skin="fluent"] .agent-bubble,
+html[data-skin="fluent"] .fs-bubble {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-dim);
+}
+html[data-skin="fluent"] .agent-pin { color: var(--accent); }
+html[data-skin="fluent"] .agent-open-hint { color: var(--text-faint); }
+
+/* --- Mini-terminal: poço escuro Cascadia (contraste com o card claro) ---- */
+html[data-skin="fluent"] .agent-term,
+html[data-skin="fluent"] .fs-term {
+  background: #1f1f1f;      /* Windows Terminal dark */
+  border: 1px solid #2b2b2b;
+  border-radius: var(--radius);
+  color: #d6d6d6;
+  font-family: var(--font-mono);
+}
+html[data-skin="fluent"] .term-ts { color: #7a7a7a; }
+html[data-skin="fluent"] .term--read { color: #4fc1ff; }
+html[data-skin="fluent"] .term--write,
+html[data-skin="fluent"] .term--ok { color: #4ec9b0; }
+html[data-skin="fluent"] .term--edit { color: #dcdcaa; }
+html[data-skin="fluent"] .term--bash { color: #c586c0; }
+html[data-skin="fluent"] .term--grep { color: #9cdcfe; }
+html[data-skin="fluent"] .term--web { color: #4fc1ff; }
+html[data-skin="fluent"] .term--think,
+html[data-skin="fluent"] .term--dim { color: #808080; }
+html[data-skin="fluent"] .term--decant { color: #d7ba7d; }
+html[data-skin="fluent"] .term--error { color: #f48771; }
+html[data-skin="fluent"] .term--say { color: #ce9178; }
+html[data-skin="fluent"] .term-add { color: #4ec9b0; }
+
+/* --- Barras: trilhos claros, preenchimento de marca --------------------- */
+html[data-skin="fluent"] .agent-trust-head,
+html[data-skin="fluent"] .fs-trust-head { color: var(--text-faint); }
+html[data-skin="fluent"] .trust-bar,
+html[data-skin="fluent"] .bar {
+  background: #e6e6e6;
+  border-radius: 999px;
+}
+html[data-skin="fluent"] .trust-bar-fill { background: var(--accent); border-radius: 999px; }
+html[data-skin="fluent"] .bar-fill { background: var(--accent); border-radius: 999px; }
+html[data-skin="fluent"] .bar-fill--cost { background: var(--gold); }
+html[data-skin="fluent"] .bar-fill.is-warn { background: var(--orange); }
+html[data-skin="fluent"] .bar-fill.is-danger { background: var(--red); }
+
+/* --- Métricas: cartões brancos discretos -------------------------------- */
+html[data-skin="fluent"] .metric {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="fluent"] .metric-label { color: var(--text-faint); }
+html[data-skin="fluent"] .metric-value,
+html[data-skin="fluent"] .metric-value--big { color: var(--text); }
+html[data-skin="fluent"] .metric-value--big { color: var(--accent); font-weight: 600; }
+html[data-skin="fluent"] .metric-sub { color: var(--text-dim); }
+
+/* --- Atividade (feed) ---------------------------------------------------- */
+html[data-skin="fluent"] .activity-list {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="fluent"] .activity-list li { border-bottom: 1px solid var(--border); }
+html[data-skin="fluent"] .activity-empty { color: var(--text-faint); }
+html[data-skin="fluent"] .act-ts { color: var(--text-faint); }
+html[data-skin="fluent"] .act-text { color: var(--text-dim); }
+html[data-skin="fluent"] .act-icon[data-i="▶"] { color: var(--accent); }
+html[data-skin="fluent"] .act-icon[data-i="◆"] { color: var(--gold); }
+html[data-skin="fluent"] .act-icon[data-i="✓"] { color: var(--green); }
+html[data-skin="fluent"] .act-icon[data-i="✗"] { color: var(--red); }
+
+/* --- Paralelo (DAG) ------------------------------------------------------ */
+html[data-skin="fluent"] .parallel-hint { color: var(--text-faint); }
+html[data-skin="fluent"] .pfeat {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="fluent"] .pfeat-slug { color: var(--text); font-weight: 600; }
+html[data-skin="fluent"] .pfeat-doing { color: var(--text-dim); }
+html[data-skin="fluent"] .pfeat-agent-name { color: var(--text-faint); }
+
+/* --- Fullscreen: painel mica elevado, backdrop acrylic ------------------ */
+html[data-skin="fluent"] .fs-backdrop {
+  background: rgba(243,243,243,0.55);
+  backdrop-filter: saturate(140%) blur(24px);
+  -webkit-backdrop-filter: saturate(140%) blur(24px);
+}
+html[data-skin="fluent"] .fs-panel {
+  background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(250,250,250,0.95));
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 25.6px 57.6px rgba(0,0,0,0.22), 0 4.8px 14.4px rgba(0,0,0,0.18);
+}
+html[data-skin="fluent"] .fs-close {
+  background: rgba(255,255,255,0.9);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-dim);
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="fluent"] .fs-close:hover { background: #f0f0f0; color: var(--red); }
+html[data-skin="fluent"] .fs-name { color: var(--text); font-weight: 600; }
+html[data-skin="fluent"] .fs-status-label { color: var(--text-dim); }
+html[data-skin="fluent"] .fs-trust-head { color: var(--text-faint); }
+html[data-skin="fluent"] .fs-trust-val { color: var(--accent); font-weight: 600; }
+html[data-skin="fluent"] .fs-term-label { color: var(--text-faint); text-transform: uppercase; letter-spacing: .06em; }
+html[data-skin="fluent"] .fs-term-empty {
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  color: var(--text-faint);
+}
+
+/* --- Banner offline ------------------------------------------------------ */
+html[data-skin="fluent"] .offline-banner {
+  background: var(--red);
+  color: #fff;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+/* --- Movimento reduzido -------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  html[data-skin="fluent"] .agent { transition: none; }
+  html[data-skin="fluent"] .agent:hover { transform: none; }
+}

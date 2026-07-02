@@ -1,0 +1,419 @@
+/* =========================================================================
+   Twitch — roxo neon sobre carvão, gamer, jovem, denso
+   Roxo de marca (#9146FF), fundo quase-preto (#0e0e10), superfícies (#18181b),
+   Inter em tudo, cantos de 4px, live-dots vermelhos, glow roxo nos ativos.
+   Escopo: html[data-skin="twitch"]
+   ========================================================================= */
+
+html[data-skin="twitch"] {
+  --bg: #0e0e10;              /* carvão Twitch */
+  --bg-soft: #18181b;         /* trilhos, recuos */
+  --surface: #18181b;         /* cards/painéis */
+  --surface-2: #1f1f23;       /* pílulas, inputs, bubble */
+  --border: #2a2a2d;          /* filete padrão */
+  --text: #efeff1;            /* branco off Twitch */
+  --text-dim: #adadb8;        /* cinza secundário Twitch */
+  --text-faint: #7d7d8a;      /* terciário / labels */
+  --accent: #9146ff;          /* roxo de marca */
+  --accent-2: #bf94ff;        /* roxo claro (hover/gradiente) */
+  --gold: #f0b132;            /* bits/cheer amarelo */
+  --orange: #ff9147;          /* aviso */
+  --red: #eb0400;             /* LIVE vermelho Twitch */
+  --green: #00c896;           /* verde online */
+  --grey: #7d7d8a;            /* neutro/dormindo */
+  --radius: 4px;              /* cantos Twitch */
+  --radius-lg: 6px;
+  --shadow: 0 8px 24px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(145, 70, 255, 0.18);
+  --shadow-soft: 0 2px 8px rgba(0, 0, 0, 0.4);
+  --gap: 12px;
+  --font-sans: "Inter", Roobert, "Segoe UI", Roboto, system-ui, -apple-system, sans-serif;
+  --font-mono: "Roboto Mono", ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+}
+
+html[data-skin="twitch"] body {
+  background: #0e0e10;
+  background-image:
+    radial-gradient(900px 500px at 100% -10%, rgba(145, 70, 255, 0.12), transparent 60%),
+    radial-gradient(700px 500px at -5% 5%, rgba(145, 70, 255, 0.08), transparent 60%);
+  background-attachment: fixed;
+  color: var(--text);
+}
+
+/* --- Topbar / chrome --- */
+html[data-skin="twitch"] .topbar {
+  background: #18181b;
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: none;
+}
+html[data-skin="twitch"] .brand h1 {
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+html[data-skin="twitch"] .brand-dot { color: var(--accent); }
+
+html[data-skin="twitch"] .conn,
+html[data-skin="twitch"] .team-count {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-dim);
+  font-weight: 600;
+}
+html[data-skin="twitch"] .conn--online .conn-dot { background: var(--green); }
+html[data-skin="twitch"] .conn--connecting .conn-dot { background: var(--gold); }
+html[data-skin="twitch"] .conn--offline .conn-dot { background: var(--red); }
+
+html[data-skin="twitch"] .icon-btn,
+html[data-skin="twitch"] .ctrl-btn,
+html[data-skin="twitch"] .skin-select {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-weight: 600;
+}
+html[data-skin="twitch"] .icon-btn:hover,
+html[data-skin="twitch"] .ctrl-btn:hover,
+html[data-skin="twitch"] .skin-select:hover {
+  background: color-mix(in srgb, var(--accent) 22%, var(--surface-2));
+  border-color: var(--accent);
+  color: #fff;
+}
+
+/* --- Hero (etapa atual) --- */
+html[data-skin="twitch"] .hero {
+  background: linear-gradient(160deg, #1c1524, #18181b 55%);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="twitch"] .hero-glow {
+  background: radial-gradient(60% 80% at 15% 0%, rgba(145, 70, 255, 0.35), transparent 70%);
+  opacity: 0.8;
+}
+html[data-skin="twitch"] .hero-eyebrow {
+  color: var(--accent-2);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 700;
+}
+html[data-skin="twitch"] .hero-title {
+  background: none;
+  -webkit-text-fill-color: var(--text);
+  color: var(--text);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+html[data-skin="twitch"] .hero-doing { color: var(--text-dim); }
+html[data-skin="twitch"] .hero-item {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+html[data-skin="twitch"] .hi-badge {
+  background: var(--accent);
+  color: #fff;
+  border-radius: var(--radius);
+  font-weight: 700;
+}
+html[data-skin="twitch"] .hi-slug { color: var(--accent-2); }
+html[data-skin="twitch"] .flag {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-weight: 600;
+}
+html[data-skin="twitch"] .flag--warn { border-color: var(--orange); color: var(--orange); }
+html[data-skin="twitch"] .flag--bypass { border-color: var(--red); color: var(--red); }
+html[data-skin="twitch"] .hero-next { color: var(--text-faint); }
+
+/* --- Mapa do workflow --- */
+html[data-skin="twitch"] .wfmap-wrap {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="twitch"] .wfmap-hint {
+  color: var(--accent-2);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+}
+html[data-skin="twitch"] .wfnode-badge {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+html[data-skin="twitch"] .wfnode.is-current .wfnode-badge {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 22%, var(--surface-2));
+  box-shadow: 0 0 0 3px rgba(145, 70, 255, 0.25), 0 0 18px rgba(145, 70, 255, 0.5);
+}
+html[data-skin="twitch"] .wfnode.is-done .wfnode-badge {
+  border-color: var(--accent-2);
+  box-shadow: 0 0 12px rgba(191, 148, 255, 0.3);
+}
+html[data-skin="twitch"] .wfnode.is-selected .wfnode-badge {
+  box-shadow: 0 0 0 2px var(--accent), 0 0 16px rgba(145, 70, 255, 0.55);
+}
+html[data-skin="twitch"] .wfnode-check {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--surface);
+  border-radius: var(--radius);
+}
+html[data-skin="twitch"] .wfnode-label { font-weight: 600; }
+html[data-skin="twitch"] .wfnode-here,
+html[data-skin="twitch"] .wfx-tag--here {
+  background: color-mix(in srgb, var(--accent) 20%, transparent);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  color: var(--accent-2);
+}
+html[data-skin="twitch"] .wfedge-line,
+html[data-skin="twitch"] .wfedge-line::after { background: var(--border); }
+html[data-skin="twitch"] .wfedge-line::after { border-left-color: var(--border); }
+html[data-skin="twitch"] .wfedge.is-done .wfedge-line { background: var(--accent-2); }
+html[data-skin="twitch"] .wfedge.is-done .wfedge-line::after { border-left-color: var(--accent-2); }
+html[data-skin="twitch"] .wfedge.is-current .wfedge-line {
+  background: var(--accent);
+  box-shadow: 0 0 8px rgba(145, 70, 255, 0.6);
+}
+html[data-skin="twitch"] .wfedge.is-current .wfedge-line::after { border-left-color: var(--accent); }
+html[data-skin="twitch"] .wfedge-label,
+html[data-skin="twitch"] .wfnode-branch,
+html[data-skin="twitch"] .wfsub-step,
+html[data-skin="twitch"] .wf-explainer,
+html[data-skin="twitch"] .wfsub,
+html[data-skin="twitch"] .wfx-when {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+html[data-skin="twitch"] .wfsub { border-left: 3px solid var(--accent); }
+html[data-skin="twitch"] .wfsub-step.is-current {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 18%, var(--surface-2));
+  box-shadow: 0 0 12px rgba(145, 70, 255, 0.35);
+}
+html[data-skin="twitch"] .wfx-tag--muted { color: var(--text-faint); }
+html[data-skin="twitch"] .wfx-title { font-weight: 700; }
+html[data-skin="twitch"] .wfreturn {
+  background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+  border: 1px dashed var(--accent-2);
+  border-radius: var(--radius);
+}
+html[data-skin="twitch"] .wfreturn-arrow,
+html[data-skin="twitch"] .wfsub-loop,
+html[data-skin="twitch"] .wfx-to { color: var(--accent-2); }
+
+/* --- Seções --- */
+html[data-skin="twitch"] .section-title {
+  color: var(--text);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+html[data-skin="twitch"] .live-dot {
+  background: var(--red);
+  box-shadow: 0 0 10px rgba(235, 4, 0, 0.7);
+}
+
+/* --- Paralelo (DAG) --- */
+html[data-skin="twitch"] .parallel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+html[data-skin="twitch"] .parallel-title { font-weight: 800; }
+html[data-skin="twitch"] .parallel-hint { color: var(--text-faint); }
+html[data-skin="twitch"] .pfeat {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="twitch"] .pfeat-dot {
+  background: var(--agent-color);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--agent-color) 60%, transparent);
+}
+html[data-skin="twitch"] .pfeat-slug { color: var(--accent-2); }
+
+/* --- Card de agente (o coração) --- */
+html[data-skin="twitch"] .agent {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+html[data-skin="twitch"] .agent::before {
+  height: 3px;
+  background: var(--agent-color);
+}
+html[data-skin="twitch"] .agent:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--accent) 50%, var(--border));
+  box-shadow: var(--shadow), 0 0 0 1px color-mix(in srgb, var(--agent-color) 45%, transparent);
+}
+html[data-skin="twitch"] .agent--working {
+  border-color: color-mix(in srgb, var(--agent-color) 55%, var(--border));
+  box-shadow: var(--shadow-soft),
+    0 0 0 1px color-mix(in srgb, var(--agent-color) 55%, transparent),
+    0 0 28px color-mix(in srgb, var(--agent-color) 32%, transparent);
+}
+html[data-skin="twitch"] .agent--human_driving {
+  border-color: var(--orange);
+  box-shadow: 0 0 22px rgba(255, 145, 71, 0.28);
+}
+html[data-skin="twitch"] .agent--error,
+html[data-skin="twitch"] .agent--needs_recovery {
+  border-color: var(--red);
+  box-shadow: 0 0 22px rgba(235, 4, 0, 0.28);
+}
+html[data-skin="twitch"] .agent--sleeping,
+html[data-skin="twitch"] .agent--idle { opacity: 0.92; }
+
+html[data-skin="twitch"] .agent-avatar::before,
+html[data-skin="twitch"] .fs-avatar::before {
+  border-width: 2px;
+  box-shadow: 0 0 14px color-mix(in srgb, var(--agent-color) 50%, transparent);
+}
+html[data-skin="twitch"] .agent-name { font-weight: 700; letter-spacing: -0.01em; }
+html[data-skin="twitch"] .agent-status,
+html[data-skin="twitch"] .fs-status {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-dim);
+  font-weight: 600;
+}
+html[data-skin="twitch"] .agent-bubble,
+html[data-skin="twitch"] .fs-bubble {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-dim);
+}
+html[data-skin="twitch"] .agent-pin,
+html[data-skin="twitch"] .agent-open-hint { color: var(--text-faint); }
+
+/* --- Mini-terminal / stream --- */
+html[data-skin="twitch"] .agent-term,
+html[data-skin="twitch"] .fs-term {
+  background: #0a0a0b;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+}
+html[data-skin="twitch"] .term-ts { color: var(--text-faint); }
+html[data-skin="twitch"] .term--read { color: #35c3ff; }
+html[data-skin="twitch"] .term--write,
+html[data-skin="twitch"] .term--ok { color: var(--green); }
+html[data-skin="twitch"] .term--edit { color: var(--accent-2); }
+html[data-skin="twitch"] .term--bash { color: var(--accent-2); }
+html[data-skin="twitch"] .term--grep { color: #66e0ff; }
+html[data-skin="twitch"] .term--web { color: #58a6ff; }
+html[data-skin="twitch"] .term--agent,
+html[data-skin="twitch"] .term--tool { color: var(--accent); }
+html[data-skin="twitch"] .term--think,
+html[data-skin="twitch"] .term--dim { color: var(--text-faint); }
+html[data-skin="twitch"] .term--decant { color: var(--gold); }
+html[data-skin="twitch"] .term--say { color: var(--text); }
+html[data-skin="twitch"] .term--start { color: var(--accent-2); }
+html[data-skin="twitch"] .term--error { color: var(--red); }
+html[data-skin="twitch"] .term-add { color: var(--green); }
+
+/* --- Barra de confiança --- */
+html[data-skin="twitch"] .agent-trust-head,
+html[data-skin="twitch"] .fs-trust-head { color: var(--text-dim); }
+html[data-skin="twitch"] .trust-bar,
+html[data-skin="twitch"] .bar {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+}
+html[data-skin="twitch"] .trust-bar-fill {
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  border-radius: 999px;
+  box-shadow: 0 0 10px rgba(145, 70, 255, 0.45);
+}
+
+/* --- Métricas --- */
+html[data-skin="twitch"] .metric {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="twitch"] .metric-label { color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.06em; }
+html[data-skin="twitch"] .metric-value,
+html[data-skin="twitch"] .metric-value--big { color: var(--text); font-weight: 800; }
+html[data-skin="twitch"] .metric-value--big { color: var(--accent-2); }
+html[data-skin="twitch"] .metric-sub { color: var(--text-dim); }
+html[data-skin="twitch"] .bar-fill { background: var(--accent); border-radius: 999px; }
+html[data-skin="twitch"] .bar-fill--cost { background: var(--gold); }
+html[data-skin="twitch"] .bar-fill.is-warn { background: var(--orange); }
+html[data-skin="twitch"] .bar-fill.is-danger { background: var(--red); }
+
+/* --- Atividade (feed) --- */
+html[data-skin="twitch"] .activity-list {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+html[data-skin="twitch"] .activity-list li { border-bottom: 1px solid var(--border); }
+html[data-skin="twitch"] .activity-empty { color: var(--text-faint); }
+html[data-skin="twitch"] .act-ts { color: var(--text-faint); }
+html[data-skin="twitch"] .act-new { background: color-mix(in srgb, var(--accent) 12%, transparent); }
+html[data-skin="twitch"] .act-icon[data-i="▶"] { color: var(--accent); }
+html[data-skin="twitch"] .act-icon[data-i="◆"] { color: var(--gold); }
+html[data-skin="twitch"] .act-icon[data-i="✓"] { color: var(--green); }
+html[data-skin="twitch"] .act-icon[data-i="✗"] { color: var(--red); }
+
+/* --- Fullscreen --- */
+html[data-skin="twitch"] .fs-backdrop {
+  background: rgba(6, 6, 8, 0.78);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+html[data-skin="twitch"] .fs-panel {
+  background: var(--surface);
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, var(--border));
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow), 0 0 60px rgba(145, 70, 255, 0.22);
+}
+html[data-skin="twitch"] .fs-name { font-weight: 800; letter-spacing: -0.01em; }
+html[data-skin="twitch"] .fs-status-label { color: var(--text-dim); }
+html[data-skin="twitch"] .fs-trust-val { color: var(--accent-2); font-weight: 700; }
+html[data-skin="twitch"] .fs-close {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+}
+html[data-skin="twitch"] .fs-close:hover {
+  background: color-mix(in srgb, var(--accent) 28%, var(--surface-2));
+  border-color: var(--accent);
+  color: #fff;
+}
+html[data-skin="twitch"] .fs-term-label { color: var(--accent-2); font-weight: 700; }
+html[data-skin="twitch"] .fs-term-empty {
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  color: var(--text-faint);
+}
+
+/* --- Outros --- */
+html[data-skin="twitch"] .offline-banner {
+  background: var(--red);
+  color: #fff;
+  border-radius: 0;
+  font-weight: 700;
+}
+
+/* --- Movimento reduzido --- */
+@media (prefers-reduced-motion: reduce) {
+  html[data-skin="twitch"] .agent { transition: none; }
+  html[data-skin="twitch"] .agent:hover { transform: none; }
+}

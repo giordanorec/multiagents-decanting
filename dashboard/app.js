@@ -38,6 +38,21 @@
     { slug: "bloomberg",    label: "Denso / Bloomberg" },
     { slug: "duolingo",     label: "Lúdico / Gamificado" },
     { slug: "handdrawn",    label: "Desenhado à mão" },
+    // — design systems de marcas famosas —
+    { slug: "apple",        label: "Apple (HIG)" },
+    { slug: "airbnb",       label: "Airbnb (DLS)" },
+    { slug: "spotify",      label: "Spotify (Encore)" },
+    { slug: "nike",         label: "Nike" },
+    { slug: "netflix",      label: "Netflix" },
+    { slug: "ibm-carbon",   label: "IBM (Carbon)" },
+    { slug: "fluent",       label: "Microsoft (Fluent)" },
+    { slug: "polaris",      label: "Shopify (Polaris)" },
+    { slug: "stripe",       label: "Stripe" },
+    { slug: "linear",       label: "Linear" },
+    { slug: "discord",      label: "Discord" },
+    { slug: "uber",         label: "Uber (Base)" },
+    { slug: "atlassian",    label: "Atlassian" },
+    { slug: "twitch",       label: "Twitch" },
   ];
   var DEFAULT_SKIN = "visionos";
   var FILTERS = ["all", "active", "no-sleeping"];

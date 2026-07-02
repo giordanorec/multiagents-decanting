@@ -1,0 +1,422 @@
+/* =========================================================================
+   Discord — blurple sobre carvão, cantos amigáveis de 8px
+   Fundo escuro em três camadas (#313338 / #2b2d31 / #1e1f22), azul blurple
+   (#5865F2) de marca, gg sans (fallback Inter), pílulas bem arredondadas,
+   verde de "online" e estados coloridos como o cliente. Denso, redondo,
+   acolhedor. Escopo: html[data-skin="discord"]
+   ========================================================================= */
+
+html[data-skin="discord"] {
+  --bg: #313338;            /* primário (área de chat) */
+  --bg-soft: #2b2d31;       /* secundário (sidebar/trilhos) */
+  --surface: #2b2d31;       /* superfície de cards */
+  --surface-2: #1e1f22;     /* superfície recuada (inputs, poços) */
+  --border: #232428;        /* divisores discretos */
+  --text: #dbdee1;          /* texto normal */
+  --text-dim: #b5bac1;      /* texto muted */
+  --text-faint: #949ba4;    /* labels / channel muted */
+  --accent: #5865f2;        /* blurple */
+  --accent-2: #7289da;      /* blurple clássico (gradientes) */
+  --gold: #f0b132;          /* amarelo Discord (idle/aviso) */
+  --orange: #e67e22;        /* laranja */
+  --red: #da373c;           /* vermelho Discord (dnd/erro) */
+  --green: #23a55a;         /* verde online */
+  --grey: #80848e;          /* cinza offline */
+  --radius: 8px;
+  --radius-lg: 16px;
+  --shadow: 0 8px 16px rgba(0, 0, 0, 0.24);
+  --shadow-soft: 0 1px 0 rgba(0, 0, 0, 0.20), 0 2px 6px rgba(0, 0, 0, 0.16);
+  --gap: 12px;
+  --font-sans: "gg sans", "Whitney", "Inter", "Helvetica Neue", Helvetica, Arial, "Apple Color Emoji", sans-serif;
+  --font-mono: "gg mono", Consolas, "Andale Mono WT", "Andale Mono", "Courier New", ui-monospace, monospace;
+}
+
+html[data-skin="discord"] body {
+  background: #313338;
+  background-image: none;
+  color: var(--text);
+}
+
+/* ---- Topbar / chrome: barra de canal ---- */
+html[data-skin="discord"] .topbar {
+  background: #313338;
+  backdrop-filter: none;
+  border-bottom: 1px solid #232428;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.24);
+}
+html[data-skin="discord"] .brand h1 {
+  font-weight: 700;
+  letter-spacing: 0;
+}
+html[data-skin="discord"] .brand h1::before {
+  content: "# ";
+  color: var(--text-faint);
+  font-weight: 400;
+}
+html[data-skin="discord"] .brand-dot { color: var(--accent); }
+
+html[data-skin="discord"] .icon-btn,
+html[data-skin="discord"] .ctrl-btn,
+html[data-skin="discord"] .skin-select {
+  background: #1e1f22;
+  color: var(--text-dim);
+  border: 1px solid transparent;
+  border-radius: 8px;
+  transition: background .17s ease, color .17s ease;
+}
+html[data-skin="discord"] .icon-btn:hover,
+html[data-skin="discord"] .ctrl-btn:hover,
+html[data-skin="discord"] .skin-select:hover {
+  background: #404249;
+  color: #fff;
+}
+
+/* pílulas de status: cápsula totalmente arredondada */
+html[data-skin="discord"] .conn,
+html[data-skin="discord"] .team-count,
+html[data-skin="discord"] .agent-status,
+html[data-skin="discord"] .fs-status {
+  background: #1e1f22;
+  border: 1px solid #232428;
+  border-radius: 999px;
+  color: var(--text-dim);
+}
+html[data-skin="discord"] .conn-dot { box-shadow: 0 0 0 3px rgba(0,0,0,0.25); }
+html[data-skin="discord"] .conn--online .conn-dot { background: var(--green); }
+html[data-skin="discord"] .conn--connecting .conn-dot { background: var(--gold); }
+html[data-skin="discord"] .conn--offline .conn-dot { background: var(--grey); }
+
+/* ---- Hero: banner de servidor ---- */
+html[data-skin="discord"] .hero {
+  background:
+    radial-gradient(120% 140% at 100% 0%, rgba(88, 101, 242, 0.18), transparent 55%),
+    #2b2d31;
+  border: 1px solid #232428;
+  border-radius: 16px;
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="discord"] .hero-glow {
+  background: radial-gradient(closest-side, rgba(88,101,242,0.35), transparent 70%);
+}
+html[data-skin="discord"] .hero-eyebrow {
+  color: var(--accent);
+  font-weight: 700;
+  letter-spacing: .04em;
+}
+html[data-skin="discord"] .hero-title {
+  background: none;
+  color: #fff;
+  -webkit-text-fill-color: #fff;
+  font-weight: 800;
+  letter-spacing: -.01em;
+}
+html[data-skin="discord"] .hero-item {
+  background: #1e1f22;
+  border: 1px solid #232428;
+  border-radius: 8px;
+}
+html[data-skin="discord"] .hi-badge {
+  background: var(--accent);
+  color: #fff;
+  border-radius: 8px;
+  font-weight: 700;
+}
+html[data-skin="discord"] .hi-slug { color: var(--text-dim); }
+html[data-skin="discord"] .hero-flags .flag {
+  background: #1e1f22;
+  border: 1px solid #232428;
+  border-radius: 999px;
+  color: var(--text-dim);
+}
+html[data-skin="discord"] .flag--warn { color: var(--gold); border-color: color-mix(in srgb, var(--gold) 45%, transparent); }
+html[data-skin="discord"] .flag--bypass { color: var(--red); border-color: color-mix(in srgb, var(--red) 45%, transparent); }
+html[data-skin="discord"] .hero-next { color: var(--text-faint); }
+
+/* ---- Seções ---- */
+html[data-skin="discord"] .section-title {
+  color: var(--text-faint);
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: .02em;
+  font-size: .78em;
+}
+html[data-skin="discord"] .live-dot {
+  background: var(--green);
+  box-shadow: 0 0 0 3px rgba(35, 165, 90, 0.22);
+}
+
+/* ---- Mapa do workflow: cápsulas blurple ---- */
+html[data-skin="discord"] .wfmap-wrap {
+  background: #2b2d31;
+  border: 1px solid #232428;
+  border-radius: 16px;
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="discord"] .wfmap-hint { color: var(--text-faint); }
+html[data-skin="discord"] .wfnode-badge {
+  background: #1e1f22;
+  border: 1px solid #232428;
+  border-radius: 12px;
+}
+html[data-skin="discord"] .wfnode.is-current .wfnode-badge {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 22%, #1e1f22);
+  box-shadow: 0 0 0 4px rgba(88, 101, 242, 0.22);
+}
+html[data-skin="discord"] .wfnode.is-done .wfnode-badge {
+  border-color: var(--green);
+  background: color-mix(in srgb, var(--green) 18%, #1e1f22);
+}
+html[data-skin="discord"] .wfnode-check {
+  background: var(--green);
+  color: #fff;
+  border-color: #2b2d31;
+}
+html[data-skin="discord"] .wfnode.is-selected .wfnode-badge {
+  box-shadow: 0 0 0 2px var(--accent), 0 0 0 6px rgba(88,101,242,0.2);
+}
+html[data-skin="discord"] .wfnode-label { font-weight: 600; }
+html[data-skin="discord"] .wfnode-here,
+html[data-skin="discord"] .wfx-tag--here {
+  background: color-mix(in srgb, var(--accent) 20%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 55%, transparent);
+  border-radius: 999px;
+  color: #fff;
+}
+html[data-skin="discord"] .wfnode-here-dot { background: var(--accent); }
+html[data-skin="discord"] .wfnode-branch,
+html[data-skin="discord"] .wfedge-label {
+  background: #1e1f22;
+  border: 1px solid #232428;
+  border-radius: 999px;
+  color: var(--text-dim);
+}
+html[data-skin="discord"] .wfedge.is-done .wfedge-line { background: var(--green); }
+html[data-skin="discord"] .wfedge.is-done .wfedge-line::after { border-left-color: var(--green); }
+html[data-skin="discord"] .wfedge.is-current .wfedge-line { background: var(--accent); box-shadow: 0 0 8px rgba(88,101,242,0.5); }
+html[data-skin="discord"] .wfedge.is-current .wfedge-line::after { border-left-color: var(--accent); }
+html[data-skin="discord"] .wfsub,
+html[data-skin="discord"] .wf-explainer {
+  background: #1e1f22;
+  border: 1px solid #232428;
+  border-radius: 12px;
+}
+html[data-skin="discord"] .wfsub { border-left: 3px solid var(--accent); }
+html[data-skin="discord"] .wfsub-step {
+  background: #2b2d31;
+  border: 1px solid #232428;
+  border-radius: 8px;
+}
+html[data-skin="discord"] .wfsub-step.is-current {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 16%, #2b2d31);
+}
+html[data-skin="discord"] .wfsub-step.is-done { border-color: color-mix(in srgb, var(--green) 45%, transparent); }
+html[data-skin="discord"] .wfsub-loop,
+html[data-skin="discord"] .wfx-to,
+html[data-skin="discord"] .wfreturn-arrow { color: var(--accent); }
+html[data-skin="discord"] .wfx-title { color: var(--text); font-weight: 700; }
+html[data-skin="discord"] .wfx-when {
+  background: #2b2d31;
+  border: 1px solid #232428;
+  border-radius: 999px;
+  color: var(--text-dim);
+}
+html[data-skin="discord"] .wfreturn {
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  border: 1px dashed color-mix(in srgb, var(--accent) 55%, transparent);
+  border-radius: 999px;
+}
+
+/* ---- Paralelo (DAG) ---- */
+html[data-skin="discord"] .pfeat {
+  background: #2b2d31;
+  border: 1px solid #232428;
+  border-radius: 8px;
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="discord"] .pfeat-dot { box-shadow: 0 0 0 3px rgba(0,0,0,0.25); }
+html[data-skin="discord"] .pfeat-slug { color: var(--text-faint); }
+html[data-skin="discord"] .pfeat-agent {
+  background: #1e1f22;
+  border-radius: 999px;
+}
+
+/* ---- Card de agente: cartão de membro ---- */
+html[data-skin="discord"] .agent {
+  background: #2b2d31;
+  border: 1px solid #232428;
+  border-radius: 8px;
+  box-shadow: var(--shadow-soft);
+  transition: transform .16s ease, box-shadow .16s ease, background .16s ease;
+}
+html[data-skin="discord"] .agent::before {
+  height: 3px;
+  background: var(--agent-color);
+  border-radius: 8px 8px 0 0;
+}
+html[data-skin="discord"] .agent:hover {
+  transform: translateY(-2px);
+  background: #35373c;
+  box-shadow: var(--shadow);
+}
+html[data-skin="discord"] .agent--working {
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--agent-color) 60%, transparent),
+              0 0 0 4px color-mix(in srgb, var(--agent-color) 20%, transparent);
+}
+html[data-skin="discord"] .agent--human_driving {
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--gold) 60%, transparent),
+              0 0 0 4px color-mix(in srgb, var(--gold) 18%, transparent);
+}
+html[data-skin="discord"] .agent--error,
+html[data-skin="discord"] .agent--needs_recovery {
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--red) 60%, transparent),
+              0 0 0 4px color-mix(in srgb, var(--red) 18%, transparent);
+}
+html[data-skin="discord"] .agent--pinned { border-color: color-mix(in srgb, var(--accent) 55%, #232428); }
+html[data-skin="discord"] .agent--sleeping { opacity: .72; }
+
+/* avatar: círculo com anel de presença */
+html[data-skin="discord"] .agent-avatar,
+html[data-skin="discord"] .fs-avatar { border-radius: 50%; }
+html[data-skin="discord"] .agent-avatar-inner,
+html[data-skin="discord"] .fs-avatar-inner { border-radius: 50%; }
+html[data-skin="discord"] .agent-avatar::before,
+html[data-skin="discord"] .fs-avatar::before {
+  border-radius: 50%;
+  border-width: 3px;
+  box-shadow: 0 0 0 2px #2b2d31;
+}
+
+html[data-skin="discord"] .agent-name { font-weight: 700; color: #f2f3f5; }
+html[data-skin="discord"] .agent-status .glyph,
+html[data-skin="discord"] .fs-status .glyph { opacity: .9; }
+html[data-skin="discord"] .agent--working .agent-status { color: var(--green); }
+html[data-skin="discord"] .agent--decanting .agent-status { color: var(--gold); }
+html[data-skin="discord"] .agent--error .agent-status { color: var(--red); }
+
+/* bolha de mensagem */
+html[data-skin="discord"] .agent-bubble,
+html[data-skin="discord"] .fs-bubble {
+  background: #1e1f22;
+  border: 1px solid #232428;
+  border-radius: 8px;
+  color: var(--text-dim);
+}
+html[data-skin="discord"] .agent-pin { color: var(--accent); }
+html[data-skin="discord"] .agent-open-hint { color: var(--text-faint); }
+html[data-skin="discord"] .zzz { color: var(--grey); }
+
+/* ---- Mini-terminal / stream ---- */
+html[data-skin="discord"] .agent-term,
+html[data-skin="discord"] .fs-term {
+  background: #1e1f22;
+  border: 1px solid #232428;
+  border-radius: 8px;
+  color: var(--text);
+}
+html[data-skin="discord"] .term-ts { color: var(--text-faint); }
+html[data-skin="discord"] .term--read { color: #4fa8ff; }
+html[data-skin="discord"] .term--write,
+html[data-skin="discord"] .term--ok { color: var(--green); }
+html[data-skin="discord"] .term--edit { color: var(--gold); }
+html[data-skin="discord"] .term--bash { color: var(--accent-2); }
+html[data-skin="discord"] .term--grep { color: #00a8fc; }
+html[data-skin="discord"] .term--web { color: #00b0f4; }
+html[data-skin="discord"] .term--agent { color: var(--accent); }
+html[data-skin="discord"] .term--think,
+html[data-skin="discord"] .term--dim { color: var(--text-faint); }
+html[data-skin="discord"] .term--decant { color: var(--gold); }
+html[data-skin="discord"] .term--error { color: var(--red); }
+html[data-skin="discord"] .term--start,
+html[data-skin="discord"] .term--say { color: var(--text-dim); }
+html[data-skin="discord"] .term-add { color: var(--green); }
+
+/* ---- Barra de confiança ---- */
+html[data-skin="discord"] .agent-trust-head,
+html[data-skin="discord"] .fs-trust-head { color: var(--text-faint); }
+html[data-skin="discord"] .trust-bar,
+html[data-skin="discord"] .bar {
+  background: #1e1f22;
+  border-radius: 999px;
+}
+html[data-skin="discord"] .trust-bar-fill {
+  background: var(--accent);
+  border-radius: 999px;
+}
+
+/* ---- Métricas ---- */
+html[data-skin="discord"] .metric {
+  background: #2b2d31;
+  border: 1px solid #232428;
+  border-radius: 8px;
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="discord"] .metric-label { color: var(--text-faint); }
+html[data-skin="discord"] .metric-value,
+html[data-skin="discord"] .metric-value--big { color: #fff; font-weight: 700; }
+html[data-skin="discord"] .metric-sub { color: var(--text-faint); }
+html[data-skin="discord"] .bar-fill { background: var(--accent); border-radius: 999px; }
+html[data-skin="discord"] .bar-fill--cost { background: var(--gold); }
+html[data-skin="discord"] .bar-fill.is-warn { background: var(--orange); }
+html[data-skin="discord"] .bar-fill.is-danger { background: var(--red); }
+
+/* ---- Atividade (feed) ---- */
+html[data-skin="discord"] .activity-list {
+  background: #2b2d31;
+  border: 1px solid #232428;
+  border-radius: 8px;
+}
+html[data-skin="discord"] .activity-list li { border-bottom: 1px solid #232428; }
+html[data-skin="discord"] .activity-list li:hover { background: #313338; }
+html[data-skin="discord"] .activity-empty { color: var(--text-faint); }
+html[data-skin="discord"] .act-ts { color: var(--text-faint); }
+html[data-skin="discord"] .act-text { color: var(--text-dim); }
+html[data-skin="discord"] .act-icon[data-i="▶"] { color: var(--green); }
+html[data-skin="discord"] .act-icon[data-i="◆"] { color: var(--accent); }
+html[data-skin="discord"] .act-icon[data-i="✓"] { color: var(--green); }
+html[data-skin="discord"] .act-icon[data-i="✗"] { color: var(--red); }
+html[data-skin="discord"] .act-new { color: var(--accent); }
+
+/* ---- Fullscreen ---- */
+html[data-skin="discord"] .fs-backdrop {
+  background: rgba(0, 0, 0, 0.78);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+html[data-skin="discord"] .fs-panel {
+  background: #313338;
+  border: 1px solid #232428;
+  border-radius: 16px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+}
+html[data-skin="discord"] .fs-panel::before { height: 4px; border-radius: 16px 16px 0 0; }
+html[data-skin="discord"] .fs-name { font-weight: 800; color: #fff; }
+html[data-skin="discord"] .fs-close {
+  background: #2b2d31;
+  color: var(--text-dim);
+  border: 1px solid #232428;
+  border-radius: 8px;
+  transition: background .17s ease, color .17s ease;
+}
+html[data-skin="discord"] .fs-close:hover { background: var(--red); color: #fff; border-color: var(--red); }
+html[data-skin="discord"] .fs-term-label { color: var(--text-faint); text-transform: uppercase; font-weight: 700; }
+html[data-skin="discord"] .fs-term-empty {
+  background: #1e1f22;
+  border: 1px dashed #232428;
+  border-radius: 8px;
+  color: var(--text-faint);
+}
+html[data-skin="discord"] .fs-trust-val { color: var(--accent); font-weight: 700; }
+
+/* ---- Banner offline ---- */
+html[data-skin="discord"] .offline-banner {
+  background: var(--red);
+  color: #fff;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-skin="discord"] .agent { transition: none; }
+}

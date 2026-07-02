@@ -1,0 +1,430 @@
+/* =========================================================================
+   Spotify — Encore design system
+   Fundo quase-preto (#121212), verde Spotify (#1DB954 / #1ED760 no hover),
+   superfícies #181818 (repouso) e #282828 (hover/pílulas), tipografia redonda
+   tipo Circular, cantos suaves nos cards (8px) e botões pill (500px), sombra
+   profunda, densidade alta. Cards que elevam a superfície no hover, botão
+   verde que "incha" (scale) — o gesto de marca do Encore.
+   Escopo: html[data-skin="spotify"]
+   ========================================================================= */
+
+html[data-skin="spotify"] {
+  --bg: #121212;
+  --bg-soft: #000000;          /* preto puro: barras/rails recuados, como a sidebar */
+  --surface: #181818;          /* card em repouso */
+  --surface-2: #282828;        /* card hover / pílulas / inputs */
+  --border: #2a2a2a;
+  --text: #ffffff;
+  --text-dim: #b3b3b3;         /* cinza-assinatura do Spotify */
+  --text-faint: #6a6a6a;
+  --accent: #1db954;           /* verde Spotify clássico */
+  --accent-2: #1ed760;         /* verde vivo do hover Encore */
+  --gold: #f2c94c;
+  --orange: #ffa42b;
+  --red: #f6465d;
+  --green: #1db954;
+  --grey: #b3b3b3;
+  --radius: 8px;
+  --radius-lg: 12px;
+  --shadow: 0 8px 24px rgba(0, 0, 0, 0.55);
+  --shadow-soft: 0 4px 14px rgba(0, 0, 0, 0.35);
+  --gap: 16px;
+  /* Circular é proprietária; nomeada primeiro e caindo no stack de sistema
+     mais próximo (Spotify usa exatamente esta cadeia como fallback). */
+  --font-sans: "Circular", "Circular Std", CircularSpUI, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-mono: "SF Mono", ui-monospace, "Roboto Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+}
+
+html[data-skin="spotify"] body {
+  background:
+    radial-gradient(1100px 520px at 50% -160px, #1f1f1f 0%, transparent 70%),
+    var(--bg);
+  color: var(--text);
+  font-weight: 400;
+}
+
+/* ---- chrome / topbar: faixa preta translúcida colada no topo ---- */
+html[data-skin="spotify"] .topbar {
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: saturate(160%) blur(18px);
+  -webkit-backdrop-filter: saturate(160%) blur(18px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+html[data-skin="spotify"] .brand h1 {
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+html[data-skin="spotify"] .brand-dot { color: var(--accent); }
+
+/* conexão + contagem: pílulas escuras */
+html[data-skin="spotify"] .conn,
+html[data-skin="spotify"] .team-count {
+  background: var(--surface-2);
+  border: 1px solid transparent;
+  border-radius: 500px;
+  color: var(--text-dim);
+  font-weight: 600;
+}
+html[data-skin="spotify"] .conn--online .conn-dot { background: var(--accent); box-shadow: 0 0 8px var(--accent); }
+
+/* botões de controle: pílulas que crescem no hover (gesto Encore) */
+html[data-skin="spotify"] .icon-btn,
+html[data-skin="spotify"] .ctrl-btn,
+html[data-skin="spotify"] .skin-select {
+  background: var(--surface-2);
+  border: 1px solid transparent;
+  border-radius: 500px;
+  color: var(--text);
+  font-weight: 600;
+  transition: transform .12s ease, background .18s ease, color .18s ease;
+}
+html[data-skin="spotify"] .icon-btn:hover,
+html[data-skin="spotify"] .ctrl-btn:hover,
+html[data-skin="spotify"] .skin-select:hover {
+  background: #3a3a3a;
+  color: #fff;
+  transform: scale(1.06);
+}
+html[data-skin="spotify"] .skin-select { color: var(--text); }
+
+/* ---- section titles ---- */
+html[data-skin="spotify"] .section-title {
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+html[data-skin="spotify"] .live-dot { background: var(--accent); box-shadow: 0 0 10px var(--accent); }
+
+/* ---- HERO: cartão amplo com wash verde escuro no topo ---- */
+html[data-skin="spotify"] .hero {
+  background:
+    linear-gradient(180deg, rgba(29, 185, 84, 0.20), rgba(29, 185, 84, 0) 220px),
+    var(--surface);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="spotify"] .hero-glow {
+  background: radial-gradient(600px 300px at 12% -20%, rgba(30, 215, 96, 0.28), transparent 70%);
+}
+html[data-skin="spotify"] .hero-eyebrow {
+  color: var(--accent-2);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+html[data-skin="spotify"] .hero-title {
+  color: #fff;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 1.04;
+}
+html[data-skin="spotify"] .hero-item {
+  background: var(--surface-2);
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+}
+html[data-skin="spotify"] .hi-badge {
+  background: var(--accent);
+  color: #000;
+  border-radius: 500px;
+  font-weight: 700;
+}
+html[data-skin="spotify"] .hi-slug { color: var(--text); font-weight: 700; }
+html[data-skin="spotify"] .flag {
+  border-radius: 500px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: var(--surface-2);
+  font-weight: 600;
+}
+html[data-skin="spotify"] .flag--warn { color: var(--orange); border-color: color-mix(in srgb, var(--orange) 50%, transparent); }
+html[data-skin="spotify"] .flag--bypass { color: var(--red); border-color: color-mix(in srgb, var(--red) 50%, transparent); }
+
+/* ---- MAPA DO WORKFLOW ---- */
+html[data-skin="spotify"] .wfmap-wrap {
+  background: var(--surface);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="spotify"] .wfmap-hint {
+  color: var(--text-dim);
+  font-weight: 600;
+}
+html[data-skin="spotify"] .wfnode-badge {
+  background: var(--surface-2);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 50%;
+  color: var(--text-dim);
+}
+html[data-skin="spotify"] .wfnode.is-current .wfnode-badge {
+  background: color-mix(in srgb, var(--accent) 22%, var(--surface-2));
+  border-color: var(--accent);
+  color: #fff;
+  box-shadow: 0 0 0 5px rgba(29, 185, 84, 0.18), 0 0 22px rgba(29, 185, 84, 0.5);
+}
+html[data-skin="spotify"] .wfnode.is-done .wfnode-badge {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+html[data-skin="spotify"] .wfnode-check {
+  background: var(--accent);
+  color: #000;
+  border-color: var(--surface);
+}
+html[data-skin="spotify"] .wfnode.is-selected .wfnode-badge {
+  box-shadow: 0 0 0 2px var(--accent-2), 0 0 18px rgba(30, 215, 96, 0.45);
+}
+html[data-skin="spotify"] .wfnode-label { font-weight: 600; }
+html[data-skin="spotify"] .wfnode.is-current .wfnode-label { color: #fff; font-weight: 700; }
+html[data-skin="spotify"] .wfnode-here,
+html[data-skin="spotify"] .wfx-tag--here {
+  background: rgba(29, 185, 84, 0.18);
+  border: 1px solid var(--accent);
+  border-radius: 500px;
+  color: var(--accent-2);
+}
+html[data-skin="spotify"] .wfnode-here-dot { background: var(--accent); box-shadow: 0 0 8px var(--accent); }
+
+/* arestas */
+html[data-skin="spotify"] .wfedge-line,
+html[data-skin="spotify"] .wfedge-line::after { background: var(--border); }
+html[data-skin="spotify"] .wfedge-line::after { border-left-color: var(--border); }
+html[data-skin="spotify"] .wfedge.is-done .wfedge-line { background: var(--accent); }
+html[data-skin="spotify"] .wfedge.is-done .wfedge-line::after { border-left-color: var(--accent); }
+html[data-skin="spotify"] .wfedge.is-current .wfedge-line { background: var(--accent-2); box-shadow: 0 0 8px rgba(30, 215, 96, 0.5); }
+html[data-skin="spotify"] .wfedge.is-current .wfedge-line::after { border-left-color: var(--accent-2); }
+html[data-skin="spotify"] .wfedge-label,
+html[data-skin="spotify"] .wfnode-branch,
+html[data-skin="spotify"] .wfsub-step,
+html[data-skin="spotify"] .wf-explainer,
+html[data-skin="spotify"] .wfsub {
+  background: var(--surface-2);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 6px;
+}
+html[data-skin="spotify"] .wfedge-label { border-radius: 500px; color: var(--text-dim); font-weight: 600; }
+html[data-skin="spotify"] .wfbr-arrow,
+html[data-skin="spotify"] .wfsub-arrow,
+html[data-skin="spotify"] .wfx-to { color: var(--accent); }
+html[data-skin="spotify"] .wfsub { border-left: 3px solid var(--accent); }
+html[data-skin="spotify"] .wfsub-step.is-current {
+  background: color-mix(in srgb, var(--accent) 20%, var(--surface-2));
+  box-shadow: 0 0 14px rgba(29, 185, 84, 0.3);
+}
+html[data-skin="spotify"] .wfsub-step.is-done .wfsub-icon { color: var(--accent); }
+html[data-skin="spotify"] .wfx-title { font-weight: 800; }
+html[data-skin="spotify"] .wfreturn {
+  background: rgba(29, 185, 84, 0.10);
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+  border-radius: 500px;
+}
+html[data-skin="spotify"] .wfreturn.is-active { box-shadow: 0 0 16px rgba(29, 185, 84, 0.3); }
+html[data-skin="spotify"] .wfreturn-arrow,
+html[data-skin="spotify"] .wfsub-loop { color: var(--accent-2); }
+html[data-skin="spotify"] .wfx-when { background: var(--bg-soft); border-radius: 500px; color: var(--text-dim); }
+html[data-skin="spotify"] .wfx-k { color: var(--accent); font-weight: 700; }
+
+/* ---- PARALELO (features simultâneas) ---- */
+html[data-skin="spotify"] .parallel {
+  background: var(--surface);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-lg);
+}
+html[data-skin="spotify"] .parallel-title { font-weight: 800; }
+html[data-skin="spotify"] .parallel-hint { color: var(--text-dim); }
+html[data-skin="spotify"] .pfeat {
+  background: var(--surface-2);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius);
+  transition: background .18s ease, transform .18s ease;
+}
+html[data-skin="spotify"] .pfeat:hover { background: #333; transform: translateY(-2px); }
+html[data-skin="spotify"] .pfeat-slug { color: var(--text); font-weight: 700; }
+html[data-skin="spotify"] .pfeat-dot { box-shadow: 0 0 8px var(--agent-color); }
+html[data-skin="spotify"] .pfeat-agent-name { color: var(--text-dim); }
+
+/* ---- CARD DE AGENTE: coração do Spotify (card que eleva no hover) ---- */
+html[data-skin="spotify"] .agent {
+  background: var(--surface);
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  box-shadow: none;
+  transition: background .25s ease, transform .25s ease, box-shadow .25s ease;
+}
+html[data-skin="spotify"] .agent::before {
+  height: 3px;
+  background: var(--agent-color);
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+html[data-skin="spotify"] .agent:hover {
+  background: var(--surface-2);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow);
+}
+html[data-skin="spotify"] .agent--working {
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--agent-color) 55%, transparent),
+    0 0 30px color-mix(in srgb, var(--agent-color) 26%, transparent);
+}
+html[data-skin="spotify"] .agent--decanting { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--gold) 55%, transparent); }
+html[data-skin="spotify"] .agent--human_driving { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--orange) 55%, transparent); }
+html[data-skin="spotify"] .agent--error,
+html[data-skin="spotify"] .agent--needs_recovery { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--red) 60%, transparent); }
+html[data-skin="spotify"] .agent--sleeping { opacity: 0.62; }
+html[data-skin="spotify"] .agent--pinned { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 50%, transparent); }
+
+/* avatar: disco redondo com anel */
+html[data-skin="spotify"] .agent-avatar,
+html[data-skin="spotify"] .fs-avatar { border-radius: 50%; }
+html[data-skin="spotify"] .agent-avatar::before,
+html[data-skin="spotify"] .fs-avatar::before {
+  border-width: 2px;
+  box-shadow: 0 0 16px color-mix(in srgb, var(--agent-color) 45%, transparent);
+}
+html[data-skin="spotify"] .agent-name { font-weight: 700; letter-spacing: -0.01em; }
+
+/* status: pílula escura */
+html[data-skin="spotify"] .agent-status,
+html[data-skin="spotify"] .fs-status {
+  background: var(--bg-soft);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 500px;
+  color: var(--text-dim);
+  font-weight: 600;
+}
+html[data-skin="spotify"] .agent-bubble,
+html[data-skin="spotify"] .fs-bubble {
+  background: var(--surface-2);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius);
+  color: var(--text-dim);
+}
+html[data-skin="spotify"] .agent-pin { color: var(--accent); }
+html[data-skin="spotify"] .zzz { color: var(--text-faint); }
+
+/* ---- MINI-TERMINAL / STREAM: poço preto puro ---- */
+html[data-skin="spotify"] .agent-term,
+html[data-skin="spotify"] .fs-term {
+  background: var(--bg-soft);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius);
+  color: var(--text-dim);
+}
+html[data-skin="spotify"] .term-ts { color: var(--text-faint); }
+html[data-skin="spotify"] .term--read { color: #6cb4ff; }
+html[data-skin="spotify"] .term--write,
+html[data-skin="spotify"] .term--ok { color: var(--accent-2); }
+html[data-skin="spotify"] .term--edit { color: var(--gold); }
+html[data-skin="spotify"] .term--bash { color: #c792ea; }
+html[data-skin="spotify"] .term--grep { color: #56d4c2; }
+html[data-skin="spotify"] .term--web { color: #6cb4ff; }
+html[data-skin="spotify"] .term--decant { color: var(--gold); }
+html[data-skin="spotify"] .term--error { color: var(--red); }
+html[data-skin="spotify"] .term--say { color: var(--text); }
+html[data-skin="spotify"] .term--dim,
+html[data-skin="spotify"] .term--think { color: var(--text-faint); }
+html[data-skin="spotify"] .term-add { color: var(--accent); }
+
+/* ---- BARRA DE CONFIANÇA + barras: trilhos verdes arredondados ---- */
+html[data-skin="spotify"] .trust-bar,
+html[data-skin="spotify"] .bar {
+  background: #4d4d4d;
+  border-radius: 500px;
+  overflow: hidden;
+}
+html[data-skin="spotify"] .trust-bar-fill {
+  background: var(--accent);
+  border-radius: 500px;
+}
+html[data-skin="spotify"] .agent:hover .trust-bar-fill { background: var(--accent-2); }
+html[data-skin="spotify"] .bar-fill { background: var(--accent); border-radius: 500px; }
+html[data-skin="spotify"] .bar-fill--cost { background: var(--gold); }
+html[data-skin="spotify"] .bar-fill.is-warn { background: var(--orange); }
+html[data-skin="spotify"] .bar-fill.is-danger { background: var(--red); }
+
+/* ---- MÉTRICAS ---- */
+html[data-skin="spotify"] .metric {
+  background: var(--surface);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius);
+  transition: background .2s ease;
+}
+html[data-skin="spotify"] .metric:hover { background: var(--surface-2); }
+html[data-skin="spotify"] .metric-label { color: var(--text-dim); font-weight: 600; }
+html[data-skin="spotify"] .metric-value,
+html[data-skin="spotify"] .metric-value--big { color: #fff; font-weight: 800; }
+html[data-skin="spotify"] .metric-sub { color: var(--text-faint); }
+
+/* ---- ATIVIDADE (feed) ---- */
+html[data-skin="spotify"] .activity-list {
+  background: var(--surface);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-lg);
+}
+html[data-skin="spotify"] .activity-list li { border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+html[data-skin="spotify"] .activity-list li:hover { background: var(--surface-2); }
+html[data-skin="spotify"] .act-ts { color: var(--text-faint); }
+html[data-skin="spotify"] .act-text { color: var(--text-dim); }
+html[data-skin="spotify"] .act-new { background: color-mix(in srgb, var(--accent) 12%, transparent); }
+html[data-skin="spotify"] .act-icon[data-i="▶"] { color: var(--accent); }
+html[data-skin="spotify"] .act-icon[data-i="◆"] { color: var(--gold); }
+html[data-skin="spotify"] .act-icon[data-i="✓"] { color: var(--accent); }
+html[data-skin="spotify"] .act-icon[data-i="✗"] { color: var(--red); }
+
+/* ---- FULLSCREEN ---- */
+html[data-skin="spotify"] .fs-backdrop {
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+html[data-skin="spotify"] .fs-panel {
+  background:
+    linear-gradient(180deg, rgba(29, 185, 84, 0.18), rgba(29, 185, 84, 0) 240px),
+    var(--surface);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow), 0 0 0 1px rgba(255, 255, 255, 0.03);
+}
+html[data-skin="spotify"] .fs-name { font-weight: 800; letter-spacing: -0.02em; }
+html[data-skin="spotify"] .fs-close {
+  background: var(--bg-soft);
+  color: var(--text);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 50%;
+  transition: transform .12s ease, background .18s ease;
+}
+html[data-skin="spotify"] .fs-close:hover { background: #333; transform: scale(1.08); }
+html[data-skin="spotify"] .fs-term-label { color: var(--text-dim); font-weight: 700; }
+html[data-skin="spotify"] .fs-trust-val { color: var(--accent); font-weight: 700; }
+html[data-skin="spotify"] .fs-term-empty {
+  background: var(--bg-soft);
+  border: 1px dashed rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius);
+  color: var(--text-faint);
+}
+
+/* ---- offline banner ---- */
+html[data-skin="spotify"] .offline-banner {
+  background: var(--red);
+  color: #fff;
+  border-radius: 500px;
+  font-weight: 700;
+}
+
+/* ---- movimento: card lift + button scale honram reduced-motion ---- */
+@media (prefers-reduced-motion: reduce) {
+  html[data-skin="spotify"] .agent,
+  html[data-skin="spotify"] .pfeat,
+  html[data-skin="spotify"] .icon-btn,
+  html[data-skin="spotify"] .ctrl-btn,
+  html[data-skin="spotify"] .skin-select,
+  html[data-skin="spotify"] .fs-close,
+  html[data-skin="spotify"] .metric { transition: none; }
+  html[data-skin="spotify"] .agent:hover,
+  html[data-skin="spotify"] .pfeat:hover,
+  html[data-skin="spotify"] .icon-btn:hover,
+  html[data-skin="spotify"] .ctrl-btn:hover,
+  html[data-skin="spotify"] .skin-select:hover,
+  html[data-skin="spotify"] .fs-close:hover { transform: none; }
+}

@@ -1,0 +1,452 @@
+/* =========================================================================
+   Netflix — cinematográfico, preto absoluto e vermelho de sangue
+   Fundo #141414, vermelho #E50914, superfícies #221f1f, sans bold pesado,
+   cantos 4px, sombras profundas de pôster, brilho vermelho no foco.
+   Web-safe: "Netflix Sans" só existe no app da marca — fallback Helvetica
+   Neue / Arial bold, que é a régua tipográfica histórica da Netflix.
+   Escopo: html[data-skin="netflix"]
+   ========================================================================= */
+
+html[data-skin="netflix"] {
+  --bg: #141414;
+  --bg-soft: #0b0b0b;
+  --surface: #221f1f;
+  --surface-2: #2b2727;
+  --border: #3a3535;
+  --text: #ffffff;
+  --text-dim: #b3b3b3;
+  --text-faint: #808080;
+  --accent: #e50914;          /* Netflix red */
+  --accent-2: #b1060f;        /* vermelho escuro (hover/press) */
+  --gold: #e8b923;
+  --orange: #f5a623;
+  --red: #e50914;
+  --green: #46d369;           /* verde "match" da Netflix */
+  --grey: #6d6d6e;
+  --radius: 4px;
+  --radius-lg: 6px;
+  --shadow: 0 8px 30px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(0, 0, 0, 0.6);
+  --shadow-soft: 0 4px 16px rgba(0, 0, 0, 0.55);
+  --gap: 12px;
+  --font-sans: "Helvetica Neue", Helvetica, Arial, "Segoe UI", Roboto, system-ui, sans-serif;
+  --font-mono: "SF Mono", ui-monospace, "Roboto Mono", Menlo, Consolas, monospace;
+}
+
+/* fundo preto cinematográfico com leve vinheta vermelha no topo */
+html[data-skin="netflix"] body {
+  background:
+    radial-gradient(1200px 520px at 50% -10%, rgba(229, 9, 20, 0.14), transparent 62%),
+    linear-gradient(180deg, #1b1717 0%, #141414 30%, #0d0d0d 100%);
+  background-attachment: fixed;
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---- chrome / topbar: barra escura que desce de preto sólido ---- */
+html[data-skin="netflix"] .topbar {
+  background: linear-gradient(180deg, #141414 0%, rgba(20, 20, 20, 0.92) 100%);
+  backdrop-filter: saturate(120%) blur(6px);
+  -webkit-backdrop-filter: saturate(120%) blur(6px);
+  border-bottom: 1px solid #000;
+  box-shadow: 0 2px 14px rgba(0, 0, 0, 0.6);
+}
+html[data-skin="netflix"] .brand h1 {
+  color: var(--accent);
+  font-weight: 900;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  text-shadow: 0 0 18px rgba(229, 9, 20, 0.5);
+}
+html[data-skin="netflix"] .brand-dot { color: var(--accent); }
+
+html[data-skin="netflix"] .conn,
+html[data-skin="netflix"] .team-count {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-dim);
+  font-weight: 700;
+}
+html[data-skin="netflix"] .conn--online .conn-dot { background: var(--green); box-shadow: 0 0 8px var(--green); }
+html[data-skin="netflix"] .conn--connecting .conn-dot { background: var(--gold); }
+html[data-skin="netflix"] .conn--offline .conn-dot { background: var(--accent); }
+
+html[data-skin="netflix"] .icon-btn,
+html[data-skin="netflix"] .ctrl-btn,
+html[data-skin="netflix"] .skin-select {
+  background: rgba(42, 42, 42, 0.7);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-weight: 700;
+}
+html[data-skin="netflix"] .icon-btn:hover,
+html[data-skin="netflix"] .ctrl-btn:hover,
+html[data-skin="netflix"] .skin-select:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+html[data-skin="netflix"] .section-title {
+  color: var(--text);
+  font-weight: 800;
+  letter-spacing: .01em;
+}
+html[data-skin="netflix"] .section-title .live-dot { background: var(--accent); box-shadow: 0 0 10px var(--accent); }
+
+/* ---- HERO: banner de destaque, como a capa do título em foco ---- */
+html[data-skin="netflix"] .hero {
+  background:
+    linear-gradient(90deg, rgba(20,20,20,0.96) 0%, rgba(20,20,20,0.55) 55%, rgba(20,20,20,0.2) 100%),
+    linear-gradient(180deg, #241d1d, #161212);
+  border: 1px solid #000;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+html[data-skin="netflix"] .hero-glow {
+  background: radial-gradient(600px 320px at 12% 20%, rgba(229, 9, 20, 0.28), transparent 70%);
+  opacity: 1;
+}
+html[data-skin="netflix"] .hero-eyebrow {
+  color: var(--accent);
+  font-weight: 800;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+}
+html[data-skin="netflix"] .hero-title {
+  color: #fff;
+  font-weight: 900;
+  letter-spacing: -.01em;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.8);
+  background: none;
+  -webkit-text-fill-color: #fff;
+}
+html[data-skin="netflix"] .hero-doing { color: var(--text-dim); }
+html[data-skin="netflix"] .hero-item {
+  background: rgba(43, 39, 39, 0.8);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+html[data-skin="netflix"] .hi-badge {
+  background: var(--accent);
+  color: #fff;
+  border-radius: var(--radius);
+  font-weight: 800;
+}
+html[data-skin="netflix"] .hi-slug { color: var(--text-dim); }
+html[data-skin="netflix"] .hero-flags .flag {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-weight: 700;
+}
+html[data-skin="netflix"] .flag--warn { border-color: var(--orange); color: var(--orange); }
+html[data-skin="netflix"] .flag--bypass { border-color: var(--accent); color: var(--accent); }
+html[data-skin="netflix"] .hero-next { color: var(--text-faint); }
+
+/* ---- MAPA DO WORKFLOW: trilha de episódios em preto/vermelho ---- */
+html[data-skin="netflix"] .wfmap-wrap {
+  background: linear-gradient(180deg, #1b1717, #141010);
+  border: 1px solid #000;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="netflix"] .wfmap-hint {
+  color: var(--accent);
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+html[data-skin="netflix"] .wfnode-badge {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+html[data-skin="netflix"] .wfnode.is-done .wfnode-badge {
+  border-color: var(--accent);
+  box-shadow: 0 0 14px color-mix(in srgb, var(--accent) 40%, transparent);
+}
+html[data-skin="netflix"] .wfnode-check {
+  background: var(--accent);
+  color: #fff;
+  border-color: #141414;
+  border-radius: var(--radius);
+}
+html[data-skin="netflix"] .wfnode.is-current .wfnode-badge {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 26%, #141414);
+  box-shadow: 0 0 0 4px rgba(229, 9, 20, 0.22), 0 0 22px rgba(229, 9, 20, 0.55);
+}
+html[data-skin="netflix"] .wfnode.is-selected .wfnode-badge {
+  box-shadow: 0 0 0 2px var(--accent), 0 0 22px rgba(229, 9, 20, 0.5);
+}
+html[data-skin="netflix"] .wfnode-label { font-weight: 700; }
+html[data-skin="netflix"] .wfnode-here,
+html[data-skin="netflix"] .wfx-tag--here {
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
+  border-color: var(--accent);
+  border-radius: var(--radius);
+  color: #fff;
+}
+html[data-skin="netflix"] .wfnode-here-dot { background: var(--accent); }
+html[data-skin="netflix"] .wfnode-branch,
+html[data-skin="netflix"] .wfbr-arrow { color: var(--text-faint); }
+
+html[data-skin="netflix"] .wfedge-line,
+html[data-skin="netflix"] .wfedge-line::after { background: var(--border); }
+html[data-skin="netflix"] .wfedge-line::after { border-left-color: var(--border); }
+html[data-skin="netflix"] .wfedge.is-done .wfedge-line { background: var(--accent); }
+html[data-skin="netflix"] .wfedge.is-done .wfedge-line::after { border-left-color: var(--accent); }
+html[data-skin="netflix"] .wfedge.is-current .wfedge-line {
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent);
+}
+html[data-skin="netflix"] .wfedge.is-current .wfedge-line::after { border-left-color: var(--accent); }
+html[data-skin="netflix"] .wfedge-label {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-dim);
+  font-weight: 700;
+}
+
+html[data-skin="netflix"] .wfreturn {
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  border: 1px solid var(--accent-2);
+  border-radius: var(--radius);
+}
+html[data-skin="netflix"] .wfreturn.is-active { box-shadow: 0 0 16px rgba(229, 9, 20, 0.3); }
+html[data-skin="netflix"] .wfreturn-arrow,
+html[data-skin="netflix"] .wfsub-loop,
+html[data-skin="netflix"] .wfx-to { color: var(--accent); }
+
+html[data-skin="netflix"] .wfsub {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius);
+}
+html[data-skin="netflix"] .wfsub-step {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+html[data-skin="netflix"] .wfsub-step.is-current {
+  background: color-mix(in srgb, var(--accent) 20%, #141414);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--accent) 40%, transparent);
+}
+html[data-skin="netflix"] .wfsub-step.is-done .wfsub-icon { color: var(--accent); }
+
+html[data-skin="netflix"] .wf-explainer {
+  background: linear-gradient(180deg, #1e1919, #161212);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+html[data-skin="netflix"] .wfx-title { font-weight: 800; }
+html[data-skin="netflix"] .wfx-tag--muted { color: var(--text-faint); }
+html[data-skin="netflix"] .wfx-when {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+html[data-skin="netflix"] .wfx-k { color: var(--accent); font-weight: 700; }
+
+/* ---- PARALELO: linha de cards de features (row de "continue watching") ---- */
+html[data-skin="netflix"] .parallel-title { font-weight: 800; }
+html[data-skin="netflix"] .parallel-hint { color: var(--text-faint); }
+html[data-skin="netflix"] .pfeat {
+  background: linear-gradient(180deg, #262020, #181414);
+  border: 1px solid #000;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+html[data-skin="netflix"] .pfeat:hover {
+  transform: scale(1.04);
+  box-shadow: var(--shadow), 0 0 0 2px var(--agent-color);
+}
+html[data-skin="netflix"] .pfeat-dot { background: var(--agent-color); box-shadow: 0 0 8px var(--agent-color); }
+html[data-skin="netflix"] .pfeat-slug { color: var(--text-dim); }
+html[data-skin="netflix"] .pfeat-agent-name { color: var(--text-faint); }
+
+/* ---- CARD DE AGENTE: pôster de título com hover que "sobe" ---- */
+html[data-skin="netflix"] .agent {
+  background: linear-gradient(180deg, #262020 0%, #181414 100%);
+  border: 1px solid #000;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+  transition: transform .28s cubic-bezier(.2,.7,.2,1), box-shadow .28s;
+}
+html[data-skin="netflix"] .agent::before {
+  height: 3px;
+  background: var(--agent-color);
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+html[data-skin="netflix"] .agent:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: var(--shadow), 0 0 0 2px var(--agent-color);
+  z-index: 2;
+}
+html[data-skin="netflix"] .agent--working {
+  box-shadow: var(--shadow-soft),
+    0 0 0 1px var(--agent-color),
+    0 0 30px color-mix(in srgb, var(--agent-color) 40%, transparent);
+}
+html[data-skin="netflix"] .agent--error {
+  box-shadow: var(--shadow-soft), 0 0 0 1px var(--accent), 0 0 26px rgba(229, 9, 20, 0.4);
+}
+html[data-skin="netflix"] .agent--human_driving {
+  box-shadow: var(--shadow-soft), 0 0 0 1px var(--orange), 0 0 24px rgba(245, 166, 35, 0.35);
+}
+html[data-skin="netflix"] .agent--decanting {
+  box-shadow: var(--shadow-soft), 0 0 0 1px var(--gold), 0 0 24px rgba(232, 185, 35, 0.3);
+}
+html[data-skin="netflix"] .agent--sleeping { opacity: .62; }
+
+html[data-skin="netflix"] .agent-avatar::before,
+html[data-skin="netflix"] .fs-avatar::before {
+  border-width: 2px;
+  border-radius: var(--radius);
+  box-shadow: 0 0 16px color-mix(in srgb, var(--agent-color) 45%, transparent);
+}
+html[data-skin="netflix"] .agent-avatar-inner,
+html[data-skin="netflix"] .fs-avatar-inner { border-radius: 3px; }
+html[data-skin="netflix"] .agent-name {
+  color: #fff;
+  font-weight: 800;
+  letter-spacing: .01em;
+}
+html[data-skin="netflix"] .agent-status,
+html[data-skin="netflix"] .fs-status {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-dim);
+  font-weight: 700;
+}
+html[data-skin="netflix"] .agent-bubble,
+html[data-skin="netflix"] .fs-bubble {
+  background: #100d0d;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-dim);
+}
+html[data-skin="netflix"] .agent-pin,
+html[data-skin="netflix"] .agent-open-hint { color: var(--text-faint); }
+html[data-skin="netflix"] .agent--pinned { box-shadow: var(--shadow-soft), 0 0 0 1px var(--accent); }
+
+/* ---- MINI-TERMINAL / STREAM: poço preto absoluto ---- */
+html[data-skin="netflix"] .agent-term {
+  background: #000;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+}
+html[data-skin="netflix"] .term-ts { color: var(--text-faint); }
+html[data-skin="netflix"] .term--read { color: #5aa9ff; }
+html[data-skin="netflix"] .term--write,
+html[data-skin="netflix"] .term--ok { color: var(--green); }
+html[data-skin="netflix"] .term--edit { color: var(--gold); }
+html[data-skin="netflix"] .term--bash { color: #ff7b7b; }
+html[data-skin="netflix"] .term--grep { color: #d98cff; }
+html[data-skin="netflix"] .term--web { color: #57c7d4; }
+html[data-skin="netflix"] .term--decant { color: var(--gold); }
+html[data-skin="netflix"] .term--error { color: var(--accent); font-weight: 700; }
+html[data-skin="netflix"] .term--start { color: var(--accent); }
+html[data-skin="netflix"] .term--dim { color: var(--text-faint); }
+html[data-skin="netflix"] .term-add { color: var(--green); }
+
+/* ---- BARRA DE CONFIANÇA + MÉTRICAS ---- */
+html[data-skin="netflix"] .trust-bar,
+html[data-skin="netflix"] .bar {
+  background: #000;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+html[data-skin="netflix"] .trust-bar-fill {
+  background: linear-gradient(90deg, var(--accent-2), var(--accent));
+  border-radius: 2px;
+  box-shadow: 0 0 10px rgba(229, 9, 20, 0.5);
+}
+html[data-skin="netflix"] .metric {
+  background: linear-gradient(180deg, #221d1d, #161212);
+  border: 1px solid #000;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="netflix"] .metric-label { color: var(--text-faint); font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+html[data-skin="netflix"] .metric-value,
+html[data-skin="netflix"] .metric-value--big { color: #fff; font-weight: 900; }
+html[data-skin="netflix"] .metric-value--big { color: var(--accent); text-shadow: 0 0 16px rgba(229, 9, 20, 0.4); }
+html[data-skin="netflix"] .metric-sub { color: var(--text-dim); }
+html[data-skin="netflix"] .bar-fill { background: var(--accent); border-radius: 2px; }
+html[data-skin="netflix"] .bar-fill--cost { background: var(--gold); }
+html[data-skin="netflix"] .bar-fill.is-warn { background: var(--orange); }
+html[data-skin="netflix"] .bar-fill.is-danger { background: var(--accent); }
+
+/* ---- ATIVIDADE (feed) ---- */
+html[data-skin="netflix"] .activity-list {
+  background: linear-gradient(180deg, #1c1717, #141010);
+  border: 1px solid #000;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+}
+html[data-skin="netflix"] .activity-list li { border-bottom: 1px solid #000; }
+html[data-skin="netflix"] .activity-empty { color: var(--text-faint); }
+html[data-skin="netflix"] .act-ts { color: var(--text-faint); }
+html[data-skin="netflix"] .act-new { background: color-mix(in srgb, var(--accent) 12%, transparent); }
+html[data-skin="netflix"] .act-icon[data-i="▶"] { color: var(--accent); }
+html[data-skin="netflix"] .act-icon[data-i="◆"] { color: var(--gold); }
+html[data-skin="netflix"] .act-icon[data-i="✓"] { color: var(--green); }
+html[data-skin="netflix"] .act-icon[data-i="✗"] { color: var(--accent); }
+
+/* ---- FULLSCREEN: modal como página de detalhe do título ---- */
+html[data-skin="netflix"] .fs-backdrop {
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+html[data-skin="netflix"] .fs-panel {
+  background:
+    linear-gradient(180deg, rgba(20,20,20,0.4) 0%, #141414 40%),
+    linear-gradient(180deg, #241d1d, #121010);
+  border: 1px solid #000;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow), 0 0 70px rgba(0, 0, 0, 0.7);
+}
+html[data-skin="netflix"] .fs-panel::before { height: 3px; background: var(--agent-color); }
+html[data-skin="netflix"] .fs-close {
+  background: rgba(42, 42, 42, 0.9);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  color: #fff;
+}
+html[data-skin="netflix"] .fs-close:hover { background: var(--accent); border-color: var(--accent); }
+html[data-skin="netflix"] .fs-name { color: #fff; font-weight: 900; letter-spacing: -.01em; }
+html[data-skin="netflix"] .fs-trust-val { color: var(--accent); font-weight: 800; }
+html[data-skin="netflix"] .fs-term { background: #000; }
+html[data-skin="netflix"] .fs-term-label { color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
+html[data-skin="netflix"] .fs-term-empty { border-style: dashed; border-color: var(--border); color: var(--text-faint); border-radius: var(--radius); }
+
+/* ---- banner offline ---- */
+html[data-skin="netflix"] .offline-banner {
+  background: var(--accent);
+  color: #fff;
+  border-radius: var(--radius);
+  font-weight: 800;
+  box-shadow: 0 0 24px rgba(229, 9, 20, 0.5);
+}
+
+/* respeita quem prefere menos movimento */
+@media (prefers-reduced-motion: reduce) {
+  html[data-skin="netflix"] .agent,
+  html[data-skin="netflix"] .pfeat {
+    transition: none;
+  }
+  html[data-skin="netflix"] .agent:hover,
+  html[data-skin="netflix"] .pfeat:hover {
+    transform: none;
+  }
+}
