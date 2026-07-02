@@ -2,6 +2,13 @@
 
 Formato: [Keep a Changelog](https://keepachangelog.com/). Versionamento semântico.
 
+## [1.22.0] — 2026-07-01 (observabilidade: waterfall no painel)
+
+### Adicionado
+- **Waterfall de trace no dashboard** (seção "Telemetria", recolhível): linha do tempo
+  dos spans do trace atual (por agente, com erro destacado, largura ~ duração) +
+  tabela de percentis por ferramenta (n, erros, média). Fecha o item 3 (observabilidade
+  completa: SQLite + OTLP + análise visual). Degrade gracioso; temável.
 ## [1.21.0] — 2026-07-01 (paralelo é PADRÃO + observabilidade completa)
 
 ### Mudado

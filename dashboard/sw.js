@@ -1,6 +1,6 @@
 /* multiagente dashboard — minimal service worker.
    Caches the app shell so the UI loads offline (data still needs the WS). */
-var CACHE = "multiagente-v6";
+var CACHE = "multiagente-v7";
 var SHELL = [
   "/",
   "/index.html",

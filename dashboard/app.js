@@ -349,6 +349,7 @@
     renderTeam(snap.agents || []);
     renderMetrics(snap.metrics || {});
     renderActivity(snap.activity || []);
+    renderTelemetry(snap.telemetry);
     // keep the fullscreen view in sync while it's open
     if (fsOpenSlug) {
       var fa = agentBySlug(fsOpenSlug);
@@ -1094,6 +1095,132 @@
       ul.appendChild(li);
     });
     seenActivity = nextSeen;
+  }
+
+  // ===================================================================
+  //  TELEMETRIA / ANÁLISE — seção recolhível (começa fechada):
+  //  tabela de tools (percentis/média por ferramenta) + waterfall do trace.
+  //  Contrato: snapshot.telemetry = { tools:[{tool,n,errors,avg_ms}],
+  //    trace:{trace_id, spans:[{ts,agent,tool,name,outcome,duration_ms}]} }
+  //  Degrade gracioso: ausente/vazio -> esconde a seção inteira.
+  // ===================================================================
+  function fmtDur(ms) {
+    if (ms == null || isNaN(ms)) return "—";
+    if (ms < 1000) return Math.round(ms) + "ms";
+    return (ms / 1000).toFixed(ms < 10000 ? 2 : 1) + "s";
+  }
+  function pad2(n) { return n < 10 ? "0" + n : String(n); }
+  function clockOf(d) { return pad2(d.getHours()) + ":" + pad2(d.getMinutes()) + ":" + pad2(d.getSeconds()); }
+  function teleTsVal(ts) {
+    if (ts == null) return 0;
+    if (typeof ts === "number") return ts < 1e12 ? ts * 1000 : ts;
+    var d = new Date(ts);
+    return isNaN(d.getTime()) ? 0 : d.getTime();
+  }
+  function fmtClock(ts) {
+    if (ts == null) return "";
+    if (typeof ts === "number") return clockOf(new Date(ts < 1e12 ? ts * 1000 : ts));
+    var s = String(ts);
+    if (/^\d{1,2}:\d{2}:\d{2}/.test(s)) return s.slice(0, 8);
+    var d = new Date(s);
+    return isNaN(d.getTime()) ? s : clockOf(d);
+  }
+
+  function renderTelemetry(tel) {
+    var sec = document.getElementById("telemetry");
+    if (!sec) return;
+    var tools = (tel && Array.isArray(tel.tools)) ? tel.tools.filter(Boolean) : [];
+    var trace = tel && tel.trace;
+    var spans = (trace && Array.isArray(trace.spans)) ? trace.spans.filter(Boolean) : [];
+    if (!tools.length && !spans.length) { sec.hidden = true; return; }
+    sec.hidden = false;
+    renderTeleTools(tools);
+    renderTeleTrace(trace, spans);
+  }
+
+  function renderTeleTools(tools) {
+    var box = document.getElementById("tele-tools");
+    if (!box) return;
+    box.innerHTML = "";
+    if (!tools.length) { box.hidden = true; return; }
+    box.hidden = false;
+    box.appendChild(el("h3", "tele-sub", "Ferramentas"));
+
+    var sorted = tools.slice().sort(function (a, b) { return (b.n || 0) - (a.n || 0); });
+    var table = el("table", "tele-table");
+    var thead = el("thead");
+    var htr = el("tr");
+    [["Ferramenta", null], ["n", "tele-num"], ["erros", "tele-num"], ["média", "tele-num"]]
+      .forEach(function (h) { htr.appendChild(el("th", h[1], h[0])); });
+    thead.appendChild(htr);
+    table.appendChild(thead);
+
+    var tb = el("tbody");
+    sorted.forEach(function (t) {
+      var tr = el("tr");
+      tr.appendChild(el("td", "tele-tool", t.tool || "—"));
+      tr.appendChild(el("td", "tele-num", fmtInt(t.n || 0)));
+      var errN = t.errors || 0;
+      tr.appendChild(el("td", "tele-num" + (errN > 0 ? " tele-err" : ""), fmtInt(errN)));
+      var hasAvg = t.avg_ms != null && !isNaN(t.avg_ms);
+      tr.appendChild(el("td", "tele-num", hasAvg ? fmtDur(t.avg_ms) : "—"));
+      tb.appendChild(tr);
+    });
+    table.appendChild(tb);
+    box.appendChild(table);
+  }
+
+  function renderTeleTrace(trace, spans) {
+    var box = document.getElementById("tele-trace");
+    if (!box) return;
+    box.innerHTML = "";
+    if (!spans.length) { box.hidden = true; return; }
+    box.hidden = false;
+
+    var head = el("h3", "tele-sub");
+    head.appendChild(document.createTextNode("Waterfall do trace "));
+    head.appendChild(el("code", "tele-tid", (trace && trace.trace_id) || "—"));
+    box.appendChild(head);
+
+    // ordem cronológica (sort estável preserva a ordem de entrada quando ts é opaco)
+    var ordered = spans.slice().sort(function (a, b) { return teleTsVal(a.ts) - teleTsVal(b.ts); });
+    var maxDur = 0;
+    ordered.forEach(function (s) {
+      if (typeof s.duration_ms === "number" && !isNaN(s.duration_ms) && s.duration_ms > maxDur) {
+        maxDur = s.duration_ms;
+      }
+    });
+    var hasDur = maxDur > 0;
+
+    var wf = el("div", "tele-wf");
+    ordered.forEach(function (s) {
+      var isErr = s.outcome === "error";
+      var row = el("div", "tele-row" + (isErr ? " tele-row--err" : ""));
+      if (s.agent) row.style.setProperty("--agent-color", colorFor(s.agent));
+
+      row.appendChild(el("span", "tele-clk", fmtClock(s.ts)));
+      row.appendChild(el("span", "tele-ag", s.agent || "—"));
+
+      var track = el("div", "tele-track");
+      var bar = el("div", "tele-bar");
+      var d = (typeof s.duration_ms === "number" && !isNaN(s.duration_ms)) ? s.duration_ms : null;
+      // com duração: largura proporcional (mín. 6%); sem duração: barras iguais (degrade)
+      var w = hasDur ? (d != null ? Math.max(6, (d / maxDur) * 100) : 6) : 100;
+      bar.style.width = w + "%";
+
+      var primary = s.tool || s.name || "—";
+      var lbl = el("span", "tele-bar-lbl", primary);
+      bar.appendChild(lbl);
+      if (s.name && s.name !== s.tool && s.tool) {
+        bar.appendChild(el("span", "tele-bar-sub", s.name));
+      }
+      if (isErr) bar.appendChild(el("span", "tele-x", "✗"));
+      if (d != null) bar.title = fmtDur(d);
+      track.appendChild(bar);
+      row.appendChild(track);
+      wf.appendChild(row);
+    });
+    box.appendChild(wf);
   }
 
   // ---- fullscreen agent view (modal / tela cheia) --------------------
