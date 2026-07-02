@@ -107,3 +107,8 @@ ollama_model = ""      # ex: llama3.1
 # confirm_irreversible=true reativa a trava de aprovação humana para itens
 # irreversíveis (mais cauteloso, menos fluido).
 confirm_irreversible = false
+# Motor de execução (v1.15+). "sequential" = uma feature por vez (padrão, estável).
+# "dag" = features independentes (deps satisfeitas + paths disjuntos) rodam em
+# PARALELO, governadas pela máquina de estados. Vira default quando maduro.
+engine = "sequential"
+max_parallel_features = 3         # teto de features simultâneas em engine="dag"

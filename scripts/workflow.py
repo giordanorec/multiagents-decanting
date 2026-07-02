@@ -835,9 +835,38 @@ def parse_backlog(root: Path) -> list[dict]:
         dm = re.search(r"(?im)^[#\-*\s]*(?:depende|deps|depends?)\s*:?\**\s*(.+)$", block)
         if dm:
             deps = [d for d in re.findall(r"F-\d{3}", dm.group(1)) if d != fid]
+        touches = []
+        tm = re.search(r"(?im)^[#\-*\s]*(?:toca|touches?|paths?|arquivos?)\s*:?\**\s*(.+)$", block)
+        if tm:
+            touches = [t.strip() for t in re.split(r"[,\s]+", tm.group(1).strip()) if t.strip()]
         out.append({"id": fid, "slug": slug, "status": "pendente",
-                    "concluded_at": None, "depends_on": deps})
+                    "concluded_at": None, "depends_on": deps, "touches": touches})
     return out
+
+
+def _touches_overlap(a: list, b: list) -> bool:
+    """Duas features colidem se declaram paths que se sobrepõem (prefixo comum).
+    Sem 'touches' declarado (lista vazia) = assume que PODE colidir (conservador)."""
+    if not a or not b:
+        return True  # sem declaração -> não arrisca paralelizar
+    for pa in a:
+        for pb in b:
+            if pa == pb or pa.startswith(pb) or pb.startswith(pa):
+                return True
+    return False
+
+
+def parallel_frontier(features: list[dict], max_parallel: int = 3) -> list[dict]:
+    """Fronteira SEGURA pra rodar em paralelo: features prontas (deps concluídas) e
+    com paths mutuamente disjuntos, até max_parallel. Greedy por ordem do backlog."""
+    frontier = []
+    for f in ready_features(features):
+        if len(frontier) >= max_parallel:
+            break
+        if all(not _touches_overlap(f.get("touches", []), g.get("touches", []))
+               for g in frontier):
+            frontier.append(f)
+    return frontier
 
 
 def has_cycle(features: list[dict]) -> str | None:

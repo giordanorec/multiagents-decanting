@@ -448,3 +448,29 @@ def test_gate_espec_rejects_cycle_and_missing(tmp_project):
                  "### F-001 — a\n- Depende: F-099\n")
     ok, msg = wf.gate_espec_done(tmp_project)
     assert not ok and "inexistente" in msg.lower()
+
+
+def test_parallel_frontier_disjoint(tmp_project):
+    feats = [
+        {"id": "F-001", "status": "concluida", "depends_on": [], "touches": ["db/"]},
+        {"id": "F-002", "status": "pendente", "depends_on": ["F-001"], "touches": ["src/api/"]},
+        {"id": "F-003", "status": "pendente", "depends_on": ["F-001"], "touches": ["src/ui/"]},
+        {"id": "F-004", "status": "pendente", "depends_on": ["F-001"], "touches": ["src/api/"]},  # colide com F-002
+    ]
+    fr = [f["id"] for f in wf.parallel_frontier(feats, max_parallel=3)]
+    assert "F-002" in fr and "F-003" in fr   # disjuntos -> paralelizam
+    assert "F-004" not in fr                  # toca src/api/ como F-002 -> serializa
+
+
+def test_parallel_frontier_no_touches_is_conservative(tmp_project):
+    feats = [{"id": "F-001", "status": "pendente", "depends_on": [], "touches": []},
+             {"id": "F-002", "status": "pendente", "depends_on": [], "touches": []}]
+    # sem 'touches' declarado -> não arrisca paralelizar (só 1 na fronteira)
+    assert len(wf.parallel_frontier(feats, max_parallel=3)) == 1
+
+
+def test_backlog_parses_touches(tmp_project):
+    u.write_text(tmp_project / "docs" / "BACKLOG_V1.md",
+                 "### F-001 — api\n- Toca: src/api/, tests/api/\n")
+    f = wf.parse_backlog(tmp_project)[0]
+    assert f["touches"] == ["src/api/", "tests/api/"]

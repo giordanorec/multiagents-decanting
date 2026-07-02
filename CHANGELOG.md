@@ -2,6 +2,15 @@
 
 Formato: [Keep a Changelog](https://keepachangelog.com/). Versionamento semântico.
 
+## [1.16.0] — 2026-07-01 (motor DAG — fronteira paralela anti-conflito)
+
+### Adicionado
+- **Fronteira paralela segura:** `parallel_frontier()` decide QUAIS features podem
+  rodar juntas — prontas (deps concluídas) E com paths **disjuntos** (campo `Toca:` no
+  backlog), até `[workflow].max_parallel_features`. É o cérebro anti-conflito do motor.
+- **Config `[workflow].engine`** (`sequential` default | `dag`) + `max_parallel_features`.
+  Backlog lê `Toca:/Touches:/Paths:` por feature (disjunção). Tudo aditivo/stdlib;
+  sequential segue idêntico. Orquestração/conflito documentados no ADR-001.
 ## [1.15.0] — 2026-07-01 (motor DAG — fundação: dependências)
 
 ### Adicionado

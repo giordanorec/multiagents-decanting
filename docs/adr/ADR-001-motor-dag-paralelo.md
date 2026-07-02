@@ -54,6 +54,31 @@ Inalterada (`spec_pendente → … → concluida`), mas **por entrada** de `acti
 não global. Cada feature tem sua sub-fase. `_activate_next_from_backlog` vira
 `_refresh_frontier` (ativa todas as prontas até `max_parallel_features`).
 
+## Orquestração e resolução de conflitos (quem manda, como não colide)
+
+- **Paralelo = fronteira pronta.** `active_features[]` são as features cujas
+  dependências já concluíram, rodando concorrentes. Dependentes ficam serializadas
+  pela ordem topológica.
+- **Orquestrador único (não swarm).** O Arquiteto dispara os especialistas da
+  fronteira via Agent tool nativo (o harness executa concorrente). A máquina de
+  estados **governa** o que pode rodar junto; o Arquiteto age dentro disso. Nada de
+  agentes se auto-coordenando ad-hoc.
+- **Anti-conflito, 3 camadas determinísticas:**
+  1. **DAG:** tarefas com dependência entre si nunca rodam juntas.
+  2. **Disjunção de paths:** duas features só paralelizam se o campo `touches:` (paths/
+     módulos que a spec declara mexer) **não se sobrepõe**; sobreposição → serializa,
+     mesmo com dependências satisfeitas. `ready_features()` filtra por disjunção.
+  3. **Isolamento + escopo de escrita:** opcionalmente cada feature paralela roda em
+     git worktree própria (Agent tool `isolation:"worktree"`) e faz merge; o hook
+     `pre-guardrail-write-scope` já impede pisar em memória/estado alheio. Conflito de
+     merge → rework/decisão humana (nunca silencioso).
+- **Diferença vs. multiagentes-giordano (v0.2):** v0.2 paralelizava lançando
+  **processos `claude -p` em background** (pesado, consumia créditos de API, gestão
+  manual de sessão, IPC por arquivo, sem governança de dependência/conflito). O mad
+  paraleliza pela **máquina de estados**: dependency-aware, conflict-guarded,
+  subagentes nativos (sem `claude -p`, dentro da assinatura), observável no painel.
+  v0.2 spawnava processos ad-hoc; o mad deixa o grafo+gates decidirem o que roda junto.
+
 ## Migração (sem quebrar projetos existentes)
 
 - Backlog antigo (sem `depende:`) → todas as features sem dependência → funciona como
