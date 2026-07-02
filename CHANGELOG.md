@@ -2,6 +2,23 @@
 
 Formato: [Keep a Changelog](https://keepachangelog.com/). Versionamento semântico.
 
+## [1.15.0] — 2026-07-01 (motor DAG — fundação: dependências)
+
+### Adicionado
+- **Backlog com dependências (DAG):** `parse_backlog` extrai `depende:/deps:` por
+  feature; `gate_espec_done` valida que as dependências existem e **rejeita ciclos**
+  (DFS). Primitivos `ready_features()` (fronteira topológica) e `has_cycle()`.
+  Base do motor paralelo. Zero instalação nova (Python stdlib); retrocompatível
+  (backlog sem `depende:` = sem dependências, comportamento igual ao de hoje).
+
+### Corrigido
+- `parse_backlog` deixou de criar "feature fantasma" a partir de menção inline de
+  F-NNN (ex.: em linha 'Depende: F-002'): feature só é linha que COMEÇA com F-NNN.
+
+### Design
+- **docs/adr/ADR-001** — design do motor DAG + execução paralela (atrás de flag
+  `engine`, migração sem quebra, bateria de testes reforçada). Docker/sandbox é
+  opcional e NÃO pré-requisito — o mad segue plug-and-play.
 ## [1.14.0] — 2026-07-01 (big bet: durable execution — checkpoint + dead-letter)
 
 ### Adicionado

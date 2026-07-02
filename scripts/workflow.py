@@ -329,9 +329,18 @@ def gate_espec_done(root: Path):
     bl = root / "docs" / "BACKLOG_V1.md"
     if not bl.is_file():
         return False, "Falta docs/BACKLOG_V1.md."
-    feats = re.findall(r"(?m)^.*\bF-\d{3}\b.*$", u.read_text(bl))
+    feats = parse_backlog(root)
     if not feats:
         return False, "BACKLOG_V1.md sem features no formato F-NNN."
+    # DAG: dependências devem existir e não formar ciclo
+    ids = {f["id"] for f in feats}
+    for f in feats:
+        missing = [d for d in (f.get("depends_on") or []) if d not in ids]
+        if missing:
+            return False, f"{f['id']} depende de feature inexistente: {', '.join(missing)}."
+    cyc = has_cycle(feats)
+    if cyc:
+        return False, f"dependências formam um ciclo: {cyc}. Quebre o ciclo no backlog."
     return True, ""
 
 
@@ -803,19 +812,68 @@ class WorkflowState:
 
 
 def parse_backlog(root: Path) -> list[dict]:
-    """Extrai features F-NNN — <slug> de docs/BACKLOG_V1.md para o estado."""
+    """Extrai features de docs/BACKLOG_V1.md, com dependências (DAG).
+
+    Uma feature é uma linha que COMEÇA com F-NNN (após #, -, * ou espaço) — assim
+    menção inline (ex.: 'Depende: F-002') não vira feature fantasma. Dependências
+    saem de uma linha 'Depende:/Deps:' no bloco da feature (retrocompatível: sem
+    essa linha, sem dependências)."""
     bl = root / "docs" / "BACKLOG_V1.md"
     if not bl.is_file():
         return []
+    text = u.read_text(bl)
+    matches = list(re.finditer(r"(?m)^[#\-*\s]*\bF-(\d{3})\b\s*[—:\-]?\s*([^\n]*)", text))
     out, seen = [], set()
-    for m in re.finditer(r"\bF-(\d{3})\b\s*[—:\-]?\s*([^\n]*)", u.read_text(bl)):
+    for i, m in enumerate(matches):
         fid = "F-" + m.group(1)
         if fid in seen:
             continue
         seen.add(fid)
         slug = re.sub(r"[^a-z0-9]+", "-", m.group(2).strip().lower()).strip("-")[:40] or "feature"
-        out.append({"id": fid, "slug": slug, "status": "pendente", "concluded_at": None})
+        block = text[m.end():(matches[i + 1].start() if i + 1 < len(matches) else len(text))]
+        deps = []
+        dm = re.search(r"(?im)^[#\-*\s]*(?:depende|deps|depends?)\s*:?\**\s*(.+)$", block)
+        if dm:
+            deps = [d for d in re.findall(r"F-\d{3}", dm.group(1)) if d != fid]
+        out.append({"id": fid, "slug": slug, "status": "pendente",
+                    "concluded_at": None, "depends_on": deps})
     return out
+
+
+def has_cycle(features: list[dict]) -> str | None:
+    """Retorna descrição do 1º ciclo achado no DAG de dependências, ou None."""
+    graph = {f["id"]: list(f.get("depends_on", []) or []) for f in features}
+    WHITE, GRAY, BLACK = 0, 1, 2
+    color = {k: WHITE for k in graph}
+
+    def dfs(node, stack):
+        color[node] = GRAY
+        for dep in graph.get(node, []):
+            if dep not in graph:
+                continue  # dependência inexistente — tratada em gate_espec
+            if color[dep] == GRAY:
+                return " → ".join(stack + [dep])
+            if color[dep] == WHITE:
+                r = dfs(dep, stack + [dep])
+                if r:
+                    return r
+        color[node] = BLACK
+        return None
+
+    for n in graph:
+        if color[n] == WHITE:
+            r = dfs(n, [n])
+            if r:
+                return r
+    return None
+
+
+def ready_features(features: list[dict]) -> list[dict]:
+    """Fronteira: features pendentes cujas dependências estão todas concluídas."""
+    done = {f["id"] for f in features if f.get("status") == "concluida"}
+    return [f for f in features
+            if f.get("status") == "pendente"
+            and all(d in done for d in (f.get("depends_on") or []))]
 
 
 def _is_catastrophic(cmd: str) -> bool:

@@ -415,3 +415,36 @@ def test_rework_dead_letter_cap(tmp_project):
                        cwd=str(tmp_project), capture_output=True, text=True)
     # após 3 reworks, o 4º vira dead-letter -> aprovacao_humano (não cicla infinito)
     assert wf.WorkflowState.load(tmp_project).subphase == "aprovacao_humano"
+
+
+def test_backlog_parses_depends_no_phantom(tmp_project):
+    u.write_text(tmp_project / "docs" / "BACKLOG_V1.md",
+                 "# Backlog\n### F-001 — base\n### F-002 — usa base\n"
+                 "- **Depende:** F-001\n### F-003 — final\n- Deps: F-001, F-002\n")
+    feats = wf.parse_backlog(tmp_project)
+    ids = [f["id"] for f in feats]
+    assert ids == ["F-001", "F-002", "F-003"]  # sem F fantasma das linhas de depende
+    d = {f["id"]: f["depends_on"] for f in feats}
+    assert d["F-001"] == [] and d["F-002"] == ["F-001"] and sorted(d["F-003"]) == ["F-001", "F-002"]
+
+
+def test_dag_cycle_and_ready(tmp_project):
+    feats = [{"id": "F-001", "status": "pendente", "depends_on": ["F-002"]},
+             {"id": "F-002", "status": "pendente", "depends_on": ["F-001"]}]
+    assert wf.has_cycle(feats)  # ciclo detectado
+    feats2 = [{"id": "F-001", "status": "concluida", "depends_on": []},
+              {"id": "F-002", "status": "pendente", "depends_on": ["F-001"]},
+              {"id": "F-003", "status": "pendente", "depends_on": ["F-002"]}]
+    ready = [f["id"] for f in wf.ready_features(feats2)]
+    assert ready == ["F-002"]  # F-003 espera F-002
+
+
+def test_gate_espec_rejects_cycle_and_missing(tmp_project):
+    u.write_text(tmp_project / "docs" / "BACKLOG_V1.md",
+                 "### F-001 — a\n- Depende: F-002\n### F-002 — b\n- Depende: F-001\n")
+    ok, msg = wf.gate_espec_done(tmp_project)
+    assert not ok and "ciclo" in msg.lower()
+    u.write_text(tmp_project / "docs" / "BACKLOG_V1.md",
+                 "### F-001 — a\n- Depende: F-099\n")
+    ok, msg = wf.gate_espec_done(tmp_project)
+    assert not ok and "inexistente" in msg.lower()
