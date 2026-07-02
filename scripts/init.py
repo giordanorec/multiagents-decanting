@@ -37,7 +37,8 @@ COPY_TREES = ["dashboard", "bin", "locale"]
 COPY_SCRIPTS = ["mad.py", "init.py", "doctor.py", "inspect_agent.py",
                 "dashboard_server.py", "resilience.py", "notify.py",
                 "a2a.py", "voice.py", "workflow.py", "mad_phase.py",
-                "mad_init.py", "migrate_v1_3.py", "verify.py", "_utils.py"]
+                "mad_init.py", "migrate_v1_3.py", "verify.py", "mcp_server.py",
+                "_utils.py"]
 
 
 def _subst(text: str, mapping: dict) -> str:
@@ -184,6 +185,17 @@ def run(name=None, project_type="outro", agents=None, budget_usd=50.0,
 
     # --- toml ---
     _write_toml(target, budget_usd)
+
+    # --- MCP server (expõe estado decantado a outras ferramentas) em .mcp.json ---
+    mcp_path = target / ".mcp.json"
+    mcp = u.read_json(mcp_path, {}) if mcp_path.is_file() else {}
+    mcp.setdefault("mcpServers", {})
+    if "mad" not in mcp["mcpServers"]:
+        mcp["mcpServers"]["mad"] = {
+            "command": "python3", "args": ["scripts/mcp_server.py"],
+            "description": "Estado decantado do mad (memória, decisões, workflow).",
+        }
+        u.write_json(mcp_path, mcp)
 
     # --- wiring dos hooks em .claude/settings.json ---
     _write_hooks_settings(target)

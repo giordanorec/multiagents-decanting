@@ -2,6 +2,20 @@
 
 Formato: [Keep a Changelog](https://keepachangelog.com/). Versionamento semântico.
 
+## [1.18.0] — 2026-07-01 (interoperabilidade + observabilidade do paralelo)
+
+### Adicionado
+- **MCP server (`scripts/mcp_server.py`, stdio, stdlib):** expõe o estado decantado
+  do mad (memory/<agente>, DECISOES, workflow) como resources + tools MCP
+  (mad_agent_state, mad_recent_decisions, mad_workflow_status). Registrado
+  automaticamente em `.mcp.json` no init — outras ferramentas (Cursor, IDEs, agentes)
+  consomem o conhecimento do mad. Zero dependência.
+- **`mad export`:** gera AGENTS.md (lingua franca cross-tool) a partir da constituição
+  + CLAUDE.md + identidades. Portabilidade além do Claude Code.
+- **Painel enxerga o paralelo:** o dashboard mostra "Construindo N coisas ao mesmo
+  tempo" (features da fronteira DAG) e a injeção do SessionStart lista a fronteira.
+- **Agent Card A2A v1.0:** schema atualizado (protocolVersion, preferredTransport
+  JSONRPC, capabilities reais — streaming=true).
 ## [1.17.0] — 2026-07-01 (motor DAG completo — execução paralela, opt-in)
 
 ### Adicionado

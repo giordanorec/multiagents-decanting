@@ -323,7 +323,9 @@
   // ---- render ---------------------------------------------------------
   function render(snap) {
     renderTitle(snap.project);
-    renderWorkflow(snap.workflow || {});
+    var wf = snap.workflow || {};
+    renderWorkflow(wf);
+    renderParallel(wf.parallel);
     renderTeam(snap.agents || []);
     renderMetrics(snap.metrics || {});
     renderActivity(snap.activity || []);
@@ -744,6 +746,60 @@
     loop.setAttribute("aria-hidden", "true");
     track.appendChild(loop);
     box.appendChild(track);
+  }
+
+  // ===================================================================
+  //  PARALELO — features rodando ao mesmo tempo (motor DAG)
+  //  Só aparece quando workflow.parallel tem >1 item. Com 0/1, é o modo
+  //  sequential de sempre e este bloco fica escondido (degrade gracioso).
+  // ===================================================================
+  function renderParallel(list) {
+    var sec = document.getElementById("parallel");
+    if (!sec) return;
+    var grid = document.getElementById("parallel-grid");
+
+    if (!Array.isArray(list) || list.length <= 1) {
+      sec.hidden = true;
+      if (grid) grid.innerHTML = "";
+      return;
+    }
+    sec.hidden = false;
+
+    var titleEl = document.getElementById("parallel-title");
+    if (titleEl) titleEl.textContent = "Construindo " + list.length + " coisas ao mesmo tempo";
+
+    if (!grid) return;
+    grid.innerHTML = "";
+    list.forEach(function (f, i) {
+      if (!f) return;
+      var slug = f.slug || f.id || "item";
+
+      var card = el("div", "pfeat");
+      card.setAttribute("role", "listitem");
+      card.style.setProperty("--pfeat-i", String(i));
+      if (f.agent) card.style.setProperty("--agent-color", colorFor(f.agent));
+
+      var name = el("div", "pfeat-name");
+      var dot = el("span", "pfeat-dot");
+      dot.setAttribute("aria-hidden", "true");
+      name.appendChild(dot);
+      name.appendChild(el("span", "pfeat-slug", slug));
+      card.appendChild(name);
+
+      var doing = f.subphase_human || f.subphase;
+      if (doing) card.appendChild(el("div", "pfeat-doing", doing));
+
+      if (f.agent) {
+        var who = el("div", "pfeat-agent");
+        var wic = el("span", "pfeat-agent-ic", "🤖");
+        wic.setAttribute("aria-hidden", "true");
+        who.appendChild(wic);
+        who.appendChild(el("span", "pfeat-agent-name", f.agent));
+        card.appendChild(who);
+      }
+
+      grid.appendChild(card);
+    });
   }
 
   function renderTitle(project) {

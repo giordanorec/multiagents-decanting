@@ -88,6 +88,39 @@ def _cmd_version(args) -> int:
     return 0
 
 
+def _cmd_export(args) -> int:
+    """Gera AGENTS.md (lingua franca cross-tool: Cursor/Aider/OpenHands/Codex) a
+    partir da constituição + CLAUDE.md + identidades dos agentes."""
+    root = u.find_project_root()
+    if root is None:
+        print(u.c("✗ Projeto não inicializado.", "red")); return 2
+    parts = ["# AGENTS.md", "",
+             "> Gerado por `mad export`. Convenções e time do projeto, em formato",
+             "> neutro (tool-agnóstico). A fonte viva é `docs/` e `memory/`.", ""]
+    claude = root / "CLAUDE.md"
+    if claude.is_file():
+        parts += ["## Projeto", u.read_text(claude).strip(), ""]
+    const = root / "docs" / "CONSTITUICAO.md"
+    if const.is_file():
+        parts += ["## Regras inegociáveis (Constituição)", u.read_text(const).strip(), ""]
+    mem = root / "memory"
+    if mem.is_dir():
+        parts += ["## Time"]
+        for ag in sorted(p for p in mem.iterdir() if p.is_dir()):
+            idf = ag / "identity.md"
+            desc = ""
+            if idf.is_file():
+                for ln in u.read_text(idf).splitlines():
+                    if ln.strip() and not ln.startswith("#"):
+                        desc = ln.strip()[:120]; break
+            parts.append(f"- **{ag.name}** — {desc}")
+        parts.append("")
+    out = root / "AGENTS.md"
+    u.write_text(out, "\n".join(parts) + "\n")
+    print(u.c(f"✓ AGENTS.md gerado ({out}).", "green"))
+    return 0
+
+
 def _cmd_bootstrap(args) -> int:
     """Setup 1-comando: instala a dep opcional (websockets p/ dashboard) e roda doctor."""
     import subprocess
@@ -163,6 +196,9 @@ def build_parser() -> argparse.ArgumentParser:
 
     bs = sub.add_parser("bootstrap", help="setup 1-comando: instala deps opcionais + doctor")
     bs.set_defaults(func=_cmd_bootstrap)
+
+    ex = sub.add_parser("export", help="gera AGENTS.md (portabilidade cross-tool)")
+    ex.set_defaults(func=_cmd_export)
 
     # alias: dashboard-status (usado por alguns command md)
     ds = sub.add_parser("dashboard-status")

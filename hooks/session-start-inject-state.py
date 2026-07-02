@@ -57,7 +57,19 @@ def main():
         human_label, human_doing = st.phase, ""
     f = st.feature or {}
     feat_block = ""
-    if st.phase == "LOOP_FEATURES" and f:
+    try:
+        is_dag = st.engine == "dag"
+    except Exception:
+        is_dag = False
+    if st.phase == "LOOP_FEATURES" and is_dag and st.active_list():
+        linhas = "\n".join(
+            f"  - {a.get('id')} ({a.get('slug')}) · {a.get('subphase')} · {a.get('agent_assigned') or '(a definir)'}"
+            for a in st.active_list())
+        feat_block = ("\nEM PARALELO (engine=dag) — trabalhe estas features ao mesmo tempo, "
+                      "avançando cada uma com `/mad-phase next <F-NNN>`:\n" + linhas + "\n"
+                      "Despache os especialistas da fronteira em PARALELO. Ao fechar uma, "
+                      "novas prontas entram sozinhas.\n")
+    elif st.phase == "LOOP_FEATURES" and f:
         ap = f.get("approvals", {})
         feat_block = (
             f"\nITEM ATUAL: {f.get('id')} — {f.get('slug')}\n"

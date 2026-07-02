@@ -166,6 +166,17 @@ def _workflow_summary(root: Path) -> dict:
     except Exception:
         ph_list = [{"id": phase, "label": phase}]
         cur_label, cur_doing, sub_human = phase, "", af.get("subphase")
+    # modo dag: a fronteira paralela (features rodando ao mesmo tempo)
+    engine = str((wd.get("_config_engine") or "")).lower()  # opcional; senão infere
+    parallel = []
+    for pf in (wd.get("active_features") or []):
+        try:
+            subh = wf.SUBPHASE_HUMAN.get(pf.get("subphase"), pf.get("subphase"))
+        except Exception:
+            subh = pf.get("subphase")
+        parallel.append({"id": pf.get("id"), "slug": pf.get("slug"),
+                         "subphase": pf.get("subphase"), "subphase_human": subh,
+                         "agent": pf.get("agent_assigned")})
     return {
         "phase": phase,
         "phase_label": cur_label,
@@ -174,6 +185,7 @@ def _workflow_summary(root: Path) -> dict:
         "feature_slug": af.get("slug"),
         "subphase": af.get("subphase"),
         "subphase_human": sub_human,
+        "parallel": parallel,          # >1 => features em paralelo (engine=dag)
         "next": _wf_next(wd),
         "warnings": len(wd.get("warnings", []) or []),
         "bypasses": sum(1 for w in (wd.get("warnings") or []) if "Bypass" in w),

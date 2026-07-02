@@ -754,6 +754,88 @@ body {
   }
 }
 
+/* ---------- PARALELO (motor DAG: várias features ao mesmo tempo) ---------- */
+.parallel {
+  background: color-mix(in srgb, var(--surface) 62%, transparent);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 16px 18px 18px;
+  box-shadow: var(--shadow-soft);
+}
+.parallel[hidden] { display: none; }
+.parallel-title { font-weight: 700; }
+.parallel-hint {
+  font-size: .72rem;
+  font-weight: 500;
+  color: var(--text-faint);
+  letter-spacing: .01em;
+}
+.parallel-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: var(--gap);
+  margin-top: 12px;
+}
+.pfeat {
+  position: relative;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--agent-color, var(--accent));
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  box-shadow: var(--shadow-soft);
+  animation: pfeat-in .32s cubic-bezier(.2, .7, .3, 1) both;
+  animation-delay: calc(var(--pfeat-i, 0) * 60ms);
+}
+.pfeat-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--text);
+}
+.pfeat-dot {
+  flex: 0 0 auto;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--agent-color, var(--accent));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--agent-color, var(--accent)) 22%, transparent);
+  animation: pfeat-pulse 1.8s ease-in-out infinite;
+}
+.pfeat-slug {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.pfeat-doing {
+  margin-top: 6px;
+  font-size: .82rem;
+  color: var(--text-dim);
+  line-height: 1.35;
+}
+.pfeat-agent {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  font-size: .74rem;
+  color: var(--text-faint);
+}
+.pfeat-agent-name {
+  font-weight: 600;
+  color: color-mix(in srgb, var(--agent-color, var(--accent)) 70%, var(--text-dim));
+}
+@keyframes pfeat-in {
+  from { opacity: 0; transform: translateY(8px) scale(.98); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes pfeat-pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: .4; }
+}
+
 /* ---------- GRID ---------- */
 .dash-grid {
   display: grid;

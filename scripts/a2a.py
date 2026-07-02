@@ -18,7 +18,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import _utils as u  # noqa: E402
 
-A2A_VERSION = "0.1"
+A2A_VERSION = "1.0"  # protocolVersion do Agent Card (Linux Foundation A2A)
 
 
 def _frontmatter(text: str) -> dict:
@@ -60,32 +60,38 @@ def build_card(agent: str, root: Path | None = None) -> dict | None:
                 break
 
     proj = root.name
+    # Agent Card A2A v1.0 (Linux Foundation). capabilities derivadas do estado real:
+    # o mad transmite estado ao vivo por WebSocket (dashboard) -> streaming=true.
     return {
-        "a2a_version": A2A_VERSION,
+        "protocolVersion": A2A_VERSION,
         "name": name,
-        "displayName": f"{name} ({proj})",
         "description": (description or role or f"Especialista {name} do projeto {proj}.").strip(),
-        "provider": {"organization": "mad (MultiAgent Decanting)", "project": proj},
-        "model": model,
+        "url": f"local://mad/{proj}/{name}",
+        "preferredTransport": "JSONRPC",
+        "version": "1.0.0",
+        "provider": {"organization": "mad (MultiAgent Decanting)", "url": f"local://{proj}"},
         "capabilities": {
-            "streaming": False,
+            "streaming": True,
             "pushNotifications": False,
             "stateTransitionHistory": True
         },
+        "defaultInputModes": ["text/plain", "text/markdown"],
+        "defaultOutputModes": ["text/plain", "text/markdown"],
         "skills": [
             {
                 "id": f"{name}-work",
-                "name": f"{name}",
+                "name": name,
                 "description": role or description or f"Trabalho de especialista {name}.",
-                "tags": [name, "mad", "decanting"]
+                "tags": [name, "mad", "decanting"],
+                "examples": [f"Delegar uma feature de {name} via specs/feature-NNN.md"]
             }
         ],
-        "memory": {
-            "convention": f"memory/{name}/",
-            "files": ["identity.md", "dossier.md", "decisions.md", "handoff.md",
-                      "state.md", "lessons.md", "trust.json"]
-        },
-        "endpoints": {"note": "Servir via HTTP em /.well-known/agent.json é roadmap (V2)."}
+        "_mad": {
+            "memory_convention": f"memory/{name}/",
+            "memory_files": ["identity.md", "dossier.md", "decisions.md", "handoff.md",
+                             "state.md", "lessons.md", "trust.json"],
+            "note": "Estado consumível também via MCP (scripts/mcp_server.py, .mcp.json)."
+        }
     }
 
 

@@ -161,6 +161,16 @@ posição da fase atual, e `is-selected` no nó fixado por clique.
 - `.content`, `.dash-grid`, `.side-col`
 - `.section-title`, `.team-count`, `.live-dot`
 
+### Paralelo (motor DAG — várias features ao mesmo tempo)
+Só aparece quando `workflow.parallel` tem **mais de 1** item (modo `engine=dag`).
+Com 0/1 item fica escondido (modo sequential de sempre). Cada card recebe
+`--agent-color` inline via JS (cor do assistente daquela feature).
+- `.parallel` (contêiner), `.parallel-title`, `.parallel-hint`, `.parallel-grid`
+- `.pfeat` (card da feature) `> .pfeat-name (.pfeat-dot, .pfeat-slug),
+  .pfeat-doing, .pfeat-agent (.pfeat-agent-ic, .pfeat-agent-name)`
+- Animações próprias: `pfeat-in` (entrada), `pfeat-pulse` (ponto vivo) — ambas
+  já neutralizadas pela regra global de `prefers-reduced-motion`.
+
 ### Card de agente (o coração)
 - `.team`, `.team-empty`
 - `.agent` (+ `.agent::before` = barra colorida do topo)

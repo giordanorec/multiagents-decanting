@@ -29,9 +29,11 @@ def test_a2a_card(tmp_project):
     card = a2a.build_card("pipeline-dev", root=tmp_project)
     assert card is not None
     assert card["name"] == "pipeline-dev"
-    assert card["a2a_version"]
+    assert card["protocolVersion"] == "1.0"           # A2A v1.0
+    assert card["preferredTransport"] == "JSONRPC"
     assert "capabilities" in card and "skills" in card
-    assert card["memory"]["convention"] == "memory/pipeline-dev/"
+    assert card["capabilities"]["streaming"] is True   # mad transmite estado ao vivo
+    assert card["_mad"]["memory_convention"] == "memory/pipeline-dev/"
 
 
 def test_a2a_card_missing_agent(tmp_project):
