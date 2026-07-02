@@ -291,12 +291,19 @@ def cmd_emergency_bypass(root, st, args) -> int:
     if not args.reason or len(args.reason) < 50:
         print(u.c("✗ emergency-bypass exige --reason com ≥50 chars.", "red"))
         return 2
+    from datetime import datetime, timedelta
     wf.log_event(root, "emergency_bypass", by="human", reason=args.reason)
+    # token de USO ÚNICO com validade (não é mais env var global pegajosa)
+    expires = (datetime.now().astimezone() + timedelta(seconds=180)).isoformat()
+    u.write_json(root / ".mad" / "bypass_token.json",
+                 {"reason": args.reason, "uses_left": 1, "expires_at": expires,
+                  "created_at": u.iso_now()})
     st.data.setdefault("warnings", []).append(
         f"Bypass usado em {u.iso_now()[:16]}. Investigar.")
     st.save()
-    print(u.c("⚠ BYPASS registrado. Libera a PRÓXIMA ação (uso único).", "yellow", "bold"))
-    print("  Exporte no shell da ação: export MAD_WORKFLOW_BYPASS=1  (e unset depois).")
+    print(u.c("⚠ BYPASS registrado — libera A PRÓXIMA ação (uso único, expira em 3min).",
+              "yellow", "bold"))
+    print("  Faça a ação agora; o token é consumido automaticamente.")
     return 0
 
 

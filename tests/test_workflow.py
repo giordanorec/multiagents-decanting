@@ -535,3 +535,26 @@ def test_dag_close_activates_dependent(tmp_project):
     assert "F-001" not in ativos and "F-002" in ativos and "F-003" in ativos
     assert any(b["id"] == "F-001" and b["status"] == "concluida"
                for b in st2.data["backlog_features"])
+
+
+def test_bypass_token_single_use(tmp_project):
+    mp = str(tmp_project / "scripts" / "mad_phase.py")
+    hook = str(tmp_project / ".claude" / "hooks" / "pre-workflow-gate.py")
+    payload = json.dumps({"tool_name": "Agent",
+                          "tool_input": {"subagent_type": "mad:pipeline-dev"},
+                          "cwd": str(tmp_project)})
+    # sem token: Agent em DISCOVERY é bloqueado
+    r = subprocess.run([sys.executable, hook], input=payload, text=True,
+                       cwd=str(tmp_project), capture_output=True)
+    assert r.returncode == 2
+    # emite token de uso único
+    subprocess.run([sys.executable, mp, "emergency-bypass", "--reason", "x" * 55],
+                   cwd=str(tmp_project), capture_output=True, text=True)
+    # 1ª ação: liberada (consome o token)
+    r1 = subprocess.run([sys.executable, hook], input=payload, text=True,
+                        cwd=str(tmp_project), capture_output=True)
+    assert r1.returncode == 0
+    # 2ª ação: bloqueada de novo (uso único)
+    r2 = subprocess.run([sys.executable, hook], input=payload, text=True,
+                        cwd=str(tmp_project), capture_output=True)
+    assert r2.returncode == 2

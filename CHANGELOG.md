@@ -2,6 +2,14 @@
 
 Formato: [Keep a Changelog](https://keepachangelog.com/). Versionamento semântico.
 
+## [1.19.0] — 2026-07-01 (hardening final)
+
+### Mudado/Adicionado
+- **Bypass de USO ÚNICO com validade:** `emergency-bypass` agora grava um token
+  `.mad/bypass_token.json` (1 uso, expira em 3min) que o hook CONSOME — substitui a
+  env var global `MAD_WORKFLOW_BYPASS`, que ficava ligada o tempo todo. Muito mais seguro.
+- **docs/SANDBOX.md:** guia do modo full-auto seguro (devcontainer opcional). Deixa
+  explícito: Docker NÃO é pré-requisito; o mad é plug-and-play sem ele.
 ## [1.18.0] — 2026-07-01 (interoperabilidade + observabilidade do paralelo)
 
 ### Adicionado

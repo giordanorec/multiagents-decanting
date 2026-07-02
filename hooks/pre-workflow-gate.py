@@ -41,15 +41,36 @@ def _deny(reason: str, suggestion: str, state=None):
     sys.exit(2)
 
 
+def _consume_bypass_token(root) -> bool:
+    """Bypass de uso único: valida e CONSOME .mad/bypass_token.json (uses_left>0 e
+    não expirado). Retorna True se liberou (e consumiu). Substitui a env var global."""
+    from datetime import datetime
+    tok_path = root / ".mad" / "bypass_token.json"
+    if not tok_path.is_file():
+        return False
+    try:
+        tok = json.loads(tok_path.read_text())
+        if int(tok.get("uses_left", 0)) < 1:
+            return False
+        if datetime.fromisoformat(tok["expires_at"]) < datetime.now().astimezone():
+            tok_path.unlink(missing_ok=True)
+            return False
+    except Exception:
+        return False
+    # consome
+    try:
+        tok_path.unlink(missing_ok=True)
+    except Exception:
+        pass
+    return True
+
+
 def main():
     raw = sys.stdin.read() if not sys.stdin.isatty() else ""
     try:
         data = json.loads(raw) if raw.strip() else {}
     except Exception:
         _allow()  # sem input parseável, não é nosso caso
-
-    if os.environ.get(BYPASS_ENV) == "1":
-        _allow()  # bypass humano ativo (uso único, gerenciado pelo comando)
 
     tool = data.get("tool_name", "")
     tin = data.get("tool_input", {}) or {}
@@ -63,6 +84,10 @@ def main():
             break
     if root is None:
         _allow()  # não é projeto mad
+
+    # bypass de USO ÚNICO com validade (consome o token). Substitui a env var global.
+    if _consume_bypass_token(root):
+        _allow()
 
     scripts = root / "scripts"
     if (scripts / "workflow.py").is_file():
